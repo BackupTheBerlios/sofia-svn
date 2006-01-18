@@ -5,3 +5,4 @@ del *.ddp /s
 del *.dcu /s
 del *.exe /s
 del *.dll /s
+del *.res /s
