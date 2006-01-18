@@ -26,6 +26,9 @@ uses Forms, Classes, Controls, StdCtrls, ExtCtrls;
 
 type
   TDisplayForm = class(TForm)
+    Panel1: TPanel;
+    Button1: TButton;
+    Panel2: TPanel;
     procedure PluginContainer1Button1Click(Sender: TObject);
   private
     { Déclarations privées }

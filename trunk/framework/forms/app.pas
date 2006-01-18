@@ -74,13 +74,13 @@ procedure TAppForm.TestOpenPlugin;
 var
   XML: TStringStream;
 begin
-  XML := TStringStream.Create('<XMLOBJECT ClassName="TContactData"><NomContact>Test</NomContact></XMLOBJECT>');
+  XML := TStringStream.Create('object TContactData'#$D#$A'  NomContact = ''testload'''#$D#$A'end'#$D#$A);
   try
     FPluginMgr.LoadPlugins;
     with FPluginMgr.Plugins[0] as TControlInstance do
     begin
       (Plugin as IControl).Load(XML);
-      Open(DisplayForm);
+      Open(DisplayForm.Panel2);
     end;
   finally
     LoadingForm.Hide;
