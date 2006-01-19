@@ -36,10 +36,19 @@ object DisplayForm: TDisplayForm
   object Panel2: TPanel
     Left = 0
     Top = 0
-    Width = 643
+    Width = 321
     Height = 430
-    Align = alClient
+    Align = alLeft
     Caption = 'Panel2'
     TabOrder = 1
+  end
+  object Panel3: TPanel
+    Left = 321
+    Top = 0
+    Width = 322
+    Height = 430
+    Align = alClient
+    Caption = 'Panel3'
+    TabOrder = 2
   end
 end

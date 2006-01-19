@@ -25,7 +25,6 @@ interface
 uses Classes, Controls, DB;
 
 type
-
   IBase = interface(IInterface)
   ['{0266191D-1BAA-4063-B95D-A9B4EED9F0DA}']
   end;

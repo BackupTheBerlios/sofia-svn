@@ -29,6 +29,7 @@ type
     Panel1: TPanel;
     Button1: TButton;
     Panel2: TPanel;
+    Panel3: TPanel;
     procedure PluginContainer1Button1Click(Sender: TObject);
   private
     { Déclarations privées }
@@ -51,7 +52,7 @@ var
 begin
   XML := TStringStream.Create('');
   try
-    (AppForm.PluginMgr.Plugins[0].Plugin as IControl).Save(XML);
+    (AppForm.PluginMgr.Plugins[1].Plugin as IControl).Save(XML);
     ShowMessage(XML.DataString);
   finally
     XML.Free;

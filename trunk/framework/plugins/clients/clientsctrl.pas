@@ -24,7 +24,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, clientsclasses, ExtCtrls, Grids;
+  Dialogs, StdCtrls, clientsclasses, ExtCtrls, Grids, CheckLst;
 
 type
   TClientsFrame = class(TFrame)
@@ -74,6 +74,11 @@ constructor TClientsController.Create(AControl: TWinControl);
 begin
   FControl := AControl as TClientsFrame;
   FNomClients := TStringList.Create;
+
+  //FNomClients.Add('Lawrence-Albert Zémour');
+  //FNomClients.Add('Anne-Angélique Meuleman');
+  //Refresh;
+
 end;
 
 function TClientsController.GetNomClients: TStrings;
@@ -83,7 +88,7 @@ end;
 
 procedure TClientsController.Refresh;
 begin
-  Control.StringGrid1.Cols[0].Assign(FNomClients);
+ Control.StringGrid1.Cols[0].Assign(FNomClients);
 end;
 
 end.

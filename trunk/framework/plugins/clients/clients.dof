@@ -95,13 +95,13 @@ UnitOutputDir=$(SOFIA)\lib
 PackageDLLOutputDir=
 PackageDCPOutputDir=
 SearchPath=$(SOFIA)\trunk\src\framework\intf;$(SOFIA)\trunk\src\framework\classes;$(SOFIA)\lib
-Packages=rtl
+Packages=vcl
 Conditionals=
 DebugSourceDirs=
 UsePackages=1
 [Parameters]
 RunParams=
-HostApplication=D:\Developpement\sofia\bin\sofia.exe
+HostApplication=D:\Developpement\berlios\sofia\bin\sofia.exe
 Launcher=
 UseLauncher=0
 DebugCWD=
@@ -135,6 +135,7 @@ ProductName=
 ProductVersion=1.0.0.0
 Comments=
 [Excluded Packages]
+D:\Developpement\sofia\bin\gdip.bpl=(sans titre)
 C:\WINDOWS\system32\rbIBE77.bpl=ReportBuilder Data Access for Interbase Express
 [HistoryLists\hlConditionals]
 Count=1
@@ -144,8 +145,8 @@ Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
 [HistoryLists\hlSearchPath]
 Count=11
-Item0=$(SOFIA)\lib
-Item1=$(SOFIA)\trunk\src\framework\intf;$(SOFIA)\trunk\src\framework\classes;$(SOFIA)\lib
+Item0=$(SOFIA)\trunk\src\framework\intf;$(SOFIA)\trunk\src\framework\classes;$(SOFIA)\lib
+Item1=$(SOFIA)\lib
 Item2=$(SOFIA)\trunk\src\framework\intf;$(SOFIA)\trunk\src\framework\classes
 Item3=$(SOFIA)\trunk\src\framework\intf;$(SOFIA)\trunk\src\gdiplus\api;$(SOFIA)\trunk\src\gdiplus\controls
 Item4=$(SOFIA)\trunk\src\framework\intf;$(SOFIA)\trunk\src\gdiplus\api
@@ -484,4 +485,3 @@ Count mtSend_FailureMsg=1
 mtSend_FailureMsg0="Sorry, sending the message didn't work."
 
 
-phPfÿPfÿ»	

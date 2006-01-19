@@ -35,12 +35,12 @@ type
 
   TClientsData = class(TComponent)
   private
-    FXMLCollection: TCollection;
+    FCollection: TCollection;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
   published
-    property XMLCollection: TCollection read FXMLCollection write FXMLCollection;
+    property Collection: TCollection read FCollection write FCollection;
   end;
 
   IClientsController = interface(IInterface)
@@ -91,6 +91,7 @@ var
   i: Integer;
   BinStream: TMemoryStream;
 begin
+
   FController.NomClients.Clear;
   BinStream := TMemoryStream.Create;
   try
@@ -100,13 +101,13 @@ begin
   finally
     BinStream.Free;
   end;
-  (*
+
   for i := 0 to FClientsData.Collection.Count - 1 do
     with FClientsData.Collection.Items[i] as TClientData do
     begin
       FController.NomClients.Add(NomClient);
     end;
-    *)
+
   FController.Refresh;
 end;
 
@@ -116,7 +117,7 @@ var
   BinStream: TMemoryStream;
 begin
   for i := 0 to FController.NomClients.Count - 1 do
-    with FClientsData.XMLCollection.Add as TClientData do
+    with FClientsData.Collection.Add as TClientData do
     begin
       NomClient := FController.NomClients[i];
     end;
@@ -137,13 +138,13 @@ end;
 constructor TClientsData.Create(AOwner: TComponent);
 begin
   inherited;
-  FXMLCollection := TCollection.Create(TClientData);
+  FCollection := TCollection.Create(TClientData);
 end;
 
 destructor TClientsData.Destroy;
 begin
   inherited;
-  FXMLCollection.Free;
+  FCollection.Free;
 end;
 
 end.

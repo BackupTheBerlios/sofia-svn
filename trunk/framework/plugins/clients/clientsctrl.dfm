@@ -1,8 +1,8 @@
 object ClientsFrame: TClientsFrame
   Left = 0
   Top = 0
-  Width = 292
-  Height = 294
+  Width = 421
+  Height = 382
   HorzScrollBar.Color = clWhite
   HorzScrollBar.ParentColor = False
   Color = clWhite
@@ -15,17 +15,22 @@ object ClientsFrame: TClientsFrame
   ParentFont = False
   TabOrder = 0
   object StringGrid1: TStringGrid
-    Left = 8
-    Top = 8
-    Width = 193
-    Height = 225
+    Left = 0
+    Top = 0
+    Width = 421
+    Height = 382
+    Align = alClient
+    BorderStyle = bsNone
     ColCount = 1
-    Ctl3D = True
-    FixedColor = 16250871
+    DefaultColWidth = 200
     FixedCols = 0
-    ParentCtl3D = False
+    FixedRows = 0
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Verdana'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 0
-    ColWidths = (
-      160)
   end
 end

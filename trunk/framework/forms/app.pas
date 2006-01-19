@@ -37,8 +37,9 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    procedure TestClosePlugin;
-    procedure TestOpenPlugin;
+    procedure TestClosePlugins;
+    procedure TestOpenPlugin1;
+    procedure TestOpenPlugin2;
     property PluginMgr: TPluginManager read FPluginMgr;
     { Déclarations publiques }
   end;
@@ -65,12 +66,13 @@ begin
   inherited;
 end;
 
-procedure TAppForm.TestClosePlugin;
+procedure TAppForm.TestClosePlugins;
 begin
   (FPluginMgr.Plugins[0] as TControlInstance).Close;
+  (FPluginMgr.Plugins[1] as TControlInstance).Close;
 end;
 
-procedure TAppForm.TestOpenPlugin;
+procedure TAppForm.TestOpenPlugin1;
 var
   XML: TStringStream;
 begin
@@ -88,13 +90,32 @@ begin
   end;
 end;
 
+procedure TAppForm.TestOpenPlugin2;
+var
+  XML: TStringStream;
+begin
+  XML := TStringStream.Create('object TClientsData'#$D#$A'  Collection = <'#$D#$A'    item'#$D#$A'      NomClient = ''Lawrence-Albert Z'#233'mour'''#$D#$A'    end'#$D#$A'    item'#$D#$A'      NomClient = ''Anne-Ang'#233'lique Meuleman'''#$D#$A'    end>'#$D#$A'end'#$D#$A);
+  try
+    FPluginMgr.LoadPlugins;
+    with FPluginMgr.Plugins[1] as TControlInstance do
+    begin
+      (Plugin as IControl).Load(XML);
+      Open(DisplayForm.Panel3);
+    end;
+  finally
+    LoadingForm.Hide;
+    XML.Free;
+  end;
+end;
+
 procedure TAppForm.tmrLaunchTimer(Sender: TObject);
 begin
   tmrLaunch.Enabled := False;
   LoadingForm.Show;
-  TestOpenPlugin;
+  TestOpenPlugin1;
+  TestOpenPlugin2;
   DisplayForm.ShowModal;
-  TestClosePlugin;
+  TestClosePlugins;
   Close;
 end;
 
