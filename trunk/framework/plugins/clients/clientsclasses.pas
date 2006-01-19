@@ -91,8 +91,8 @@ var
   i: Integer;
   BinStream: TMemoryStream;
 begin
-
   FController.NomClients.Clear;
+
   BinStream := TMemoryStream.Create;
   try
     ObjectTextToBinary(XML, BinStream);
