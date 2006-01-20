@@ -23,8 +23,7 @@ unit clientsctrl;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, clientsclasses, ExtCtrls, Grids, CheckLst;
+  Forms, Classes, Controls, Grids, plugdef, clientsclasses;
 
 type
   TClientsFrame = class(TFrame)
@@ -32,63 +31,58 @@ type
   private
     { Déclarations privées }
   public
-    constructor Create(AOwner: TComponent); override;
-    destructor Destroy; override;
     { Déclarations publiques }
   end;
 
-  TClientsController = class(TInterfacedObject, IClientsController)
+  TController = class(TInterfacedObject, IController)
     function GetNomClients: TStrings; stdcall;
     procedure Refresh; stdcall;
   private
-    FControl: TClientsFrame;
+    FContainer: TClientsFrame;
     FNomClients: TStrings;
   public
-    constructor Create(AControl: TWinControl);
-    property Control: TClientsFrame read FControl write FControl;
+    constructor Create(AContainer: TPlugContainer);
+    destructor Destroy; override;
+    property Container: TClientsFrame read FContainer write FContainer;
   end;
 
-function NewController(AControl: TWinControl): IClientsController;
+function NewController(AControl: TWinControl): IController;
 
 implementation
 
 {$R *.dfm}
 
 
-function NewController(AControl: TWinControl): IClientsController;
+function NewController(AControl: TWinControl): IController;
 begin
-  Result := TClientsController.Create(AControl);
+  Result := TController.Create(AControl);
 end;
 
-constructor TClientsFrame.Create(AOwner: TComponent);
+constructor TController.Create(AContainer: TPlugContainer);
 begin
-  inherited;
-end;
-
-destructor TClientsFrame.Destroy;
-begin
-  inherited;
-end;
-
-constructor TClientsController.Create(AControl: TWinControl);
-begin
-  FControl := AControl as TClientsFrame;
+  FContainer := AContainer as TClientsFrame;
   FNomClients := TStringList.Create;
-
-  //FNomClients.Add('Lawrence-Albert Zémour');
-  //FNomClients.Add('Anne-Angélique Meuleman');
-  //Refresh;
-
+  {
+  FNomClients.Add('Lawrence-Albert Zémour');
+  FNomClients.Add('Anne-Angélique Meuleman');
+  Refresh;
+  }
 end;
 
-function TClientsController.GetNomClients: TStrings;
+destructor TController.Destroy;
+begin
+  inherited;
+  FNomClients.Free;
+end;
+
+function TController.GetNomClients: TStrings;
 begin
   Result := FNomClients;
 end;
 
-procedure TClientsController.Refresh;
+procedure TController.Refresh;
 begin
- Control.StringGrid1.Cols[0].Assign(FNomClients);
+ Container.StringGrid1.Cols[0].Assign(FNomClients);
 end;
 
 end.

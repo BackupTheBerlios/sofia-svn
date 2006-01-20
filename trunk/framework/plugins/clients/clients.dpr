@@ -5,7 +5,7 @@ uses
   clientsctrl in 'clientsctrl.pas',
   clientsclasses in 'clientsclasses.pas';
 
-function NewPlugin: IBase;
+function NewPlugin: IPlugUnknown;
 begin
   Result := TClientsPlugin.Create;
 end;

@@ -23,8 +23,7 @@ unit contactctrl;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, contactclasses, ExtCtrls;
+  Forms, Classes, Controls, StdCtrls, ExtCtrls, plugdef, contactclasses;
 
 type
   TContactFrame = class(TFrame)
@@ -37,26 +36,26 @@ type
     { Déclarations publiques }
   end;
 
-  TContactController = class(TInterfacedObject, IContactController)
+  TController = class(TInterfacedObject, IController)
     function GetNomContact: string; stdcall;
     procedure SetNomContact(const Value: string); stdcall;
   private
-    FControl: TContactFrame;
+    FContainer: TContactFrame;
   public
-    constructor Create(AControl: TWinControl);
-    property Control: TContactFrame read FControl write FControl;
+    constructor Create(AContainer: TPlugContainer);
+    property Container: TContactFrame read FContainer write FContainer;
   end;
 
-function NewController(AControl: TWinControl): IContactController;
+function NewController(AContainer: TPlugContainer): IController;
 
 implementation
 
 {$R *.dfm}
 
 
-function NewController(AControl: TWinControl): IContactController;
+function NewController(AContainer: TPlugContainer): IController;
 begin
-  Result := TContactController.Create(AControl);
+  Result := TController.Create(AContainer);
 end;
 
 constructor TContactFrame.Create(AOwner: TComponent);
@@ -69,19 +68,19 @@ begin
   inherited;
 end;
 
-constructor TContactController.Create(AControl: TWinControl);
+constructor TController.Create(AContainer: TPlugContainer);
 begin
-  FControl := AControl as TContactFrame;
+  FContainer := AContainer as TContactFrame;
 end;
 
-function TContactController.GetNomContact: string;
+function TController.GetNomContact: string;
 begin
-  Result := Control.edtNom.Text;
+  Result := Container.edtNom.Text;
 end;
 
-procedure TContactController.SetNomContact(const Value: string);
+procedure TController.SetNomContact(const Value: string);
 begin
-  Control.edtNom.Text := Value;
+  Container.edtNom.Text := Value;
 end;
 
 end.

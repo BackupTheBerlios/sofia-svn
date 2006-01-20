@@ -22,32 +22,32 @@ unit contactclasses;
 
 interface
 
-uses Controls, Classes, plugintf;
+uses plugdef, plugintf;
 
 type
 
-  TContactData = class(TComponent)
+  TContactData = class(TPlugData)
   private
     FNomContact: string;
   published
     property NomContact: string read FNomContact write FNomContact;
   end;
 
-  IContactController = interface(IInterface)
-    ['{B0122448-88BA-44DF-9B33-8198AF276DF6}']
+  IController = interface(IInterface)
+  ['{B0122448-88BA-44DF-9B33-8198AF276DF6}']
     function GetNomContact: string; stdcall;
     procedure SetNomContact(const Value: string); stdcall;
     property NomContact: string read GetNomContact write SetNomContact;
   end;
 
-  TContactPlugin = class(TInterfacedObject, IBase, IControl)
-    function GetControl: TWinControl; stdcall;
-    procedure Load(XML: TStringStream); stdcall;
-    procedure Save(XML: TStringStream); stdcall;
+  TContactPlugin = class(TInterfacedObject, IPlugUnknown, IPlugContainer)
+    function GetContainer: TPlugContainer; stdcall;
+    procedure LoadFromStream(Stream: TPlugDataStream); stdcall;
+    procedure SaveToStream(Stream: TPlugDataStream); stdcall;
   private
     FContactData: TContactData;
-    FControl: TWinControl;
-    FController: IContactController;
+    FContainer: TPlugContainer;
+    FController: IController;
   public
     constructor Create;
     destructor Destroy; override;
@@ -55,34 +55,34 @@ type
 
 implementation
 
-uses contactctrl;
+uses Classes, contactctrl;
 
 constructor TContactPlugin.Create;
 begin
-  FControl := TContactFrame.Create(nil);
-  FControl.Name := 'FrameContact';
-  FController := NewController(FControl);
+  FContainer := TContactFrame.Create(nil);
+  FContainer.Name := 'FrameContact';
+  FController := NewController(FContainer);
   FContactData := TContactData.Create(nil);
 end;
 
 destructor TContactPlugin.Destroy;
 begin
-  FControl.Free;
+  FContainer.Free;
   inherited;
 end;
 
-function TContactPlugin.GetControl: TWinControl;
+function TContactPlugin.GetContainer: TPlugContainer;
 begin
-  Result := FControl;
+  Result := FContainer;
 end;
 
-procedure TContactPlugin.Load(XML: TStringStream);
+procedure TContactPlugin.LoadFromStream(Stream: TPlugDataStream);
 var
-  BinStream: TMemoryStream;
+  BinStream: TPlugDataStream;
 begin
-  BinStream := TMemoryStream.Create;
+  BinStream := TPlugDataStream.Create('');
   try
-    ObjectTextToBinary(XML, BinStream);
+    ObjectTextToBinary(Stream, BinStream);
     BinStream.Position := 0;
     BinStream.ReadComponent(FContactData);
   finally
@@ -91,18 +91,18 @@ begin
   FController.NomContact := FContactData.NomContact;
 end;
 
-procedure TContactPlugin.Save(XML: TStringStream);
+procedure TContactPlugin.SaveToStream(Stream: TPlugDataStream);
 var
-  BinStream: TMemoryStream;
+  BinStream: TPlugDataStream;
 begin
   FContactData.NomContact := FController.NomContact;
 
   //Flux
-  BinStream := TMemoryStream.Create;
+  BinStream := TPlugDataStream.Create('');
   try
     BinStream.WriteComponent(FContactData);
     BinStream.Position := 0;
-    ObjectBinaryToText(BinStream, XML);
+    ObjectBinaryToText(BinStream, Stream);
   finally
     BinStream.Free;
   end;

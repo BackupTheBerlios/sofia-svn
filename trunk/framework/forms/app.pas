@@ -24,7 +24,7 @@ interface
 
 uses
   Forms, Controls, ExtCtrls, Classes, StdCtrls,
-  plugins;
+  plugmgr;
 
 type
   TAppForm = class(TForm)
@@ -49,7 +49,7 @@ var
 
 implementation
 
-uses loading, display, plugintf, SysUtils;
+uses loading, display, plugdef, plugintf;
 
 {$R *.dfm}
 
@@ -68,43 +68,43 @@ end;
 
 procedure TAppForm.TestClosePlugins;
 begin
-  (FPluginMgr.Plugins[0] as TControlInstance).Close;
-  (FPluginMgr.Plugins[1] as TControlInstance).Close;
+  TPluginControlInstance(FPluginMgr.Plugins[0]).Close;
+  TPluginControlInstance(FPluginMgr.Plugins[1]).Close;
 end;
 
 procedure TAppForm.TestOpenPlugin1;
 var
-  XML: TStringStream;
+  Stream: TPlugDataStream;
 begin
-  XML := TStringStream.Create('object TContactData'#$D#$A'  NomContact = ''testload'''#$D#$A'end'#$D#$A);
+  Stream := TPlugDataStream.Create('object TContactData'#$D#$A'  NomContact = ''testload'''#$D#$A'end'#$D#$A);
   try
     FPluginMgr.LoadPlugins;
-    with FPluginMgr.Plugins[0] as TControlInstance do
+    with TPluginControlInstance(FPluginMgr.Plugins[0])  do
     begin
-      (Plugin as IControl).Load(XML);
+      (Plugin as IPlugContainer).LoadFromStream(Stream);
       Open(DisplayForm.Panel2);
     end;
   finally
     LoadingForm.Hide;
-    XML.Free;
+    Stream.Free;
   end;
 end;
 
 procedure TAppForm.TestOpenPlugin2;
 var
-  XML: TStringStream;
+  Stream: TStringStream;
 begin
-  XML := TStringStream.Create('object TClientsData'#$D#$A'  Collection = <'#$D#$A'    item'#$D#$A'      NomClient = ''Lawrence-Albert Z'#233'mour'''#$D#$A'    end'#$D#$A'    item'#$D#$A'      NomClient = ''Anne-Ang'#233'lique Meuleman'''#$D#$A'    end>'#$D#$A'end'#$D#$A);
+  Stream := TPlugDataStream.Create('object TClientsData'#$D#$A'  Collection = <'#$D#$A'    item'#$D#$A'      NomClient = ''Lawrence-Albert Z'#233'mour'''#$D#$A'    end'#$D#$A'    item'#$D#$A'      NomClient = ''Anne-Ang'#233'lique Meuleman'''#$D#$A'    end>'#$D#$A'end'#$D#$A);
   try
     FPluginMgr.LoadPlugins;
-    with FPluginMgr.Plugins[1] as TControlInstance do
+    with TPluginControlInstance(FPluginMgr.Plugins[1]) do
     begin
-      (Plugin as IControl).Load(XML);
+      (Plugin as IPlugContainer).LoadFromStream(Stream);
       Open(DisplayForm.Panel3);
     end;
   finally
     LoadingForm.Hide;
-    XML.Free;
+    Stream.Free;
   end;
 end;
 

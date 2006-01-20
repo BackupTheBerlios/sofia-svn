@@ -2,11 +2,13 @@ program sofia;
 
 uses
   Forms,
-  plugins in 'classes\plugins.pas',
+  plugmgr in 'classes\plugmgr.pas',
   app in 'forms\app.pas' {AppForm},
   display in 'forms\display.pas' {DisplayForm},
   loading in 'forms\loading.pas' {LoadingForm},
-  plugintf in 'classes\plugintf.pas';
+  plugintf in 'classes\plugintf.pas',
+  plugdata in 'classes\plugdata.pas',
+  plugdef in 'classes\plugdef.pas';
 
 {$R *.res}
 

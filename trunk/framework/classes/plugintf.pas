@@ -22,25 +22,25 @@ unit plugintf;
 
 interface
 
-uses Classes, Controls, DB;
+uses plugdef;
 
 type
-  IBase = interface(IInterface)
+  IPlugUnknown = interface(IInterface)
   ['{0266191D-1BAA-4063-B95D-A9B4EED9F0DA}']
   end;
 
-  IDatabase = interface(IInterface)
+  IPlugDatabase = interface(IInterface)
   ['{FA94CE0A-DF1A-4628-A8A8-C599CC785286}']
-    function GetConnection: TCustomConnection; stdcall;
-    property Connection: TCustomConnection read GetConnection;
+    function GetConnection: TPlugConnection; stdcall;
+    property Connection: TPlugConnection read GetConnection;
   end;
 
-  IControl = interface(IInterface)
+  IPlugContainer = interface(IInterface)
   ['{570C9B35-15F3-435E-9166-963ACE05F635}']
-    function GetControl: TWinControl; stdcall;
-    procedure Load(XML: TStringStream); stdcall;
-    procedure Save(XML: TStringStream); stdcall;
-    property Control: TWinControl read GetControl;
+    function GetContainer: TPlugContainer; stdcall;
+    procedure LoadFromStream(Stream: TPlugDataStream); stdcall;
+    procedure SaveToStream(Stream: TPlugDataStream); stdcall;
+    property Container: TPlugContainer read GetContainer;
   end;
 
 implementation

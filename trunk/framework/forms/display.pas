@@ -42,22 +42,21 @@ var
 
 implementation
 
-uses DateUtils, app, Dialogs, plugins, plugintf;
+uses DateUtils, Dialogs, app, plugmgr, plugdef, plugintf;
 
 {$R *.dfm}
 
 procedure TDisplayForm.PluginContainer1Button1Click(Sender: TObject);
 var
-  XML: TStringStream;
+  Stream: TPlugDataStream;
 begin
-  XML := TStringStream.Create('');
+  Stream := TPlugDataStream.Create('');
   try
-    (AppForm.PluginMgr.Plugins[1].Plugin as IControl).Save(XML);
-    ShowMessage(XML.DataString);
+    (AppForm.PluginMgr.Plugins[1].Plugin as IPlugContainer).SaveToStream(Stream);
+    ShowMessage(Stream.DataString);
   finally
-    XML.Free;
+    Stream.Free;
   end;
-
 end;
 
 end.

@@ -18,11 +18,11 @@ along with Sofia; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 -------------------------------------------------------------------------------}
 
-unit plugins;
+unit plugmgr;
 
 interface
 
-uses Windows, Controls, SysUtils, plugintf, Classes, Contnrs;
+uses Classes, Controls, SysUtils, Contnrs, plugdef, plugintf;
 
 resourcestring
   sUnexistingFile = 'Le fichier ''%s'' n''existe pas';
@@ -31,34 +31,31 @@ resourcestring
 
 type
   EPluginError = class(Exception);
-  TNewPlugin = function: IBase; stdcall;
+  TNewPlugin = function: IPlugUnknown; stdcall;
 
   TPluginInstance = class(TObject)
   private
     FDLLName: string;
-    FPlugin: IBase;
+    FPlugin: IPlugUnknown;
     FDLLHandle: HModule;
     FNewPluginProcName: string;
     procedure CreatePluginInstance;
     procedure LoadLib;
     procedure UnloadLib;
   protected
-    function GetPlugin: IBase; virtual;
+    function GetPlugin: IPlugUnknown; virtual;
   public
     constructor Create(ADLLName, ANewPluginProcName: string); virtual;
     destructor Destroy; override;
     procedure ReleaseInstance; virtual;
     property NewPluginProcName: string read FNewPluginProcName write
         FNewPluginProcName;
-    property Plugin: IBase read GetPlugin;
+    property Plugin: IPlugUnknown read GetPlugin;
   end;
 
-  TDatabaseInstance = class(TPluginInstance)
-  end;
-
-  TControlInstance = class(TPluginInstance)
+  TPluginControlInstance = class(TPluginInstance)
   private
-    FControl: TWinControl;
+    FContainer: TPlugContainer;
   protected
   public
     constructor Create(ADLLName, ANewPluginProcName: string); override;
@@ -81,9 +78,13 @@ type
 
 implementation
 
+uses Windows;
+
 const
   LIBPATH = '';
-  DBDLL = LIBPATH + 'ibx.dll';
+
+
+{PluginInstance}
 
 constructor TPluginManager.Create;
 begin
@@ -106,8 +107,9 @@ end;
 
 procedure TPluginManager.LoadPlugins;
 begin
-  FPlugins.Add(TControlInstance.Create('contact.dll', 'NewPlugin'));
-  FPlugins.Add(TControlInstance.Create('clients.dll', 'NewPlugin'));
+  //TODO: Chargement des plugins depuis une liste
+  FPlugins.Add(TPluginControlInstance.Create('contact.dll', 'NewPlugin'));
+  FPlugins.Add(TPluginControlInstance.Create('clients.dll', 'NewPlugin'));
 end;
 
 procedure TPluginManager.UnloadPlugins;
@@ -168,7 +170,7 @@ begin
   FPlugin := NewPlugin;
 end;
 
-function TPluginInstance.GetPlugin: IBase;
+function TPluginInstance.GetPlugin: IPlugUnknown;
 begin
   if not Assigned(FPlugin) then
     CreatePluginInstance;
@@ -180,31 +182,33 @@ begin
   FPlugin := nil;
 end;
 
-constructor TControlInstance.Create(ADLLName, ANewPluginProcName: string);
+{TControlPluginInstance}
+
+constructor TPluginControlInstance.Create(ADLLName, ANewPluginProcName: string);
 begin
   inherited;
-  FControl := nil;
+  FContainer := nil;
 end;
 
-procedure TControlInstance.Close;
+procedure TPluginControlInstance.Close;
 begin
-  FControl.Parent := nil;
+  FContainer.Parent := nil;
   ReleaseInstance;
 end;
 
-procedure TControlInstance.Open(AParent: TWinControl);
+procedure TPluginControlInstance.Open(AParent: TWinControl);
 begin
   try
-    FControl := (Plugin as IControl).Control;
-    FControl.Parent := AParent;
-    FControl.Align := alClient;
+    FContainer := (Plugin as IPlugContainer).Container;
+    FContainer.Parent := AParent;
+    FContainer.Align := alClient;
   except
     on Error: Exception do
       raise EPluginError.Create(Error.Message);
   end;
 end;
 
-procedure TControlInstance.ReleaseInstance;
+procedure TPluginControlInstance.ReleaseInstance;
 begin
   inherited;
 end;

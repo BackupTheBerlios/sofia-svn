@@ -5,7 +5,7 @@ uses
   contactctrl in 'contactctrl.pas',
   contactclasses in 'contactclasses.pas';
 
-function NewPlugin: IBase;
+function NewPlugin: IPlugUnknown;
 begin
   Result := TContactPlugin.Create;
 end;

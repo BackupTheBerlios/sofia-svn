@@ -22,42 +22,34 @@ unit clientsclasses;
 
 interface
 
-uses Controls, Classes, plugintf;
+uses Classes, plugdef, plugintf;
 
 type
 
-  TClientData = class(TCollectionItem)
+  TClientData = class(TPlugDataItem)
   private
     FNomClient: string;
   published
     property NomClient: string read FNomClient write FNomClient;
   end;
 
-  TClientsData = class(TComponent)
-  private
-    FCollection: TCollection;
-  public
-    constructor Create(AOwner: TComponent); override;
-    destructor Destroy; override;
-  published
-    property Collection: TCollection read FCollection write FCollection;
-  end;
+  TClientsData = class(TPlugData);
 
-  IClientsController = interface(IInterface)
+  IController = interface(IInterface)
   ['{CD5C131C-E966-4743-85B9-D1F2E96D4DDD}']
     function GetNomClients: TStrings; stdcall;
     procedure Refresh; stdcall;
     property NomClients: TStrings read GetNomClients;
   end;
 
-  TClientsPlugin = class(TInterfacedObject, IBase, IControl)
-    function GetControl: TWinControl; stdcall;
-    procedure Load(XML: TStringStream); stdcall;
-    procedure Save(XML: TStringStream); stdcall;
+  TClientsPlugin = class(TInterfacedObject, IPlugUnknown, IplugContainer)
+    function GetContainer: TPlugContainer; stdcall;
+    procedure LoadFromStream(Stream: TPlugDataStream); stdcall;
+    procedure SaveToStream(Stream: TPlugDataStream); stdcall;
   private
     FClientsData: TClientsData;
-    FControl: TWinControl;
-    FController: IClientsController;
+    FContainer: TPlugContainer;
+    FController: IController;
   public
     constructor Create;
     destructor Destroy; override;
@@ -69,24 +61,24 @@ uses clientsctrl;
 
 constructor TClientsPlugin.Create;
 begin
-  FControl := TClientsFrame.Create(nil);
-  FControl.Name := 'FrameClients';
-  FController := NewController(FControl);
-  FClientsData := TClientsData.Create(nil);
+  FContainer := TClientsFrame.Create(nil);
+  FContainer.Name := 'FrameClients';
+  FController := NewController(FContainer);
+  FClientsData := TClientsData.Create(nil, TClientData);
 end;
 
 destructor TClientsPlugin.Destroy;
 begin
-  FControl.Free;
+  FContainer.Free;
   inherited;
 end;
 
-function TClientsPlugin.GetControl: TWinControl;
+function TClientsPlugin.GetContainer: TPlugContainer;
 begin
-  Result := FControl;
+  Result := FContainer;
 end;
 
-procedure TClientsPlugin.Load(XML: TStringStream);
+procedure TClientsPlugin.LoadFromStream(Stream: TPlugDataStream);
 var
   i: Integer;
   BinStream: TMemoryStream;
@@ -95,9 +87,9 @@ begin
 
   BinStream := TMemoryStream.Create;
   try
-    ObjectTextToBinary(XML, BinStream);
+    ObjectTextToBinary(Stream, BinStream);
     BinStream.Position := 0;
-    BinStream.ReadComponent(FClientsData);
+      BinStream.ReadComponent(FClientsData);
   finally
     BinStream.Free;
   end;
@@ -111,11 +103,12 @@ begin
   FController.Refresh;
 end;
 
-procedure TClientsPlugin.Save(XML: TStringStream);
+procedure TClientsPlugin.SaveToStream(Stream: TPlugDataStream);
 var
   i: Integer;
   BinStream: TMemoryStream;
 begin
+  FClientsData.Collection.Clear;
   for i := 0 to FController.NomClients.Count - 1 do
     with FClientsData.Collection.Add as TClientData do
     begin
@@ -127,25 +120,12 @@ begin
   try
     BinStream.WriteComponent(FClientsData);
     BinStream.Position := 0;
-    ObjectBinaryToText(BinStream, XML);
+    ObjectBinaryToText(BinStream, Stream);
   finally
     BinStream.Free;
   end;
 end;
 
-{ TCollectionItem }
-
-constructor TClientsData.Create(AOwner: TComponent);
-begin
-  inherited;
-  FCollection := TCollection.Create(TClientData);
-end;
-
-destructor TClientsData.Destroy;
-begin
-  inherited;
-  FCollection.Free;
-end;
 
 end.
 
