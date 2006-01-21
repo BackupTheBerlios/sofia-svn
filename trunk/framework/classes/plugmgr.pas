@@ -35,33 +35,28 @@ type
 
   TPluginInstance = class(TObject)
   private
+    FContainer: TPlugContainer;
     FDLLName: string;
     FPlugin: IPlugUnknown;
     FDLLHandle: HModule;
     FNewPluginProcName: string;
+    FPlugDisplay: IPlugDisplay;
+    FSupportsDisplay: Boolean;
     procedure CreatePluginInstance;
     procedure LoadLib;
     procedure UnloadLib;
   protected
     function GetPlugin: IPlugUnknown; virtual;
   public
-    constructor Create(ADLLName, ANewPluginProcName: string); virtual;
+    constructor Create(ADLLName, ANewPluginProcName: string);
     destructor Destroy; override;
+    procedure Close;
     procedure ReleaseInstance; virtual;
+    procedure Show(AParent: TWinControl);
     property NewPluginProcName: string read FNewPluginProcName write
         FNewPluginProcName;
     property Plugin: IPlugUnknown read GetPlugin;
-  end;
-
-  TPluginControlInstance = class(TPluginInstance)
-  private
-    FContainer: TPlugContainer;
-  protected
-  public
-    constructor Create(ADLLName, ANewPluginProcName: string); override;
-    procedure Close;
-    procedure Open(AParent: TWinControl);
-    procedure ReleaseInstance; override;
+    property SupportsDisplay: Boolean read FSupportsDisplay write FSupportsDisplay;
   end;
 
   TPluginManager = class(TObject)
@@ -108,8 +103,8 @@ end;
 procedure TPluginManager.LoadPlugins;
 begin
   //TODO: Chargement des plugins depuis une liste
-  FPlugins.Add(TPluginControlInstance.Create('contact.dll', 'NewPlugin'));
-  FPlugins.Add(TPluginControlInstance.Create('clients.dll', 'NewPlugin'));
+  FPlugins.Add(TPluginInstance.Create('contact.dll', 'NewPlugin'));
+  FPlugins.Add(TPluginInstance.Create('clients.dll', 'NewPlugin'));
 end;
 
 procedure TPluginManager.UnloadPlugins;
@@ -124,13 +119,23 @@ begin
   FDLLHandle := 0;
   FNewPluginProcName := ANewPluginProcName;
   LoadLib;
+
+  FContainer := nil;
+  FSupportsDisplay := False;
 end;
 
 destructor TPluginInstance.Destroy;
 begin
   ReleaseInstance;
   UnLoadLib;
-  inherited;
+end;
+
+procedure TPluginInstance.Close;
+begin
+  if SupportsDisplay then
+    FContainer.Parent := nil;
+    
+  ReleaseInstance;
 end;
 
 procedure TPluginInstance.LoadLib;
@@ -168,6 +173,13 @@ begin
   if not Assigned(NewPlugin) then
     raise EPluginError.CreateFmt(sUnexistingFunction, [FNewPluginProcName]);
   FPlugin := NewPlugin;
+
+  try
+    FPlugDisplay := Plugin as IPlugDisplay;
+    FSupportsDisplay := True;
+  except
+  end;
+
 end;
 
 function TPluginInstance.GetPlugin: IPlugUnknown;
@@ -182,35 +194,17 @@ begin
   FPlugin := nil;
 end;
 
-{TControlPluginInstance}
-
-constructor TPluginControlInstance.Create(ADLLName, ANewPluginProcName: string);
+procedure TPluginInstance.Show(AParent: TWinControl);
 begin
-  inherited;
-  FContainer := nil;
-end;
-
-procedure TPluginControlInstance.Close;
-begin
-  FContainer.Parent := nil;
-  ReleaseInstance;
-end;
-
-procedure TPluginControlInstance.Open(AParent: TWinControl);
-begin
-  try
-    FContainer := (Plugin as IPlugContainer).Container;
-    FContainer.Parent := AParent;
-    FContainer.Align := alClient;
-  except
-    on Error: Exception do
-      raise EPluginError.Create(Error.Message);
-  end;
-end;
-
-procedure TPluginControlInstance.ReleaseInstance;
-begin
-  inherited;
+  if SupportsDisplay then
+    try
+      FContainer := FPlugDisplay.Container;
+      FContainer.Parent := AParent;
+      FContainer.Align := alClient;
+    except
+      on Error: Exception do
+        raise EPluginError.Create(Error.Message);
+    end;
 end;
 
 end.

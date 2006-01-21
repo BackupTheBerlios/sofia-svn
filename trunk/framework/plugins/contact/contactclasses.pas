@@ -40,7 +40,7 @@ type
     property NomContact: string read GetNomContact write SetNomContact;
   end;
 
-  TContactPlugin = class(TInterfacedObject, IPlugUnknown, IPlugContainer)
+  TContactPlugin = class(TInterfacedObject, IPlugUnknown, IPlugIO, IPlugDisplay)
     function GetContainer: TPlugContainer; stdcall;
     procedure LoadFromStream(Stream: TPlugDataStream); stdcall;
     procedure SaveToStream(Stream: TPlugDataStream); stdcall;

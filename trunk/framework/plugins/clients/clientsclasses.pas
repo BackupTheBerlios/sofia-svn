@@ -42,7 +42,7 @@ type
     property NomClients: TStrings read GetNomClients;
   end;
 
-  TClientsPlugin = class(TInterfacedObject, IPlugUnknown, IplugContainer)
+  TClientsPlugin = class(TInterfacedObject, IPlugUnknown, IplugIO, IPlugDisplay)
     function GetContainer: TPlugContainer; stdcall;
     procedure LoadFromStream(Stream: TPlugDataStream); stdcall;
     procedure SaveToStream(Stream: TPlugDataStream); stdcall;

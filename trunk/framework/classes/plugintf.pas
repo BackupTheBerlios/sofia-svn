@@ -35,11 +35,15 @@ type
     property Connection: TPlugConnection read GetConnection;
   end;
 
-  IPlugContainer = interface(IInterface)
+  IPlugIO = interface(IInterface)
   ['{570C9B35-15F3-435E-9166-963ACE05F635}']
-    function GetContainer: TPlugContainer; stdcall;
     procedure LoadFromStream(Stream: TPlugDataStream); stdcall;
     procedure SaveToStream(Stream: TPlugDataStream); stdcall;
+  end;
+
+  IPlugDisplay = interface(IInterface)
+  ['{84499261-05FD-4311-9EC4-2462528712B6}']
+    function GetContainer: TPlugContainer; stdcall;
     property Container: TPlugContainer read GetContainer;
   end;
 

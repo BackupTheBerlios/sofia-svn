@@ -68,8 +68,8 @@ end;
 
 procedure TAppForm.TestClosePlugins;
 begin
-  TPluginControlInstance(FPluginMgr.Plugins[0]).Close;
-  TPluginControlInstance(FPluginMgr.Plugins[1]).Close;
+  FPluginMgr.Plugins[0].Close;
+  FPluginMgr.Plugins[1].Close;
 end;
 
 procedure TAppForm.TestOpenPlugin1;
@@ -79,10 +79,10 @@ begin
   Stream := TPlugDataStream.Create('object TContactData'#$D#$A'  NomContact = ''testload'''#$D#$A'end'#$D#$A);
   try
     FPluginMgr.LoadPlugins;
-    with TPluginControlInstance(FPluginMgr.Plugins[0])  do
+    with FPluginMgr.Plugins[0]  do
     begin
-      (Plugin as IPlugContainer).LoadFromStream(Stream);
-      Open(DisplayForm.Panel2);
+      (Plugin as IPlugIO).LoadFromStream(Stream);
+      Show(DisplayForm.Panel2);
     end;
   finally
     LoadingForm.Hide;
@@ -97,10 +97,10 @@ begin
   Stream := TPlugDataStream.Create('object TClientsData'#$D#$A'  Collection = <'#$D#$A'    item'#$D#$A'      NomClient = ''Lawrence-Albert Z'#233'mour'''#$D#$A'    end'#$D#$A'    item'#$D#$A'      NomClient = ''Anne-Ang'#233'lique Meuleman'''#$D#$A'    end>'#$D#$A'end'#$D#$A);
   try
     FPluginMgr.LoadPlugins;
-    with TPluginControlInstance(FPluginMgr.Plugins[1]) do
+    with FPluginMgr.Plugins[1] do
     begin
-      (Plugin as IPlugContainer).LoadFromStream(Stream);
-      Open(DisplayForm.Panel3);
+      (Plugin as IPlugIO).LoadFromStream(Stream);
+      Show(DisplayForm.Panel3);
     end;
   finally
     LoadingForm.Hide;
