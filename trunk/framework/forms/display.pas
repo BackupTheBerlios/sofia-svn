@@ -52,7 +52,7 @@ var
 begin
   Stream := TPlugDataStream.Create('');
   try
-    (AppForm.PluginMgr.Plugins[1].Plugin as IPlugIO).SaveToStream(Stream);
+    AppForm.PluginMgr.Plugins[1].SaveToStream(Stream);
     ShowMessage(Stream.DataString);
   finally
     Stream.Free;

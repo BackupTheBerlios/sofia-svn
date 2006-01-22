@@ -22,11 +22,11 @@ unit contactclasses;
 
 interface
 
-uses plugdef, plugintf;
+uses plugdef, plugdata, plugintf;
 
 type
 
-  TContactData = class(TPlugData)
+  TContactData = class(TPlugDataComponent)
   private
     FNomContact: string;
   published
@@ -77,34 +77,25 @@ begin
 end;
 
 procedure TContactPlugin.LoadFromStream(Stream: TPlugDataStream);
-var
-  BinStream: TPlugDataStream;
 begin
-  BinStream := TPlugDataStream.Create('');
+  with TSerializer.Create do
   try
-    ObjectTextToBinary(Stream, BinStream);
-    BinStream.Position := 0;
-    BinStream.ReadComponent(FContactData);
+    Deserialize(Stream, FContactData);
+    FController.NomContact := FContactData.NomContact;
   finally
-    BinStream.Free;
+    Free;
   end;
-  FController.NomContact := FContactData.NomContact;
 end;
 
 procedure TContactPlugin.SaveToStream(Stream: TPlugDataStream);
-var
-  BinStream: TPlugDataStream;
 begin
   FContactData.NomContact := FController.NomContact;
 
-  //Flux
-  BinStream := TPlugDataStream.Create('');
+  with TSerializer.Create do
   try
-    BinStream.WriteComponent(FContactData);
-    BinStream.Position := 0;
-    ObjectBinaryToText(BinStream, Stream);
+    Serialize(FContactData, Stream);
   finally
-    BinStream.Free;
+    Free;
   end;
 end;
 

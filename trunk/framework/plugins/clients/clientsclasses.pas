@@ -22,7 +22,7 @@ unit clientsclasses;
 
 interface
 
-uses Classes, plugdef, plugintf;
+uses Classes, plugdef, plugdata, plugintf;
 
 type
 
@@ -33,7 +33,7 @@ type
     property NomClient: string read FNomClient write FNomClient;
   end;
 
-  TClientsData = class(TPlugData);
+  TClientsData = class(TPlugDataComponent);
 
   IController = interface(IInterface)
   ['{CD5C131C-E966-4743-85B9-D1F2E96D4DDD}']
@@ -81,32 +81,29 @@ end;
 procedure TClientsPlugin.LoadFromStream(Stream: TPlugDataStream);
 var
   i: Integer;
-  BinStream: TMemoryStream;
 begin
   FController.NomClients.Clear;
 
-  BinStream := TMemoryStream.Create;
+  with TSerializer.Create do
   try
-    ObjectTextToBinary(Stream, BinStream);
-    BinStream.Position := 0;
-      BinStream.ReadComponent(FClientsData);
-  finally
-    BinStream.Free;
-  end;
+    Deserialize(Stream, FClientsData);
 
-  for i := 0 to FClientsData.Collection.Count - 1 do
+    for i := 0 to FClientsData.Collection.Count - 1 do
     with FClientsData.Collection.Items[i] as TClientData do
     begin
       FController.NomClients.Add(NomClient);
     end;
 
-  FController.Refresh;
+    FController.Refresh;
+
+  finally
+    Free;
+  end;
 end;
 
 procedure TClientsPlugin.SaveToStream(Stream: TPlugDataStream);
 var
   i: Integer;
-  BinStream: TMemoryStream;
 begin
   FClientsData.Collection.Clear;
   for i := 0 to FController.NomClients.Count - 1 do
@@ -115,14 +112,11 @@ begin
       NomClient := FController.NomClients[i];
     end;
 
-  //Flux
-  BinStream := TMemoryStream.Create;
+  with TSerializer.Create do
   try
-    BinStream.WriteComponent(FClientsData);
-    BinStream.Position := 0;
-    ObjectBinaryToText(BinStream, Stream);
+    Serialize(FClientsData, Stream);
   finally
-    BinStream.Free;
+    Free;
   end;
 end;
 

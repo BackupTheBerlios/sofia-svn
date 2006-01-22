@@ -81,7 +81,7 @@ begin
     FPluginMgr.LoadPlugins;
     with FPluginMgr.Plugins[0]  do
     begin
-      (Plugin as IPlugIO).LoadFromStream(Stream);
+      LoadFromStream(Stream);
       Show(DisplayForm.Panel2);
     end;
   finally
@@ -99,7 +99,7 @@ begin
     FPluginMgr.LoadPlugins;
     with FPluginMgr.Plugins[1] do
     begin
-      (Plugin as IPlugIO).LoadFromStream(Stream);
+      LoadFromStream(Stream);
       Show(DisplayForm.Panel3);
     end;
   finally

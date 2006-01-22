@@ -33,42 +33,47 @@ type
   EPluginError = class(Exception);
   TNewPlugin = function: IPlugUnknown; stdcall;
 
-  TPluginInstance = class(TObject)
+  TPluginLibrary = class(TObject)
   private
-    FContainer: TPlugContainer;
     FDLLName: string;
-    FPlugin: IPlugUnknown;
     FDLLHandle: HModule;
-    FNewPluginProcName: string;
     FPlugDisplay: IPlugDisplay;
-    FSupportsDisplay: Boolean;
-    procedure CreatePluginInstance;
     procedure LoadLib;
     procedure UnloadLib;
   protected
-    function GetPlugin: IPlugUnknown; virtual;
+    function GetPluginInterface: IPlugUnknown;
   public
-    constructor Create(ADLLName, ANewPluginProcName: string);
+    constructor Create(ADLLName: string);
     destructor Destroy; override;
-    procedure Close;
-    procedure ReleaseInstance; virtual;
+  end;
+
+   TPlugin = class(TObject)
+  private
+    FName: string;
+    FPlugin: IPlugUnknown;
+    FPluginLibrary: TPluginLibrary;
+    function GetPlugin: IPlugUnknown;
+  public
+    constructor Create(AName: string);
+    destructor Destroy; override;
     procedure Show(AParent: TWinControl);
-    property NewPluginProcName: string read FNewPluginProcName write
-        FNewPluginProcName;
+    procedure Close;
+    procedure LoadFromStream(Stream: TPlugDataStream); stdcall;
+    procedure SaveToStream(Stream: TPlugDataStream); stdcall;
+    property Name: string read FName;
     property Plugin: IPlugUnknown read GetPlugin;
-    property SupportsDisplay: Boolean read FSupportsDisplay write FSupportsDisplay;
   end;
 
   TPluginManager = class(TObject)
   private
     FPlugins: TObjectList;
-    function GetPlugins(Index: Integer): TPluginInstance;
+    function GetPlugins(Index: Integer): TPlugin;
   public
     constructor Create;
     destructor Destroy; override;
     procedure LoadPlugins;
     procedure UnloadPlugins;
-    property Plugins[Index: Integer]: TPluginInstance read GetPlugins; default;
+    property Plugins[Index: Integer]: TPlugin read GetPlugins; default;
   end;
 
 implementation
@@ -77,6 +82,7 @@ uses Windows;
 
 const
   LIBPATH = '';
+  PROCNAME = 'NewPlugin';
 
 
 {PluginInstance}
@@ -92,10 +98,10 @@ begin
   inherited;
 end;
 
-function TPluginManager.GetPlugins(Index: Integer): TPluginInstance;
+function TPluginManager.GetPlugins(Index: Integer): TPlugin;
 begin
   if Index < FPlugins.Count then
-    Result := TPluginInstance(FPlugins[Index])
+    Result := TPlugin(FPlugins[Index])
   else
     Result := nil;
 end;
@@ -103,8 +109,8 @@ end;
 procedure TPluginManager.LoadPlugins;
 begin
   //TODO: Chargement des plugins depuis une liste
-  FPlugins.Add(TPluginInstance.Create('contact.dll', 'NewPlugin'));
-  FPlugins.Add(TPluginInstance.Create('clients.dll', 'NewPlugin'));
+  FPlugins.Add(TPlugin.Create('contact'));
+  FPlugins.Add(TPlugin.Create('clients'));
 end;
 
 procedure TPluginManager.UnloadPlugins;
@@ -112,33 +118,20 @@ begin
   FPlugins.Clear;
 end;
 
-constructor TPluginInstance.Create(ADLLName, ANewPluginProcName: string);
+constructor TPluginLibrary.Create(ADLLName: string);
 begin
   inherited Create;
   FDLLName := ADLLName;
   FDLLHandle := 0;
-  FNewPluginProcName := ANewPluginProcName;
   LoadLib;
-
-  FContainer := nil;
-  FSupportsDisplay := False;
 end;
 
-destructor TPluginInstance.Destroy;
+destructor TPluginLibrary.Destroy;
 begin
-  ReleaseInstance;
   UnLoadLib;
 end;
 
-procedure TPluginInstance.Close;
-begin
-  if SupportsDisplay then
-    FContainer.Parent := nil;
-    
-  ReleaseInstance;
-end;
-
-procedure TPluginInstance.LoadLib;
+procedure TPluginLibrary.LoadLib;
 begin
   if (FDLLHandle <> 0) then
     Exit;
@@ -158,53 +151,87 @@ begin
   end;
 end;
 
-procedure TPluginInstance.UnloadLib;
+procedure TPluginLibrary.UnloadLib;
 begin
   if FDLLHandle <> 0 then
     FreeLibrary(FDLLHandle);
   FDLLHandle := 0;
 end;
 
-procedure TPluginInstance.CreatePluginInstance;
+function TPluginLibrary.GetPluginInterface: IPlugUnknown;
 var
   NewPlugin: TNewPlugin;
 begin
-  NewPlugin := GetProcAddress(FDLLHandle, PChar(FNewPluginProcName));
+  NewPlugin := GetProcAddress(FDLLHandle, PChar(PROCNAME));
   if not Assigned(NewPlugin) then
-    raise EPluginError.CreateFmt(sUnexistingFunction, [FNewPluginProcName]);
-  FPlugin := NewPlugin;
-
-  try
-    FPlugDisplay := Plugin as IPlugDisplay;
-    FSupportsDisplay := True;
-  except
-  end;
-
+    raise EPluginError.CreateFmt(sUnexistingFunction, [PROCNAME]);
+  Result := NewPlugin;
 end;
 
-function TPluginInstance.GetPlugin: IPlugUnknown;
+constructor TPlugin.Create(AName: string);
+begin
+  FPluginLibrary := TPluginLibrary.Create(AName + '.dll');
+end;
+
+destructor TPlugin.Destroy;
+begin
+  FPlugin := nil;
+  FPluginLibrary.Free;
+  inherited;
+end;
+
+function TPlugin.GetPlugin: IPlugUnknown;
 begin
   if not Assigned(FPlugin) then
-    CreatePluginInstance;
+    FPlugin := FPluginLibrary.GetPluginInterface;
   Result := FPlugin;
 end;
 
-procedure TPluginInstance.ReleaseInstance;
+procedure TPlugin.Show(AParent: TWinControl);
 begin
-  FPlugin := nil;
+   try
+    with Plugin as IPlugDisplay do
+    begin
+      Container.Parent := AParent;
+      Container.Align := alClient;
+    end;
+  except
+    //interface non supportée par le plugin
+  end;
 end;
 
-procedure TPluginInstance.Show(AParent: TWinControl);
+procedure TPlugin.Close;
 begin
-  if SupportsDisplay then
+  try
     try
-      FContainer := FPlugDisplay.Container;
-      FContainer.Parent := AParent;
-      FContainer.Align := alClient;
+      with Plugin as IPlugDisplay do
+        Container.Parent := nil;
     except
-      on Error: Exception do
-        raise EPluginError.Create(Error.Message);
+      //interface non supportée par le plugin
     end;
+  finally
+    FPlugin := nil;
+  end;
+end;
+
+procedure TPlugin.LoadFromStream(Stream: TPlugDataStream);
+begin
+  try
+    with Plugin as IPlugIO do
+     LoadFromStream(Stream);
+  except
+    //interface non supportée par le plugin
+  end;
+end;
+
+procedure TPlugin.SaveToStream(Stream: TPlugDataStream);
+begin
+  try
+    with Plugin as IPlugIO do
+     SaveToStream(Stream);
+  except
+    //interface non supportée par le plugin
+  end;
 end;
 
 end.
