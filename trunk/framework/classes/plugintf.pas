@@ -47,7 +47,7 @@ type
     property Container: TPlugContainer read GetContainer;
   end;
 
-  ISerializer = interface(IInterface)
+  IPlugSerializer = interface(IInterface)
   ['{22E9D362-B42C-4065-BD30-E285D7D6DD1F}']
     procedure Deserialize(Stream: TPlugDataStream; PlugDataComponent:
         TPlugDataComponent);

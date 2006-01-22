@@ -22,7 +22,7 @@ unit clientsclasses;
 
 interface
 
-uses Classes, plugdef, plugdata, plugintf;
+uses Classes, plugdef, plugintf;
 
 type
 

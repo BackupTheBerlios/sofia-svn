@@ -22,7 +22,7 @@ unit contactclasses;
 
 interface
 
-uses plugdef, plugdata, plugintf;
+uses plugdef, plugintf;
 
 type
 
