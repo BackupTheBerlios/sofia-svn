@@ -132,10 +132,14 @@ end;
 
 procedure TPluginManager.LoadPlugins;
 begin
-  //TODO: Chargement des plugins depuis une liste
+  //Plugins bas niveau
   FPlugins.Add(TPlugin.Create('serializer'));
+
+  //Plugins interface graphique
   FPlugins.Add(TPlugin.Create('contact'));
   FPlugins.Add(TPlugin.Create('clients'));
+
+  Items
 end;
 
 procedure TPluginManager.UnloadPlugins;
