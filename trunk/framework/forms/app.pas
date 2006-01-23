@@ -68,8 +68,8 @@ end;
 
 procedure TAppForm.TestClosePlugins;
 begin
-  FPluginMgr.Plugins[0].Close;
-  FPluginMgr.Plugins[1].Close;
+  FPluginMgr['contact'].Close;
+  FPluginMgr['clients'].Close;
 end;
 
 procedure TAppForm.TestOpenPlugin1;
@@ -79,7 +79,7 @@ begin
   Stream := TPlugDataStream.Create('object TContactData'#$D#$A'  NomContact = ''testload'''#$D#$A'end'#$D#$A);
   try
     FPluginMgr.LoadPlugins;
-    with FPluginMgr.Plugins[0]  do
+    with FPluginMgr['contact']  do
     begin
       LoadFromStream(Stream);
       Show(DisplayForm.Panel2);
@@ -97,7 +97,7 @@ begin
   Stream := TPlugDataStream.Create('object TClientsData'#$D#$A'  Collection = <'#$D#$A'    item'#$D#$A'      NomClient = ''Lawrence-Albert Z'#233'mour'''#$D#$A'    end'#$D#$A'    item'#$D#$A'      NomClient = ''Anne-Ang'#233'lique Meuleman'''#$D#$A'    end>'#$D#$A'end'#$D#$A);
   try
     FPluginMgr.LoadPlugins;
-    with FPluginMgr.Plugins[1] do
+    with FPluginMgr['clients'] do
     begin
       LoadFromStream(Stream);
       Show(DisplayForm.Panel3);

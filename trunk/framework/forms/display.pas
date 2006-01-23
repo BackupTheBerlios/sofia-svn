@@ -52,7 +52,7 @@ var
 begin
   Stream := TPlugDataStream.Create('');
   try
-    AppForm.PluginMgr.Plugins[1].SaveToStream(Stream);
+    AppForm.PluginMgr['contact'].SaveToStream(Stream);
     ShowMessage(Stream.DataString);
   finally
     Stream.Free;

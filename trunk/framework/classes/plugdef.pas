@@ -20,7 +20,7 @@ type
     function GetItems(Index: Integer): TPlugDataItem;
   public
     constructor Create(AOwner: TComponent; ADataItemClass: TDataItemClass);
-        overload;
+        reintroduce; overload;
     destructor Destroy; override;
     property DataItemClass: TDataItemClass read FDataItemClass write FDataItemClass;
     property Items[Index: Integer]: TPlugDataItem read GetItems; default;
