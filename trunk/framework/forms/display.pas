@@ -48,9 +48,9 @@ uses DateUtils, Dialogs, app, plugmgr, plugdef, plugintf;
 
 procedure TDisplayForm.PluginContainer1Button1Click(Sender: TObject);
 var
-  Stream: TPlugDataStream;
+  Stream: TSerializeStream;
 begin
-  Stream := TPlugDataStream.Create('');
+  Stream := TSerializeStream.Create('');
   try
     AppForm.PluginMgr['contact'].SaveToStream(Stream);
     ShowMessage(Stream.DataString);

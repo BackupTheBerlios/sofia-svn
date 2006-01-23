@@ -26,7 +26,7 @@ uses plugdef, plugintf;
 
 type
 
-  TContactData = class(TPlugDataComponent)
+  TContactData = class(TSerializable)
   private
     FNomContact: string;
   published
@@ -41,16 +41,18 @@ type
   end;
 
   TContactPlugin = class(TInterfacedObject, IPlugUnknown, IPlugIO, IPlugDisplay)
-    function GetContainer: TPlugContainer; stdcall;
-    procedure LoadFromStream(Stream: TPlugDataStream); stdcall;
-    procedure SaveToStream(Stream: TPlugDataStream); stdcall;
   private
     FContactData: TContactData;
     FContainer: TPlugContainer;
     FController: IController;
+    FSerializer: IPlugSerializer;
   public
     constructor Create;
     destructor Destroy; override;
+    function GetContainer: TPlugContainer; stdcall;
+    procedure LoadFromStream(Stream: TSerializeStream); stdcall;
+    procedure SaveToStream(Stream: TSerializeStream); stdcall;
+    procedure SetSerializer(ASerializer: IPlugSerializer); stdcall;
   end;
 
 implementation
@@ -76,27 +78,21 @@ begin
   Result := FContainer;
 end;
 
-procedure TContactPlugin.LoadFromStream(Stream: TPlugDataStream);
+procedure TContactPlugin.LoadFromStream(Stream: TSerializeStream);
 begin
-  with TSerializer.Create do
-  try
-    Deserialize(Stream, FContactData);
-    FController.NomContact := FContactData.NomContact;
-  finally
-    Free;
-  end;
+  FSerializer.Deserialize(Stream, FContactData);
+  FController.NomContact := FContactData.NomContact;
 end;
 
-procedure TContactPlugin.SaveToStream(Stream: TPlugDataStream);
+procedure TContactPlugin.SaveToStream(Stream: TSerializeStream);
 begin
   FContactData.NomContact := FController.NomContact;
+  FSerializer.Serialize(FContactData, Stream);
+end;
 
-  with TSerializer.Create do
-  try
-    Serialize(FContactData, Stream);
-  finally
-    Free;
-  end;
+procedure TContactPlugin.SetSerializer(ASerializer: IPlugSerializer);
+begin
+  FSerializer := ASerializer;
 end;
 
 

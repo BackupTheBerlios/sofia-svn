@@ -26,14 +26,14 @@ uses Classes, plugdef, plugintf;
 
 type
 
-  TClientData = class(TPlugDataItem)
+  TClientData = class(TCollectionItem)
   private
     FNomClient: string;
   published
     property NomClient: string read FNomClient write FNomClient;
   end;
 
-  TClientsData = class(TPlugDataComponent);
+  TClientsData = class(TSerializable);
 
   IController = interface(IInterface)
   ['{CD5C131C-E966-4743-85B9-D1F2E96D4DDD}']
@@ -43,16 +43,18 @@ type
   end;
 
   TClientsPlugin = class(TInterfacedObject, IPlugUnknown, IplugIO, IPlugDisplay)
-    function GetContainer: TPlugContainer; stdcall;
-    procedure LoadFromStream(Stream: TPlugDataStream); stdcall;
-    procedure SaveToStream(Stream: TPlugDataStream); stdcall;
   private
     FClientsData: TClientsData;
     FContainer: TPlugContainer;
     FController: IController;
+    FSerializer: IPlugSerializer;
   public
     constructor Create;
     destructor Destroy; override;
+    function GetContainer: TPlugContainer; stdcall;
+    procedure LoadFromStream(Stream: TserializeStream); stdcall;
+    procedure SaveToStream(Stream: TSerializeStream); stdcall;
+    procedure SetSerializer(ASerializer: IPlugSerializer); stdcall;
   end;
 
 implementation
@@ -78,30 +80,22 @@ begin
   Result := FContainer;
 end;
 
-procedure TClientsPlugin.LoadFromStream(Stream: TPlugDataStream);
+procedure TClientsPlugin.LoadFromStream(Stream: TserializeStream);
 var
   i: Integer;
 begin
-  FController.NomClients.Clear;
+  FSerializer.Deserialize(Stream, FClientsData);
 
-  with TSerializer.Create do
-  try
-    Deserialize(Stream, FClientsData);
-
-    for i := 0 to FClientsData.Collection.Count - 1 do
+  for i := 0 to FClientsData.Collection.Count - 1 do
     with FClientsData.Collection.Items[i] as TClientData do
     begin
       FController.NomClients.Add(NomClient);
     end;
 
-    FController.Refresh;
-
-  finally
-    Free;
-  end;
+  FController.Refresh;
 end;
 
-procedure TClientsPlugin.SaveToStream(Stream: TPlugDataStream);
+procedure TClientsPlugin.SaveToStream(Stream: TSerializeStream);
 var
   i: Integer;
 begin
@@ -112,12 +106,12 @@ begin
       NomClient := FController.NomClients[i];
     end;
 
-  with TSerializer.Create do
-  try
-    Serialize(FClientsData, Stream);
-  finally
-    Free;
-  end;
+  FSerializer.Serialize(FClientsData, Stream);
+end;
+
+procedure TClientsPlugin.SetSerializer(ASerializer: IPlugSerializer);
+begin
+  FSerializer := ASerializer;
 end;
 
 

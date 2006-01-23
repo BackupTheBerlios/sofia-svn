@@ -53,15 +53,17 @@ type
     FName: string;
     FPlugin: IPlugUnknown;
     FPluginLibrary: TPluginLibrary;
+    FPluginManager: TPluginManager;
     FSerializer: IPlugSerializer;
     function GetPlugin: IPlugUnknown;
   public
-    constructor Create(PluginManager: TPluginManager; AName: string);
+    constructor Create(APluginManager: TPluginManager; AName: string);
     destructor Destroy; override;
     procedure Show(AParent: TWinControl);
     procedure Close;
-    procedure LoadFromStream(Stream: TPlugDataStream); stdcall;
-    procedure SaveToStream(Stream: TPlugDataStream); stdcall;
+    procedure LoadFromStream(Stream: TSerializeStream); stdcall;
+    procedure SaveToStream(Stream: TSerializeStream); stdcall;
+    function GetSerializer: IPlugSerializer; stdcall;
     property Name: string read FName;
     property Plugin: IPlugUnknown read GetPlugin;
   end;
@@ -120,12 +122,12 @@ begin
   i := 0;
   while not Found and (i < FPlugins.Count) do
   begin
-    Found := SameText(TPlugin(FPlugins).Name, PluginName);
+    Found := SameText(TPlugin(FPlugins[i]).Name, PluginName);
     if not Found then
       Inc(i)
   end;
   if Found then
-    Result := TPlugin(FPlugins)
+    Result := TPlugin(FPlugins[i])
   else
     Result := nil;
 end;
@@ -133,13 +135,11 @@ end;
 procedure TPluginManager.LoadPlugins;
 begin
   //Plugins bas niveau
-  FPlugins.Add(TPlugin.Create('serializer'));
+  FPlugins.Add(TPlugin.Create(Self, 'serializer'));
 
   //Plugins interface graphique
-  FPlugins.Add(TPlugin.Create('contact'));
-  FPlugins.Add(TPlugin.Create('clients'));
-
-  Items
+  FPlugins.Add(TPlugin.Create(Self, 'contact'));
+  FPlugins.Add(TPlugin.Create(Self, 'clients'));
 end;
 
 procedure TPluginManager.UnloadPlugins;
@@ -197,10 +197,11 @@ begin
   Result := NewPlugin;
 end;
 
-constructor TPlugin.Create(PluginManager: TPluginManager; AName: string);
+constructor TPlugin.Create(APluginManager: TPluginManager; AName: string);
 begin
   FPluginLibrary := TPluginLibrary.Create(AName + '.dll');
-  FSerializer :=
+  FPluginManager := APluginManager;
+  FName := AName;
 end;
 
 destructor TPlugin.Destroy;
@@ -226,7 +227,7 @@ begin
       Container.Align := alClient;
     end;
   except
-    //interface non supportée par le plugin
+    //interface IPlugDisplay non supportée par le plugin
   end;
 end;
 
@@ -237,30 +238,48 @@ begin
       with Plugin as IPlugDisplay do
         Container.Parent := nil;
     except
-      //interface non supportée par le plugin
+      //interface IPlugDisplay non supportée par le plugin
     end;
   finally
     FPlugin := nil;
   end;
 end;
 
-procedure TPlugin.LoadFromStream(Stream: TPlugDataStream);
+procedure TPlugin.LoadFromStream(Stream: TSerializeStream);
 begin
   try
     with Plugin as IPlugIO do
+    begin
+      SetSerializer(GetSerializer);
       LoadFromStream(Stream);
+    end;
   except
-    //interface non supportée par le plugin
+    //interface IPlugIO non supportée par le plugin
   end;
 end;
 
-procedure TPlugin.SaveToStream(Stream: TPlugDataStream);
+procedure TPlugin.SaveToStream(Stream: TSerializeStream);
 begin
   try
     with Plugin as IPlugIO do
+    begin
+      SetSerializer(GetSerializer);
       SaveToStream(Stream);
+    end
   except
-    //interface non supportée par le plugin
+    //interface IPlugIO non supportée par le plugin
+  end;
+end;
+
+function TPlugin.GetSerializer: IPlugSerializer;
+begin
+  try
+    if Assigned(FPluginManager['serializer']) then
+      Result := FPluginManager['serializer'].Plugin as IPlugSerializer
+    else
+      Result := nil;
+  except
+    //interface IPlugSerializer non supportée par le plugin serializer
   end;
 end;
 

@@ -74,11 +74,10 @@ end;
 
 procedure TAppForm.TestOpenPlugin1;
 var
-  Stream: TPlugDataStream;
+  Stream: TSerializeStream;
 begin
-  Stream := TPlugDataStream.Create('object TContactData'#$D#$A'  NomContact = ''testload'''#$D#$A'end'#$D#$A);
+  Stream := TSerializeStream.Create('object TContactData'#$D#$A'  NomContact = ''testload'''#$D#$A'end'#$D#$A);
   try
-    FPluginMgr.LoadPlugins;
     with FPluginMgr['contact']  do
     begin
       LoadFromStream(Stream);
@@ -94,9 +93,8 @@ procedure TAppForm.TestOpenPlugin2;
 var
   Stream: TStringStream;
 begin
-  Stream := TPlugDataStream.Create('object TClientsData'#$D#$A'  Collection = <'#$D#$A'    item'#$D#$A'      NomClient = ''Lawrence-Albert Z'#233'mour'''#$D#$A'    end'#$D#$A'    item'#$D#$A'      NomClient = ''Anne-Ang'#233'lique Meuleman'''#$D#$A'    end>'#$D#$A'end'#$D#$A);
+  Stream := TSerializeStream.Create('object TClientsData'#$D#$A'  Collection = <'#$D#$A'    item'#$D#$A'      NomClient = ''Lawrence-Albert Z'#233'mour'''#$D#$A'    end'#$D#$A'    item'#$D#$A'      NomClient = ''Anne-Ang'#233'lique Meuleman'''#$D#$A'    end>'#$D#$A'end'#$D#$A);
   try
-    FPluginMgr.LoadPlugins;
     with FPluginMgr['clients'] do
     begin
       LoadFromStream(Stream);
@@ -112,6 +110,7 @@ procedure TAppForm.tmrLaunchTimer(Sender: TObject);
 begin
   tmrLaunch.Enabled := False;
   LoadingForm.Show;
+  FPluginMgr.LoadPlugins;
   TestOpenPlugin1;
   TestOpenPlugin2;
   DisplayForm.ShowModal;

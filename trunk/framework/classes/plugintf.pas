@@ -37,17 +37,15 @@ type
 
   IPlugSerializer = interface(IInterface)
   ['{22E9D362-B42C-4065-BD30-E285D7D6DD1F}']
-    procedure Deserialize(Stream: TPlugDataStream; PlugDataComponent:
-        TPlugDataComponent);
-    procedure Serialize(Data: TPlugDataComponent; Stream: TPlugDataStream);
+    procedure Deserialize(Stream: TSerializeStream; Serializable: TSerializable);
+    procedure Serialize(Serializable: TSerializable; Stream: TSerializeStream);
   end;
 
   IPlugIO = interface(IInterface)
   ['{570C9B35-15F3-435E-9166-963ACE05F635}']
-    procedure LoadFromStream(Stream: TPlugDataStream; Serializer: IPlugSerializer);
-        stdcall;
-    procedure SaveToStream(Stream: TPlugDataStream; Serializer: IPlugSerializer);
-        stdcall;
+    procedure LoadFromStream(Stream: TSerializeStream); stdcall;
+    procedure SaveToStream(Stream: TSerializeStream); stdcall;
+    procedure SetSerializer(ASerializer: IPlugSerializer); stdcall;
   end;
 
   IPlugDisplay = interface(IInterface)
