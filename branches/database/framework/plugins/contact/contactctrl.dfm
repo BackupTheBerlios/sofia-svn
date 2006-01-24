@@ -1,0 +1,34 @@
+object ContactFrame: TContactFrame
+  Left = 0
+  Top = 0
+  Width = 230
+  Height = 181
+  HorzScrollBar.Color = clWhite
+  HorzScrollBar.ParentColor = False
+  Color = clWhite
+  Font.Charset = ANSI_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Verdana'
+  Font.Style = []
+  ParentColor = False
+  ParentFont = False
+  TabOrder = 0
+  object edtNom: TLabeledEdit
+    Left = 40
+    Top = 8
+    Width = 121
+    Height = 21
+    BevelKind = bkFlat
+    BorderStyle = bsNone
+    Ctl3D = True
+    EditLabel.Width = 26
+    EditLabel.Height = 13
+    EditLabel.Caption = 'Nom'
+    LabelPosition = lpLeft
+    LabelSpacing = 5
+    ParentColor = True
+    ParentCtl3D = False
+    TabOrder = 0
+  end
+end
