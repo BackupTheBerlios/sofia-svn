@@ -9,7 +9,7 @@ MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
 DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
-PROJECTS = sofia.exe contact.dll clients.dll serializer.dll
+PROJECTS = sofia.exe contact.dll clients.dll serializer.dll uibcnx.dll
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
@@ -25,6 +25,9 @@ clients.dll: plugins\clients\clients.dpr
   $(DCC)
 
 serializer.dll: plugins\serializer\serializer.dpr
+  $(DCC)
+
+uibcnx.dll: plugins\connexion\uibcnx.dpr
   $(DCC)
 
 

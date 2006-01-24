@@ -38,8 +38,8 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     procedure TestClosePlugins;
-    procedure TestOpenPlugin1;
-    procedure TestOpenPlugin2;
+    procedure TestContact;
+    procedure TestClients;
     property PluginMgr: TPluginManager read FPluginMgr;
     { Déclarations publiques }
   end;
@@ -72,7 +72,7 @@ begin
   FPluginMgr['clients'].Close;
 end;
 
-procedure TAppForm.TestOpenPlugin1;
+procedure TAppForm.TestContact;
 var
   Stream: TSerializeStream;
 begin
@@ -81,7 +81,7 @@ begin
     with FPluginMgr['contact']  do
     begin
       LoadFromStream(Stream);
-      Show(DisplayForm.Panel2);
+      Show(DisplayForm.Panel3);
     end;
   finally
     LoadingForm.Hide;
@@ -89,7 +89,7 @@ begin
   end;
 end;
 
-procedure TAppForm.TestOpenPlugin2;
+procedure TAppForm.TestClients;
 var
   Stream: TStringStream;
 begin
@@ -98,7 +98,7 @@ begin
     with FPluginMgr['clients'] do
     begin
       LoadFromStream(Stream);
-      Show(DisplayForm.Panel3);
+      Show(DisplayForm.Panel2);
     end;
   finally
     LoadingForm.Hide;
@@ -111,8 +111,7 @@ begin
   tmrLaunch.Enabled := False;
   LoadingForm.Show;
   FPluginMgr.LoadPlugins;
-  TestOpenPlugin1;
-  TestOpenPlugin2;
+  TestClients;
   DisplayForm.ShowModal;
   TestClosePlugins;
   Close;

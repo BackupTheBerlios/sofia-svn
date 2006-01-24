@@ -29,7 +29,7 @@ type
   ['{0266191D-1BAA-4063-B95D-A9B4EED9F0DA}']
   end;
 
-  IPlugDatabase = interface(IInterface)
+  IPlugConnexion = interface(IInterface)
   ['{FA94CE0A-DF1A-4628-A8A8-C599CC785286}']
     function GetConnection: TPlugConnection; stdcall;
     property Connection: TPlugConnection read GetConnection;

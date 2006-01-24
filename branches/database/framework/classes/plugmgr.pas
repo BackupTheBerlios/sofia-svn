@@ -77,18 +77,6 @@ type
     destructor Destroy; override;
     procedure LoadPlugins;
     procedure UnloadPlugins;
-    {
-    ~desc       Donne accès aux valeurs de tous les champs de l'enregistrement.
-                Utilisez la propriété FieldValues pour lire ou écrire des valeurs dans un
-                enregistrement. FieldName spécifie le ou les nom(s) du/des champ(s) à
-                consulter ou à modifier.~[br]
-                FieldValues accepte et renvoie un Variant, elle peut donc gérer et convertir
-                des champs de tout type.~[~[br]]
-    ~attention  pour des raison de permformances, il est préférable d'acceder à la valeur
-                d'un champ de l'enregistrement directement par le nom de la propriété.~[br]
-    ~example    Document.FieldValues['ID_DOCUMENT'] := Edit1.Text;~[br]
-                Document.FieldValues['ID_DOCUMENT;ID_DOCMETIER'] renvoie une tableau de variant
-    }
     property Items[const PluginName: string]: TPlugin read GetItems; default;
   end;
 

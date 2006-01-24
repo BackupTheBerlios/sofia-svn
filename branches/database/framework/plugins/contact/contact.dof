@@ -137,37 +137,18 @@ Comments=
 [Excluded Packages]
 D:\Developpement\sofia\bin\gdip.bpl=(sans titre)
 C:\WINDOWS\system32\rbIBE77.bpl=ReportBuilder Data Access for Interbase Express
-[HistoryLists\hlConditionals]
-Count=1
-Item0=TNT
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
-[HistoryLists\hlSearchPath]
-Count=11
-Item0=$(SOFIA)\trunk\src\framework\intf;$(SOFIA)\trunk\src\framework\classes;$(SOFIA)\lib
-Item1=$(SOFIA)\lib
-Item2=$(SOFIA)\trunk\src\framework\intf;$(SOFIA)\trunk\src\framework\classes
-Item3=$(SOFIA)\trunk\src\framework\intf;$(SOFIA)\trunk\src\gdiplus\api;$(SOFIA)\trunk\src\gdiplus\controls
-Item4=$(SOFIA)\trunk\src\framework\intf;$(SOFIA)\trunk\src\gdiplus\api
-Item5=$(DELPHI)\Lib\Debug;D:\code\HSV Library;D:\Code\Mylib
-Item6=$(SOFIA)\trunk\src\framework\intf;$(sofia)\lib
-Item7=$(SOFIA)\trunk\src\framework\intf
-Item8=$(SOFIA)\trunk\src\framework\intf;$(SOFIA)\lib;$(SOFIA)\trunk\src\gdiplus\api
-Item9=$(SOFIA)\trunk\src\framework\intf;$(SOFIA)\lib;D:\Developpement\sofia\trunk\src\gdiplus\controls
-Item10=$(DELPHI)\Lib\Debug;D:\code\VirtualTrees\Source;D:\code\xmlpartner\source;D:\code\Abbrevia\source;D:\Code\Mylib;D:\Code\pngimage;D:\code\virtualshelltools\Source;D:\Code\GDI+Controls;D:\Code\GDI+;D:\Code\Tnt;D:\Code\unitntctrls;D:\Code\HSV Library;D:\Code\VirtualTreeEditors;D:\Code\tntExtendedEditors;D:\Code\PBEditPack
 [HistoryLists\hlUnitOutputDirectory]
 Count=1
-Item0=$(SOFIA)\lib
-[HistoryLists\hlOutputDirectorry]
-Count=1
-Item0=$(SOFIA)\bin
+Item0=E:\Developpement\Composants\ComponentLibrary
 [HistoryLists\hlBPLOutput]
 Count=1
-Item0=$(SOFIA)\bin
+Item0=E:\Developpement\Composants\ComponentLibrary
 [HistoryLists\hlDCPOutput]
 Count=1
-Item0=$(SOFIA)\lib
+Item0=E:\Developpement\Composants\ComponentLibrary
 [Exception Log]
 EurekaLog Version=504
 Activate=0
@@ -485,3 +466,4 @@ Count mtSend_FailureMsg=1
 mtSend_FailureMsg0="Sorry, sending the message didn't work."
 
 
+ge4ùR4ùRÈ
