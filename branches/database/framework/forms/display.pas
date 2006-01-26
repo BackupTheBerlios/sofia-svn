@@ -52,7 +52,7 @@ var
 begin
   Stream := TSerializeStream.Create('');
   try
-    AppForm.PluginMgr['contact'].SaveToStream(Stream);
+    AppForm.PluginMgr['contact'].IOSaveToStream(Stream);
     ShowMessage(Stream.DataString);
   finally
     Stream.Free;

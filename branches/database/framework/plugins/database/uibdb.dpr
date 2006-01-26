@@ -6,7 +6,7 @@ uses
 
 function NewPlugin: IPlugUnknown;
 begin
-  Result := TConnexionPlugin.Create;
+  Result := TDBPlugin.Create;
 end;
 
 exports

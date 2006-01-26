@@ -59,10 +59,10 @@ type
   public
     constructor Create(APluginManager: TPluginManager; AName: string);
     destructor Destroy; override;
-    procedure Show(AParent: TWinControl);
-    procedure Close;
-    procedure LoadFromStream(Stream: TSerializeStream); stdcall;
-    procedure SaveToStream(Stream: TSerializeStream); stdcall;
+    procedure DisplayShow(AParent: TWinControl);
+    procedure DisplayClose;
+    procedure IOLoadFromStream(Stream: TSerializeStream); stdcall;
+    procedure IOSaveToStream(Stream: TSerializeStream); stdcall;
     function GetSerializer: IPlugSerializer; stdcall;
     property Name: string read FName;
     property Plugin: IPlugUnknown read GetPlugin;
@@ -206,7 +206,7 @@ begin
   Result := FPlugin;
 end;
 
-procedure TPlugin.Show(AParent: TWinControl);
+procedure TPlugin.DisplayShow(AParent: TWinControl);
 begin
   try
     with Plugin as IPlugDisplay do
@@ -219,7 +219,7 @@ begin
   end;
 end;
 
-procedure TPlugin.Close;
+procedure TPlugin.DisplayClose;
 begin
   try
     try
@@ -233,7 +233,7 @@ begin
   end;
 end;
 
-procedure TPlugin.LoadFromStream(Stream: TSerializeStream);
+procedure TPlugin.IOLoadFromStream(Stream: TSerializeStream);
 begin
   try
     with Plugin as IPlugIO do
@@ -246,7 +246,7 @@ begin
   end;
 end;
 
-procedure TPlugin.SaveToStream(Stream: TSerializeStream);
+procedure TPlugin.IOSaveToStream(Stream: TSerializeStream);
 begin
   try
     with Plugin as IPlugIO do

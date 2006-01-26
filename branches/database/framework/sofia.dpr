@@ -1,5 +1,7 @@
 program sofia;
 
+
+
 uses
   Forms,
   plugmgr in 'classes\plugmgr.pas',

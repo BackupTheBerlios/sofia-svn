@@ -68,8 +68,8 @@ end;
 
 procedure TAppForm.TestClosePlugins;
 begin
-  FPluginMgr['contact'].Close;
-  FPluginMgr['clients'].Close;
+  FPluginMgr['contact'].DisplayClose;
+  FPluginMgr['clients'].DisplayClose;
 end;
 
 procedure TAppForm.TestContact;
@@ -80,8 +80,8 @@ begin
   try
     with FPluginMgr['contact']  do
     begin
-      LoadFromStream(Stream);
-      Show(DisplayForm.Panel3);
+      IOLoadFromStream(Stream);
+      DisplayShow(DisplayForm.Panel3);
     end;
   finally
     LoadingForm.Hide;
@@ -97,8 +97,8 @@ begin
   try
     with FPluginMgr['clients'] do
     begin
-      LoadFromStream(Stream);
-      Show(DisplayForm.Panel2);
+      IOLoadFromStream(Stream);
+      DisplayShow(DisplayForm.Panel2);
     end;
   finally
     LoadingForm.Hide;
