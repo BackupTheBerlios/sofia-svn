@@ -1,4 +1,4 @@
-object ClientsFrame: TClientsFrame
+object NavigateurFrame: TNavigateurFrame
   Left = 0
   Top = 0
   Width = 421

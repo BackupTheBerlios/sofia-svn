@@ -18,7 +18,7 @@ along with Sofia; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 -------------------------------------------------------------------------------}
 
-unit clientsclasses;
+unit navigateurclasses;
 
 interface
 
@@ -33,18 +33,18 @@ type
     property NomClient: string read FNomClient write FNomClient;
   end;
 
-  TClientsData = class(TSerializable);
+  TNavigateurData = class(TSerializable);
 
   IController = interface(IInterface)
   ['{CD5C131C-E966-4743-85B9-D1F2E96D4DDD}']
-    function GetNomClients: TStrings; stdcall;
+    function GetNomNavigateur: TStrings; stdcall;
     procedure Refresh; stdcall;
-    property NomClients: TStrings read GetNomClients;
+    property NomNavigateur: TStrings read GetNomNavigateur;
   end;
 
-  TClientsPlugin = class(TInterfacedObject, IPlugUnknown, IplugIO, IPlugDisplay)
+  TNavigateurPlugin = class(TInterfacedObject, IPlugUnknown, IPlugIO, IPlugDisplay)
   private
-    FClientsData: TClientsData;
+    FNavigateurData: TNavigateurData;
     FContainer: TPlugContainer;
     FController: IController;
     FSerializer: IPlugSerializer;
@@ -59,57 +59,57 @@ type
 
 implementation
 
-uses clientsctrl;
+uses navigateurctrl;
 
-constructor TClientsPlugin.Create;
+constructor TNavigateurPlugin.Create;
 begin
-  FContainer := TClientsFrame.Create(nil);
-  FContainer.Name := 'FrameClients';
+  FContainer := TNavigateurFrame.Create(nil);
+  FContainer.Name := 'FrameNavigateur';
   FController := NewController(FContainer);
-  FClientsData := TClientsData.Create(nil, TClientData);
+  FNavigateurData := TNavigateurData.Create(nil, TClientData);
 end;
 
-destructor TClientsPlugin.Destroy;
+destructor TNavigateurPlugin.Destroy;
 begin
   FContainer.Free;
   inherited;
 end;
 
-function TClientsPlugin.GetContainer: TPlugContainer;
+function TNavigateurPlugin.GetContainer: TPlugContainer;
 begin
   Result := FContainer;
 end;
 
-procedure TClientsPlugin.LoadFromStream(Stream: TserializeStream);
+procedure TNavigateurPlugin.LoadFromStream(Stream: TserializeStream);
 var
   i: Integer;
 begin
-  FSerializer.Deserialize(Stream, FClientsData);
+  FSerializer.Deserialize(Stream, FNavigateurData);
 
-  for i := 0 to FClientsData.Collection.Count - 1 do
-    with FClientsData.Collection.Items[i] as TClientData do
+  for i := 0 to FNavigateurData.Collection.Count - 1 do
+    with FNavigateurData.Collection.Items[i] as TClientData do
     begin
-      FController.NomClients.Add(NomClient);
+      FController.NomNavigateur.Add(NomClient);
     end;
 
   FController.Refresh;
 end;
 
-procedure TClientsPlugin.SaveToStream(Stream: TSerializeStream);
+procedure TNavigateurPlugin.SaveToStream(Stream: TSerializeStream);
 var
   i: Integer;
 begin
-  FClientsData.Collection.Clear;
-  for i := 0 to FController.NomClients.Count - 1 do
-    with FClientsData.Collection.Add as TClientData do
+  FNavigateurData.Collection.Clear;
+  for i := 0 to FController.NomNavigateur.Count - 1 do
+    with FNavigateurData.Collection.Add as TClientData do
     begin
-      NomClient := FController.NomClients[i];
+      NomClient := FController.NomNavigateur[i];
     end;
 
-  FSerializer.Serialize(FClientsData, Stream);
+  FSerializer.Serialize(FNavigateurData, Stream);
 end;
 
-procedure TClientsPlugin.SetSerializer(ASerializer: IPlugSerializer);
+procedure TNavigateurPlugin.SetSerializer(ASerializer: IPlugSerializer);
 begin
   FSerializer := ASerializer;
 end;

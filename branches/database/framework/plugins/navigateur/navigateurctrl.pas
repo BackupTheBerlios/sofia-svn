@@ -18,15 +18,15 @@ along with Sofia; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 -------------------------------------------------------------------------------}
 
-unit clientsctrl;
+unit navigateurctrl;
 
 interface
 
 uses
-  Forms, Classes, Controls, Grids, plugdef, clientsclasses;
+  Forms, Classes, Controls, Grids, plugdef, navigateurclasses;
 
 type
-  TClientsFrame = class(TFrame)
+  TNavigateurFrame = class(TFrame)
     StringGrid1: TStringGrid;
   private
     { Déclarations privées }
@@ -35,15 +35,15 @@ type
   end;
 
   TController = class(TInterfacedObject, IController)
-    function GetNomClients: TStrings; stdcall;
+    function GetNomNavigateur: TStrings; stdcall;
     procedure Refresh; stdcall;
   private
-    FContainer: TClientsFrame;
-    FNomClients: TStrings;
+    FContainer: TNavigateurFrame;
+    FNomNavigateur: TStrings;
   public
     constructor Create(AContainer: TPlugContainer);
     destructor Destroy; override;
-    property Container: TClientsFrame read FContainer write FContainer;
+    property Container: TNavigateurFrame read FContainer write FContainer;
   end;
 
 function NewController(AControl: TWinControl): IController;
@@ -60,11 +60,11 @@ end;
 
 constructor TController.Create(AContainer: TPlugContainer);
 begin
-  FContainer := AContainer as TClientsFrame;
-  FNomClients := TStringList.Create;
+  FContainer := AContainer as TNavigateurFrame;
+  FNomNavigateur := TStringList.Create;
   {
-  FNomClients.Add('Lawrence-Albert Zémour');
-  FNomClients.Add('Anne-Angélique Meuleman');
+  FNomNavigateur.Add('Lawrence-Albert Zémour');
+  FNomNavigateur.Add('Anne-Angélique Meuleman');
   Refresh;
   }
 end;
@@ -72,17 +72,17 @@ end;
 destructor TController.Destroy;
 begin
   inherited;
-  FNomClients.Free;
+  FNomNavigateur.Free;
 end;
 
-function TController.GetNomClients: TStrings;
+function TController.GetNomNavigateur: TStrings;
 begin
-  Result := FNomClients;
+  Result := FNomNavigateur;
 end;
 
 procedure TController.Refresh;
 begin
- Container.StringGrid1.Cols[0].Assign(FNomClients);
+ Container.StringGrid1.Cols[0].Assign(FNomNavigateur);
 end;
 
 end.

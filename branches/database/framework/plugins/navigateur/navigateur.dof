@@ -141,14 +141,17 @@ C:\WINDOWS\system32\rbIBE77.bpl=ReportBuilder Data Access for Interbase Express
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
 [HistoryLists\hlUnitOutputDirectory]
-Count=1
-Item0=E:\Developpement\Composants\ComponentLibrary
+Count=2
+Item0=$(SOFIA)\lib
+Item1=E:\Developpement\Composants\ComponentLibrary
 [HistoryLists\hlBPLOutput]
-Count=1
-Item0=E:\Developpement\Composants\ComponentLibrary
+Count=2
+Item0=$(SOFIA)\bin
+Item1=E:\Developpement\Composants\ComponentLibrary
 [HistoryLists\hlDCPOutput]
-Count=1
-Item0=E:\Developpement\Composants\ComponentLibrary
+Count=2
+Item0=$(SOFIA)\lib
+Item1=E:\Developpement\Composants\ComponentLibrary
 [Exception Log]
 EurekaLog Version=504
 Activate=0
