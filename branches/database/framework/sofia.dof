@@ -97,7 +97,7 @@ PackageDCPOutputDir=
 SearchPath=$(SOFIA)\lib
 Packages=vcl
 Conditionals=
-DebugSourceDirs=
+DebugSourceDirs=D:\Developpement\berlios\sofia\branches\database\framework\xmlcursor\
 UsePackages=1
 [Parameters]
 RunParams=
@@ -136,19 +136,26 @@ ProductVersion=1.0.0.0
 Comments=
 [Excluded Packages]
 D:\Developpement\sofia\bin\gdip.bpl=(sans titre)
-C:\WINDOWS\system32\rbIBE77.bpl=ReportBuilder Data Access for Interbase Express
+D:\Developpement\sofia\bin\GDIPlusControls.bpl=GDI+ Controls
+[HistoryLists\hlDebugSourcePath]
+Count=1
+Item0=D:\Developpement\berlios\sofia\branches\database\framework\xmlcursor\
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
+[HistoryLists\hlSearchPath]
+Count=2
+Item0=$(SOFIA)\lib
+Item1=$(SOFIA)\lib;..\..\xmlcursor
 [HistoryLists\hlUnitOutputDirectory]
-Count=2
+Count=1
 Item0=$(SOFIA)\lib
-Item1=E:\Developpement\Composants\ComponentLibrary
-[HistoryLists\hlBPLOutput]
-Count=2
+[HistoryLists\hlOutputDirectorry]
+Count=1
 Item0=$(SOFIA)\bin
-Item1=E:\Developpement\Composants\ComponentLibrary
+[HistoryLists\hlBPLOutput]
+Count=1
+Item0=$(SOFIA)\bin
 [HistoryLists\hlDCPOutput]
-Count=2
+Count=1
 Item0=$(SOFIA)\lib
-Item1=E:\Developpement\Composants\ComponentLibrary

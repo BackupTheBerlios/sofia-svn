@@ -22,7 +22,7 @@ unit plugintf;
 
 interface
 
-uses plugdef;
+uses Controls, StdXML_TLB;
 
 type
   IPlugUnknown = interface(IInterface)
@@ -54,23 +54,17 @@ type
 
 {------------------------------------------------------------------------------}
 
-  IPlugSerializer = interface(IInterface)
-  ['{22E9D362-B42C-4065-BD30-E285D7D6DD1F}']
-    procedure Deserialize(Stream: TSerializeStream; Serializable: TSerializable);
-    procedure Serialize(Serializable: TSerializable; Stream: TSerializeStream);
-  end;
-
   IPlugIO = interface(IInterface)
   ['{570C9B35-15F3-435E-9166-963ACE05F635}']
-    procedure LoadFromStream(Stream: TSerializeStream); stdcall;
-    procedure SaveToStream(Stream: TSerializeStream); stdcall;
-    procedure SetSerializer(Serializer: IPlugSerializer); stdcall;
+    procedure LoadFromXML(XML: string); stdcall;
+    function SaveToXML: string; stdcall;
+    procedure SetXMLCursor(AXMLCursor: IXMLCursor); stdcall;
   end;
 
   IPlugDisplay = interface(IInterface)
   ['{84499261-05FD-4311-9EC4-2462528712B6}']
-    function GetContainer: TPlugContainer; stdcall;
-    property Container: TPlugContainer read GetContainer;
+    function GetContainer: TWinControl; stdcall;
+    property Container: TWinControl read GetContainer;
   end;
 
 {------------------------------------------------------------------------------}

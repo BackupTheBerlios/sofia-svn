@@ -22,12 +22,7 @@ unit plugmgr;
 
 interface
 
-uses Classes, Controls, SysUtils, Contnrs, plugdef, plugintf;
-
-resourcestring
-  sUnexistingFile = 'Le fichier ''%s'' n''existe pas';
-  sDLLCantBeLoaded = 'La DLL ne peut être chargée';
-  sUnexistingFunction = 'La fonction %s n''existe pas';
+uses Classes, Controls, SysUtils, Contnrs, plugintf, StdXML_TLB;
 
 type
   EPluginError = class(Exception);
@@ -54,16 +49,15 @@ type
     FPlugin: IPlugUnknown;
     FPluginLibrary: TPluginLibrary;
     FPluginManager: TPluginManager;
-    FSerializer: IPlugSerializer;
     function GetPlugin: IPlugUnknown;
   public
     constructor Create(APluginManager: TPluginManager; AName: string);
     destructor Destroy; override;
     procedure DisplayShow(AParent: TWinControl);
     procedure DisplayClose;
-    procedure IOLoadFromStream(Stream: TSerializeStream); stdcall;
-    procedure IOSaveToStream(Stream: TSerializeStream); stdcall;
-    function GetSerializer: IPlugSerializer; stdcall;
+    procedure IOLoadFromXML(XML: string); stdcall;
+    function IOSaveToXML: string; stdcall;
+    procedure IOSetXMLCursor(AXMLCursor: IXMLCursor);
     property Name: string read FName;
     property Plugin: IPlugUnknown read GetPlugin;
   end;
@@ -83,6 +77,12 @@ type
 implementation
 
 uses Windows;
+
+resourcestring
+  SUnexistingFile = 'Le fichier ''%s'' n''existe pas';
+  SDLLCantBeLoaded = 'La DLL ne peut être chargée';
+  SUnexistingFunction = 'La fonction %s n''existe pas';
+  SInterfaceIPlugDisplayNonSupportee = 'Interface IPlugDisplay non supportée par le plugin';
 
 const
   LIBPATH = '';
@@ -122,12 +122,8 @@ end;
 
 procedure TPluginManager.LoadPlugins;
 begin
-  //Plugins bas niveau
-  FPlugins.Add(TPlugin.Create(Self, 'serializer'));
-
-  //Plugins interface graphique
   FPlugins.Add(TPlugin.Create(Self, 'contact'));
-  FPlugins.Add(TPlugin.Create(Self, 'clients'));
+  //FPlugins.Add(TPlugin.Create(Self, 'navigateur'));
 end;
 
 procedure TPluginManager.UnloadPlugins;
@@ -226,49 +222,42 @@ begin
       with Plugin as IPlugDisplay do
         Container.Parent := nil;
     except
-      //interface IPlugDisplay non supportée par le plugin
+      raise EPluginError.Create(SInterfaceIPlugDisplayNonSupportee);
     end;
   finally
     FPlugin := nil;
   end;
 end;
 
-procedure TPlugin.IOLoadFromStream(Stream: TSerializeStream);
+procedure TPlugin.IOLoadFromXML(XML: string);
 begin
   try
     with Plugin as IPlugIO do
-    begin
-      SetSerializer(GetSerializer);
-      LoadFromStream(Stream);
-    end;
+      LoadFromXML(XML);
   except
     //interface IPlugIO non supportée par le plugin
   end;
 end;
 
-procedure TPlugin.IOSaveToStream(Stream: TSerializeStream);
+function TPlugin.IOSaveToXML: string;
 begin
   try
     with Plugin as IPlugIO do
-    begin
-      SetSerializer(GetSerializer);
-      SaveToStream(Stream);
-    end
+      Result := SaveToXML;
   except
     //interface IPlugIO non supportée par le plugin
   end;
 end;
 
-function TPlugin.GetSerializer: IPlugSerializer;
+procedure TPlugin.IOSetXMLCursor(AXMLCursor: IXMLCursor);
 begin
   try
-    if Assigned(FPluginManager['serializer']) then
-      Result := FPluginManager['serializer'].Plugin as IPlugSerializer
-    else
-      Result := nil;
+    with Plugin as IPlugIO do
+      SetXMLCursor(AXMLCursor);
   except
-    //interface IPlugSerializer non supportée par le plugin serializer
+    //interface IPlugIO non supportée par le plugin
   end;
+
 end;
 
 end.

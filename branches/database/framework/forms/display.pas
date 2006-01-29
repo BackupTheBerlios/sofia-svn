@@ -42,21 +42,13 @@ var
 
 implementation
 
-uses DateUtils, Dialogs, app, plugmgr, plugdef, plugintf;
+uses DateUtils, Dialogs, app, plugmgr, plugintf;
 
 {$R *.dfm}
 
 procedure TDisplayForm.PluginContainer1Button1Click(Sender: TObject);
-var
-  Stream: TSerializeStream;
 begin
-  Stream := TSerializeStream.Create('');
-  try
-    AppForm.PluginMgr['contact'].IOSaveToStream(Stream);
-    ShowMessage(Stream.DataString);
-  finally
-    Stream.Free;
-  end;
+  ShowMessage(AppForm.PluginMgr['contact'].IOSaveToXML);
 end;
 
 end.

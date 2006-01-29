@@ -2,7 +2,7 @@ unit uibdbclasses;
 
 interface
 
-uses Classes, plugdef, plugintf, jvuib, contnrs;
+uses Classes, plugintf, jvuib, contnrs;
 
 type
   TQueryItem = class(TObject)

@@ -22,16 +22,9 @@ unit contactclasses;
 
 interface
 
-uses plugdef, plugintf;
+uses Controls, plugintf, StdXML_TLB;
 
 type
-
-  TContactData = class(TSerializable)
-  private
-    FNomContact: string;
-  published
-    property NomContact: string read FNomContact write FNomContact;
-  end;
 
   IController = interface(IInterface)
   ['{B0122448-88BA-44DF-9B33-8198AF276DF6}']
@@ -42,17 +35,16 @@ type
 
   TContactPlugin = class(TInterfacedObject, IPlugUnknown, IPlugIO, IPlugDisplay)
   private
-    FContactData: TContactData;
-    FContainer: TPlugContainer;
+    FContainer: TWinControl;
     FController: IController;
-    FSerializer: IPlugSerializer;
+    FData: IXMLCursor;
   public
     constructor Create;
     destructor Destroy; override;
-    function GetContainer: TPlugContainer; stdcall;
-    procedure LoadFromStream(Stream: TSerializeStream); stdcall;
-    procedure SaveToStream(Stream: TSerializeStream); stdcall;
-    procedure SetSerializer(ASerializer: IPlugSerializer); stdcall;
+    function GetContainer: TWinControl; stdcall;
+    procedure LoadFromXML(XML: string); stdcall;
+    function SaveToXML: string; stdcall;
+    procedure SetXMLCursor(AXMLCursor: IXMLCursor); stdcall;
   end;
 
 implementation
@@ -62,9 +54,7 @@ uses Classes, contactctrl;
 constructor TContactPlugin.Create;
 begin
   FContainer := TContactFrame.Create(nil);
-  FContainer.Name := 'FrameContact';
   FController := NewController(FContainer);
-  FContactData := TContactData.Create(nil);
 end;
 
 destructor TContactPlugin.Destroy;
@@ -73,26 +63,26 @@ begin
   inherited;
 end;
 
-function TContactPlugin.GetContainer: TPlugContainer;
+function TContactPlugin.GetContainer: TWinControl;
 begin
   Result := FContainer;
 end;
 
-procedure TContactPlugin.LoadFromStream(Stream: TSerializeStream);
+procedure TContactPlugin.LoadFromXML(XML: string);
 begin
-  FSerializer.Deserialize(Stream, FContactData);
-  FController.NomContact := FContactData.NomContact;
+  FData.Document.LoadXML(XML);
+  FController.NomContact := FData.GetValue('NomContact');
 end;
 
-procedure TContactPlugin.SaveToStream(Stream: TSerializeStream);
+function TContactPlugin.SaveToXML: string;
 begin
-  FContactData.NomContact := FController.NomContact;
-  FSerializer.Serialize(FContactData, Stream);
+  FData.AppendChild('NomContact', FController.NomContact);
+  Result := FData.XML;
 end;
 
-procedure TContactPlugin.SetSerializer(ASerializer: IPlugSerializer);
+procedure TContactPlugin.SetXMLCursor(AXMLCursor: IXMLCursor);
 begin
-  FSerializer := ASerializer;
+  FData := AXMLCursor;
 end;
 
 

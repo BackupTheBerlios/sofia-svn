@@ -23,7 +23,7 @@ unit navigateurctrl;
 interface
 
 uses
-  Forms, Classes, Controls, Grids, plugdef, navigateurclasses;
+  Forms, Classes, Controls, Grids, navigateurclasses;
 
 type
   TNavigateurFrame = class(TFrame)
@@ -41,7 +41,7 @@ type
     FContainer: TNavigateurFrame;
     FNomNavigateur: TStrings;
   public
-    constructor Create(AContainer: TPlugContainer);
+    constructor Create(AContainer: TWinControl);
     destructor Destroy; override;
     property Container: TNavigateurFrame read FContainer write FContainer;
   end;
@@ -58,7 +58,7 @@ begin
   Result := TController.Create(AControl);
 end;
 
-constructor TController.Create(AContainer: TPlugContainer);
+constructor TController.Create(AContainer: TWinControl);
 begin
   FContainer := AContainer as TNavigateurFrame;
   FNomNavigateur := TStringList.Create;

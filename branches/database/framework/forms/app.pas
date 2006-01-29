@@ -49,7 +49,7 @@ var
 
 implementation
 
-uses loading, display, plugdef, plugintf;
+uses loading, display, plugintf, xmlcursor;
 
 {$R *.dfm}
 
@@ -74,35 +74,37 @@ end;
 
 procedure TAppForm.TestContact;
 var
-  Stream: TSerializeStream;
+  XML: string;
+  Cursor: TXMLCursor;
 begin
-  Stream := TSerializeStream.Create('object TContactData'#$D#$A'  NomContact = ''testload'''#$D#$A'end'#$D#$A);
+  XML := '<NomContact>test</NomContact>';
+  Cursor := TXMLCursor.Create;
   try
     with FPluginMgr['contact']  do
     begin
-      IOLoadFromStream(Stream);
+      IOSetXMLCursor(Cursor);
+      IOLoadFromXML(XML);
       DisplayShow(DisplayForm.Panel3);
     end;
   finally
     LoadingForm.Hide;
-    Stream.Free;
+    Cursor.Free;
   end;
 end;
 
 procedure TAppForm.TestClients;
 var
-  Stream: TStringStream;
+  XML: string;
 begin
-  Stream := TSerializeStream.Create('object TClientsData'#$D#$A'  Collection = <'#$D#$A'    item'#$D#$A'      NomClient = ''Lawrence-Albert Z'#233'mour'''#$D#$A'    end'#$D#$A'    item'#$D#$A'      NomClient = ''Anne-Ang'#233'lique Meuleman'''#$D#$A'    end>'#$D#$A'end'#$D#$A);
+  XML := '';
   try
     with FPluginMgr['clients'] do
     begin
-      IOLoadFromStream(Stream);
+      IOLoadFromXML(XML);
       DisplayShow(DisplayForm.Panel2);
     end;
   finally
     LoadingForm.Hide;
-    Stream.Free;
   end;
 end;
 
@@ -111,7 +113,7 @@ begin
   tmrLaunch.Enabled := False;
   LoadingForm.Show;
   FPluginMgr.LoadPlugins;
-  TestClients;
+  TestContact;
   DisplayForm.ShowModal;
   TestClosePlugins;
   Close;

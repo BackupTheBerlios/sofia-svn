@@ -23,7 +23,7 @@ unit contactctrl;
 interface
 
 uses
-  Forms, Classes, Controls, StdCtrls, ExtCtrls, plugdef, contactclasses;
+  Forms, Classes, Controls, StdCtrls, ExtCtrls, contactclasses;
 
 type
   TContactFrame = class(TFrame)
@@ -42,18 +42,18 @@ type
   private
     FContainer: TContactFrame;
   public
-    constructor Create(AContainer: TPlugContainer);
+    constructor Create(AContainer: TWinControl);
     property Container: TContactFrame read FContainer write FContainer;
   end;
 
-function NewController(AContainer: TPlugContainer): IController;
+function NewController(AContainer: TWinControl): IController;
 
 implementation
 
 {$R *.dfm}
 
 
-function NewController(AContainer: TPlugContainer): IController;
+function NewController(AContainer: TWinControl): IController;
 begin
   Result := TController.Create(AContainer);
 end;
@@ -68,7 +68,7 @@ begin
   inherited;
 end;
 
-constructor TController.Create(AContainer: TPlugContainer);
+constructor TController.Create(AContainer: TWinControl);
 begin
   FContainer := AContainer as TContactFrame;
 end;
