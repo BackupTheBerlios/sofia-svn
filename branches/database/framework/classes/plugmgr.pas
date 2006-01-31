@@ -203,61 +203,67 @@ begin
 end;
 
 procedure TPlugin.DisplayShow(AParent: TWinControl);
+var
+  PlugDisplay: IPlugDisplay;
 begin
   try
-    with Plugin as IPlugDisplay do
-    begin
-      Container.Parent := AParent;
-      Container.Align := alClient;
-    end;
+    PlugDisplay := Plugin as IPlugDisplay;
   except
-    //interface IPlugDisplay non supportée par le plugin
+  end;
+
+  with PlugDisplay do
+  begin
+    Container.Parent := AParent;
+    Container.Align := alClient;
   end;
 end;
 
 procedure TPlugin.DisplayClose;
+var
+  PlugDisplay: IPlugDisplay;
 begin
   try
     try
-      with Plugin as IPlugDisplay do
-        Container.Parent := nil;
+      PlugDisplay := Plugin as IPlugDisplay;
     except
-      raise EPluginError.Create(SInterfaceIPlugDisplayNonSupportee);
     end;
+    PlugDisplay.Container.Parent := nil;
   finally
     FPlugin := nil;
   end;
 end;
 
 procedure TPlugin.IOLoadFromXML(XML: string);
+var
+  PlugIO: IPlugIO;
 begin
   try
-    with Plugin as IPlugIO do
-      LoadFromXML(XML);
+    PlugIO := Plugin as IPlugIO;
   except
-    //interface IPlugIO non supportée par le plugin
   end;
+  PlugIO.LoadFromXML(XML);
 end;
 
 function TPlugin.IOSaveToXML: string;
+var
+  PlugIO: IPlugIO;
 begin
   try
-    with Plugin as IPlugIO do
-      Result := SaveToXML;
+    PlugIO := Plugin as IPlugIO;
   except
-    //interface IPlugIO non supportée par le plugin
   end;
+  Result := PlugIO.SaveToXML;
 end;
 
 procedure TPlugin.IOSetXMLCursor(AXMLCursor: IXMLCursor);
+var
+  PlugIO: IPlugIO;
 begin
   try
-    with Plugin as IPlugIO do
-      SetXMLCursor(AXMLCursor);
+    PlugIO := Plugin as IPlugIO;
   except
-    //interface IPlugIO non supportée par le plugin
   end;
-
+  PlugIO.SetXMLCursor(AXMLCursor);
 end;
 
 end.

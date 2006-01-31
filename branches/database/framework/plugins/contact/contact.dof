@@ -137,25 +137,3 @@ Comments=
 [Excluded Packages]
 D:\Developpement\sofia\bin\gdip.bpl=(sans titre)
 D:\Developpement\sofia\bin\GDIPlusControls.bpl=GDI+ Controls
-[HistoryLists\hlDebugSourcePath]
-Count=1
-Item0=D:\Developpement\berlios\sofia\branches\database\framework\xmlcursor\
-[HistoryLists\hlUnitAliases]
-Count=1
-Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
-[HistoryLists\hlSearchPath]
-Count=2
-Item0=$(SOFIA)\lib
-Item1=$(SOFIA)\lib;..\..\xmlcursor
-[HistoryLists\hlUnitOutputDirectory]
-Count=1
-Item0=$(SOFIA)\lib
-[HistoryLists\hlOutputDirectorry]
-Count=1
-Item0=$(SOFIA)\bin
-[HistoryLists\hlBPLOutput]
-Count=1
-Item0=$(SOFIA)\bin
-[HistoryLists\hlDCPOutput]
-Count=1
-Item0=$(SOFIA)\lib

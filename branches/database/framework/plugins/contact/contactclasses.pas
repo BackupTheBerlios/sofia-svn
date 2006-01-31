@@ -70,13 +70,19 @@ end;
 
 procedure TContactPlugin.LoadFromXML(XML: string);
 begin
-  FData.Document.LoadXML(XML);
-  FController.NomContact := FData.GetValue('NomContact');
+  if Length(XML) > 0 then
+  begin
+    FData.LoadXML(XML);
+    FController.NomContact := FData.GetValue('/NomContact');
+  end;
 end;
 
 function TContactPlugin.SaveToXML: string;
 begin
-  FData.AppendChild('NomContact', FController.NomContact);
+  if FData.Count = 0 then
+    FData.AppendChild('NomContact', FController.NomContact)
+  else
+    FData.SetValue('/NomContact', FController.NomContact);
   Result := FData.XML;
 end;
 
