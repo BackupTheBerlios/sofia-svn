@@ -76,7 +76,7 @@ var
   XML: string;
   Cursor: TXMLCursor;
 begin
-  XML := '';//'<NomContact>test</NomContact>';
+  XML := '<NomContact>test</NomContact>';
   Cursor := TXMLCursor.Create;
   try
     with FPluginMgr['contact']  do
@@ -87,7 +87,6 @@ begin
     end;
   finally
     LoadingForm.Hide;
-    Cursor := nil;
   end;
 end;
 

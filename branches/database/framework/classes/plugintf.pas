@@ -22,7 +22,7 @@ unit plugintf;
 
 interface
 
-uses Controls, StdXML_TLB;
+uses Controls, stdxml_tlb, db;
 
 type
   IPlugUnknown = interface(IInterface)
@@ -47,9 +47,17 @@ type
     property UserName: string read GetUserName write SetUserName;
   end;
 
-  IPlugQuery = interface(IInterface)
+  IPlugDataset = interface(IInterface)
   ['{2BBE4585-C2A2-4383-A723-73715CB61AC7}']
-    procedure AddQuery(Name: string); stdcall;
+    function AddDataset(Name, SQLText, Parameters: string): TDataset; stdcall;
+  end;
+
+{------------------------------------------------------------------------------}
+
+  IPlugDatabaseObject = interface(IInterface)
+  ['{87078381-3F7D-4020-B4FB-7C3097CA91C7}']
+    function GetPersonnes(Categorie: string): TDataset; stdcall;
+    procedure SetPlugDataset(APlugDataset: IPlugDataset); stdcall;
   end;
 
 {------------------------------------------------------------------------------}
