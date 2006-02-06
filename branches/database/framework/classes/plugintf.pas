@@ -25,6 +25,7 @@ interface
 uses Controls, stdxml_tlb, db;
 
 type
+
   IPlugUnknown = interface(IInterface)
   ['{0266191D-1BAA-4063-B95D-A9B4EED9F0DA}']
   end;
@@ -49,7 +50,9 @@ type
 
   IPlugDataset = interface(IInterface)
   ['{2BBE4585-C2A2-4383-A723-73715CB61AC7}']
-    function AddDataset(Name, SQLText, Parameters: string): TDataset; stdcall;
+    function AddDataset(XML: string): TDataset; stdcall;
+    procedure RemoveDataset(AName: string); stdcall;
+    procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
   end;
 
 {------------------------------------------------------------------------------}
@@ -57,7 +60,7 @@ type
   IPlugDatabaseObject = interface(IInterface)
   ['{87078381-3F7D-4020-B4FB-7C3097CA91C7}']
     function GetPersonnes(Categorie: string): TDataset; stdcall;
-    procedure SetPlugDataset(APlugDataset: IPlugDataset); stdcall;
+    procedure SetDataset(Dataset: IPlugDataset); stdcall;
   end;
 
 {------------------------------------------------------------------------------}
@@ -66,7 +69,8 @@ type
   ['{570C9B35-15F3-435E-9166-963ACE05F635}']
     procedure LoadFromXML(XML: string); stdcall;
     function SaveToXML: string; stdcall;
-    procedure SetXMLCursor(AXMLCursor: IXMLCursor); stdcall;
+    procedure SetDatabaseObject(ADatabaseObject: IPlugDatabaseObject); stdcall;
+    procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
   end;
 
   IPlugDisplay = interface(IInterface)

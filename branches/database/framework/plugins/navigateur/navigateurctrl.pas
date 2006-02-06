@@ -23,11 +23,12 @@ unit navigateurctrl;
 interface
 
 uses
-  Forms, Classes, Controls, Grids, navigateurclasses;
+  Forms, Classes, Controls, Grids, navigateurclasses, DBGrids, DB;
 
 type
   TNavigateurFrame = class(TFrame)
-    StringGrid1: TStringGrid;
+    DataSource: TDataSource;
+    DBGrid1: TDBGrid;
   private
     { Déclarations privées }
   public
@@ -35,11 +36,9 @@ type
   end;
 
   TController = class(TInterfacedObject, IController)
-    function GetNomNavigateur: TStrings; stdcall;
-    procedure Refresh; stdcall;
+    procedure SetPersonnes(const Value: TDataset); stdcall;
   private
     FContainer: TNavigateurFrame;
-    FNomNavigateur: TStrings;
   public
     constructor Create(AContainer: TWinControl);
     destructor Destroy; override;
@@ -61,28 +60,16 @@ end;
 constructor TController.Create(AContainer: TWinControl);
 begin
   FContainer := AContainer as TNavigateurFrame;
-  FNomNavigateur := TStringList.Create;
-  {
-  FNomNavigateur.Add('Lawrence-Albert Zémour');
-  FNomNavigateur.Add('Anne-Angélique Meuleman');
-  Refresh;
-  }
 end;
 
 destructor TController.Destroy;
 begin
   inherited;
-  FNomNavigateur.Free;
 end;
 
-function TController.GetNomNavigateur: TStrings;
+procedure TController.SetPersonnes(const Value: TDataset);
 begin
-  Result := FNomNavigateur;
-end;
-
-procedure TController.Refresh;
-begin
- Container.StringGrid1.Cols[0].Assign(FNomNavigateur);
+  FContainer.DataSource.DataSet := Value;
 end;
 
 end.

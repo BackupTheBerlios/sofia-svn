@@ -39,7 +39,7 @@ type
     destructor Destroy; override;
     procedure TestClosePlugins;
     procedure TestContact;
-    procedure TestClients;
+    procedure TestNavigateur;
     property PluginMgr: TPluginManager read FPluginMgr;
     { Déclarations publiques }
   end;
@@ -68,7 +68,7 @@ end;
 
 procedure TAppForm.TestClosePlugins;
 begin
-  FPluginMgr['contact'].DisplayClose;
+  FPluginMgr['contact'].Close;
 end;
 
 procedure TAppForm.TestContact;
@@ -81,25 +81,24 @@ begin
   try
     with FPluginMgr['contact']  do
     begin
-      IOSetXMLCursor(Cursor);
-      IOLoadFromXML(XML);
-      DisplayShow(DisplayForm.Panel3);
+      SetXMLCursor(Cursor);
+      LoadFromXML(XML);
+      Show(DisplayForm.Panel3);
     end;
   finally
     LoadingForm.Hide;
   end;
 end;
 
-procedure TAppForm.TestClients;
-var
-  XML: string;
+procedure TAppForm.TestNavigateur;
 begin
-  XML := '';
   try
-    with FPluginMgr['clients'] do
+    //TODO: initialisation des parametres de cnx
+
+    with FPluginMgr['navigateur'] do
     begin
-      IOLoadFromXML(XML);
-      DisplayShow(DisplayForm.Panel2);
+      SetDatabaseObject(FPluginMgr['dbobj'].Plugin);
+      Show(DisplayForm.Panel2);
     end;
   finally
     LoadingForm.Hide;

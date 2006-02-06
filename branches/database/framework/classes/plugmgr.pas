@@ -53,11 +53,12 @@ type
   public
     constructor Create(APluginManager: TPluginManager; AName: string);
     destructor Destroy; override;
-    procedure DisplayShow(AParent: TWinControl);
-    procedure DisplayClose;
-    procedure IOLoadFromXML(XML: string); stdcall;
-    function IOSaveToXML: string; stdcall;
-    procedure IOSetXMLCursor(AXMLCursor: IXMLCursor);
+    procedure Show(AParent: TWinControl);
+    procedure Close;
+    procedure LoadFromXML(XML: string); stdcall;
+    function SaveToXML: string; stdcall;
+    procedure SetDatabaseObject(DatabaseObject: IPlugUnknown);
+    procedure SetXMLCursor(XMLCursor: IXMLCursor);
     property Name: string read FName;
     property Plugin: IPlugUnknown read GetPlugin;
   end;
@@ -65,13 +66,13 @@ type
   TPluginManager = class(TObject)
   private
     FPlugins: TObjectList;
-    function GetItems(const PluginName: string): TPlugin;
+    function GetPlugins(const PluginName: string): TPlugin;
   public
     constructor Create;
     destructor Destroy; override;
     procedure LoadPlugins;
     procedure UnloadPlugins;
-    property Items[const PluginName: string]: TPlugin read GetItems; default;
+    property Plugins[const PluginName: string]: TPlugin read GetPlugins; default;
   end;
 
 implementation
@@ -101,7 +102,7 @@ begin
   inherited;
 end;
 
-function TPluginManager.GetItems(const PluginName: string): TPlugin;
+function TPluginManager.GetPlugins(const PluginName: string): TPlugin;
 var
   Found: Boolean;
   i: Integer;
@@ -122,8 +123,10 @@ end;
 
 procedure TPluginManager.LoadPlugins;
 begin
+  FPlugins.Add(TPlugin.Create(Self, 'dbuib'));
+  FPlugins.Add(TPlugin.Create(Self, 'dbobj'));
   FPlugins.Add(TPlugin.Create(Self, 'contact'));
-  //FPlugins.Add(TPlugin.Create(Self, 'navigateur'));
+  FPlugins.Add(TPlugin.Create(Self, 'navigateur'));
 end;
 
 procedure TPluginManager.UnloadPlugins;
@@ -202,7 +205,7 @@ begin
   Result := FPlugin;
 end;
 
-procedure TPlugin.DisplayShow(AParent: TWinControl);
+procedure TPlugin.Show(AParent: TWinControl);
 var
   PlugDisplay: IPlugDisplay;
 begin
@@ -218,7 +221,7 @@ begin
   end;
 end;
 
-procedure TPlugin.DisplayClose;
+procedure TPlugin.Close;
 var
   PlugDisplay: IPlugDisplay;
 begin
@@ -233,7 +236,7 @@ begin
   end;
 end;
 
-procedure TPlugin.IOLoadFromXML(XML: string);
+procedure TPlugin.LoadFromXML(XML: string);
 var
   PlugIO: IPlugIO;
 begin
@@ -244,7 +247,7 @@ begin
   PlugIO.LoadFromXML(XML);
 end;
 
-function TPlugin.IOSaveToXML: string;
+function TPlugin.SaveToXML: string;
 var
   PlugIO: IPlugIO;
 begin
@@ -255,7 +258,20 @@ begin
   Result := PlugIO.SaveToXML;
 end;
 
-procedure TPlugin.IOSetXMLCursor(AXMLCursor: IXMLCursor);
+procedure TPlugin.SetDatabaseObject(DatabaseObject: IPlugUnknown);
+var
+  PlugIO: IPlugIO;
+  PlugDatabaseObject: IPlugDatabaseObject;
+begin
+  try
+    PlugIO := Plugin as IPlugIO;
+    PlugDatabaseObject := DatabaseObject as IPlugDatabaseObject;
+  except
+  end;
+  PlugIO.SetDatabaseObject(PlugDatabaseObject);
+end;
+
+procedure TPlugin.SetXMLCursor(XMLCursor: IXMLCursor);
 var
   PlugIO: IPlugIO;
 begin
@@ -263,7 +279,7 @@ begin
     PlugIO := Plugin as IPlugIO;
   except
   end;
-  PlugIO.SetXMLCursor(AXMLCursor);
+  PlugIO.SetXMLCursor(XMLCursor);
 end;
 
 end.

@@ -22,23 +22,29 @@ unit navigateurclasses;
 
 interface
 
-uses Classes, Controls, plugintf;
+uses Classes, Controls, DB, StdXML_TLB, plugintf;
 
 type
 
   IController = interface(IInterface)
   ['{CD5C131C-E966-4743-85B9-D1F2E96D4DDD}']
-    procedure Refresh; stdcall;
+    procedure SetPersonnes(const Value: TDataset); stdcall;
   end;
 
-  TNavigateurPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay)
+  TNavigateurPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay, IPlugIO)
+    function GetContainer: TWinControl; stdcall;
+    procedure LoadFromXML(XML: string); stdcall;
+    function SaveToXML: string; stdcall;
+    procedure SetDatabaseObject(DatabaseObject: IPlugDatabaseObject); stdcall;
+    procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
   private
     FContainer: TWinControl;
     FController: IController;
+    FDatabaseObject: IPlugDatabaseObject;
+    FXMLCursor: IXMLCursor;
   public
     constructor Create;
     destructor Destroy; override;
-    function GetContainer: TWinControl; stdcall;
   end;
 
 implementation
@@ -49,6 +55,8 @@ constructor TNavigateurPlugin.Create;
 begin
   FContainer := TNavigateurFrame.Create(nil);
   FController := NewController(FContainer);
+
+  FController.SetPersonnes(FDatabaseObject.GetPersonnes('clients'));
 end;
 
 destructor TNavigateurPlugin.Destroy;
@@ -60,6 +68,27 @@ end;
 function TNavigateurPlugin.GetContainer: TWinControl;
 begin
   Result := FContainer;
+end;
+
+procedure TNavigateurPlugin.LoadFromXML(XML: string);
+begin
+
+end;
+
+function TNavigateurPlugin.SaveToXML: string;
+begin
+
+end;
+
+procedure TNavigateurPlugin.SetDatabaseObject(DatabaseObject:
+    IPlugDatabaseObject);
+begin
+  FDatabaseObject := DatabaseObject;
+end;
+
+procedure TNavigateurPlugin.SetXMLCursor(XMLCursor: IXMLCursor);
+begin
+  FXMLCursor := XMLCursor;
 end;
 
 

@@ -34,17 +34,19 @@ type
   end;
 
   TContactPlugin = class(TInterfacedObject, IPlugUnknown, IPlugIO, IPlugDisplay)
-  private
-    FContainer: TWinControl;
-    FController: IController;
-    FData: IXMLCursor;
-  public
-    constructor Create;
-    destructor Destroy; override;
     function GetContainer: TWinControl; stdcall;
     procedure LoadFromXML(XML: string); stdcall;
     function SaveToXML: string; stdcall;
-    procedure SetXMLCursor(AXMLCursor: IXMLCursor); stdcall;
+    procedure SetDatabaseObject(DatabaseObject: IPlugDatabaseObject); stdcall;
+    procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
+  private
+    FContainer: TWinControl;
+    FController: IController;
+    FDatabaseObject: IPlugDatabaseObject;
+    FXMLCursor: IXMLCursor;
+  public
+    constructor Create;
+    destructor Destroy; override;
   end;
 
 implementation
@@ -72,23 +74,28 @@ procedure TContactPlugin.LoadFromXML(XML: string);
 begin
   if Length(XML) > 0 then
   begin
-    FData.LoadXML(XML);
-    FController.NomContact := FData.GetValue('/NomContact');
+    FXMLCursor.LoadXML(XML);
+    FController.NomContact := FXMLCursor.GetValue('/NomContact');
   end;
 end;
 
 function TContactPlugin.SaveToXML: string;
 begin
-  if FData.Count = 0 then
-    FData.AppendChild('NomContact', FController.NomContact)
+  if FXMLCursor.Count = 0 then
+    FXMLCursor.AppendChild('NomContact', FController.NomContact)
   else
-    FData.SetValue('/NomContact', FController.NomContact);
-  Result := FData.XML;
+    FXMLCursor.SetValue('/NomContact', FController.NomContact);
+  Result := FXMLCursor.XML;
 end;
 
-procedure TContactPlugin.SetXMLCursor(AXMLCursor: IXMLCursor);
+procedure TContactPlugin.SetDatabaseObject(DatabaseObject: IPlugDatabaseObject);
 begin
-  FData := AXMLCursor;
+  FDatabaseObject := DatabaseObject;
+end;
+
+procedure TContactPlugin.SetXMLCursor(XMLCursor: IXMLCursor);
+begin
+  FXMLCursor := XMLCursor;
 end;
 
 
