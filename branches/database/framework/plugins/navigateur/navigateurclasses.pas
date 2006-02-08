@@ -63,8 +63,6 @@ constructor TNavigateurPlugin.Create;
 begin
   FContainer := TNavigateurFrame.Create(nil);
   FController := NewController(FContainer);
-
-  FController.SetPersonnes(FPluginConnector.DatabaseObject['dbobj'].GetPersonnes('clients'));
 end;
 
 destructor TNavigateurPlugin.Destroy;
@@ -126,6 +124,7 @@ end;
 
 procedure TNavigateurPlugin.Show;
 begin
+  FController.SetPersonnes(FPluginConnector.DatabaseObject['dbobj'].GetPersonnes('clients'));
   FContainer.Parent := FParent;
   FContainer.Align := alClient;
 end;

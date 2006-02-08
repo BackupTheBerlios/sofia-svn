@@ -44,7 +44,7 @@ type
 
   IPlugDataset = interface(IInterface)
   ['{2BBE4585-C2A2-4383-A723-73715CB61AC7}']
-    function AddDataset(XML: string): TDataset; stdcall;
+    function Add(DatasetDef: string): TDataset; stdcall;
     procedure RemoveDataset(AName: string); stdcall;
     procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
   end;
@@ -53,8 +53,10 @@ type
 
   IPlugDatabaseObject = interface(IInterface)
   ['{87078381-3F7D-4020-B4FB-7C3097CA91C7}']
+    function GetDataset: IPlugDataset; stdcall;
     function GetPersonnes(Categorie: string): TDataset; stdcall;
     procedure SetDataset(Dataset: IPlugDataset); stdcall;
+    property Dataset: IPlugDataset read GetDataset write SetDataset;
   end;
 
 {------------------------------------------------------------------------------}

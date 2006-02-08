@@ -54,7 +54,7 @@ type
 
   TDatabaseAccessPlugin = class(TInterfacedObject, IPlugUnknown, IPlugConnection,
       IPlugDataset)
-    function AddDataset(XML: string): TDataset; stdcall;
+    function Add(DatasetDef: string): TDataset; stdcall;
     function GetConnected: boolean; stdcall;
     function GetConnectionName: string; stdcall;
     function GetPassWord: string; stdcall;
@@ -105,9 +105,9 @@ begin
   inherited;
 end;
 
-function TDatabaseAccessPlugin.AddDataset(XML: string): TDataset;
+function TDatabaseAccessPlugin.Add(DatasetDef: string): TDataset;
 begin
-  FXMLCursor.LoadXML(XML);
+  FXMLCursor.LoadXML(DatasetDef);
   Result := FDatasetList.Add(FXMLCursor).Dataset;
 end;
 
@@ -184,21 +184,23 @@ end;
 constructor TDatasetItem.Create(DatasetDef: IXMLCursor; Connection:
     TJvUIBDatabase; Transaction: TJvUIBTransaction);
 var
+  Name: IXMLCursor;
   Params: IXMLCursor;
+  Sql: IXMLCursor;
   ParamType: string;
   ParamValue: string;
   ParamName: string;
   IntValue: Integer;
 begin
-  FName := DatasetDef.GetValue('/Name');
+  FName := DatasetDef.GetValue('/DatasetDef/Name');
   FDataset := TJvUIBDataset.Create(nil);
   FDataset.Transaction := Transaction;
   FDataset.DataBase := Connection;
   FDataset.FetchBlobs := True;
-  FDataset.SQL.Text := DatasetDef.GetValue('/Sql');
+  FDataset.SQL.Text := DatasetDef.GetValue('/DatasetDef/Sql');
 
   //affectation des parametres xml
-  Params := DatasetDef.Select('Params/*');
+  Params := DatasetDef.Select('/DatasetDef/Params/*');
   try
     while not Params.EOF do
      begin
