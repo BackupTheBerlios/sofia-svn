@@ -42,7 +42,6 @@ type
     constructor Create;
     destructor Destroy; override;
     function GetPersonnes(Categorie: string): TDataset; stdcall;
-    procedure SetDataset(Dataset: IPlugDataset); stdcall;
   end;
 
 implementation
@@ -92,11 +91,6 @@ end;
 function TDatabaseObjectPlugin.GetXMLCursor: IXMLCursor;
 begin
   Result := FXMLCursor;
-end;
-
-procedure TDatabaseObjectPlugin.SetDataset(Dataset: IPlugDataset);
-begin
-  FDataset := Dataset;
 end;
 
 procedure TDatabaseObjectPlugin.SetDataset1(Dataset: IPlugDataset);

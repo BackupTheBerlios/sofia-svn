@@ -69,7 +69,13 @@ end;
 
 procedure TController.SetPersonnes(const Value: TDataset);
 begin
+  if Assigned(FContainer.DataSource.DataSet) then
+  begin
+    FContainer.DataSource.DataSet.Close;
+    FContainer.DataSource.DataSet.Free;
+  end;
   FContainer.DataSource.DataSet := Value;
+  FContainer.DataSource.DataSet.Open;
 end;
 
 end.

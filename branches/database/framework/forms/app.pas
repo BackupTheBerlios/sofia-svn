@@ -96,13 +96,11 @@ begin
   if Assigned(PluginCnt.Connection['dbuib']) then
   with PluginCnt.Connection['dbuib'] do
   begin
-    ConnectionName := '';
-    UserName := 'sofia';
-    PassWord := 'sofia';
+    ConnectionName := 'D:\Developpement\berlios\sofia\database\sofia.fdb';
+    UserName := 'sysdba';
+    PassWord := 'masterkey';
+    Connected := True;
   end;
-
-  if Assigned(PluginCnt.Dataset['dbuib']) and Assigned(PluginCnt.DatabaseObject['dbobj']) then
-     PluginCnt.DatabaseObject['dbobj'].Dataset := PluginCnt.Dataset['dbuib'];
 
   if Assigned(PluginCnt.Display['navigateur']) then
   with PluginCnt.Display['navigateur'] do
