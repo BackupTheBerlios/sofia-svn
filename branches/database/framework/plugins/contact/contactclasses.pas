@@ -33,17 +33,23 @@ type
     property NomContact: string read GetNomContact write SetNomContact;
   end;
 
-  TContactPlugin = class(TInterfacedObject, IPlugUnknown, IPlugIO, IPlugDisplay)
-    function GetContainer: TWinControl; stdcall;
+  TContactPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay)
+    procedure Hide; stdcall;
+    function GetParent: TWinControl; stdcall;
+    function GetPluginConnector: IPluginConnector; stdcall;
+    function GetXMLCursor: IXMLCursor; stdcall;
     procedure LoadFromXML(XML: string); stdcall;
     function SaveToXML: string; stdcall;
-    procedure SetDatabaseObject(DatabaseObject: IPlugDatabaseObject); stdcall;
+    procedure SetParent(const Value: TWinControl); stdcall;
+    procedure SetPluginConnector(PluginConnector: IPluginConnector); stdcall;
     procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
+    procedure Show; stdcall;
   private
     FContainer: TWinControl;
     FController: IController;
-    FDatabaseObject: IPlugDatabaseObject;
+    FPluginConnector: IPluginConnector;
     FXMLCursor: IXMLCursor;
+    FParent: TWinControl;
   public
     constructor Create;
     destructor Destroy; override;
@@ -62,12 +68,28 @@ end;
 destructor TContactPlugin.Destroy;
 begin
   FContainer.Free;
+  FXMLCursor := nil;
   inherited;
 end;
 
-function TContactPlugin.GetContainer: TWinControl;
+procedure TContactPlugin.Hide;
 begin
-  Result := FContainer;
+  FContainer.Parent := nil;
+end;
+
+function TContactPlugin.GetParent: TWinControl;
+begin
+  Result := FParent;
+end;
+
+function TContactPlugin.GetPluginConnector: IPluginConnector;
+begin
+  Result := FPluginConnector;
+end;
+
+function TContactPlugin.GetXMLCursor: IXMLCursor;
+begin
+  Result := FXMLCursor;
 end;
 
 procedure TContactPlugin.LoadFromXML(XML: string);
@@ -88,14 +110,25 @@ begin
   Result := FXMLCursor.XML;
 end;
 
-procedure TContactPlugin.SetDatabaseObject(DatabaseObject: IPlugDatabaseObject);
+procedure TContactPlugin.SetParent(const Value: TWinControl);
 begin
-  FDatabaseObject := DatabaseObject;
+  FParent := Value;
+end;
+
+procedure TContactPlugin.SetPluginConnector(PluginConnector: IPluginConnector);
+begin
+  FPluginConnector := PluginConnector;
 end;
 
 procedure TContactPlugin.SetXMLCursor(XMLCursor: IXMLCursor);
 begin
   FXMLCursor := XMLCursor;
+end;
+
+procedure TContactPlugin.Show;
+begin
+  FContainer.Parent := FParent;
+  FContainer.Align := alClient;
 end;
 
 

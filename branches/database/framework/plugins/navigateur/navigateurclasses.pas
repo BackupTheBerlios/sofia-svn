@@ -31,17 +31,25 @@ type
     procedure SetPersonnes(const Value: TDataset); stdcall;
   end;
 
-  TNavigateurPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay, IPlugIO)
+  TNavigateurPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay)
     function GetContainer: TWinControl; stdcall;
+    function GetParent: TWinControl; stdcall;
+    function GetPluginConnector: IPluginConnector; stdcall;
+    function GetXMLCursor: IXMLCursor; stdcall;
+    procedure Hide; stdcall;
     procedure LoadFromXML(XML: string); stdcall;
     function SaveToXML: string; stdcall;
-    procedure SetDatabaseObject(DatabaseObject: IPlugDatabaseObject); stdcall;
+    procedure SetParent(const Value: TWinControl); stdcall;
+    procedure SetPluginConnector(PluginConnector: IPluginConnector); stdcall;
     procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
+    procedure Show; stdcall;
   private
     FContainer: TWinControl;
     FController: IController;
-    FDatabaseObject: IPlugDatabaseObject;
+    FParent: TWinControl;
+    FPluginConnector: IPluginConnector;
     FXMLCursor: IXMLCursor;
+    Result: TWinControl;
   public
     constructor Create;
     destructor Destroy; override;
@@ -56,7 +64,7 @@ begin
   FContainer := TNavigateurFrame.Create(nil);
   FController := NewController(FContainer);
 
-  FController.SetPersonnes(FDatabaseObject.GetPersonnes('clients'));
+  FController.SetPersonnes(FPluginConnector.DatabaseObject['dbobj'].GetPersonnes('clients'));
 end;
 
 destructor TNavigateurPlugin.Destroy;
@@ -70,6 +78,26 @@ begin
   Result := FContainer;
 end;
 
+function TNavigateurPlugin.GetParent: TWinControl;
+begin
+  Result := FParent;
+end;
+
+function TNavigateurPlugin.GetPluginConnector: IPluginConnector;
+begin
+  Result := FPluginConnector;
+end;
+
+function TNavigateurPlugin.GetXMLCursor: IXMLCursor;
+begin
+  Result := FXMLCursor;
+end;
+
+procedure TNavigateurPlugin.Hide;
+begin
+  FContainer.Parent := nil;
+end;
+
 procedure TNavigateurPlugin.LoadFromXML(XML: string);
 begin
 
@@ -80,15 +108,26 @@ begin
 
 end;
 
-procedure TNavigateurPlugin.SetDatabaseObject(DatabaseObject:
-    IPlugDatabaseObject);
+procedure TNavigateurPlugin.SetParent(const Value: TWinControl);
 begin
-  FDatabaseObject := DatabaseObject;
+  FParent := Value;
+end;
+
+procedure TNavigateurPlugin.SetPluginConnector(PluginConnector:
+    IPluginConnector);
+begin
+  FPluginConnector := PluginConnector;
 end;
 
 procedure TNavigateurPlugin.SetXMLCursor(XMLCursor: IXMLCursor);
 begin
   FXMLCursor := XMLCursor;
+end;
+
+procedure TNavigateurPlugin.Show;
+begin
+  FContainer.Parent := FParent;
+  FContainer.Align := alClient;
 end;
 
 

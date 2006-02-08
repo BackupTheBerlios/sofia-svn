@@ -26,12 +26,6 @@ uses Controls, stdxml_tlb, db;
 
 type
 
-  IPlugUnknown = interface(IInterface)
-  ['{0266191D-1BAA-4063-B95D-A9B4EED9F0DA}']
-  end;
-
-{------------------------------------------------------------------------------}
-
   IPlugConnection = interface(IInterface)
   ['{FA94CE0A-DF1A-4628-A8A8-C599CC785286}']
     function GetConnected: boolean; stdcall;
@@ -65,18 +59,43 @@ type
 
 {------------------------------------------------------------------------------}
 
-  IPlugIO = interface(IInterface)
+  IPlugDisplay = interface(IInterface)
   ['{570C9B35-15F3-435E-9166-963ACE05F635}']
+    procedure Hide; stdcall;
+    function GetParent: TWinControl; stdcall;
     procedure LoadFromXML(XML: string); stdcall;
     function SaveToXML: string; stdcall;
-    procedure SetDatabaseObject(ADatabaseObject: IPlugDatabaseObject); stdcall;
-    procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
+    procedure SetParent(const Value: TWinControl); stdcall;
+    procedure Show; stdcall;
+    property Parent: TWinControl read GetParent write SetParent;
   end;
 
-  IPlugDisplay = interface(IInterface)
-  ['{84499261-05FD-4311-9EC4-2462528712B6}']
-    function GetContainer: TWinControl; stdcall;
-    property Container: TWinControl read GetContainer;
+{------------------------------------------------------------------------------}
+
+  IPluginConnector = interface(IInterface)
+  ['{8B5E227A-50DE-4DDE-9B47-FC09A2CF6946}']
+    function GetConnection(const PluginName: string): IPlugConnection; stdcall;
+    function GetDatabaseObject(const PluginName: string): IPlugDatabaseObject;
+        stdcall;
+    function GetDataset(const PluginName: string): IPlugDataset; stdcall;
+    function GetDisplay(const PluginName: string): IPlugDisplay; stdcall;
+    property Connection[const PluginName: string]: IPlugConnection read
+        GetConnection;
+    property DatabaseObject[const PluginName: string]: IPlugDatabaseObject read
+        GetDatabaseObject;
+    property Dataset[const PluginName: string]: IPlugDataset read GetDataset;
+    property Display[const PluginName: string]: IPlugDisplay read GetDisplay;
+  end;
+
+  IPlugUnknown = interface(IInterface)
+  ['{0266191D-1BAA-4063-B95D-A9B4EED9F0DA}']
+    function GetPluginConnector: IPluginConnector; stdcall;
+    function GetXMLCursor: IXMLCursor; stdcall;
+    procedure SetPluginConnector(PluginConnector: IPluginConnector); stdcall;
+    procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
+    property PluginConnector: IPluginConnector read GetPluginConnector write
+        SetPluginConnector;
+    property XMLCursor: IXMLCursor read GetXMLCursor write SetXMLCursor;
   end;
 
 {------------------------------------------------------------------------------}

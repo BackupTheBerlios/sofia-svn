@@ -53,31 +53,45 @@ type
   public
     constructor Create(APluginManager: TPluginManager; AName: string);
     destructor Destroy; override;
-    procedure Show(AParent: TWinControl);
-    procedure Close;
-    procedure LoadFromXML(XML: string); stdcall;
-    function SaveToXML: string; stdcall;
-    procedure SetDatabaseObject(DatabaseObject: IPlugUnknown);
-    procedure SetXMLCursor(XMLCursor: IXMLCursor);
     property Name: string read FName;
     property Plugin: IPlugUnknown read GetPlugin;
   end;
 
+  TPluginConnector = class(TInterfacedObject, IPluginConnector)
+    function GetConnection(const PluginName: string): IPlugConnection; stdcall;
+    function GetDatabaseObject(const PluginName: string): IPlugDatabaseObject;
+        stdcall;
+    function GetDataset(const PluginName: string): IPlugDataset; stdcall;
+    function GetDisplay(const PluginName: string): IPlugDisplay; stdcall;
+    property Connection[const PluginName: string]: IPlugConnection read
+        GetConnection;
+    property DatabaseObject[const PluginName: string]: IPlugDatabaseObject read
+        GetDatabaseObject;
+    property Dataset[const PluginName: string]: IPlugDataset read GetDataset;
+    property Display[const PluginName: string]: IPlugDisplay read GetDisplay;
+  private
+    FPluginManager: TPluginManager;
+  public
+    constructor Create(PluginManager: TPluginManager);
+    destructor Destroy; override;
+  end;
   TPluginManager = class(TObject)
+    function GetPlugins(const PluginName: string): TPlugin; stdcall;
+    property Plugins[const PluginName: string]: TPlugin read GetPlugins; default;
   private
     FPlugins: TObjectList;
-    function GetPlugins(const PluginName: string): TPlugin;
   public
     constructor Create;
     destructor Destroy; override;
     procedure LoadPlugins;
     procedure UnloadPlugins;
-    property Plugins[const PluginName: string]: TPlugin read GetPlugins; default;
   end;
+
+
 
 implementation
 
-uses Windows;
+uses Windows, xmlcursor;
 
 resourcestring
   SUnexistingFile = 'Le fichier ''%s'' n''existe pas';
@@ -116,7 +130,7 @@ begin
       Inc(i)
   end;
   if Found then
-    Result := TPlugin(FPlugins[i])
+    Result := FPlugins[i] as TPlugin
   else
     Result := nil;
 end;
@@ -193,7 +207,12 @@ end;
 
 destructor TPlugin.Destroy;
 begin
-  FPlugin := nil;
+  if Assigned(FPlugin) then
+  begin
+    FPlugin.PluginConnector := nil;
+    FPlugin.XMLCursor := nil;
+    FPlugin := nil;
+  end;
   FPluginLibrary.Free;
   inherited;
 end;
@@ -201,85 +220,44 @@ end;
 function TPlugin.GetPlugin: IPlugUnknown;
 begin
   if not Assigned(FPlugin) then
+  begin
     FPlugin := FPluginLibrary.GetPluginInterface;
+    FPlugin.PluginConnector := TPluginConnector.Create(FPluginManager);
+    FPlugin.XMLCursor := TXMLCursor.Create;
+  end;
   Result := FPlugin;
 end;
 
-procedure TPlugin.Show(AParent: TWinControl);
-var
-  PlugDisplay: IPlugDisplay;
+constructor TPluginConnector.Create(PluginManager: TPluginManager);
 begin
-  try
-    PlugDisplay := Plugin as IPlugDisplay;
-  except
-  end;
-
-  with PlugDisplay do
-  begin
-    Container.Parent := AParent;
-    Container.Align := alClient;
-  end;
+  FPluginManager := PluginManager;
 end;
 
-procedure TPlugin.Close;
-var
-  PlugDisplay: IPlugDisplay;
+destructor TPluginConnector.Destroy;
 begin
-  try
-    try
-      PlugDisplay := Plugin as IPlugDisplay;
-    except
-    end;
-    PlugDisplay.Container.Parent := nil;
-  finally
-    FPlugin := nil;
-  end;
+  inherited;
 end;
 
-procedure TPlugin.LoadFromXML(XML: string);
-var
-  PlugIO: IPlugIO;
+function TPluginConnector.GetConnection(const PluginName: string):
+    IPlugConnection;
 begin
-  try
-    PlugIO := Plugin as IPlugIO;
-  except
-  end;
-  PlugIO.LoadFromXML(XML);
+  Result := FPluginManager[PluginName].Plugin as IPlugConnection;
 end;
 
-function TPlugin.SaveToXML: string;
-var
-  PlugIO: IPlugIO;
+function TPluginConnector.GetDatabaseObject(const PluginName: string):
+    IPlugDatabaseObject;
 begin
-  try
-    PlugIO := Plugin as IPlugIO;
-  except
-  end;
-  Result := PlugIO.SaveToXML;
+  Result := FPluginManager[PluginName].Plugin as IPlugDatabaseObject;
 end;
 
-procedure TPlugin.SetDatabaseObject(DatabaseObject: IPlugUnknown);
-var
-  PlugIO: IPlugIO;
-  PlugDatabaseObject: IPlugDatabaseObject;
+function TPluginConnector.GetDataset(const PluginName: string): IPlugDataset;
 begin
-  try
-    PlugIO := Plugin as IPlugIO;
-    PlugDatabaseObject := DatabaseObject as IPlugDatabaseObject;
-  except
-  end;
-  PlugIO.SetDatabaseObject(PlugDatabaseObject);
+  Result := FPluginManager[PluginName].Plugin as IPlugDataset;
 end;
 
-procedure TPlugin.SetXMLCursor(XMLCursor: IXMLCursor);
-var
-  PlugIO: IPlugIO;
+function TPluginConnector.GetDisplay(const PluginName: string): IPlugDisplay;
 begin
-  try
-    PlugIO := Plugin as IPlugIO;
-  except
-  end;
-  PlugIO.SetXMLCursor(XMLCursor);
+   Result := FPluginManager[PluginName].Plugin as IPlugDisplay;
 end;
 
 end.

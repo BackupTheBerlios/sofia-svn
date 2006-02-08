@@ -31,6 +31,7 @@ type
     tmrLaunch: TTimer;
     procedure tmrLaunchTimer(Sender: TObject);
   private
+    FPluginCnt: TPluginConnector;
     FPluginMgr: TPluginManager;
     //FLoader: TLoaderForm;
     { Déclarations privées }
@@ -40,7 +41,7 @@ type
     procedure TestClosePlugins;
     procedure TestContact;
     procedure TestNavigateur;
-    property PluginMgr: TPluginManager read FPluginMgr;
+    property PluginCnt: TPluginConnector read FPluginCnt;
     { Déclarations publiques }
   end;
 
@@ -58,17 +59,20 @@ begin
   inherited;
   Application.ShowMainForm := False;
   FPluginMgr := TPluginManager.Create;
+  FPluginCnt := TPluginConnector.Create(FPluginMgr);
 end;
 
 destructor TAppForm.Destroy;
 begin
   FPluginMgr.Free;
+  FPluginCnt.Free;
   inherited;
 end;
 
 procedure TAppForm.TestClosePlugins;
 begin
-  FPluginMgr['contact'].Close;
+  if Assigned(PluginCnt.Display['contact']) then
+    PluginCnt.Display['contact'].Hide;
 end;
 
 procedure TAppForm.TestContact;
@@ -77,31 +81,31 @@ var
   Cursor: TXMLCursor;
 begin
   XML := '<NomContact>test</NomContact>';
-  Cursor := TXMLCursor.Create;
-  try
-    with FPluginMgr['contact']  do
+  if Assigned(PluginCnt.Display['contact']) then
+    with PluginCnt.Display['contact']  do
     begin
-      SetXMLCursor(Cursor);
       LoadFromXML(XML);
-      Show(DisplayForm.Panel3);
+      Parent := DisplayForm.Panel3;
+      Show;
     end;
-  finally
-    LoadingForm.Hide;
-  end;
 end;
 
 procedure TAppForm.TestNavigateur;
 begin
-  try
     //TODO: initialisation des parametres de cnx
+  if Assigned(PluginCnt.Connection['dbuib']) then
+  with PluginCnt.Connection['dbuib'] do
+  begin
+    ConnectionName := '';
+    UserName := 'sofia';
+    PassWord := 'sofia';
+  end;
 
-    with FPluginMgr['navigateur'] do
-    begin
-      SetDatabaseObject(FPluginMgr['dbobj'].Plugin);
-      Show(DisplayForm.Panel2);
-    end;
-  finally
-    LoadingForm.Hide;
+  if Assigned(PluginCnt.Display['navigateur']) then
+  with PluginCnt.Display['navigateur'] do
+  begin
+    Parent := DisplayForm.Panel2;
+    Show;
   end;
 end;
 
@@ -109,7 +113,11 @@ procedure TAppForm.tmrLaunchTimer(Sender: TObject);
 begin
   tmrLaunch.Enabled := False;
   LoadingForm.Show;
-  FPluginMgr.LoadPlugins;
+  try
+    FPluginMgr.LoadPlugins;
+  finally
+    LoadingForm.Hide;
+  end;
   TestContact;
   DisplayForm.ShowModal;
   TestClosePlugins;

@@ -48,7 +48,7 @@ uses DateUtils, Dialogs, app, plugmgr, plugintf;
 
 procedure TDisplayForm.PluginContainer1Button1Click(Sender: TObject);
 begin
-  ShowMessage(AppForm.PluginMgr['contact'].SaveToXML);
+  ShowMessage(AppForm.PluginCnt.Display['contact'].SaveToXML);
 end;
 
 end.

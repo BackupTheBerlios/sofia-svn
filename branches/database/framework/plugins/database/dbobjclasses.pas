@@ -22,13 +22,19 @@ unit dbobjclasses;
 
 interface
 
-uses Classes, DB, plugintf;
+uses Classes, DB, StdXML_TLB, plugintf;
 
 type
   TDatabaseObjectPlugin = class(TInterfacedObject, IPlugUnknown,
       IPlugDatabaseObject)
+    function GetPluginConnector: IPluginConnector; stdcall;
+    function GetXMLCursor: IXMLCursor; stdcall;
+    procedure SetPluginConnector(PluginConnector: IPluginConnector); stdcall;
+    procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
   private
     FDataset: IPlugDataset;
+    FPluginConnector: IPluginConnector;
+    FXMLCursor: IXMLCursor;
   public
     constructor Create;
     destructor Destroy; override;
@@ -48,6 +54,7 @@ end;
 
 destructor TDatabaseObjectPlugin.Destroy;
 begin
+  FXMLCursor := nil;
   inherited;
 end;
 
@@ -69,9 +76,30 @@ begin
   end;
 end;
 
+function TDatabaseObjectPlugin.GetPluginConnector: IPluginConnector;
+begin
+  Result := FPluginConnector;
+end;
+
+function TDatabaseObjectPlugin.GetXMLCursor: IXMLCursor;
+begin
+  Result := FXMLCursor;
+end;
+
 procedure TDatabaseObjectPlugin.SetDataset(Dataset: IPlugDataset);
 begin
   FDataset := Dataset;
+end;
+
+procedure TDatabaseObjectPlugin.SetPluginConnector(PluginConnector:
+    IPluginConnector);
+begin
+  FPluginConnector := PluginConnector;
+end;
+
+procedure TDatabaseObjectPlugin.SetXMLCursor(XMLCursor: IXMLCursor);
+begin
+  FXMLCursor := XMLCursor;
 end;
 
 end.

@@ -58,16 +58,20 @@ type
     function GetConnected: boolean; stdcall;
     function GetConnectionName: string; stdcall;
     function GetPassWord: string; stdcall;
+    function GetPluginConnector: IPluginConnector; stdcall;
     function GetUserName: string; stdcall;
+    function GetXMLCursor: IXMLCursor; stdcall;
     procedure RemoveDataset(AName: string); stdcall;
     procedure SetConnected(const Value: boolean); stdcall;
     procedure SetConnectionName(const Value: string); stdcall;
     procedure SetPassWord(const Value: string); stdcall;
+    procedure SetPluginConnector(PluginConnector: IPluginConnector); stdcall;
     procedure SetUserName(const Value: string); stdcall;
     procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
   private
     FConnection: TJvUIBDataBase;
     FDatasetList: TDatasetList;
+    FPluginConnector: IPluginConnector;
     FTransaction: TJvUIBTransaction;
     FXMLCursor: IXMLCursor;
   public
@@ -122,9 +126,19 @@ begin
   Result := FConnection.PassWord;
 end;
 
+function TDatabaseAccessPlugin.GetPluginConnector: IPluginConnector;
+begin
+  Result := FPluginConnector;
+end;
+
 function TDatabaseAccessPlugin.GetUserName: string;
 begin
   Result := FConnection.UserName;
+end;
+
+function TDatabaseAccessPlugin.GetXMLCursor: IXMLCursor;
+begin
+  Result := FXMLCursor;
 end;
 
 procedure TDatabaseAccessPlugin.RemoveDataset(AName: string);
@@ -149,6 +163,12 @@ end;
 procedure TDatabaseAccessPlugin.SetPassWord(const Value: string);
 begin
   FConnection.PassWord := Value;
+end;
+
+procedure TDatabaseAccessPlugin.SetPluginConnector(PluginConnector:
+    IPluginConnector);
+begin
+  FPluginConnector := PluginConnector;
 end;
 
 procedure TDatabaseAccessPlugin.SetUserName(const Value: string);
