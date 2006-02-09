@@ -31,4 +31,10 @@ object NavigateurFrame: TNavigateurFrame
     Left = 344
     Top = 32
   end
+  object ClientDataset: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    Left = 312
+    Top = 64
+  end
 end

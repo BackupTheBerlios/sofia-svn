@@ -23,12 +23,13 @@ unit navigateurctrl;
 interface
 
 uses
-  Forms, Classes, Controls, Grids, navigateurclasses, DBGrids, DB;
+  Forms, Classes, Controls, Grids, navigateurclasses, DBGrids, DB, DBClient;
 
 type
   TNavigateurFrame = class(TFrame)
     DataSource: TDataSource;
     DBGrid1: TDBGrid;
+    ClientDataset: TClientDataSet;
   private
     { Déclarations privées }
   public
@@ -36,7 +37,7 @@ type
   end;
 
   TController = class(TInterfacedObject, IController)
-    procedure SetPersonnes(const Value: TDataset); stdcall;
+    procedure SetPersonnes(const Value: string); stdcall;
   private
     FContainer: TNavigateurFrame;
   public
@@ -50,7 +51,6 @@ function NewController(AControl: TWinControl): IController;
 implementation
 
 {$R *.dfm}
-
 
 function NewController(AControl: TWinControl): IController;
 begin
@@ -67,15 +67,17 @@ begin
   inherited;
 end;
 
-procedure TController.SetPersonnes(const Value: TDataset);
+procedure TController.SetPersonnes(const Value: string);
+var
+  Stream: TStringStream;
 begin
-  if Assigned(FContainer.DataSource.DataSet) then
-  begin
-    FContainer.DataSource.DataSet.Close;
-    FContainer.DataSource.DataSet.Free;
+  Stream := TStringStream.Create(Value);
+  try
+    FContainer.ClientDataset.LoadFromStream(Stream);
+    FContainer.DataSource.DataSet.Open;
+  finally
+    Stream.Free;
   end;
-  FContainer.DataSource.DataSet := Value;
-  FContainer.DataSource.DataSet.Open;
 end;
 
 end.

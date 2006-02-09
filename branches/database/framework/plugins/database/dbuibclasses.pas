@@ -54,7 +54,7 @@ type
 
   TDatabaseAccessPlugin = class(TInterfacedObject, IPlugUnknown, IPlugConnection,
       IPlugDataset)
-    function Add(DatasetDef: string): TDataset; stdcall;
+    function Add(DatasetDef: string): string; stdcall;
     function GetConnected: boolean; stdcall;
     function GetConnectionName: string; stdcall;
     function GetPassWord: string; stdcall;
@@ -105,10 +105,10 @@ begin
   inherited;
 end;
 
-function TDatabaseAccessPlugin.Add(DatasetDef: string): TDataset;
+function TDatabaseAccessPlugin.Add(DatasetDef: string): string;
 begin
   FXMLCursor.LoadXML(DatasetDef);
-  Result := FDatasetList.Add(FXMLCursor).Dataset;
+  Result := '';//FDatasetList.Add(FXMLCursor).Dataset;
 end;
 
 function TDatabaseAccessPlugin.GetConnected: boolean;

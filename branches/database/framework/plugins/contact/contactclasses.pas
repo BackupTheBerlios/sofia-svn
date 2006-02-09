@@ -38,8 +38,8 @@ type
     function GetParent: TWinControl; stdcall;
     function GetPluginConnector: IPluginConnector; stdcall;
     function GetXMLCursor: IXMLCursor; stdcall;
-    procedure LoadFromXML(XML: string); stdcall;
-    function SaveToXML: string; stdcall;
+    procedure SetXML(const Value: string); stdcall;
+    function GetXML: string; stdcall;
     procedure SetParent(const Value: TWinControl); stdcall;
     procedure SetPluginConnector(PluginConnector: IPluginConnector); stdcall;
     procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
@@ -92,16 +92,16 @@ begin
   Result := FXMLCursor;
 end;
 
-procedure TContactPlugin.LoadFromXML(XML: string);
+procedure TContactPlugin.SetXML(const Value: string);
 begin
-  if Length(XML) > 0 then
+  if Length(Value) > 0 then
   begin
-    FXMLCursor.LoadXML(XML);
+    FXMLCursor.LoadXML(Value);
     FController.NomContact := FXMLCursor.GetValue('/NomContact');
   end;
 end;
 
-function TContactPlugin.SaveToXML: string;
+function TContactPlugin.GetXML: string;
 begin
   if FXMLCursor.Count = 0 then
     FXMLCursor.AppendChild('NomContact', FController.NomContact)

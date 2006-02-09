@@ -28,7 +28,7 @@ type
 
   IController = interface(IInterface)
   ['{CD5C131C-E966-4743-85B9-D1F2E96D4DDD}']
-    procedure SetPersonnes(const Value: TDataset); stdcall;
+    procedure SetPersonnes(const Value: string); stdcall;
   end;
 
   TNavigateurPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay)
@@ -37,8 +37,8 @@ type
     function GetPluginConnector: IPluginConnector; stdcall;
     function GetXMLCursor: IXMLCursor; stdcall;
     procedure Hide; stdcall;
-    procedure LoadFromXML(XML: string); stdcall;
-    function SaveToXML: string; stdcall;
+    procedure SetXML(const Value: string); stdcall;
+    function GetXML: string; stdcall;
     procedure SetParent(const Value: TWinControl); stdcall;
     procedure SetPluginConnector(PluginConnector: IPluginConnector); stdcall;
     procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
@@ -95,12 +95,12 @@ begin
   FContainer.Parent := nil;
 end;
 
-procedure TNavigateurPlugin.LoadFromXML(XML: string);
+procedure TNavigateurPlugin.SetXML(const Value: string);
 begin
 
 end;
 
-function TNavigateurPlugin.SaveToXML: string;
+function TNavigateurPlugin.GetXML: string;
 begin
 
 end;

@@ -28,6 +28,7 @@ type
   TDatabaseObjectPlugin = class(TInterfacedObject, IPlugUnknown,
       IPlugDatabaseObject)
     function GetDataset: IPlugDataset; stdcall;
+    function GetPersonnes(Categorie: string): string; stdcall;
     function GetPluginConnector: IPluginConnector; stdcall;
     function GetXMLCursor: IXMLCursor; stdcall;
     procedure SetDataset1(Dataset: IPlugDataset); stdcall;
@@ -41,12 +42,11 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-    function GetPersonnes(Categorie: string): TDataset; stdcall;
   end;
 
 implementation
 
-uses SysUtils;
+uses SysUtils, dbclient;
 
 
 constructor TDatabaseObjectPlugin.Create;
@@ -65,7 +65,7 @@ begin
   Result := FDataset;
 end;
 
-function TDatabaseObjectPlugin.GetPersonnes(Categorie: string): TDataset;
+function TDatabaseObjectPlugin.GetPersonnes(Categorie: string): string;
 var
   sql: string;
   par: string;
@@ -77,9 +77,9 @@ begin
   par := '<Params><Param><Name>categorie</Name><Type>string</Type><Value>%s</Value></Param></Params>';
   xml := Format('<DatasetDef>' + nam + sql + par + '</DatasetDef>', [Categorie]);
   try
-    Result := FPluginConnector.Dataset['dbuib'].Add(xml);//Dataset.Add(xml);
+    Result := FPluginConnector.Dataset['dbuib'].Add(xml);
   finally
-    FPluginConnector.Dataset['dbuib'].RemoveDataset('personnes'); //FDataset.RemoveDataset('personnes');
+    FPluginConnector.Dataset['dbuib'].RemoveDataset('personnes');
   end;
 end;
 

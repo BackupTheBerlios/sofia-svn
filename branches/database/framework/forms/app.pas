@@ -76,14 +76,11 @@ begin
 end;
 
 procedure TAppForm.TestContact;
-var
-  XML: string;
 begin
-  XML := '<NomContact>test</NomContact>';
   if Assigned(PluginCnt.Display['contact']) then
     with PluginCnt.Display['contact']  do
     begin
-      LoadFromXML(XML);
+      XML := '<NomContact>test</NomContact>';
       Parent := DisplayForm.Panel3;
       Show;
     end;

@@ -22,7 +22,7 @@ unit plugintf;
 
 interface
 
-uses Controls, stdxml_tlb, db;
+uses Controls, stdxml_tlb, dbclient;
 
 type
 
@@ -44,7 +44,7 @@ type
 
   IPlugDataset = interface(IInterface)
   ['{2BBE4585-C2A2-4383-A723-73715CB61AC7}']
-    function Add(DatasetDef: string): TDataset; stdcall;
+    function Add(DatasetDef: string): string; stdcall;
     procedure RemoveDataset(AName: string); stdcall;
     procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
   end;
@@ -53,7 +53,7 @@ type
 
   IPlugDatabaseObject = interface(IInterface)
   ['{87078381-3F7D-4020-B4FB-7C3097CA91C7}']
-    function GetPersonnes(Categorie: string): TDataset; stdcall;
+    function GetPersonnes(Categorie: string): string; stdcall;
   end;
 
 {------------------------------------------------------------------------------}
@@ -62,11 +62,12 @@ type
   ['{570C9B35-15F3-435E-9166-963ACE05F635}']
     procedure Hide; stdcall;
     function GetParent: TWinControl; stdcall;
-    procedure LoadFromXML(XML: string); stdcall;
-    function SaveToXML: string; stdcall;
+    procedure SetXML(const Value: string); stdcall;
+    function GetXML: string; stdcall;
     procedure SetParent(const Value: TWinControl); stdcall;
     procedure Show; stdcall;
     property Parent: TWinControl read GetParent write SetParent;
+    property XML: string read GetXML write SetXML;
   end;
 
 {------------------------------------------------------------------------------}
