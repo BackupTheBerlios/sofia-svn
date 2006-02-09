@@ -3,8 +3,7 @@ library navigateur;
 uses
   plugintf,
   navigateurctrl in 'navigateurctrl.pas',
-  navigateurclasses in 'navigateurclasses.pas',
-  navigateurdb in 'navigateurdb.pas';
+  navigateurclasses in 'navigateurclasses.pas';
 
 function NewPlugin: IPlugUnknown;
 begin

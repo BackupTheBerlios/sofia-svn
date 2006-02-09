@@ -73,7 +73,7 @@ var
   xml: string;
 begin
   nam := '<Name>personnes</Name>';
-  sql := '<Sql>select * from personne where categorie = :categorie</Sql>';
+  sql := '<Sql>select * from personnes where prs_categorie = :categorie</Sql>';
   par := '<Params><Param><Name>categorie</Name><Type>string</Type><Value>%s</Value></Param></Params>';
   xml := Format('<DatasetDef>' + nam + sql + par + '</DatasetDef>', [Categorie]);
   try

@@ -22,19 +22,25 @@ unit dbuibclasses;
 
 interface
 
-uses Classes, plugintf, jvuib, jvuibdataset, contnrs, DB, StdXML_TLB;
+uses Classes, jvuib, jvuibdataset, contnrs, DBClient, provider, StdXML_TLB, plugintf;
 
 type
+  TDatasetList = class;
+
   TDatasetItem = class(TObject)
   private
+    FClientDataset: TClientDataset;
     FName: string;
     FDataset: TJvUIBDataset;
+    FOwner: TDatasetList;
+    FProvider: TDataSetProvider;
+    function GetXML: string;
   public
-    constructor Create(DatasetDef: IXMLCursor; Connection: TJvUIBDatabase;
-        Transaction: TJvUIBTransaction); reintroduce; overload;
+    constructor Create(Owner: TDatasetList; DatasetDef: IXMLCursor); reintroduce;
+        overload;
     destructor Destroy; override;
     property Name: string read FName;
-    property Dataset: TJvUIBDataset read FDataset write FDataset;
+    property XML: string read GetXML;
   end;
 
   TDatasetList = class(TObjectList)
@@ -108,7 +114,7 @@ end;
 function TDatabaseAccessPlugin.Add(DatasetDef: string): string;
 begin
   FXMLCursor.LoadXML(DatasetDef);
-  Result := '';//FDatasetList.Add(FXMLCursor).Dataset;
+  Result := FDatasetList.Add(FXMLCursor).XML;
 end;
 
 function TDatabaseAccessPlugin.GetConnected: boolean;
@@ -181,8 +187,7 @@ begin
   FXMLCursor := XMLCursor;
 end;
 
-constructor TDatasetItem.Create(DatasetDef: IXMLCursor; Connection:
-    TJvUIBDatabase; Transaction: TJvUIBTransaction);
+constructor TDatasetItem.Create(Owner: TDatasetList; DatasetDef: IXMLCursor);
 var
   Params: IXMLCursor;
   ParamType: string;
@@ -190,10 +195,11 @@ var
   ParamName: string;
   IntValue: Integer;
 begin
+  FOwner := Owner;
   FName := DatasetDef.GetValue('/DatasetDef/Name');
   FDataset := TJvUIBDataset.Create(nil);
-  FDataset.Transaction := Transaction;
-  FDataset.DataBase := Connection;
+  FDataset.Transaction := Owner.Transaction;
+  FDataset.DataBase := Owner.Connection;
   FDataset.FetchBlobs := True;
   FDataset.SQL.Text := DatasetDef.GetValue('/DatasetDef/Sql');
 
@@ -218,12 +224,28 @@ begin
    finally
      Params := nil;
    end;
+
+   FClientDataset := TClientDataSet.Create(nil);
+   FProvider := TDataSetProvider.Create(nil);
+   FProvider.DataSet := FDataset;
+   FClientDataset.SetProvider(FProvider);
+
+   FDataset.Open;
 end;
 
 destructor TDatasetItem.Destroy;
 begin
+  FDataset.Close;
+  FProvider.Free;
+  FClientDataset.Free;
   FDataset.Free;
   inherited;
+end;
+
+function TDatasetItem.GetXML: string;
+begin
+  FClientDataset.Open;
+  Result := FClientDataset.XMLData;
 end;
 
 constructor TDatasetList.Create;
@@ -240,7 +262,7 @@ end;
 
 function TDatasetList.Add(DatasetDef: IXMLCursor): TDatasetItem;
 begin
-  Result := TDatasetItem.Create(DatasetDef, FConnection, FTransaction);
+  Result := TDatasetItem.Create(Self, DatasetDef);
   FQueryList.Add(Result);
 end;
 

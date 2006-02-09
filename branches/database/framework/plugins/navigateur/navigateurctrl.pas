@@ -30,6 +30,9 @@ type
     DataSource: TDataSource;
     DBGrid1: TDBGrid;
     ClientDataset: TClientDataSet;
+    ClientDatasetprs_nom: TStringField;
+    ClientDatasetprs_prenom: TStringField;
+    ClientDatasetprs_id: TStringField;
   private
     { Déclarations privées }
   public
@@ -68,16 +71,8 @@ begin
 end;
 
 procedure TController.SetPersonnes(const Value: string);
-var
-  Stream: TStringStream;
 begin
-  Stream := TStringStream.Create(Value);
-  try
-    FContainer.ClientDataset.LoadFromStream(Stream);
-    FContainer.DataSource.DataSet.Open;
-  finally
-    Stream.Free;
-  end;
+  FContainer.ClientDataset.XMLData := Value;
 end;
 
 end.

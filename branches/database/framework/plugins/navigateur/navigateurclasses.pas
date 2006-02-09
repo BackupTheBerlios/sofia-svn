@@ -66,7 +66,8 @@ end;
 
 destructor TNavigateurPlugin.Destroy;
 begin
-  FContainer.Free;
+  FController := nil;
+  FXMLCursor := nil;
   inherited;
 end;
 
@@ -123,7 +124,7 @@ end;
 
 procedure TNavigateurPlugin.Show;
 begin
-  FController.SetPersonnes(FPluginConnector.DatabaseObject['dbobj'].GetPersonnes('clients'));
+  FController.SetPersonnes(FPluginConnector.DatabaseObject['dbobj'].GetPersonnes('client'));
   FContainer.Parent := FParent;
   FContainer.Align := alClient;
 end;

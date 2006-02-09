@@ -15,26 +15,57 @@ object NavigateurFrame: TNavigateurFrame
   ParentFont = False
   TabOrder = 0
   object DBGrid1: TDBGrid
-    Left = 8
-    Top = 8
-    Width = 289
-    Height = 273
+    Left = 0
+    Top = 0
+    Width = 421
+    Height = 382
+    Align = alClient
+    BorderStyle = bsNone
+    Ctl3D = False
     DataSource = DataSource
+    Options = [dgTitles, dgColumnResize, dgTabs, dgRowSelect, dgAlwaysShowSelection]
+    ParentCtl3D = False
     TabOrder = 0
     TitleFont.Charset = ANSI_CHARSET
     TitleFont.Color = clWindowText
     TitleFont.Height = -11
     TitleFont.Name = 'Verdana'
     TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'prs_nom'
+        Visible = True
+      end
+      item
+        Color = cl3DLight
+        Expanded = False
+        FieldName = 'prs_prenom'
+        Visible = True
+      end>
   end
   object DataSource: TDataSource
+    DataSet = ClientDataset
     Left = 344
     Top = 32
   end
   object ClientDataset: TClientDataSet
     Aggregates = <>
     Params = <>
-    Left = 312
-    Top = 64
+    Left = 344
+    Top = 88
+    object ClientDatasetprs_nom: TStringField
+      DisplayLabel = 'Nom'
+      FieldName = 'prs_nom'
+    end
+    object ClientDatasetprs_prenom: TStringField
+      DisplayLabel = 'Prenom'
+      FieldName = 'prs_prenom'
+    end
+    object ClientDatasetprs_id: TStringField
+      FieldName = 'prs_id'
+      Visible = False
+      Size = 32
+    end
   end
 end

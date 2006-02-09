@@ -67,7 +67,7 @@ end;
 
 destructor TContactPlugin.Destroy;
 begin
-  FContainer.Free;
+  FController := nil;
   FXMLCursor := nil;
   inherited;
 end;

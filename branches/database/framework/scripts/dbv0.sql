@@ -7,7 +7,7 @@ SET NAMES NONE;
 /* < == Extracting database header... ===================================== > */
 /* < ====================================================================== > */
 
-CREATE DATABASE 'localhost:D:\Developpement\berlios\sofia\database\sofia.fdb'
+CREATE DATABASE 'localhost:D:\Developpement\berlios\sofia\bin\sofia.fdb'
 USER 'SYSDBA' PASSWORD 'masterkey'
 PAGE_SIZE 4096
 DEFAULT CHARACTER SET NONE;
