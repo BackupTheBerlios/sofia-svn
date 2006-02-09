@@ -49,7 +49,6 @@ type
     FParent: TWinControl;
     FPluginConnector: IPluginConnector;
     FXMLCursor: IXMLCursor;
-    Result: TWinControl;
   public
     constructor Create;
     destructor Destroy; override;

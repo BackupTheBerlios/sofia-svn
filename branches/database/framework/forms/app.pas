@@ -78,7 +78,6 @@ end;
 procedure TAppForm.TestContact;
 var
   XML: string;
-  Cursor: TXMLCursor;
 begin
   XML := '<NomContact>test</NomContact>';
   if Assigned(PluginCnt.Display['contact']) then
@@ -96,7 +95,7 @@ begin
   if Assigned(PluginCnt.Connection['dbuib']) then
   with PluginCnt.Connection['dbuib'] do
   begin
-    ConnectionName := 'D:\Developpement\berlios\sofia\database\sofia.fdb';
+    ConnectionName := 'sofia.fdb';
     UserName := 'sysdba';
     PassWord := 'masterkey';
     Connected := True;

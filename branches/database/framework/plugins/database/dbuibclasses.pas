@@ -184,9 +184,7 @@ end;
 constructor TDatasetItem.Create(DatasetDef: IXMLCursor; Connection:
     TJvUIBDatabase; Transaction: TJvUIBTransaction);
 var
-  Name: IXMLCursor;
   Params: IXMLCursor;
-  Sql: IXMLCursor;
   ParamType: string;
   ParamValue: string;
   ParamName: string;
