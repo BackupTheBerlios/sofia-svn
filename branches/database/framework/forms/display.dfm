@@ -21,7 +21,8 @@ object DisplayForm: TDisplayForm
     Width = 643
     Height = 41
     Align = alBottom
-    Caption = 'Panel1'
+    BevelOuter = bvNone
+    Color = clWindow
     TabOrder = 0
     object Button1: TButton
       Left = 560
@@ -39,7 +40,8 @@ object DisplayForm: TDisplayForm
     Width = 321
     Height = 430
     Align = alLeft
-    Caption = 'Panel2'
+    BevelOuter = bvNone
+    Color = clWindow
     TabOrder = 1
   end
   object Panel3: TPanel
@@ -48,7 +50,9 @@ object DisplayForm: TDisplayForm
     Width = 322
     Height = 430
     Align = alClient
-    Caption = 'Panel3'
+    BevelOuter = bvNone
+    BorderWidth = 8
+    Color = clWindow
     TabOrder = 2
   end
 end

@@ -15,15 +15,13 @@ object NavigateurFrame: TNavigateurFrame
   ParentFont = False
   TabOrder = 0
   object DBGrid1: TDBGrid
-    Left = 0
-    Top = 0
-    Width = 421
-    Height = 382
-    Align = alClient
-    BorderStyle = bsNone
-    Ctl3D = False
+    Left = 16
+    Top = 16
+    Width = 217
+    Height = 137
+    Ctl3D = True
     DataSource = DataSource
-    Options = [dgTitles, dgColumnResize, dgTabs, dgRowSelect, dgAlwaysShowSelection]
+    Options = [dgColumnResize, dgTabs, dgRowSelect, dgAlwaysShowSelection]
     ParentCtl3D = False
     TabOrder = 0
     TitleFont.Charset = ANSI_CHARSET

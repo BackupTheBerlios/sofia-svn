@@ -23,7 +23,8 @@ unit navigateurctrl;
 interface
 
 uses
-  Forms, Classes, Controls, Grids, navigateurclasses, DBGrids, DB, DBClient;
+  Forms, Classes, Controls, Grids, navigateurclasses, DBGrids, DB, DBClient,
+  ExtCtrls;
 
 type
   TNavigateurFrame = class(TFrame)

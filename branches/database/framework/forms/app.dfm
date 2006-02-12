@@ -1,8 +1,8 @@
 object AppForm: TAppForm
-  Left = 452
-  Top = 190
-  Width = 123
-  Height = 98
+  Left = 497
+  Top = 172
+  Width = 209
+  Height = 132
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,6 +16,10 @@ object AppForm: TAppForm
     Interval = 500
     OnTimer = tmrLaunchTimer
     Left = 48
+    Top = 16
+  end
+  object XPManifest1: TXPManifest
+    Left = 96
     Top = 16
   end
 end

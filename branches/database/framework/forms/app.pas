@@ -24,11 +24,12 @@ interface
 
 uses
   Forms, Controls, ExtCtrls, Classes, StdCtrls,
-  plugmgr;
+  plugmgr, XPMan;
 
 type
   TAppForm = class(TForm)
     tmrLaunch: TTimer;
+    XPManifest1: TXPManifest;
     procedure tmrLaunchTimer(Sender: TObject);
   private
     FPluginCnt: TPluginConnector;
@@ -116,6 +117,7 @@ begin
     LoadingForm.Hide;
   end;
   TestNavigateur;
+  TestContact;
   DisplayForm.ShowModal;
   TestClosePlugins;
   Close;
