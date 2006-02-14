@@ -1,7 +1,7 @@
 object DisplayForm: TDisplayForm
-  Left = 372
-  Top = 217
-  Width = 651
+  Left = 347
+  Top = 215
+  Width = 718
   Height = 505
   Caption = 'DisplayForm'
   Color = clWhite
@@ -15,40 +15,79 @@ object DisplayForm: TDisplayForm
   WindowState = wsMaximized
   PixelsPerInch = 96
   TextHeight = 13
-  object Panel1: TPanel
-    Left = 0
-    Top = 430
-    Width = 643
-    Height = 41
-    Align = alBottom
-    Caption = 'Panel1'
-    TabOrder = 0
-    object Button1: TButton
-      Left = 560
-      Top = 8
-      Width = 75
-      Height = 25
-      Caption = 'Button1'
-      TabOrder = 0
-      OnClick = PluginContainer1Button1Click
-    end
-  end
   object Panel2: TPanel
     Left = 0
     Top = 0
-    Width = 321
-    Height = 430
-    Align = alLeft
-    Caption = 'Panel2'
-    TabOrder = 1
-  end
-  object Panel3: TPanel
-    Left = 321
-    Top = 0
-    Width = 322
-    Height = 430
+    Width = 710
+    Height = 471
     Align = alClient
-    Caption = 'Panel3'
-    TabOrder = 2
+    BevelOuter = bvNone
+    Color = clWindow
+    TabOrder = 0
+    object Panel1: TPanel
+      Left = 0
+      Top = 0
+      Width = 710
+      Height = 73
+      Align = alTop
+      BevelOuter = bvNone
+      Color = 14149867
+      TabOrder = 0
+      object pbPages: TPaintBox
+        Left = 0
+        Top = 20
+        Width = 710
+        Height = 53
+        Align = alClient
+        OnPaint = pbPagesPaint
+      end
+      object Panel3: TPanel
+        Left = 0
+        Top = 0
+        Width = 710
+        Height = 20
+        Align = alTop
+        BevelOuter = bvNone
+        TabOrder = 0
+        object pnlScrollRight: TPanel
+          Left = 693
+          Top = 0
+          Width = 17
+          Height = 20
+          Align = alRight
+          BevelOuter = bvNone
+          Color = clWindow
+          TabOrder = 0
+        end
+        object pnlScrollLeft: TPanel
+          Left = 0
+          Top = 0
+          Width = 17
+          Height = 20
+          Align = alLeft
+          BevelOuter = bvNone
+          Color = clWindow
+          TabOrder = 1
+        end
+        object sgPages: TStringGrid
+          Left = 17
+          Top = 0
+          Width = 676
+          Height = 20
+          BorderStyle = bsNone
+          ColCount = 3
+          Ctl3D = False
+          DefaultRowHeight = 21
+          DefaultDrawing = False
+          FixedCols = 0
+          RowCount = 1
+          FixedRows = 0
+          Options = [goFixedVertLine, goFixedHorzLine, goRangeSelect]
+          ParentCtl3D = False
+          TabOrder = 2
+          OnDrawCell = sgPagesDrawCell
+        end
+      end
+    end
   end
 end

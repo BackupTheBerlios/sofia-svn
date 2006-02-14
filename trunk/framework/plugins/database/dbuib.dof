@@ -94,21 +94,21 @@ OutputDir=$(SOFIA)\bin
 UnitOutputDir=$(SOFIA)\lib
 PackageDLLOutputDir=
 PackageDCPOutputDir=
-SearchPath=$(SOFIA)\lib
+SearchPath=$(SOFIA)\trunk\src\framework\intf;$(SOFIA)\trunk\src\framework\classes;$(SOFIA)\lib
 Packages=vcl
 Conditionals=
-DebugSourceDirs=D:\Developpement\berlios\sofia\branches\database\framework\xmlcursor\
+DebugSourceDirs=
 UsePackages=1
 [Parameters]
 RunParams=
-HostApplication=D:\Developpement\berlios\sofia\bin\sofia.exe
+HostApplication=D:\Developpement\sofia\bin\sofia.exe
 Launcher=
 UseLauncher=0
 DebugCWD=
 [Language]
 ActiveLang=
 ProjectLang=
-RootDir=
+RootDir=D:\Developpement\berlios\sofia\branches\database\framework\plugins\connexion\
 [Version Info]
 IncludeVerInfo=0
 AutoIncBuild=0
@@ -136,7 +136,7 @@ ProductVersion=1.0.0.0
 Comments=
 [Excluded Packages]
 D:\Developpement\sofia\bin\gdip.bpl=(sans titre)
-D:\Developpement\sofia\bin\GDIPlusControls.bpl=GDI+ Controls
+C:\WINDOWS\system32\rbIBE77.bpl=ReportBuilder Data Access for Interbase Express
 [HistoryLists\hlDebugSourcePath]
 Count=2
 Item0=..\..\xmlcursor
@@ -471,3 +471,5 @@ Count mtSend_FailureMsg=1
 mtSend_FailureMsg0="Sorry, sending the message didn't work."
 
 
+un´fÒ
+l™sø

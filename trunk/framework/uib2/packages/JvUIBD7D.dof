@@ -3,16 +3,16 @@ Version=7.0
 [Compiler]
 A=8
 B=0
-C=1
+C=0
 D=1
 E=0
 F=0
 G=1
 H=1
 I=1
-J=0
+J=1
 K=0
-L=1
+L=0
 M=0
 N=1
 O=1
@@ -25,7 +25,7 @@ U=0
 V=1
 W=0
 X=1
-Y=1
+Y=0
 Z=1
 ShowHints=1
 ShowWarnings=1
@@ -80,7 +80,7 @@ UnsafeType=0
 UnsafeCode=0
 UnsafeCast=0
 [Linker]
-MapFile=0
+MapFile=3
 OutputObjs=0
 ConsoleApp=1
 DebugInfo=0
@@ -88,20 +88,20 @@ RemoteSymbols=0
 MinStackSize=16384
 MaxStackSize=1048576
 ImageBase=4194304
-ExeDescription=
+ExeDescription=UIB - Unified Interbase Components
 [Directories]
-OutputDir=$(SOFIA)\bin
+OutputDir=
 UnitOutputDir=$(SOFIA)\lib
-PackageDLLOutputDir=
-PackageDCPOutputDir=
-SearchPath=$(SOFIA)\lib
-Packages=vcl
+PackageDLLOutputDir=$(SOFIA)\bin
+PackageDCPOutputDir=$(SOFIA)\lib
+SearchPath=
+Packages=
 Conditionals=
-DebugSourceDirs=D:\Developpement\berlios\sofia\branches\database\framework\xmlcursor\
-UsePackages=1
+DebugSourceDirs=
+UsePackages=0
 [Parameters]
 RunParams=
-HostApplication=D:\Developpement\berlios\sofia\bin\sofia.exe
+HostApplication=
 Launcher=
 UseLauncher=0
 DebugCWD=
@@ -110,10 +110,10 @@ ActiveLang=
 ProjectLang=
 RootDir=
 [Version Info]
-IncludeVerInfo=0
+IncludeVerInfo=1
 AutoIncBuild=0
 MajorVer=1
-MinorVer=0
+MinorVer=2
 Release=0
 Build=0
 Debug=0
@@ -121,12 +121,12 @@ PreRelease=0
 Special=0
 Private=0
 DLL=0
-Locale=1036
+Locale=1043
 CodePage=1252
 [Version Info Keys]
 CompanyName=
 FileDescription=
-FileVersion=1.0.0.0
+FileVersion=1.2.0.0
 InternalName=
 LegalCopyright=
 LegalTrademarks=
@@ -136,24 +136,22 @@ ProductVersion=1.0.0.0
 Comments=
 [Excluded Packages]
 D:\Developpement\sofia\bin\gdip.bpl=(sans titre)
-D:\Developpement\sofia\bin\GDIPlusControls.bpl=GDI+ Controls
-[HistoryLists\hlDebugSourcePath]
-Count=2
-Item0=..\..\xmlcursor
-Item1=D:\Developpement\berlios\sofia\branches\database\framework\xmlcursor\
+C:\WINDOWS\system32\rbIBE77.bpl=ReportBuilder Data Access for Interbase Express
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
-[HistoryLists\hlSearchPath]
+[HistoryLists\hlUnitOutputDirectory]
 Count=2
 Item0=$(SOFIA)\lib
-Item1=$(SOFIA)\lib;..\..\xmlcursor
-[HistoryLists\hlUnitOutputDirectory]
-Count=1
-Item0=$(SOFIA)\lib
-[HistoryLists\hlOutputDirectorry]
-Count=1
+Item1=E:\Developpement\Composants\ComponentLibrary
+[HistoryLists\hlBPLOutput]
+Count=2
 Item0=$(SOFIA)\bin
+Item1=E:\Developpement\Composants\ComponentLibrary
+[HistoryLists\hlDCPOutput]
+Count=2
+Item0=$(SOFIA)\lib
+Item1=E:\Developpement\Composants\ComponentLibrary
 [Exception Log]
 EurekaLog Version=504
 Activate=0
@@ -471,3 +469,4 @@ Count mtSend_FailureMsg=1
 mtSend_FailureMsg0="Sorry, sending the message didn't work."
 
 
+*èöLLŸz

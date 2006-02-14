@@ -9,7 +9,7 @@ MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
 DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
-PROJECTS = sofia.exe contact.dll clients.dll serializer.dll
+PROJECTS = JvUIBD7R.bpl sofia.exe contact.dll dbuib.dll dbobj.dll navigateur.dll
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
@@ -21,10 +21,16 @@ sofia.exe: sofia.dpr
 contact.dll: plugins\contact\contact.dpr
   $(DCC)
 
-clients.dll: plugins\clients\clients.dpr
+dbuib.dll: plugins\database\dbuib.dpr
   $(DCC)
 
-serializer.dll: plugins\serializer\serializer.dpr
+navigateur.dll: plugins\navigateur\navigateur.dpr
+  $(DCC)
+
+JvUIBD7R.bpl: uib2\packages\JvUIBD7R.dpk
+  $(DCC)
+
+dbobj.dll: plugins\database\dbobj.dpr
   $(DCC)
 
 

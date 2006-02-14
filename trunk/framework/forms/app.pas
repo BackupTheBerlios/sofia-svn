@@ -31,6 +31,7 @@ type
     tmrLaunch: TTimer;
     procedure tmrLaunchTimer(Sender: TObject);
   private
+    FPluginCnt: TPluginConnector;
     FPluginMgr: TPluginManager;
     //FLoader: TLoaderForm;
     { Déclarations privées }
@@ -38,9 +39,9 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     procedure TestClosePlugins;
-    procedure TestOpenPlugin1;
-    procedure TestOpenPlugin2;
-    property PluginMgr: TPluginManager read FPluginMgr;
+    procedure TestContact;
+    procedure TestNavigateur;
+    property PluginCnt: TPluginConnector read FPluginCnt;
     { Déclarations publiques }
   end;
 
@@ -49,7 +50,7 @@ var
 
 implementation
 
-uses loading, display, plugdef, plugintf;
+uses loading, display, plugintf, xmlcursor;
 
 {$R *.dfm}
 
@@ -58,51 +59,54 @@ begin
   inherited;
   Application.ShowMainForm := False;
   FPluginMgr := TPluginManager.Create;
+  FPluginCnt := TPluginConnector.Create(FPluginMgr);
 end;
 
 destructor TAppForm.Destroy;
 begin
   FPluginMgr.Free;
+  FPluginCnt.Free;
   inherited;
 end;
 
 procedure TAppForm.TestClosePlugins;
 begin
-  FPluginMgr['contact'].Close;
-  FPluginMgr['clients'].Close;
+  if Assigned(PluginCnt.Display['contact']) then
+    PluginCnt.Display['contact'].Hide;
 end;
 
-procedure TAppForm.TestOpenPlugin1;
-var
-  Stream: TSerializeStream;
+procedure TAppForm.TestContact;
 begin
-  Stream := TSerializeStream.Create('object TContactData'#$D#$A'  NomContact = ''testload'''#$D#$A'end'#$D#$A);
-  try
-    with FPluginMgr['contact']  do
+  if Assigned(PluginCnt.Display['contact']) then
+    with PluginCnt.Display['contact']  do
     begin
-      LoadFromStream(Stream);
-      Show(DisplayForm.Panel2);
+      XML := '<NomContact>test</NomContact>';
+      //Parent := DisplayForm.Panel3;
+      Show;
     end;
-  finally
-    LoadingForm.Hide;
-    Stream.Free;
+end;
+
+procedure TAppForm.TestNavigateur;
+var
+  PageIndex: Integer;
+begin
+  //initialisation des parametres de cnx
+  if Assigned(PluginCnt.Connection['dbuib']) then
+  with PluginCnt.Connection['dbuib'] do
+  begin
+    ConnectionName := 'sofia.fdb';
+    UserName := 'sysdba';
+    PassWord := 'masterkey';
+    Connected := True;
   end;
-end;
 
-procedure TAppForm.TestOpenPlugin2;
-var
-  Stream: TStringStream;
-begin
-  Stream := TSerializeStream.Create('object TClientsData'#$D#$A'  Collection = <'#$D#$A'    item'#$D#$A'      NomClient = ''Lawrence-Albert Z'#233'mour'''#$D#$A'    end'#$D#$A'    item'#$D#$A'      NomClient = ''Anne-Ang'#233'lique Meuleman'''#$D#$A'    end>'#$D#$A'end'#$D#$A);
-  try
-    with FPluginMgr['clients'] do
-    begin
-      LoadFromStream(Stream);
-      Show(DisplayForm.Panel3);
-    end;
-  finally
-    LoadingForm.Hide;
-    Stream.Free;
+  //ajout d'un nouvel onglet
+  PageIndex := DisplayForm.AddPage('navigateur', 'Acceuil');
+  if Assigned(PluginCnt.Display['navigateur']) then
+  with PluginCnt.Display['navigateur'] do
+  begin
+    //Parent := DisplayForm.pcMain.Pages[PageIndex];
+    Show;
   end;
 end;
 
@@ -110,9 +114,12 @@ procedure TAppForm.tmrLaunchTimer(Sender: TObject);
 begin
   tmrLaunch.Enabled := False;
   LoadingForm.Show;
-  FPluginMgr.LoadPlugins;
-  TestOpenPlugin1;
-  TestOpenPlugin2;
+  try
+    FPluginMgr.LoadPlugins;
+  finally
+    LoadingForm.Hide;
+  end;
+  //TestNavigateur;
   DisplayForm.ShowModal;
   TestClosePlugins;
   Close;

@@ -1,8 +1,8 @@
 object AppForm: TAppForm
-  Left = 452
-  Top = 190
-  Width = 123
-  Height = 98
+  Left = 575
+  Top = 166
+  Width = 209
+  Height = 132
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

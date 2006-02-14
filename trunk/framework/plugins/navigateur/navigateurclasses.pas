@@ -18,26 +18,25 @@ along with Sofia; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 -------------------------------------------------------------------------------}
 
-unit contactclasses;
+unit navigateurclasses;
 
 interface
 
-uses Controls, plugintf, StdXML_TLB;
+uses Classes, Controls, DB, StdXML_TLB, plugintf;
 
 type
 
   IController = interface(IInterface)
-  ['{B0122448-88BA-44DF-9B33-8198AF276DF6}']
-    function GetNomContact: string; stdcall;
-    procedure SetNomContact(const Value: string); stdcall;
-    property NomContact: string read GetNomContact write SetNomContact;
+  ['{CD5C131C-E966-4743-85B9-D1F2E96D4DDD}']
+    procedure SetPersonnes(const Value: string); stdcall;
   end;
 
-  TContactPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay)
-    procedure Hide; stdcall;
+  TNavigateurPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay)
+    function GetContainer: TWinControl; stdcall;
     function GetParent: TWinControl; stdcall;
     function GetPluginConnector: IPluginConnector; stdcall;
     function GetXMLCursor: IXMLCursor; stdcall;
+    procedure Hide; stdcall;
     procedure SetXML(const Value: string); stdcall;
     function GetXML: string; stdcall;
     procedure SetParent(const Value: TWinControl); stdcall;
@@ -47,9 +46,9 @@ type
   private
     FContainer: TWinControl;
     FController: IController;
+    FParent: TWinControl;
     FPluginConnector: IPluginConnector;
     FXMLCursor: IXMLCursor;
-    FParent: TWinControl;
   public
     constructor Create;
     destructor Destroy; override;
@@ -57,78 +56,77 @@ type
 
 implementation
 
-uses Classes, contactctrl;
+uses navigateurctrl;
 
-constructor TContactPlugin.Create;
+constructor TNavigateurPlugin.Create;
 begin
-  FContainer := TContactFrame.Create(nil);
+  FContainer := TNavigateurFrame.Create(nil);
   FController := NewController(FContainer);
 end;
 
-destructor TContactPlugin.Destroy;
+destructor TNavigateurPlugin.Destroy;
 begin
   FController := nil;
   FXMLCursor := nil;
   inherited;
 end;
 
-procedure TContactPlugin.Hide;
+function TNavigateurPlugin.GetContainer: TWinControl;
 begin
-  FContainer.Parent := nil;
+  Result := FContainer;
 end;
 
-function TContactPlugin.GetParent: TWinControl;
+function TNavigateurPlugin.GetParent: TWinControl;
 begin
   Result := FParent;
 end;
 
-function TContactPlugin.GetPluginConnector: IPluginConnector;
+function TNavigateurPlugin.GetPluginConnector: IPluginConnector;
 begin
   Result := FPluginConnector;
 end;
 
-function TContactPlugin.GetXMLCursor: IXMLCursor;
+function TNavigateurPlugin.GetXMLCursor: IXMLCursor;
 begin
   Result := FXMLCursor;
 end;
 
-procedure TContactPlugin.SetXML(const Value: string);
+procedure TNavigateurPlugin.Hide;
 begin
-  if Length(Value) > 0 then
-  begin
-    FXMLCursor.LoadXML(Value);
-    FController.NomContact := FXMLCursor.GetValue('/NomContact');
-  end;
+  FContainer.Parent := nil;
 end;
 
-function TContactPlugin.GetXML: string;
+procedure TNavigateurPlugin.SetXML(const Value: string);
 begin
-  if FXMLCursor.Count = 0 then
-    FXMLCursor.AppendChild('NomContact', FController.NomContact)
-  else
-    FXMLCursor.SetValue('/NomContact', FController.NomContact);
-  Result := FXMLCursor.XML;
+
 end;
 
-procedure TContactPlugin.SetParent(const Value: TWinControl);
+function TNavigateurPlugin.GetXML: string;
+begin
+
+end;
+
+procedure TNavigateurPlugin.SetParent(const Value: TWinControl);
 begin
   FParent := Value;
 end;
 
-procedure TContactPlugin.SetPluginConnector(PluginConnector: IPluginConnector);
+procedure TNavigateurPlugin.SetPluginConnector(PluginConnector:
+    IPluginConnector);
 begin
   FPluginConnector := PluginConnector;
 end;
 
-procedure TContactPlugin.SetXMLCursor(XMLCursor: IXMLCursor);
+procedure TNavigateurPlugin.SetXMLCursor(XMLCursor: IXMLCursor);
 begin
   FXMLCursor := XMLCursor;
 end;
 
-procedure TContactPlugin.Show;
+procedure TNavigateurPlugin.Show;
 begin
+  FController.SetPersonnes(FPluginConnector.DatabaseObject['dbobj'].GetPersonnes('client'));
   FContainer.Parent := FParent;
-  //FContainer.Align := alClient;
+  FContainer.Align := alClient;
 end;
 
 

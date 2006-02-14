@@ -22,12 +22,7 @@ unit plugmgr;
 
 interface
 
-uses Classes, Controls, SysUtils, Contnrs, plugdef, plugintf;
-
-resourcestring
-  sUnexistingFile = 'Le fichier ''%s'' n''existe pas';
-  sDLLCantBeLoaded = 'La DLL ne peut être chargée';
-  sUnexistingFunction = 'La fonction %s n''existe pas';
+uses Classes, Controls, SysUtils, Contnrs, plugintf, StdXML_TLB;
 
 type
   EPluginError = class(Exception);
@@ -54,47 +49,55 @@ type
     FPlugin: IPlugUnknown;
     FPluginLibrary: TPluginLibrary;
     FPluginManager: TPluginManager;
-    FSerializer: IPlugSerializer;
     function GetPlugin: IPlugUnknown;
   public
     constructor Create(APluginManager: TPluginManager; AName: string);
     destructor Destroy; override;
-    procedure Show(AParent: TWinControl);
-    procedure Close;
-    procedure LoadFromStream(Stream: TSerializeStream); stdcall;
-    procedure SaveToStream(Stream: TSerializeStream); stdcall;
-    function GetSerializer: IPlugSerializer; stdcall;
     property Name: string read FName;
     property Plugin: IPlugUnknown read GetPlugin;
   end;
 
+  TPluginConnector = class(TInterfacedObject, IPluginConnector)
+    function GetConnection(const PluginName: string): IPlugConnection; stdcall;
+    function GetDatabaseObject(const PluginName: string): IPlugDatabaseObject;
+        stdcall;
+    function GetDataset(const PluginName: string): IPlugDataset; stdcall;
+    function GetDisplay(const PluginName: string): IPlugDisplay; stdcall;
+    property Connection[const PluginName: string]: IPlugConnection read
+        GetConnection;
+    property DatabaseObject[const PluginName: string]: IPlugDatabaseObject read
+        GetDatabaseObject;
+    property Dataset[const PluginName: string]: IPlugDataset read GetDataset;
+    property Display[const PluginName: string]: IPlugDisplay read GetDisplay;
+  private
+    FPluginManager: TPluginManager;
+  public
+    constructor Create(PluginManager: TPluginManager);
+    destructor Destroy; override;
+  end;
   TPluginManager = class(TObject)
+    function GetPlugins(const PluginName: string): TPlugin; stdcall;
+    property Plugins[const PluginName: string]: TPlugin read GetPlugins; default;
   private
     FPlugins: TObjectList;
-    function GetItems(const PluginName: string): TPlugin;
   public
     constructor Create;
     destructor Destroy; override;
     procedure LoadPlugins;
     procedure UnloadPlugins;
-    {
-    ~desc       Donne accès aux valeurs de tous les champs de l'enregistrement.
-                Utilisez la propriété FieldValues pour lire ou écrire des valeurs dans un
-                enregistrement. FieldName spécifie le ou les nom(s) du/des champ(s) à
-                consulter ou à modifier.~[br]
-                FieldValues accepte et renvoie un Variant, elle peut donc gérer et convertir
-                des champs de tout type.~[~[br]]
-    ~attention  pour des raison de permformances, il est préférable d'acceder à la valeur
-                d'un champ de l'enregistrement directement par le nom de la propriété.~[br]
-    ~example    Document.FieldValues['ID_DOCUMENT'] := Edit1.Text;~[br]
-                Document.FieldValues['ID_DOCUMENT;ID_DOCMETIER'] renvoie une tableau de variant
-    }
-    property Items[const PluginName: string]: TPlugin read GetItems; default;
   end;
+
+
 
 implementation
 
-uses Windows;
+uses Windows, xmlcursor;
+
+resourcestring
+  SUnexistingFile = 'Le fichier ''%s'' n''existe pas';
+  SDLLCantBeLoaded = 'La DLL ne peut être chargée';
+  SUnexistingFunction = 'La fonction %s n''existe pas';
+  SInterfaceIPlugDisplayNonSupportee = 'Interface IPlugDisplay non supportée par le plugin';
 
 const
   LIBPATH = '';
@@ -113,7 +116,7 @@ begin
   inherited;
 end;
 
-function TPluginManager.GetItems(const PluginName: string): TPlugin;
+function TPluginManager.GetPlugins(const PluginName: string): TPlugin;
 var
   Found: Boolean;
   i: Integer;
@@ -127,19 +130,17 @@ begin
       Inc(i)
   end;
   if Found then
-    Result := TPlugin(FPlugins[i])
+    Result := FPlugins[i] as TPlugin
   else
     Result := nil;
 end;
 
 procedure TPluginManager.LoadPlugins;
 begin
-  //Plugins bas niveau
-  FPlugins.Add(TPlugin.Create(Self, 'serializer'));
-
-  //Plugins interface graphique
+  FPlugins.Add(TPlugin.Create(Self, 'dbuib'));
+  FPlugins.Add(TPlugin.Create(Self, 'dbobj'));
   FPlugins.Add(TPlugin.Create(Self, 'contact'));
-  FPlugins.Add(TPlugin.Create(Self, 'clients'));
+  FPlugins.Add(TPlugin.Create(Self, 'navigateur'));
 end;
 
 procedure TPluginManager.UnloadPlugins;
@@ -206,7 +207,12 @@ end;
 
 destructor TPlugin.Destroy;
 begin
-  FPlugin := nil;
+  if Assigned(FPlugin) then
+  begin
+    FPlugin.PluginConnector := nil;
+    FPlugin.XMLCursor := nil;
+    FPlugin := nil;
+  end;
   FPluginLibrary.Free;
   inherited;
 end;
@@ -214,73 +220,44 @@ end;
 function TPlugin.GetPlugin: IPlugUnknown;
 begin
   if not Assigned(FPlugin) then
+  begin
     FPlugin := FPluginLibrary.GetPluginInterface;
+    FPlugin.PluginConnector := TPluginConnector.Create(FPluginManager);
+    FPlugin.XMLCursor := TXMLCursor.Create;
+  end;
   Result := FPlugin;
 end;
 
-procedure TPlugin.Show(AParent: TWinControl);
+constructor TPluginConnector.Create(PluginManager: TPluginManager);
 begin
-  try
-    with Plugin as IPlugDisplay do
-    begin
-      Container.Parent := AParent;
-      Container.Align := alClient;
-    end;
-  except
-    //interface IPlugDisplay non supportée par le plugin
-  end;
+  FPluginManager := PluginManager;
 end;
 
-procedure TPlugin.Close;
+destructor TPluginConnector.Destroy;
 begin
-  try
-    try
-      with Plugin as IPlugDisplay do
-        Container.Parent := nil;
-    except
-      //interface IPlugDisplay non supportée par le plugin
-    end;
-  finally
-    FPlugin := nil;
-  end;
+  inherited;
 end;
 
-procedure TPlugin.LoadFromStream(Stream: TSerializeStream);
+function TPluginConnector.GetConnection(const PluginName: string):
+    IPlugConnection;
 begin
-  try
-    with Plugin as IPlugIO do
-    begin
-      SetSerializer(GetSerializer);
-      LoadFromStream(Stream);
-    end;
-  except
-    //interface IPlugIO non supportée par le plugin
-  end;
+  Result := FPluginManager[PluginName].Plugin as IPlugConnection;
 end;
 
-procedure TPlugin.SaveToStream(Stream: TSerializeStream);
+function TPluginConnector.GetDatabaseObject(const PluginName: string):
+    IPlugDatabaseObject;
 begin
-  try
-    with Plugin as IPlugIO do
-    begin
-      SetSerializer(GetSerializer);
-      SaveToStream(Stream);
-    end
-  except
-    //interface IPlugIO non supportée par le plugin
-  end;
+  Result := FPluginManager[PluginName].Plugin as IPlugDatabaseObject;
 end;
 
-function TPlugin.GetSerializer: IPlugSerializer;
+function TPluginConnector.GetDataset(const PluginName: string): IPlugDataset;
 begin
-  try
-    if Assigned(FPluginManager['serializer']) then
-      Result := FPluginManager['serializer'].Plugin as IPlugSerializer
-    else
-      Result := nil;
-  except
-    //interface IPlugSerializer non supportée par le plugin serializer
-  end;
+  Result := FPluginManager[PluginName].Plugin as IPlugDataset;
+end;
+
+function TPluginConnector.GetDisplay(const PluginName: string): IPlugDisplay;
+begin
+   Result := FPluginManager[PluginName].Plugin as IPlugDisplay;
 end;
 
 end.

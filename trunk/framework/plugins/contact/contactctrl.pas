@@ -23,11 +23,47 @@ unit contactctrl;
 interface
 
 uses
-  Forms, Classes, Controls, StdCtrls, ExtCtrls, plugdef, contactclasses;
+  Forms, Classes, Controls, StdCtrls, ExtCtrls, contactclasses, ComCtrls,
+  Mask, Graphics;
 
 type
   TContactFrame = class(TFrame)
+    pcMain: TPageControl;
+    tsNom: TTabSheet;
+    tsDomicile: TTabSheet;
+    tsBureau: TTabSheet;
+    tsPersonnel: TTabSheet;
+    tsAutre: TTabSheet;
     edtNom: TLabeledEdit;
+    edtPrenom: TLabeledEdit;
+    LabeledEdit1: TLabeledEdit;
+    ListView1: TListView;
+    btnAjouterAddr: TButton;
+    btnModifierAddr: TButton;
+    btnSupprimer: TButton;
+    btnDefaultAddr: TButton;
+    Label1: TLabel;
+    Memo1: TMemo;
+    BevelTop: TBevel;
+    Image1: TImage;
+    Label2: TLabel;
+    Bevel1: TBevel;
+    Label3: TLabel;
+    Image2: TImage;
+    Bevel2: TBevel;
+    MaskEdit1: TMaskEdit;
+    MaskEdit2: TMaskEdit;
+    MaskEdit3: TMaskEdit;
+    MaskEdit4: TMaskEdit;
+    Label4: TLabel;
+    Label5: TLabel;
+    Edit1: TEdit;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Bevel3: TBevel;
+    Edit2: TEdit;
+    Label9: TLabel;
   private
     { Déclarations privées }
   public
@@ -42,18 +78,18 @@ type
   private
     FContainer: TContactFrame;
   public
-    constructor Create(AContainer: TPlugContainer);
+    constructor Create(AContainer: TWinControl);
     property Container: TContactFrame read FContainer write FContainer;
   end;
 
-function NewController(AContainer: TPlugContainer): IController;
+function NewController(AContainer: TWinControl): IController;
 
 implementation
 
 {$R *.dfm}
 
 
-function NewController(AContainer: TPlugContainer): IController;
+function NewController(AContainer: TWinControl): IController;
 begin
   Result := TController.Create(AContainer);
 end;
@@ -68,7 +104,7 @@ begin
   inherited;
 end;
 
-constructor TController.Create(AContainer: TPlugContainer);
+constructor TController.Create(AContainer: TWinControl);
 begin
   FContainer := AContainer as TContactFrame;
 end;
