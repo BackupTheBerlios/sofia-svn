@@ -40,6 +40,7 @@ type
       Rect: TRect; State: TGridDrawState);
     procedure pbPagesPaint(Sender: TObject);
   private
+    FPagesCount: Integer;
     FPageIndex: Integer;
     { Déclarations privées }
   public
@@ -62,8 +63,7 @@ uses DateUtils, Dialogs, app, plugmgr, plugintf, SysUtils, Windows;
 constructor TDisplayForm.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  sgPages.Cells[0,0] := 'Accueil';
-  ResizeTab(0);
+  FPagesCount := 0;
 end;
 
 destructor TDisplayForm.Destroy;
@@ -73,10 +73,12 @@ end;
 
 function TDisplayForm.AddPage(AName, ACaption: string): Integer;
 begin
-  Result := sgPages.ColCount;
-  sgPages.ColCount := Result + 1;
-  sgPages.Cells[Result, 0] := ACaption;
-  ResizeTab(Result);
+  if FPagesCount > 0 then
+    sgPages.ColCount := sgPages.ColCount + 1;
+  Inc(FPagesCount);
+  sgPages.Cells[0, FPagesCount - 1] := ACaption;
+  ResizeTab(FPagesCount - 1);
+  Result := FPagesCount - 1;
 end;
 
 procedure TDisplayForm.PluginContainer1Button1Click(Sender: TObject);
@@ -104,7 +106,7 @@ var
       FillRect(Rect);
       Pen.Color := $000FA089;
       PenPos := Point(Rect.Left, Rect.Bottom);
-      LineTo(rect.Left, Rect.Top);
+      LineTo(Rect.Left, Rect.Top);
       LineTo(Rect.Right - 1, Rect.Top);
       LineTo(Rect.Right - 1, Rect.Bottom);
       pbPages.Repaint;
@@ -127,9 +129,6 @@ var
   procedure DrawCaption;
   begin
     InflateRect(Rect, -1, -1);
-    TextX := ((Rect.Right - Rect.Left) div 2) - (TextWidth div 2);
-    TextY := ((Rect.Bottom - Rect.Top) div 2) - (TextHeight div 2);
-
     ACanvas.Font.Style := [fsBold];
     ACanvas.TextRect(Rect, TextX, TextY, Text);
   end;
@@ -138,7 +137,7 @@ var
   begin
     with ACanvas do
     begin
-      Pen.Color := clBlack;
+      Font.Color := clBlack;
     end;
     DrawCaption;
   end;
@@ -147,7 +146,7 @@ var
   begin
     with ACanvas do
     begin
-      Pen.Color := clWhite;
+      Font.Color := clWhite;
     end;
     DrawCaption;
   end;
@@ -158,9 +157,11 @@ begin
   AGrid := Sender as TStringGrid;
   ACanvas := AGrid.Canvas;
 
-  Text := AGrid.Cells[ACol, ARow];
+  Text := AGrid.Cells[ARow, ACol];
   TextHeight := ACanvas.TextHeight(Text);
   TextWidth := ACanvas.TextWidth(Text);
+  TextX := ((Rect.Right - Rect.Left) div 2) - (TextWidth div 2) + Rect.Left;
+  TextY := ((Rect.Bottom - Rect.Top) div 2) - (TextHeight div 2) + Rect.Top;
 
   if gdSelected in State then
   begin
@@ -200,9 +201,10 @@ var
   Text: string;
   TextWidth: Integer;
 begin
-  Text := sgPages.Cells[PageIndex, 0];
+  Text := sgPages.Cells[0, PageIndex];
   TextWidth := sgPages.Canvas.TextWidth(Text);
   sgPages.ColWidths[PageIndex] := TextWidth + 30;
+  //sgPages.Repaint;
 end;
 
 end.

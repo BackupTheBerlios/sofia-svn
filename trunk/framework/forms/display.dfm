@@ -1,6 +1,6 @@
 object DisplayForm: TDisplayForm
-  Left = 377
-  Top = 180
+  Left = 307
+  Top = 151
   Width = 718
   Height = 505
   Caption = 'DisplayForm'
@@ -12,7 +12,6 @@ object DisplayForm: TDisplayForm
   Font.Style = []
   OldCreateOrder = False
   Position = poDesktopCenter
-  WindowState = wsMaximized
   PixelsPerInch = 96
   TextHeight = 13
   object Panel2: TPanel
