@@ -22,17 +22,19 @@ unit display;
 
 interface
 
-uses Forms, Classes, Controls, ExtCtrls, ComCtrls, Grids, Types;
+uses Forms, Classes, Controls, ExtCtrls, ComCtrls, Grids, Types, Graphics;
 
 type
   TDisplayForm = class(TForm)
     Panel2: TPanel;
+    Image1: TImage;
+    Panel4: TPanel;
     Panel1: TPanel;
+    pbPages: TPaintBox;
     Panel3: TPanel;
     pnlScrollRight: TPanel;
     pnlScrollLeft: TPanel;
     sgPages: TStringGrid;
-    pbPages: TPaintBox;
     procedure PluginContainer1Button1Click(Sender: TObject);
     procedure sgPagesDrawCell(Sender: TObject; ACol, ARow: Integer;
       Rect: TRect; State: TGridDrawState);
@@ -41,8 +43,10 @@ type
     FPageIndex: Integer;
     { Déclarations privées }
   public
-    constructor Create(AOwner: TComponent);
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
     function AddPage(AName, ACaption: string): Integer;
+    procedure ResizeTab(PageIndex: Integer);
     { Déclarations publiques }
   end;
 
@@ -51,19 +55,28 @@ var
 
 implementation
 
-uses DateUtils, Dialogs, app, plugmgr, plugintf, Graphics;
+uses DateUtils, Dialogs, app, plugmgr, plugintf, SysUtils, Windows;
 
 {$R *.dfm}
 
 constructor TDisplayForm.Create(AOwner: TComponent);
 begin
-  inherited;
+  inherited Create(AOwner);
+  sgPages.Cells[0,0] := 'Accueil';
+  ResizeTab(0);
+end;
+
+destructor TDisplayForm.Destroy;
+begin
+  inherited Destroy;
 end;
 
 function TDisplayForm.AddPage(AName, ACaption: string): Integer;
 begin
-  sgPages.ColCount := sgPages.ColCount + 1;
-  sgPages.Rows[0].Strings[sgPages.ColCount - 1] := ACaption;
+  Result := sgPages.ColCount;
+  sgPages.ColCount := Result + 1;
+  sgPages.Cells[Result, 0] := ACaption;
+  ResizeTab(Result);
 end;
 
 procedure TDisplayForm.PluginContainer1Button1Click(Sender: TObject);
@@ -76,19 +89,17 @@ procedure TDisplayForm.sgPagesDrawCell(Sender: TObject; ACol,
 var
   ACanvas: TCanvas;
   AGrid: TStringGrid;
-begin
-  if not (Sender is TStringGrid) then
-    Exit;
-  AGrid := Sender as TStringGrid;
-  ACanvas := AGrid.Canvas;
+  TextHeight: Integer;
+  TextWidth: Integer;
+  Text: string;
+  TextX: Integer;
+  TextY: Integer;
 
 
-  with ACanvas do
+  procedure DrawActiveBackground;
   begin
-
-    if gdSelected in State then
+    with ACanvas do
     begin
-      FPageIndex := ACol;
       Brush.Color := $00D7E8EB;
       FillRect(Rect);
       Pen.Color := $000FA089;
@@ -96,8 +107,13 @@ begin
       LineTo(rect.Left, Rect.Top);
       LineTo(Rect.Right - 1, Rect.Top);
       LineTo(Rect.Right - 1, Rect.Bottom);
-    end
-    else
+      pbPages.Repaint;
+    end;
+  end;
+
+  procedure DrawInactiveBackground;
+  begin
+    with ACanvas do
     begin
       Brush.Color := clWindow;
       Rect.Bottom := Rect.Bottom + 1;
@@ -106,9 +122,57 @@ begin
       Brush.Color := $000FA089;
       FillRect(Rect);
     end;
-
   end;
 
+  procedure DrawCaption;
+  begin
+    InflateRect(Rect, -1, -1);
+    TextX := ((Rect.Right - Rect.Left) div 2) - (TextWidth div 2);
+    TextY := ((Rect.Bottom - Rect.Top) div 2) - (TextHeight div 2);
+
+    ACanvas.Font.Style := [fsBold];
+    ACanvas.TextRect(Rect, TextX, TextY, Text);
+  end;
+
+  procedure DrawActiveCaption;
+  begin
+    with ACanvas do
+    begin
+      Pen.Color := clBlack;
+    end;
+    DrawCaption;
+  end;
+
+  procedure DrawInactiveCaption;
+  begin
+    with ACanvas do
+    begin
+      Pen.Color := clWhite;
+    end;
+    DrawCaption;
+  end;
+
+begin
+  if not (Sender is TStringGrid) then
+    Exit;
+  AGrid := Sender as TStringGrid;
+  ACanvas := AGrid.Canvas;
+
+  Text := AGrid.Cells[ACol, ARow];
+  TextHeight := ACanvas.TextHeight(Text);
+  TextWidth := ACanvas.TextWidth(Text);
+
+  if gdSelected in State then
+  begin
+    FPageIndex := ACol;
+    DrawActiveBackground;
+    DrawActiveCaption;
+  end
+  else
+  begin
+    DrawInactiveBackground;
+    DrawInactiveCaption
+  end;
 end;
 
 procedure TDisplayForm.pbPagesPaint(Sender: TObject);
@@ -122,13 +186,23 @@ begin
   with APaintBox.Canvas do
   begin
     Pen.Color := $000FA089;
-    PenPos := Point((FPageIndex * sgPages.DefaultColWidth) + sgPages.LeftCol, 0);
+    PenPos := Point(sgPages.CellRect(FPageIndex, 0).Left + sgPages.Left, 0);
     LineTo(0, 0);
     LineTo(0, APaintBox.Height - 1);
-    LineTo(APaintBox.Width, APaintBox.Height - 1);
-    LineTo(APaintBox.Width, 0);
-    //LineTo(sgPages.Selection.Right + sgPages.Left, 0);
+    LineTo(APaintBox.Width - 1, APaintBox.Height - 1);
+    LineTo(APaintBox.Width - 1, 0);
+    LineTo(sgPages.CellRect(FPageIndex, 0).Right + sgPages.Left - 2, 0);
   end;
+end;
+
+procedure TDisplayForm.ResizeTab(PageIndex: Integer);
+var
+  Text: string;
+  TextWidth: Integer;
+begin
+  Text := sgPages.Cells[PageIndex, 0];
+  TextWidth := sgPages.Canvas.TextWidth(Text);
+  sgPages.ColWidths[PageIndex] := TextWidth + 30;
 end;
 
 end.

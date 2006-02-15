@@ -119,6 +119,8 @@ begin
   finally
     LoadingForm.Hide;
   end;
+  DisplayForm.AddPage('recherche', 'Résultats de la recherche');
+  DisplayForm.AddPage('contact', 'Nouveau contact');
   //TestNavigateur;
   DisplayForm.ShowModal;
   TestClosePlugins;
