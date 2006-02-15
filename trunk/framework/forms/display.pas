@@ -22,12 +22,12 @@ unit display;
 
 interface
 
-uses Forms, Classes, Controls, ExtCtrls, ComCtrls, Grids, Types, Graphics;
+uses Forms, Classes, Controls, ExtCtrls, ComCtrls, Grids, Types, Graphics,
+  StdCtrls;
 
 type
   TDisplayForm = class(TForm)
     Panel2: TPanel;
-    Image1: TImage;
     Panel4: TPanel;
     Panel1: TPanel;
     pbPages: TPaintBox;
@@ -35,11 +35,29 @@ type
     pnlScrollRight: TPanel;
     pnlScrollLeft: TPanel;
     sgPages: TStringGrid;
+    Panel5: TPanel;
+    Image1: TImage;
+    Panel6: TPanel;
+    Panel7: TPanel;
+    lblUser: TLabel;
+    lblAide: TLabel;
+    lblQuitter: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Edit1: TEdit;
+    StaticText2: TStaticText;
+    Label8: TLabel;
+    lblGo: TLabel;
+    OverTimer: TTimer;
     procedure PluginContainer1Button1Click(Sender: TObject);
     procedure sgPagesDrawCell(Sender: TObject; ACol, ARow: Integer;
       Rect: TRect; State: TGridDrawState);
     procedure pbPagesPaint(Sender: TObject);
+    procedure OverTimerTimer(Sender: TObject);
   private
+    FLinks: TList;
     FPagesCount: Integer;
     FPageIndex: Integer;
     { Déclarations privées }
@@ -47,12 +65,16 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     function AddPage(AName, ACaption: string): Integer;
-    procedure ResizeTab(PageIndex: Integer);
     { Déclarations publiques }
   end;
 
 var
   DisplayForm: TDisplayForm;
+
+const
+  clBleu = $00C09A6C;
+  clVert = $000FA089;
+  clGris = $00D7E8EB;
 
 implementation
 
@@ -64,10 +86,17 @@ constructor TDisplayForm.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FPagesCount := 0;
+  FLinks := TList.Create();
+
+  //FLinks.Add(lblUser);
+  FLinks.Add(lblAide);
+  FLinks.Add(lblQuitter);
+  FLinks.Add(lblGo);
 end;
 
 destructor TDisplayForm.Destroy;
 begin
+  FreeAndNil(FLinks);
   inherited Destroy;
 end;
 
@@ -77,8 +106,9 @@ begin
     sgPages.ColCount := sgPages.ColCount + 1;
   Inc(FPagesCount);
   sgPages.Cells[0, FPagesCount - 1] := ACaption;
-  ResizeTab(FPagesCount - 1);
   Result := FPagesCount - 1;
+  if FPagesCount = 1 then
+   sgPagesDrawCell(sgPages, 0, 0, sgPages.CellRect(0, 0), [gdSelected]);
 end;
 
 procedure TDisplayForm.PluginContainer1Button1Click(Sender: TObject);
@@ -102,9 +132,9 @@ var
   begin
     with ACanvas do
     begin
-      Brush.Color := $00D7E8EB;
+      Brush.Color := clGris;
       FillRect(Rect);
-      Pen.Color := $000FA089;
+      Pen.Color := clVert;
       PenPos := Point(Rect.Left, Rect.Bottom);
       LineTo(Rect.Left, Rect.Top);
       LineTo(Rect.Right - 1, Rect.Top);
@@ -120,8 +150,8 @@ var
       Brush.Color := clWindow;
       Rect.Bottom := Rect.Bottom + 1;
       FillRect(Rect);
-      Rect.Top := Rect.Top + 4;
-      Brush.Color := $000FA089;
+      Rect.Top := Rect.Top + 2;
+      Brush.Color := clVert;
       FillRect(Rect);
     end;
   end;
@@ -129,6 +159,8 @@ var
   procedure DrawCaption;
   begin
     InflateRect(Rect, -1, -1);
+    ACanvas.Font.Name := 'Verdana';
+    ACanvas.Font.Size := 8;
     ACanvas.Font.Style := [fsBold];
     ACanvas.TextRect(Rect, TextX, TextY, Text);
   end;
@@ -160,6 +192,7 @@ begin
   Text := AGrid.Cells[ARow, ACol];
   TextHeight := ACanvas.TextHeight(Text);
   TextWidth := ACanvas.TextWidth(Text);
+  AGrid.ColWidths[ACol] := TextWidth + 20;
   TextX := ((Rect.Right - Rect.Left) div 2) - (TextWidth div 2) + Rect.Left;
   TextY := ((Rect.Bottom - Rect.Top) div 2) - (TextHeight div 2) + Rect.Top;
 
@@ -186,7 +219,9 @@ begin
 
   with APaintBox.Canvas do
   begin
-    Pen.Color := $000FA089;
+    Brush.Color := clGris;
+    FillRect(APaintBox.ClientRect);
+    Pen.Color := clVert;
     PenPos := Point(sgPages.CellRect(FPageIndex, 0).Left + sgPages.Left, 0);
     LineTo(0, 0);
     LineTo(0, APaintBox.Height - 1);
@@ -196,15 +231,20 @@ begin
   end;
 end;
 
-procedure TDisplayForm.ResizeTab(PageIndex: Integer);
+procedure TDisplayForm.OverTimerTimer(Sender: TObject);
 var
-  Text: string;
-  TextWidth: Integer;
+  AControl: TControl;
+  i: Integer;
+  ALabel: TLabel;
 begin
-  Text := sgPages.Cells[0, PageIndex];
-  TextWidth := sgPages.Canvas.TextWidth(Text);
-  sgPages.ColWidths[PageIndex] := TextWidth + 30;
-  //sgPages.Repaint;
+  for i := 0 to FLinks.Count - 1 do
+  begin
+    ALabel := TLabel(FLinks[i]);
+    if PtInRect(ALabel.ClientRect, ALabel.ScreenToClient(Mouse.CursorPos)) then
+      ALabel.Font.Style := ALabel.Font.Style + [fsUnderline]
+    else
+      ALabel.Font.Style := ALabel.Font.Style - [fsUnderline];
+  end;
 end;
 
 end.

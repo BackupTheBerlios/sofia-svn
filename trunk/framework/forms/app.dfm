@@ -1,6 +1,6 @@
 object AppForm: TAppForm
-  Left = 575
-  Top = 166
+  Left = 517
+  Top = 226
   Width = 209
   Height = 132
   Color = clBtnFace
@@ -17,5 +17,9 @@ object AppForm: TAppForm
     OnTimer = tmrLaunchTimer
     Left = 48
     Top = 16
+  end
+  object XPManifest1: TXPManifest
+    Left = 168
+    Top = 40
   end
 end
