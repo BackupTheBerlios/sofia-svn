@@ -63,12 +63,14 @@ type
         stdcall;
     function GetDataset(const PluginName: string): IPlugDataset; stdcall;
     function GetDisplay(const PluginName: string): IPlugDisplay; stdcall;
+    function GetIO(const PluginName: string): IPlugIO; stdcall;
     property Connection[const PluginName: string]: IPlugConnection read
         GetConnection;
     property DatabaseObject[const PluginName: string]: IPlugDatabaseObject read
         GetDatabaseObject;
     property Dataset[const PluginName: string]: IPlugDataset read GetDataset;
     property Display[const PluginName: string]: IPlugDisplay read GetDisplay;
+    property IO[const PluginName: string]: IPlugIO read GetIO;
   private
     FPluginManager: TPluginManager;
   public
@@ -91,7 +93,7 @@ type
 
 implementation
 
-uses Windows, xmlcursor;
+uses Windows, xmlcursor, Dialogs;
 
 resourcestring
   SUnexistingFile = 'Le fichier ''%s'' n''existe pas';
@@ -209,7 +211,6 @@ destructor TPlugin.Destroy;
 begin
   if Assigned(FPlugin) then
   begin
-    FPlugin.PluginConnector := nil;
     FPlugin.XMLCursor := nil;
     FPlugin := nil;
   end;
@@ -222,7 +223,6 @@ begin
   if not Assigned(FPlugin) then
   begin
     FPlugin := FPluginLibrary.GetPluginInterface;
-    FPlugin.PluginConnector := TPluginConnector.Create(FPluginManager);
     FPlugin.XMLCursor := TXMLCursor.Create;
   end;
   Result := FPlugin;
@@ -258,6 +258,15 @@ end;
 function TPluginConnector.GetDisplay(const PluginName: string): IPlugDisplay;
 begin
    Result := FPluginManager[PluginName].Plugin as IPlugDisplay;
+end;
+
+function TPluginConnector.GetIO(const PluginName: string): IPlugIO;
+begin
+  try
+    Result := FPluginManager[PluginName].Plugin as IPlugIO;
+  except
+    ShowMessage(Format('Le plugin "%s" ne supporte pas l''interface PlugIO', [PluginName]));
+  end;
 end;
 
 end.

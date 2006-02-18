@@ -28,7 +28,7 @@ uses Forms, Classes, Controls, ExtCtrls, ComCtrls, Grids, Types, Graphics,
 type
   TDisplayForm = class(TForm)
     Panel2: TPanel;
-    Panel4: TPanel;
+    pnlPlugin: TPanel;
     Panel1: TPanel;
     pbPages: TPaintBox;
     Panel3: TPanel;
@@ -37,7 +37,6 @@ type
     sgPages: TStringGrid;
     Panel5: TPanel;
     Image1: TImage;
-    Panel6: TPanel;
     Panel7: TPanel;
     lblUser: TLabel;
     lblAide: TLabel;
@@ -47,17 +46,16 @@ type
     Label6: TLabel;
     Label7: TLabel;
     Edit1: TEdit;
-    StaticText2: TStaticText;
-    Label8: TLabel;
-    lblGo: TLabel;
-    OverTimer: TTimer;
-    procedure PluginContainer1Button1Click(Sender: TObject);
+    Button1: TButton;
+    TimerBug: TTimer;
     procedure sgPagesDrawCell(Sender: TObject; ACol, ARow: Integer;
       Rect: TRect; State: TGridDrawState);
     procedure pbPagesPaint(Sender: TObject);
-    procedure OverTimerTimer(Sender: TObject);
+    procedure lblMouseEnter(Sender: TObject);
+    procedure lblMouseLeave(Sender: TObject);
+    procedure TimerBugTimer(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   private
-    FLinks: TList;
     FPagesCount: Integer;
     FPageIndex: Integer;
     { Déclarations privées }
@@ -78,7 +76,7 @@ const
 
 implementation
 
-uses DateUtils, Dialogs, app, plugmgr, plugintf, SysUtils, Windows;
+uses DateUtils, Dialogs, app, plugmgr, plugintf, SysUtils, Windows, Messages;
 
 {$R *.dfm}
 
@@ -86,34 +84,36 @@ constructor TDisplayForm.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FPagesCount := 0;
-  FLinks := TList.Create();
-
-  //FLinks.Add(lblUser);
-  FLinks.Add(lblAide);
-  FLinks.Add(lblQuitter);
-  FLinks.Add(lblGo);
 end;
 
 destructor TDisplayForm.Destroy;
 begin
-  FreeAndNil(FLinks);
   inherited Destroy;
 end;
 
 function TDisplayForm.AddPage(AName, ACaption: string): Integer;
+var
+  Plug: IPlugDisplay;
+  Panel: TPanel;
 begin
-  if FPagesCount > 0 then
-    sgPages.ColCount := sgPages.ColCount + 1;
   Inc(FPagesCount);
+  sgPages.ColCount := FPagesCount;
   sgPages.Cells[0, FPagesCount - 1] := ACaption;
-  Result := FPagesCount - 1;
-  if FPagesCount = 1 then
-   sgPagesDrawCell(sgPages, 0, 0, sgPages.CellRect(0, 0), [gdSelected]);
-end;
 
-procedure TDisplayForm.PluginContainer1Button1Click(Sender: TObject);
-begin
-  ShowMessage(AppForm.PluginCnt.Display['contact'].XML);
+  Panel := TPanel.Create(Self);
+  Plug := AppForm.PluginCnt.Display[AName];
+  if Assigned(Plug) then
+  begin
+    sgPages.Cols[FPagesCount - 1].Objects[0] := Panel;
+    Panel.BevelOuter := bvNone;
+    Panel.Align := alClient;
+    Panel.Parent := pnlPlugin;
+    Plug.Parent := Panel;
+    Plug.Show;
+  end else
+    Panel.Free;
+
+  Result := FPagesCount - 1;
 end;
 
 procedure TDisplayForm.sgPagesDrawCell(Sender: TObject; ACol,
@@ -127,11 +127,21 @@ var
   TextX: Integer;
   TextY: Integer;
 
+  procedure EraseBackground;
+  begin
+    with ACanvas do
+    begin
+      Brush.Style := bsSolid;
+      Brush.Color := clWindow;
+      FillRect(Rect);
+    end;
+  end;
 
   procedure DrawActiveBackground;
   begin
     with ACanvas do
     begin
+      Brush.Style := bsSolid;
       Brush.Color := clGris;
       FillRect(Rect);
       Pen.Color := clVert;
@@ -147,9 +157,6 @@ var
   begin
     with ACanvas do
     begin
-      Brush.Color := clWindow;
-      Rect.Bottom := Rect.Bottom + 1;
-      FillRect(Rect);
       Rect.Top := Rect.Top + 2;
       Brush.Color := clVert;
       FillRect(Rect);
@@ -159,10 +166,14 @@ var
   procedure DrawCaption;
   begin
     InflateRect(Rect, -1, -1);
-    ACanvas.Font.Name := 'Verdana';
-    ACanvas.Font.Size := 8;
-    ACanvas.Font.Style := [fsBold];
-    ACanvas.TextRect(Rect, TextX, TextY, Text);
+    with ACanvas do
+    begin
+      Brush.Style := bsClear;
+      Font.Name := 'Verdana';
+      Font.Size := 8;
+      Font.Style := [fsBold];
+      TextRect(Rect, TextX, TextY, Text);
+    end;
   end;
 
   procedure DrawActiveCaption;
@@ -196,7 +207,8 @@ begin
   TextX := ((Rect.Right - Rect.Left) div 2) - (TextWidth div 2) + Rect.Left;
   TextY := ((Rect.Bottom - Rect.Top) div 2) - (TextHeight div 2) + Rect.Top;
 
-  if gdSelected in State then
+  EraseBackground;
+  if (gdSelected in State) then
   begin
     FPageIndex := ACol;
     DrawActiveBackground;
@@ -231,20 +243,50 @@ begin
   end;
 end;
 
-procedure TDisplayForm.OverTimerTimer(Sender: TObject);
+procedure TDisplayForm.lblMouseEnter(Sender: TObject);
 var
-  AControl: TControl;
-  i: Integer;
   ALabel: TLabel;
 begin
-  for i := 0 to FLinks.Count - 1 do
+  if not (Sender is TLabel) then
+    Exit;
+  ALabel := Sender as TLabel;
+  ALabel.Font.Style := ALabel.Font.Style + [fsUnderline]
+end;
+
+procedure TDisplayForm.lblMouseLeave(Sender: TObject);
+var
+  ALabel: TLabel;
+begin
+  if not (Sender is TLabel) then
+    Exit;
+  ALabel := Sender as TLabel;
+  ALabel.Font.Style := ALabel.Font.Style - [fsUnderline];
+end;
+
+procedure TDisplayForm.TimerBugTimer(Sender: TObject);
+begin
+  if FPagesCount = 1 then
   begin
-    ALabel := TLabel(FLinks[i]);
-    if PtInRect(ALabel.ClientRect, ALabel.ScreenToClient(Mouse.CursorPos)) then
-      ALabel.Font.Style := ALabel.Font.Style + [fsUnderline]
-    else
-      ALabel.Font.Style := ALabel.Font.Style - [fsUnderline];
+    sgPagesDrawCell(sgPages, 0, 0, sgPages.CellRect(0, 0), [gdSelected]);
+    sgPages.Invalidate;
+    Application.ProcessMessages;
+    TimerBug.Enabled := False;
   end;
+end;
+
+procedure TDisplayForm.Button1Click(Sender: TObject);
+var
+  Query: string;
+  Dataset: string;
+  Nav: IPlugIO;
+begin
+  Query := AppForm.PluginCnt.DatabaseObject['dbobj'].GetQueryPersonnes('client');
+  Dataset := AppForm.PluginCnt.Dataset['dbuib'].Add(Query);
+  Nav := AppForm.PluginCnt.IO['navigateur'];
+  if Assigned(Nav) then
+  begin
+    Nav.XML := Dataset;
+  end else
 end;
 
 end.

@@ -31,23 +31,20 @@ type
     procedure SetPersonnes(const Value: string); stdcall;
   end;
 
-  TNavigateurPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay)
+  TNavigateurPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay, IPlugIO)
     function GetContainer: TWinControl; stdcall;
     function GetParent: TWinControl; stdcall;
-    function GetPluginConnector: IPluginConnector; stdcall;
     function GetXMLCursor: IXMLCursor; stdcall;
     procedure Hide; stdcall;
     procedure SetXML(const Value: string); stdcall;
     function GetXML: string; stdcall;
     procedure SetParent(const Value: TWinControl); stdcall;
-    procedure SetPluginConnector(PluginConnector: IPluginConnector); stdcall;
     procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
     procedure Show; stdcall;
   private
     FContainer: TWinControl;
     FController: IController;
     FParent: TWinControl;
-    FPluginConnector: IPluginConnector;
     FXMLCursor: IXMLCursor;
   public
     constructor Create;
@@ -81,11 +78,6 @@ begin
   Result := FParent;
 end;
 
-function TNavigateurPlugin.GetPluginConnector: IPluginConnector;
-begin
-  Result := FPluginConnector;
-end;
-
 function TNavigateurPlugin.GetXMLCursor: IXMLCursor;
 begin
   Result := FXMLCursor;
@@ -98,7 +90,7 @@ end;
 
 procedure TNavigateurPlugin.SetXML(const Value: string);
 begin
-
+  FController.SetPersonnes(Value);
 end;
 
 function TNavigateurPlugin.GetXML: string;
@@ -111,12 +103,6 @@ begin
   FParent := Value;
 end;
 
-procedure TNavigateurPlugin.SetPluginConnector(PluginConnector:
-    IPluginConnector);
-begin
-  FPluginConnector := PluginConnector;
-end;
-
 procedure TNavigateurPlugin.SetXMLCursor(XMLCursor: IXMLCursor);
 begin
   FXMLCursor := XMLCursor;
@@ -124,7 +110,7 @@ end;
 
 procedure TNavigateurPlugin.Show;
 begin
-  FController.SetPersonnes(FPluginConnector.DatabaseObject['dbobj'].GetPersonnes('client'));
+  //FController.SetPersonnes(FPluginConnector.DatabaseObject['dbobj'].GetPersonnes('client'));
   FContainer.Parent := FParent;
   FContainer.Align := alClient;
 end;

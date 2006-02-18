@@ -36,18 +36,15 @@ type
   TContactPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay)
     procedure Hide; stdcall;
     function GetParent: TWinControl; stdcall;
-    function GetPluginConnector: IPluginConnector; stdcall;
     function GetXMLCursor: IXMLCursor; stdcall;
     procedure SetXML(const Value: string); stdcall;
     function GetXML: string; stdcall;
     procedure SetParent(const Value: TWinControl); stdcall;
-    procedure SetPluginConnector(PluginConnector: IPluginConnector); stdcall;
     procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
     procedure Show; stdcall;
   private
     FContainer: TWinControl;
     FController: IController;
-    FPluginConnector: IPluginConnector;
     FXMLCursor: IXMLCursor;
     FParent: TWinControl;
   public
@@ -82,11 +79,6 @@ begin
   Result := FParent;
 end;
 
-function TContactPlugin.GetPluginConnector: IPluginConnector;
-begin
-  Result := FPluginConnector;
-end;
-
 function TContactPlugin.GetXMLCursor: IXMLCursor;
 begin
   Result := FXMLCursor;
@@ -113,11 +105,6 @@ end;
 procedure TContactPlugin.SetParent(const Value: TWinControl);
 begin
   FParent := Value;
-end;
-
-procedure TContactPlugin.SetPluginConnector(PluginConnector: IPluginConnector);
-begin
-  FPluginConnector := PluginConnector;
 end;
 
 procedure TContactPlugin.SetXMLCursor(XMLCursor: IXMLCursor);

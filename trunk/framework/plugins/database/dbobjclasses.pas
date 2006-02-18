@@ -27,17 +27,10 @@ uses Classes, DB, StdXML_TLB, plugintf;
 type
   TDatabaseObjectPlugin = class(TInterfacedObject, IPlugUnknown,
       IPlugDatabaseObject)
-    function GetDataset: IPlugDataset; stdcall;
-    function GetPersonnes(Categorie: string): string; stdcall;
-    function GetPluginConnector: IPluginConnector; stdcall;
+    function GetQueryPersonnes(Categorie: string): string; stdcall;
     function GetXMLCursor: IXMLCursor; stdcall;
-    procedure SetDataset1(Dataset: IPlugDataset); stdcall;
-    procedure SetPluginConnector(PluginConnector: IPluginConnector); stdcall;
     procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
-    property Dataset: IPlugDataset read GetDataset write SetDataset1;
   private
-    FDataset: IPlugDataset;
-    FPluginConnector: IPluginConnector;
     FXMLCursor: IXMLCursor;
   public
     constructor Create;
@@ -60,48 +53,21 @@ begin
   inherited;
 end;
 
-function TDatabaseObjectPlugin.GetDataset: IPlugDataset;
-begin
-  Result := FDataset;
-end;
-
-function TDatabaseObjectPlugin.GetPersonnes(Categorie: string): string;
+function TDatabaseObjectPlugin.GetQueryPersonnes(Categorie: string): string;
 var
   sql: string;
   par: string;
   nam: string;
-  xml: string;
 begin
   nam := '<Name>personnes</Name>';
   sql := '<Sql>select * from personnes where prs_categorie = :categorie</Sql>';
   par := '<Params><Param><Name>categorie</Name><Type>string</Type><Value>%s</Value></Param></Params>';
-  xml := Format('<DatasetDef>' + nam + sql + par + '</DatasetDef>', [Categorie]);
-  try
-    Result := FPluginConnector.Dataset['dbuib'].Add(xml);
-  finally
-    FPluginConnector.Dataset['dbuib'].RemoveDataset('personnes');
-  end;
-end;
-
-function TDatabaseObjectPlugin.GetPluginConnector: IPluginConnector;
-begin
-  Result := FPluginConnector;
+  Result := Format('<DatasetDef>' + nam + sql + par + '</DatasetDef>', [Categorie]);
 end;
 
 function TDatabaseObjectPlugin.GetXMLCursor: IXMLCursor;
 begin
   Result := FXMLCursor;
-end;
-
-procedure TDatabaseObjectPlugin.SetDataset1(Dataset: IPlugDataset);
-begin
-  // TODO -cMM: TDatabaseObjectPlugin.SetDataset1 default body inserted
-end;
-
-procedure TDatabaseObjectPlugin.SetPluginConnector(PluginConnector:
-    IPluginConnector);
-begin
-  FPluginConnector := PluginConnector;
 end;
 
 procedure TDatabaseObjectPlugin.SetXMLCursor(XMLCursor: IXMLCursor);

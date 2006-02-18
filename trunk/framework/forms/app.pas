@@ -39,9 +39,6 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    procedure TestClosePlugins;
-    procedure TestContact;
-    procedure TestNavigateur;
     property PluginCnt: TPluginConnector read FPluginCnt;
     { Déclarations publiques }
   end;
@@ -70,27 +67,16 @@ begin
   inherited;
 end;
 
-procedure TAppForm.TestClosePlugins;
+procedure TAppForm.tmrLaunchTimer(Sender: TObject);
 begin
-  if Assigned(PluginCnt.Display['contact']) then
-    PluginCnt.Display['contact'].Hide;
-end;
+  tmrLaunch.Enabled := False;
+  LoadingForm.Show;
+  try
+    FPluginMgr.LoadPlugins;
+  finally
+    LoadingForm.Hide;
+  end;
 
-procedure TAppForm.TestContact;
-begin
-  if Assigned(PluginCnt.Display['contact']) then
-    with PluginCnt.Display['contact']  do
-    begin
-      XML := '<NomContact>test</NomContact>';
-      //Parent := DisplayForm.Panel3;
-      Show;
-    end;
-end;
-
-procedure TAppForm.TestNavigateur;
-var
-  PageIndex: Integer;
-begin
   //initialisation des parametres de cnx
   if Assigned(PluginCnt.Connection['dbuib']) then
   with PluginCnt.Connection['dbuib'] do
@@ -101,30 +87,9 @@ begin
     Connected := True;
   end;
 
-  //ajout d'un nouvel onglet
-  PageIndex := DisplayForm.AddPage('navigateur', 'Acceuil');
-  if Assigned(PluginCnt.Display['navigateur']) then
-  with PluginCnt.Display['navigateur'] do
-  begin
-    //Parent := DisplayForm.pcMain.Pages[PageIndex];
-    Show;
-  end;
-end;
-
-procedure TAppForm.tmrLaunchTimer(Sender: TObject);
-begin
-  tmrLaunch.Enabled := False;
-  LoadingForm.Show;
-  try
-    FPluginMgr.LoadPlugins;
-  finally
-    LoadingForm.Hide;
-  end;
   DisplayForm.AddPage('navigateur', 'Accueil');
-  DisplayForm.AddPage('contact', 'Nouveau contact');
-  //TestNavigateur;
+
   DisplayForm.ShowModal;
-  TestClosePlugins;
   Close;
 end;
 

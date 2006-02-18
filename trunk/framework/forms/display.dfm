@@ -23,7 +23,7 @@ object DisplayForm: TDisplayForm
     BevelOuter = bvNone
     Color = clWindow
     TabOrder = 0
-    object Panel4: TPanel
+    object pnlPlugin: TPanel
       Left = 0
       Top = 41
       Width = 670
@@ -33,15 +33,6 @@ object DisplayForm: TDisplayForm
       BorderWidth = 8
       ParentColor = True
       TabOrder = 0
-      object Label8: TLabel
-        Left = 312
-        Top = 184
-        Width = 37
-        Height = 13
-        Caption = 'Label8'
-        Color = clScrollBar
-        ParentColor = False
-      end
       object Panel1: TPanel
         Left = 8
         Top = 8
@@ -102,30 +93,13 @@ object DisplayForm: TDisplayForm
             FixedCols = 0
             RowCount = 1
             FixedRows = 0
-            Options = [goFixedVertLine, goFixedHorzLine, goRangeSelect]
+            Options = [goFixedVertLine, goFixedHorzLine, goRowSelect]
             ParentCtl3D = False
+            ScrollBars = ssNone
             TabOrder = 2
             OnDrawCell = sgPagesDrawCell
           end
         end
-      end
-      object Panel6: TPanel
-        Left = 168
-        Top = 112
-        Width = 129
-        Height = 57
-        Caption = 'Panel6'
-        Color = 14149867
-        TabOrder = 1
-      end
-      object StaticText2: TStaticText
-        Left = 216
-        Top = 224
-        Width = 68
-        Height = 17
-        BorderStyle = sbsSunken
-        Caption = 'StaticText2'
-        TabOrder = 2
       end
     end
     object Panel5: TPanel
@@ -180,9 +154,9 @@ object DisplayForm: TDisplayForm
         Stretch = True
       end
       object Panel7: TPanel
-        Left = 184
+        Left = 178
         Top = 19
-        Width = 475
+        Width = 483
         Height = 22
         Anchors = [akTop, akRight]
         BevelOuter = bvNone
@@ -210,6 +184,7 @@ object DisplayForm: TDisplayForm
           Top = 0
           Width = 25
           Height = 22
+          Cursor = crHandPoint
           Align = alLeft
           Caption = 'Aide'
           Font.Charset = ANSI_CHARSET
@@ -219,12 +194,15 @@ object DisplayForm: TDisplayForm
           Font.Style = []
           ParentFont = False
           Layout = tlCenter
+          OnMouseEnter = lblMouseEnter
+          OnMouseLeave = lblMouseLeave
         end
         object lblQuitter: TLabel
           Left = 172
           Top = 0
           Width = 39
           Height = 22
+          Cursor = crHandPoint
           Align = alLeft
           Caption = 'Quitter'
           Font.Charset = ANSI_CHARSET
@@ -234,6 +212,8 @@ object DisplayForm: TDisplayForm
           Font.Style = []
           ParentFont = False
           Layout = tlCenter
+          OnMouseEnter = lblMouseEnter
+          OnMouseLeave = lblMouseLeave
         end
         object Label4: TLabel
           Left = 159
@@ -277,23 +257,8 @@ object DisplayForm: TDisplayForm
           ParentFont = False
           Layout = tlCenter
         end
-        object lblGo: TLabel
-          Left = 457
-          Top = 0
-          Width = 18
-          Height = 22
-          Align = alRight
-          Caption = 'GO'
-          Font.Charset = ANSI_CHARSET
-          Font.Color = 1024137
-          Font.Height = -11
-          Font.Name = 'Verdana'
-          Font.Style = [fsBold]
-          ParentFont = False
-          Layout = tlCenter
-        end
         object Edit1: TEdit
-          Left = 333
+          Left = 332
           Top = 0
           Width = 121
           Height = 21
@@ -301,13 +266,28 @@ object DisplayForm: TDisplayForm
           ParentCtl3D = False
           TabOrder = 0
         end
+        object Button1: TButton
+          Left = 455
+          Top = -1
+          Width = 24
+          Height = 23
+          Caption = 'GO'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Verdana'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 1
+          OnClick = Button1Click
+        end
       end
     end
   end
-  object OverTimer: TTimer
-    Interval = 20
-    OnTimer = OverTimerTimer
-    Left = 24
-    Top = 16
+  object TimerBug: TTimer
+    Interval = 1
+    OnTimer = TimerBugTimer
+    Left = 16
+    Top = 17
   end
 end

@@ -53,21 +53,25 @@ type
 
   IPlugDatabaseObject = interface(IInterface)
   ['{87078381-3F7D-4020-B4FB-7C3097CA91C7}']
-    function GetPersonnes(Categorie: string): string; stdcall;
+    function GetQueryPersonnes(Categorie: string): string; stdcall;
   end;
 
 {------------------------------------------------------------------------------}
 
+  IPlugIO = interface(IInterface)
+  ['{26DBC708-70B8-4105-91E1-72911457F912}']
+    function GetXML: string; stdcall;
+    procedure SetXML(const Value: string); stdcall;
+    property XML: string read GetXML write SetXML;
+  end;
+  
   IPlugDisplay = interface(IInterface)
   ['{570C9B35-15F3-435E-9166-963ACE05F635}']
     procedure Hide; stdcall;
     function GetParent: TWinControl; stdcall;
-    procedure SetXML(const Value: string); stdcall;
-    function GetXML: string; stdcall;
     procedure SetParent(const Value: TWinControl); stdcall;
     procedure Show; stdcall;
     property Parent: TWinControl read GetParent write SetParent;
-    property XML: string read GetXML write SetXML;
   end;
 
 {------------------------------------------------------------------------------}
@@ -79,24 +83,24 @@ type
         stdcall;
     function GetDataset(const PluginName: string): IPlugDataset; stdcall;
     function GetDisplay(const PluginName: string): IPlugDisplay; stdcall;
+    function GetIO(const PluginName: string): IPlugIO; stdcall;
     property Connection[const PluginName: string]: IPlugConnection read
         GetConnection;
     property DatabaseObject[const PluginName: string]: IPlugDatabaseObject read
         GetDatabaseObject;
     property Dataset[const PluginName: string]: IPlugDataset read GetDataset;
     property Display[const PluginName: string]: IPlugDisplay read GetDisplay;
+    property IO[const PluginName: string]: IPlugIO read GetIO;
   end;
 
   IPlugUnknown = interface(IInterface)
   ['{0266191D-1BAA-4063-B95D-A9B4EED9F0DA}']
-    function GetPluginConnector: IPluginConnector; stdcall;
     function GetXMLCursor: IXMLCursor; stdcall;
-    procedure SetPluginConnector(PluginConnector: IPluginConnector); stdcall;
     procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
-    property PluginConnector: IPluginConnector read GetPluginConnector write
-        SetPluginConnector;
     property XMLCursor: IXMLCursor read GetXMLCursor write SetXMLCursor;
   end;
+
+
 
 {------------------------------------------------------------------------------}
 
