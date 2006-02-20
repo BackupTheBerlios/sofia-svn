@@ -24,24 +24,52 @@ interface
 
 uses
   Forms, Classes, Controls, Grids, navigateurclasses, DBGrids, DB, DBClient,
-  ExtCtrls;
+  ExtCtrls, contnrs, dbuibclasses, jvuib, stdxml_tlb;
 
 type
-  TNavigateurFrame = class(TFrame)
-    DataSource: TDataSource;
-    DBGrid1: TDBGrid;
-    ClientDataset: TClientDataSet;
-    ClientDatasetprs_nom: TStringField;
-    ClientDatasetprs_prenom: TStringField;
-    ClientDatasetprs_id: TStringField;
+  TDBViewList = class;
+
+  TDBView = class(TObject)
   private
+    FClientDataSet: TClientDataset;
+    FDataSource: TDataSource;
+    FDBGrid: TDBGrid;
+    FName: string;
+  public
+    constructor Create(AName, XMLData: string);
+    destructor Destroy; override;
+    property ClientDataSet: TClientDataset read FClientDataSet write FClientDataSet;
+    property DataSource: TDataSource read FDataSource write FDataSource;
+    property DBGrid: TDBGrid read FDBGrid write FDBGrid;
+    property Name: string read FName write FName;
+  end;
+
+  TDBViewList = class(TObjectList)
+  private
+    FDBViewList: TObjectList;
+    function GetCount: Integer;
+    function GetItems(Index: Integer): TDBView;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    function Add(AName, XMLData: string): TDBView;
+    property Count: Integer read GetCount;
+    property Items[Index: Integer]: TDBView read GetItems; default;
+  end;
+
+  TNavigateurFrame = class(TFrame)
+  private
+    FDBViewList: TDBViewList;
     { Déclarations privées }
   public
+    constructor Create(AOwner: TComponent);
+    destructor Destroy; override;
+    property DBViewList: TDBViewList read FDBViewList;
     { Déclarations publiques }
   end;
 
   TController = class(TInterfacedObject, IController)
-    procedure SetPersonnes(const Value: string); stdcall;
+    procedure AddResultatRecherche(Name, XMLData: string); stdcall;
   private
     FContainer: TNavigateurFrame;
   public
@@ -53,6 +81,8 @@ type
 function NewController(AControl: TWinControl): IController;
 
 implementation
+
+uses SysUtils;
 
 {$R *.dfm}
 
@@ -71,9 +101,69 @@ begin
   inherited;
 end;
 
-procedure TController.SetPersonnes(const Value: string);
+procedure TController.AddResultatRecherche(Name, XMLData: string);
 begin
-  FContainer.ClientDataset.XMLData := Value;
+  FContainer.DBViewList.Add(Name, XMLData);
+end;
+
+constructor TDBView.Create(AName, XMLData: string);
+begin
+  inherited Create;
+  FName := AName;
+  FClientDataSet := TClientDataset.Create(nil);
+  FDataSource := TDataSource.Create(nil);
+  FDBGrid := TDBGrid.Create(nil);
+  FDBGrid.DataSource := FDataSource;
+  FDataSource.DataSet := FClientDataSet;
+  FClientDataSet.XMLData := XMLData;
+end;
+
+destructor TDBView.Destroy;
+begin
+  FreeAndNil(FDBGrid);
+  FreeAndNil(FDataSource);
+  FreeAndNil(FClientDataSet);
+  inherited Destroy;
+end;
+
+constructor TDBViewList.Create;
+begin
+  inherited;
+  FDBViewList := TObjectList.Create;
+end;
+
+destructor TDBViewList.Destroy;
+begin
+  FDBViewList.Free;
+  inherited;
+end;
+
+function TDBViewList.Add(AName, XMLData: string): TDBView;
+begin
+  Result := TDBView.Create(AName, XMLData);
+  FDBViewList.Add(Result);
+end;
+
+function TDBViewList.GetCount: Integer;
+begin
+  Result := FDBViewList.Count;
+end;
+
+function TDBViewList.GetItems(Index: Integer): TDBView;
+begin
+  Result := TDBView(FDBViewList.Items[Index]);
+end;
+
+constructor TNavigateurFrame.Create(AOwner: TComponent);
+begin
+  inherited;
+  FDBViewList := TDBViewList.Create();
+end;
+
+destructor TNavigateurFrame.Destroy;
+begin
+  FreeAndNil(FDBViewList);
+  inherited Destroy;
 end;
 
 end.

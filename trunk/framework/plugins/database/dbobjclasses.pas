@@ -59,7 +59,7 @@ var
   par: string;
   nam: string;
 begin
-  nam := '<Name>personnes</Name>';
+  nam := Format('<Name>prs_%s</Name>', [Categorie]);
   sql := '<Sql>select * from personnes where prs_categorie = :categorie</Sql>';
   par := '<Params><Param><Name>categorie</Name><Type>string</Type><Value>%s</Value></Param></Params>';
   Result := Format('<DatasetDef>' + nam + sql + par + '</DatasetDef>', [Categorie]);

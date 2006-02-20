@@ -110,7 +110,8 @@ begin
     Panel.Parent := pnlPlugin;
     Plug.Parent := Panel;
     Plug.Show;
-  end else
+  end
+  else
     Panel.Free;
 
   Result := FPagesCount - 1;
@@ -276,17 +277,18 @@ end;
 
 procedure TDisplayForm.Button1Click(Sender: TObject);
 var
-  Query: string;
-  Dataset: string;
   Nav: IPlugIO;
+  Qry: IPlugDatabaseObject;
+  Dts: IPlugDataset;
 begin
-  Query := AppForm.PluginCnt.DatabaseObject['dbobj'].GetQueryPersonnes('client');
-  Dataset := AppForm.PluginCnt.Dataset['dbuib'].Add(Query);
+  Qry := AppForm.PluginCnt.DatabaseObject['dbobj'];
+  Dts := AppForm.PluginCnt.Dataset['dbuib'];
   Nav := AppForm.PluginCnt.IO['navigateur'];
-  if Assigned(Nav) then
-  begin
-    Nav.XML := Dataset;
-  end else
+
+  Dts.Add(Qry.GetQueryPersonnes('contact'));
+  Dts.Add(Qry.GetQueryPersonnes('client'));
+  Dts.Add(Qry.GetQueryPersonnes('organisation'));
+  Nav.XML := Dts.XML;
 end;
 
 end.

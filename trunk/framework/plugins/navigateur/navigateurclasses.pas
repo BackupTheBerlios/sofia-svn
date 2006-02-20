@@ -28,7 +28,7 @@ type
 
   IController = interface(IInterface)
   ['{CD5C131C-E966-4743-85B9-D1F2E96D4DDD}']
-    procedure SetPersonnes(const Value: string); stdcall;
+    procedure AddResultatRecherche(Categorie, XMLData: string); stdcall;
   end;
 
   TNavigateurPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay, IPlugIO)
@@ -89,8 +89,25 @@ begin
 end;
 
 procedure TNavigateurPlugin.SetXML(const Value: string);
+var
+  DatasetList: IXMLCursor;
+  Name: string;
+  XMLData: string;
 begin
-  FController.SetPersonnes(Value);
+  FXMLCursor.LoadXML(Value);
+  DatasetList := FXMLCursor.Select('/Dataset/*');
+  try
+    while not DatasetList.EOF do
+     begin
+       Name :=  DatasetList.GetValue('Name');
+       XMLData := DatasetList.GetValue('XMLData');
+       FController.AddResultatRecherche(Name, XMLData);
+       DatasetList.Next;
+     end;
+   finally
+     DatasetList := nil;
+   end;
+
 end;
 
 function TNavigateurPlugin.GetXML: string;
@@ -110,7 +127,6 @@ end;
 
 procedure TNavigateurPlugin.Show;
 begin
-  //FController.SetPersonnes(FPluginConnector.DatabaseObject['dbobj'].GetPersonnes('client'));
   FContainer.Parent := FParent;
   FContainer.Align := alClient;
 end;

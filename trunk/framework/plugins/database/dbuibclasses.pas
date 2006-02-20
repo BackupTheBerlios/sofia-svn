@@ -37,7 +37,7 @@ type
     function GetXML: string;
   public
     constructor Create(Owner: TDatasetList; DatasetDef: IXMLCursor); reintroduce;
-        overload;
+      overload;
     destructor Destroy; override;
     property Name: string read FName;
     property XML: string read GetXML;
@@ -48,13 +48,17 @@ type
     FConnection: TJvUIBDatabase;
     FQueryList: TObjectList;
     FTransaction: TJvUIBTransaction;
-    function GetItems(const Name: string): TDatasetItem;
+    function GetCount: Integer;
+    function GetDatasetByName(const Name: string): TDatasetItem;
+    function GetItems(Index: Integer): TDatasetItem;
   public
     constructor Create;
     destructor Destroy; override;
     function Add(DatasetDef: IXMLCursor): TDatasetItem;
     property Connection: TJvUIBDatabase read FConnection write FConnection;
-    property Items[const Name: string]: TDatasetItem read GetItems; default;
+    property Count: Integer read GetCount;
+    property DatasetByName[const Name: string]: TDatasetItem read GetDatasetByName;
+    property Items[Index: Integer]: TDatasetItem read GetItems; default;
     property Transaction: TJvUIBTransaction read FTransaction write FTransaction;
   end;
 
@@ -65,6 +69,7 @@ type
     function GetConnectionName: string; stdcall;
     function GetPassWord: string; stdcall;
     function GetUserName: string; stdcall;
+    function GetXML: string; stdcall;
     function GetXMLCursor: IXMLCursor; stdcall;
     procedure RemoveDataset(AName: string); stdcall;
     procedure SetConnected(const Value: boolean); stdcall;
@@ -72,6 +77,7 @@ type
     procedure SetPassWord(const Value: string); stdcall;
     procedure SetUserName(const Value: string); stdcall;
     procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
+    property XML: string read GetXML;
   private
     FConnection: TJvUIBDataBase;
     FDatasetList: TDatasetList;
@@ -134,6 +140,25 @@ begin
   Result := FConnection.UserName;
 end;
 
+function TDatabaseAccessPlugin.GetXML: string;
+var
+  i: Integer;
+  DatasetList: IXMLCursor;
+  Dataset: IXMLCursor;
+begin
+  //Constituer un flux global en parcourant tous les Datasets
+  FXMLCursor.Delete;
+  FXMLCursor.LoadXML('<Dataset></Dataset>');
+  DatasetList := FXMLCursor.Select('/Dataset');
+  for i := 0 to FDatasetList.Count - 1 do
+  begin
+    Dataset := DatasetList.AppendChild('Dataset', '');
+    Dataset.SetValue('Name', FDatasetList.Items[i].Name);
+    Dataset.SetValue('XMLData', FDatasetList[i].XML);
+  end;
+  Result := FXMLCursor.XML;
+end;
+
 function TDatabaseAccessPlugin.GetXMLCursor: IXMLCursor;
 begin
   Result := FXMLCursor;
@@ -143,7 +168,7 @@ procedure TDatabaseAccessPlugin.RemoveDataset(AName: string);
 var
   DatasetItem: TDatasetItem;
 begin
-  DatasetItem := FDatasetList[AName];
+  DatasetItem := FDatasetList.DatasetByName[AName];
   if Assigned(DatasetItem) then
     DatasetItem.Free;
 end;
@@ -193,30 +218,30 @@ begin
   Params := DatasetDef.Select('/DatasetDef/Params/*');
   try
     while not Params.EOF do
-     begin
-       ParamName :=  Params.GetValue('Name');
-       ParamType := Params.GetValue('Type');
-       ParamValue := Params.GetValue('Value');
+    begin
+      ParamName := Params.GetValue('Name');
+      ParamType := Params.GetValue('Type');
+      ParamValue := Params.GetValue('Value');
 
-       if SameText(ParamType, 'string') then
-         FDataset.Params.ByNameAsString[ParamName] := ParamValue;
+      if SameText(ParamType, 'string') then
+        FDataset.Params.ByNameAsString[ParamName] := ParamValue;
 
-       if SameText(ParamType, 'integer') then
-         if TryStrToInt(ParamValue, IntValue) then
-           FDataset.Params.ByNameAsInteger[ParamName] := IntValue;
+      if SameText(ParamType, 'integer') then
+        if TryStrToInt(ParamValue, IntValue) then
+          FDataset.Params.ByNameAsInteger[ParamName] := IntValue;
 
-       Params.Next;
-     end;
-   finally
-     Params := nil;
-   end;
+      Params.Next;
+    end;
+  finally
+    Params := nil;
+  end;
 
-   FClientDataset := TClientDataSet.Create(nil);
-   FProvider := TDataSetProvider.Create(nil);
-   FProvider.DataSet := FDataset;
-   FClientDataset.SetProvider(FProvider);
+  FClientDataset := TClientDataSet.Create(nil);
+  FProvider := TDataSetProvider.Create(nil);
+  FProvider.DataSet := FDataset;
+  FClientDataset.SetProvider(FProvider);
 
-   FDataset.Open;
+  FDataset.Open;
 end;
 
 destructor TDatasetItem.Destroy;
@@ -252,7 +277,12 @@ begin
   FQueryList.Add(Result);
 end;
 
-function TDatasetList.GetItems(const Name: string): TDatasetItem;
+function TDatasetList.GetCount: Integer;
+begin
+  Result := FQueryList.Count;
+end;
+
+function TDatasetList.GetDatasetByName(const Name: string): TDatasetItem;
 var
   Found: Boolean;
   i: Integer;
@@ -269,6 +299,11 @@ begin
     Result := TDatasetItem(FQueryList[i])
   else
     Result := nil;
+end;
+
+function TDatasetList.GetItems(Index: Integer): TDatasetItem;
+begin
+  Result := TDatasetItem(FQueryList.Items[Index]);
 end;
 
 end.

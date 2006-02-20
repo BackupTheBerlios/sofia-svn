@@ -45,8 +45,10 @@ type
   IPlugDataset = interface(IInterface)
   ['{2BBE4585-C2A2-4383-A723-73715CB61AC7}']
     function Add(DatasetDef: string): string; stdcall;
+    function GetXML: string; stdcall;
     procedure RemoveDataset(AName: string); stdcall;
     procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
+    property XML: string read GetXML;
   end;
 
 {------------------------------------------------------------------------------}
