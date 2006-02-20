@@ -34,13 +34,15 @@ type
     FClientDataSet: TClientDataset;
     FDataSource: TDataSource;
     FDBGrid: TDBGrid;
+    FDescription: string;
     FName: string;
   public
-    constructor Create(AName, XMLData: string);
+    constructor Create(AName, ADescription, XMLData: string);
     destructor Destroy; override;
     property ClientDataSet: TClientDataset read FClientDataSet write FClientDataSet;
     property DataSource: TDataSource read FDataSource write FDataSource;
     property DBGrid: TDBGrid read FDBGrid write FDBGrid;
+    property Description: string read FDescription write FDescription;
     property Name: string read FName write FName;
   end;
 
@@ -52,7 +54,8 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-    function Add(AName, XMLData: string): TDBView;
+    function Add(Name, Description, XMLData: string): TDBView;
+    procedure Clear;
     property Count: Integer read GetCount;
     property Items[Index: Integer]: TDBView read GetItems; default;
   end;
@@ -62,14 +65,17 @@ type
     FDBViewList: TDBViewList;
     { Déclarations privées }
   public
-    constructor Create(AOwner: TComponent);
+    constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
+    procedure DisplayDBViews;
     property DBViewList: TDBViewList read FDBViewList;
     { Déclarations publiques }
   end;
 
   TController = class(TInterfacedObject, IController)
-    procedure AddResultatRecherche(Name, XMLData: string); stdcall;
+    procedure AddResultatRecherche(Name, Description, XMLData: string); stdcall;
+    procedure ClearResultatRecherche; stdcall;
+    procedure DisplayResultatRecherche; stdcall;
   private
     FContainer: TNavigateurFrame;
   public
@@ -101,15 +107,26 @@ begin
   inherited;
 end;
 
-procedure TController.AddResultatRecherche(Name, XMLData: string);
+procedure TController.AddResultatRecherche(Name, Description, XMLData: string);
 begin
-  FContainer.DBViewList.Add(Name, XMLData);
+  FContainer.DBViewList.Add(Name, Description, XMLData);
 end;
 
-constructor TDBView.Create(AName, XMLData: string);
+procedure TController.ClearResultatRecherche;
+begin
+  FContainer.DBViewList.Clear;
+end;
+
+procedure TController.DisplayResultatRecherche;
+begin
+  FContainer.DisplayDBViews;
+end;
+
+constructor TDBView.Create(AName, ADescription, XMLData: string);
 begin
   inherited Create;
   FName := AName;
+  FDescription := ADescription;
   FClientDataSet := TClientDataset.Create(nil);
   FDataSource := TDataSource.Create(nil);
   FDBGrid := TDBGrid.Create(nil);
@@ -120,6 +137,7 @@ end;
 
 destructor TDBView.Destroy;
 begin
+  FDBGrid.Parent := nil;
   FreeAndNil(FDBGrid);
   FreeAndNil(FDataSource);
   FreeAndNil(FClientDataSet);
@@ -138,10 +156,15 @@ begin
   inherited;
 end;
 
-function TDBViewList.Add(AName, XMLData: string): TDBView;
+function TDBViewList.Add(Name, Description, XMLData: string): TDBView;
 begin
-  Result := TDBView.Create(AName, XMLData);
+  Result := TDBView.Create(Name, Description, XMLData);
   FDBViewList.Add(Result);
+end;
+
+procedure TDBViewList.Clear;
+begin
+  FDBViewList.Clear;
 end;
 
 function TDBViewList.GetCount: Integer;
@@ -164,6 +187,21 @@ destructor TNavigateurFrame.Destroy;
 begin
   FreeAndNil(FDBViewList);
   inherited Destroy;
+end;
+
+procedure TNavigateurFrame.DisplayDBViews;
+var
+  i: Integer;
+begin
+  //Affichage des DBViews
+  for i := 0 to FDBViewList.Count - 1 do
+    with FDBViewList[i] do
+    begin
+      DBGrid.Top := Self.Height;
+      DBGrid.Align := alTop;
+      DBGrid.Parent := Self;
+      ClientDataSet.Open;
+    end;
 end;
 
 end.

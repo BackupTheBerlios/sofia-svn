@@ -32,6 +32,7 @@ type
     FClientDataset: TClientDataset;
     FName: string;
     FDataset: TJvUIBDataset;
+    FDescription: string;
     FOwner: TDatasetList;
     FProvider: TDataSetProvider;
     function GetXML: string;
@@ -39,6 +40,7 @@ type
     constructor Create(Owner: TDatasetList; DatasetDef: IXMLCursor); reintroduce;
       overload;
     destructor Destroy; override;
+    property Description: string read FDescription;
     property Name: string read FName;
     property XML: string read GetXML;
   end;
@@ -154,6 +156,7 @@ begin
   begin
     Dataset := DatasetList.AppendChild('Dataset', '');
     Dataset.SetValue('Name', FDatasetList.Items[i].Name);
+    Dataset.SetValue('Description', FDatasetList.Items[i].Description);
     Dataset.SetValue('XMLData', FDatasetList[i].XML);
   end;
   Result := FXMLCursor.XML;
@@ -208,6 +211,7 @@ var
 begin
   FOwner := Owner;
   FName := DatasetDef.GetValue('/DatasetDef/Name');
+  FDescription := DatasetDef.GetValue('/DatasetDef/Description');
   FDataset := TJvUIBDataset.Create(nil);
   FDataset.Transaction := Owner.Transaction;
   FDataset.DataBase := Owner.Connection;

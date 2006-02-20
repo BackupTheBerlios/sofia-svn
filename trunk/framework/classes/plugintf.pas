@@ -55,7 +55,7 @@ type
 
   IPlugDatabaseObject = interface(IInterface)
   ['{87078381-3F7D-4020-B4FB-7C3097CA91C7}']
-    function GetQueryPersonnes(Categorie: string): string; stdcall;
+    function GetQueryPersonnes(Categorie, Description: string): string; stdcall;
   end;
 
 {------------------------------------------------------------------------------}

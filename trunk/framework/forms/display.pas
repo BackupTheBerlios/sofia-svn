@@ -280,14 +280,17 @@ var
   Nav: IPlugIO;
   Qry: IPlugDatabaseObject;
   Dts: IPlugDataset;
+  desc: string;
 begin
   Qry := AppForm.PluginCnt.DatabaseObject['dbobj'];
   Dts := AppForm.PluginCnt.Dataset['dbuib'];
   Nav := AppForm.PluginCnt.IO['navigateur'];
 
-  Dts.Add(Qry.GetQueryPersonnes('contact'));
-  Dts.Add(Qry.GetQueryPersonnes('client'));
-  Dts.Add(Qry.GetQueryPersonnes('organisation'));
+  desc := 'Résultats dans la catégorie "%s"';
+
+  Dts.Add(Qry.GetQueryPersonnes('contact', Format(desc, ['Contact'])));
+  Dts.Add(Qry.GetQueryPersonnes('client', Format(desc, ['Clients'])));
+  Dts.Add(Qry.GetQueryPersonnes('organisation', Format(desc, ['Organisations'])));
   Nav.XML := Dts.XML;
 end;
 

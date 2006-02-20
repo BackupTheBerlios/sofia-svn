@@ -27,7 +27,7 @@ uses Classes, DB, StdXML_TLB, plugintf;
 type
   TDatabaseObjectPlugin = class(TInterfacedObject, IPlugUnknown,
       IPlugDatabaseObject)
-    function GetQueryPersonnes(Categorie: string): string; stdcall;
+    function GetQueryPersonnes(Categorie, Description: string): string; stdcall;
     function GetXMLCursor: IXMLCursor; stdcall;
     procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
   private
@@ -53,16 +53,19 @@ begin
   inherited;
 end;
 
-function TDatabaseObjectPlugin.GetQueryPersonnes(Categorie: string): string;
+function TDatabaseObjectPlugin.GetQueryPersonnes(Categorie, Description:
+    string): string;
 var
   sql: string;
-  par: string;
-  nam: string;
+  param: string;
+  name: string;
+  desc: string;
 begin
-  nam := Format('<Name>prs_%s</Name>', [Categorie]);
+  name := Format('<Name>prs_%s</Name>', [Categorie]);
+  desc := Format('<Description>%s</Description>', [Description]);
   sql := '<Sql>select * from personnes where prs_categorie = :categorie</Sql>';
-  par := '<Params><Param><Name>categorie</Name><Type>string</Type><Value>%s</Value></Param></Params>';
-  Result := Format('<DatasetDef>' + nam + sql + par + '</DatasetDef>', [Categorie]);
+  param := '<Params><Param><Name>categorie</Name><Type>string</Type><Value>%s</Value></Param></Params>';
+  Result := Format('<DatasetDef>' + name + sql + param + '</DatasetDef>', [Categorie]);
 end;
 
 function TDatabaseObjectPlugin.GetXMLCursor: IXMLCursor;

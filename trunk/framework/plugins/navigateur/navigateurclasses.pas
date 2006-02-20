@@ -28,7 +28,9 @@ type
 
   IController = interface(IInterface)
   ['{CD5C131C-E966-4743-85B9-D1F2E96D4DDD}']
-    procedure AddResultatRecherche(Categorie, XMLData: string); stdcall;
+    procedure AddResultatRecherche(Name, Description, XMLData: string); stdcall;
+    procedure ClearResultatRecherche; stdcall;
+    procedure DisplayResultatRecherche; stdcall;
   end;
 
   TNavigateurPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay, IPlugIO)
@@ -93,17 +95,21 @@ var
   DatasetList: IXMLCursor;
   Name: string;
   XMLData: string;
+  Description: string;
 begin
+  FController.ClearResultatRecherche;
   FXMLCursor.LoadXML(Value);
   DatasetList := FXMLCursor.Select('/Dataset/*');
   try
     while not DatasetList.EOF do
      begin
        Name :=  DatasetList.GetValue('Name');
+       Description := DatasetList.GetValue('Description');
        XMLData := DatasetList.GetValue('XMLData');
-       FController.AddResultatRecherche(Name, XMLData);
+       FController.AddResultatRecherche(Name, Description, XMLData);
        DatasetList.Next;
      end;
+     FController.DisplayResultatRecherche;
    finally
      DatasetList := nil;
    end;
