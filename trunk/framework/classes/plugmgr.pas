@@ -143,6 +143,7 @@ begin
   FPlugins.Add(TPlugin.Create(Self, 'dbobj'));
   FPlugins.Add(TPlugin.Create(Self, 'contact'));
   FPlugins.Add(TPlugin.Create(Self, 'navigateur'));
+  FPlugins.Add(TPlugin.Create(Self, 'recherche'));
 end;
 
 procedure TPluginManager.UnloadPlugins;

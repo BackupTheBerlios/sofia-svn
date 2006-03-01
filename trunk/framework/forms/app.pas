@@ -48,7 +48,7 @@ var
 
 implementation
 
-uses loading, display, plugintf, xmlcursor;
+uses display, plugintf, xmlcursor;
 
 {$R *.dfm}
 
@@ -70,11 +70,9 @@ end;
 procedure TAppForm.tmrLaunchTimer(Sender: TObject);
 begin
   tmrLaunch.Enabled := False;
-  LoadingForm.Show;
   try
     FPluginMgr.LoadPlugins;
   finally
-    LoadingForm.Hide;
   end;
 
   //initialisation des parametres de cnx

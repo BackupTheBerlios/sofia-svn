@@ -1,4 +1,4 @@
-object NavigateurFrame: TNavigateurFrame
+object RechercheFrame: TRechercheFrame
   Left = 0
   Top = 0
   Width = 668

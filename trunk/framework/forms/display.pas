@@ -277,21 +277,23 @@ end;
 
 procedure TDisplayForm.Button1Click(Sender: TObject);
 var
-  Nav: IPlugIO;
+  Res: IPlugIO;
   Qry: IPlugDatabaseObject;
   Dts: IPlugDataset;
   desc: string;
 begin
+  AddPage('recherche', 'Résultats');
+
   Qry := AppForm.PluginCnt.DatabaseObject['dbobj'];
   Dts := AppForm.PluginCnt.Dataset['dbuib'];
-  Nav := AppForm.PluginCnt.IO['navigateur'];
+  Res := AppForm.PluginCnt.IO['recherche'];
 
   desc := 'Résultats dans la catégorie "%s"';
 
   Dts.Add(Qry.GetQueryPersonnes('contact', Format(desc, ['Contact'])));
   Dts.Add(Qry.GetQueryPersonnes('client', Format(desc, ['Clients'])));
   Dts.Add(Qry.GetQueryPersonnes('organisation', Format(desc, ['Organisations'])));
-  Nav.XML := Dts.XML;
+  Res.XML := Dts.XML;
 end;
 
 end.

@@ -18,7 +18,7 @@ along with Sofia; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 -------------------------------------------------------------------------------}
 
-unit navigateurclasses;
+unit rechercheclasses;
 
 interface
 
@@ -28,9 +28,12 @@ type
 
   IController = interface(IInterface)
   ['{CD5C131C-E966-4743-85B9-D1F2E96D4DDD}']
+    procedure AddResultatRecherche(Name, Description, XMLData: string); stdcall;
+    procedure ClearResultatRecherche; stdcall;
+    procedure DisplayResultatRecherche; stdcall;
   end;
 
-  TNavigateurPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay, IPlugIO)
+  TRecherchePlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay, IPlugIO)
     function GetContainer: TWinControl; stdcall;
     function GetParent: TWinControl; stdcall;
     function GetXMLCursor: IXMLCursor; stdcall;
@@ -52,62 +55,83 @@ type
 
 implementation
 
-uses navigateurctrl;
+uses recherchectrl;
 
-constructor TNavigateurPlugin.Create;
+constructor TRecherchePlugin.Create;
 begin
-  FContainer := TNavigateurFrame.Create(nil);
+  FContainer := TRechercheFrame.Create(nil);
   FController := NewController(FContainer);
 end;
 
-destructor TNavigateurPlugin.Destroy;
+destructor TRecherchePlugin.Destroy;
 begin
   FController := nil;
   FXMLCursor := nil;
   inherited;
 end;
 
-function TNavigateurPlugin.GetContainer: TWinControl;
+function TRecherchePlugin.GetContainer: TWinControl;
 begin
   Result := FContainer;
 end;
 
-function TNavigateurPlugin.GetParent: TWinControl;
+function TRecherchePlugin.GetParent: TWinControl;
 begin
   Result := FParent;
 end;
 
-function TNavigateurPlugin.GetXMLCursor: IXMLCursor;
+function TRecherchePlugin.GetXMLCursor: IXMLCursor;
 begin
   Result := FXMLCursor;
 end;
 
-procedure TNavigateurPlugin.Hide;
+procedure TRecherchePlugin.Hide;
 begin
   FContainer.Parent := nil;
 end;
 
-procedure TNavigateurPlugin.SetXML(const Value: string);
+procedure TRecherchePlugin.SetXML(const Value: string);
+var
+  DatasetList: IXMLCursor;
+  Name: string;
+  XMLData: string;
+  Description: string;
+begin
+  FController.ClearResultatRecherche;
+  FXMLCursor.LoadXML(Value);
+  DatasetList := FXMLCursor.Select('/Dataset/*');
+  try
+    while not DatasetList.EOF do
+     begin
+       Name :=  DatasetList.GetValue('Name');
+       Description := DatasetList.GetValue('Description');
+       XMLData := DatasetList.GetValue('XMLData');
+       FController.AddResultatRecherche(Name, Description, XMLData);
+       DatasetList.Next;
+     end;
+     FController.DisplayResultatRecherche;
+   finally
+     DatasetList := nil;
+   end;
+
+end;
+
+function TRecherchePlugin.GetXML: string;
 begin
 
 end;
 
-function TNavigateurPlugin.GetXML: string;
-begin
-
-end;
-
-procedure TNavigateurPlugin.SetParent(const Value: TWinControl);
+procedure TRecherchePlugin.SetParent(const Value: TWinControl);
 begin
   FParent := Value;
 end;
 
-procedure TNavigateurPlugin.SetXMLCursor(XMLCursor: IXMLCursor);
+procedure TRecherchePlugin.SetXMLCursor(XMLCursor: IXMLCursor);
 begin
   FXMLCursor := XMLCursor;
 end;
 
-procedure TNavigateurPlugin.Show;
+procedure TRecherchePlugin.Show;
 begin
   FContainer.Parent := FParent;
   FContainer.Align := alClient;

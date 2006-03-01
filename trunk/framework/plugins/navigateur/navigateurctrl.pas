@@ -23,59 +23,23 @@ unit navigateurctrl;
 interface
 
 uses
-  Forms, Classes, Controls, Grids, navigateurclasses, DBGrids, DB, DBClient,
-  ExtCtrls, contnrs, dbuibclasses, jvuib, stdxml_tlb;
+  Forms, Classes, Controls, navigateurclasses, ExtCtrls, stdxml_tlb;
 
 type
   TDBViewList = class;
 
-  TDBView = class(TObject)
-  private
-    FClientDataSet: TClientDataset;
-    FDataSource: TDataSource;
-    FDBGrid: TDBGrid;
-    FDescription: string;
-    FName: string;
-  public
-    constructor Create(AName, ADescription, XMLData: string);
-    destructor Destroy; override;
-    property ClientDataSet: TClientDataset read FClientDataSet write FClientDataSet;
-    property DataSource: TDataSource read FDataSource write FDataSource;
-    property DBGrid: TDBGrid read FDBGrid write FDBGrid;
-    property Description: string read FDescription write FDescription;
-    property Name: string read FName write FName;
-  end;
-
-  TDBViewList = class(TObjectList)
-  private
-    FDBViewList: TObjectList;
-    function GetCount: Integer;
-    function GetItems(Index: Integer): TDBView;
-  public
-    constructor Create;
-    destructor Destroy; override;
-    function Add(Name, Description, XMLData: string): TDBView;
-    procedure Clear;
-    property Count: Integer read GetCount;
-    property Items[Index: Integer]: TDBView read GetItems; default;
-  end;
+  TPanelList = class;
 
   TNavigateurFrame = class(TFrame)
   private
-    FDBViewList: TDBViewList;
     { Déclarations privées }
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    procedure DisplayDBViews;
-    property DBViewList: TDBViewList read FDBViewList;
     { Déclarations publiques }
   end;
 
   TController = class(TInterfacedObject, IController)
-    procedure AddResultatRecherche(Name, Description, XMLData: string); stdcall;
-    procedure ClearResultatRecherche; stdcall;
-    procedure DisplayResultatRecherche; stdcall;
   private
     FContainer: TNavigateurFrame;
   public
@@ -107,102 +71,17 @@ begin
   inherited;
 end;
 
-procedure TController.AddResultatRecherche(Name, Description, XMLData: string);
-begin
-  FContainer.DBViewList.Add(Name, Description, XMLData);
-end;
-
-procedure TController.ClearResultatRecherche;
-begin
-  FContainer.DBViewList.Clear;
-end;
-
-procedure TController.DisplayResultatRecherche;
-begin
-  FContainer.DisplayDBViews;
-end;
-
-constructor TDBView.Create(AName, ADescription, XMLData: string);
-begin
-  inherited Create;
-  FName := AName;
-  FDescription := ADescription;
-  FClientDataSet := TClientDataset.Create(nil);
-  FDataSource := TDataSource.Create(nil);
-  FDBGrid := TDBGrid.Create(nil);
-  FDBGrid.DataSource := FDataSource;
-  FDataSource.DataSet := FClientDataSet;
-  FClientDataSet.XMLData := XMLData;
-end;
-
-destructor TDBView.Destroy;
-begin
-  FDBGrid.Parent := nil;
-  FreeAndNil(FDBGrid);
-  FreeAndNil(FDataSource);
-  FreeAndNil(FClientDataSet);
-  inherited Destroy;
-end;
-
-constructor TDBViewList.Create;
-begin
-  inherited;
-  FDBViewList := TObjectList.Create;
-end;
-
-destructor TDBViewList.Destroy;
-begin
-  FDBViewList.Free;
-  inherited;
-end;
-
-function TDBViewList.Add(Name, Description, XMLData: string): TDBView;
-begin
-  Result := TDBView.Create(Name, Description, XMLData);
-  FDBViewList.Add(Result);
-end;
-
-procedure TDBViewList.Clear;
-begin
-  FDBViewList.Clear;
-end;
-
-function TDBViewList.GetCount: Integer;
-begin
-  Result := FDBViewList.Count;
-end;
-
-function TDBViewList.GetItems(Index: Integer): TDBView;
-begin
-  Result := TDBView(FDBViewList.Items[Index]);
-end;
-
 constructor TNavigateurFrame.Create(AOwner: TComponent);
 begin
   inherited;
-  FDBViewList := TDBViewList.Create();
 end;
 
 destructor TNavigateurFrame.Destroy;
 begin
-  FreeAndNil(FDBViewList);
   inherited Destroy;
 end;
 
-procedure TNavigateurFrame.DisplayDBViews;
-var
-  i: Integer;
-begin
-  //Affichage des DBViews
-  for i := 0 to FDBViewList.Count - 1 do
-    with FDBViewList[i] do
-    begin
-      DBGrid.Top := Self.Height;
-      DBGrid.Align := alTop;
-      DBGrid.Parent := Self;
-      ClientDataSet.Open;
-    end;
-end;
+
 
 end.
 
