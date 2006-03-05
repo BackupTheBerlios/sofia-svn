@@ -23,7 +23,7 @@ unit display;
 interface
 
 uses Forms, Classes, Controls, ExtCtrls, ComCtrls, Grids, Types, Graphics,
-  StdCtrls;
+  StdCtrls, Buttons, ToolWin;
 
 type
   TDisplayForm = class(TForm)
@@ -47,6 +47,9 @@ type
     Label7: TLabel;
     Edit1: TEdit;
     Button1: TButton;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
     procedure sgPagesDrawCell(Sender: TObject; ACol, ARow: Integer;
       Rect: TRect; State: TGridDrawState);
     procedure pbPagesPaint(Sender: TObject);
@@ -286,7 +289,7 @@ begin
   Dts.Add(Qry.GetPersonnes('organisation', Format(desc, ['Organisations'])));
   Res.XML := Dts.XML;
 
-  AddPage('search', 'Résultats');
+  AddPage('search', 'Résultats de la recherche');
 end;
 
 procedure TDisplayForm.RepaintCurrentTab(ATabIndex: Integer);

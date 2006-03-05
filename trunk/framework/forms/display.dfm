@@ -39,17 +39,20 @@ object DisplayForm: TDisplayForm
         Left = 8
         Top = 8
         Width = 654
-        Height = 52
+        Height = 48
         Align = alTop
         BevelOuter = bvNone
         Color = 14149867
         TabOrder = 0
+        DesignSize = (
+          654
+          48)
         object pbPages: TPaintBox
           Left = 0
           Top = 22
           Width = 654
-          Height = 30
-          Align = alClient
+          Height = 26
+          Align = alTop
           OnPaint = pbPagesPaint
         end
         object Panel3: TPanel
@@ -100,6 +103,34 @@ object DisplayForm: TDisplayForm
             ScrollBars = ssNone
             TabOrder = 2
             OnDrawCell = sgPagesDrawCell
+          end
+        end
+        object ToolBar1: TToolBar
+          Left = 605
+          Top = 23
+          Width = 48
+          Height = 24
+          Align = alNone
+          Anchors = [akTop, akRight]
+          AutoSize = True
+          ButtonHeight = 24
+          ButtonWidth = 24
+          Caption = 'ToolBar1'
+          EdgeBorders = []
+          Flat = True
+          TabOrder = 1
+          Transparent = False
+          object ToolButton1: TToolButton
+            Left = 0
+            Top = 0
+            Caption = 'Fermer'
+            ImageIndex = 0
+          end
+          object ToolButton2: TToolButton
+            Left = 24
+            Top = 0
+            Caption = 'ToolButton2'
+            ImageIndex = 1
           end
         end
       end

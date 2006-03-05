@@ -43,6 +43,7 @@ type
   public
     constructor Create(AName, ADescription, XMLData: string);
     destructor Destroy; override;
+    procedure InitGridStyle;
     property ClientDataSet: TClientDataset read FClientDataSet write FClientDataSet;
     property DataSource: TDataSource read FDataSource write FDataSource;
     property DBGrid: TDBGrid read FDBGrid write FDBGrid;
@@ -59,6 +60,7 @@ type
   end;
 
   TContainer = class(TFrame)
+    DBGrid1: TDBGrid;
   private
     FDBViewList: TDBViewList;
     { Déclarations privées }
@@ -140,6 +142,13 @@ begin
   FreeAndNil(FDataSource);
   FreeAndNil(FClientDataSet);
   inherited Destroy;
+end;
+
+procedure TDBView.InitGridStyle;
+begin
+  with FDBGrid do
+  begin
+  end;
 end;
 
 function TDBViewList.Add(Name, Description, XMLData: string): TDBView;

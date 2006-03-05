@@ -14,4 +14,18 @@ object Container: TContainer
   ParentColor = False
   ParentFont = False
   TabOrder = 0
+  object DBGrid1: TDBGrid
+    Left = 24
+    Top = 32
+    Width = 320
+    Height = 120
+    BorderStyle = bsNone
+    Color = 14743786
+    TabOrder = 0
+    TitleFont.Charset = ANSI_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Verdana'
+    TitleFont.Style = []
+  end
 end
