@@ -1,6 +1,6 @@
 object DisplayForm: TDisplayForm
-  Left = 317
-  Top = 217
+  Left = 318
+  Top = 218
   Width = 678
   Height = 506
   Caption = 'DisplayForm'
@@ -93,7 +93,7 @@ object DisplayForm: TDisplayForm
             FixedCols = 0
             RowCount = 1
             FixedRows = 0
-            Options = [goFixedVertLine, goFixedHorzLine, goRowSelect]
+            Options = [goFixedVertLine, goFixedHorzLine]
             ParentCtl3D = False
             ScrollBars = ssNone
             TabOrder = 2

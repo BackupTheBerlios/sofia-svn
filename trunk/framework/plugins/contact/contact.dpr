@@ -2,12 +2,12 @@ library contact;
 
 uses
   plugintf,
-  contactctrl in 'contactctrl.pas',
+  contactgui in 'contactgui.pas' {Container},
   contactclasses in 'contactclasses.pas';
 
 function NewPlugin: IPlugUnknown;
 begin
-  Result := TContactPlugin.Create;
+  Result := TPlugin.Create;
 end;
 
 exports

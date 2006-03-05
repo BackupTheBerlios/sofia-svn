@@ -85,7 +85,7 @@ begin
     Connected := True;
   end;
 
-  DisplayForm.AddPage('navigateur', 'Accueil');
+  DisplayForm.AddPage('welcome', 'Accueil');
 
   DisplayForm.ShowModal;
   Close;

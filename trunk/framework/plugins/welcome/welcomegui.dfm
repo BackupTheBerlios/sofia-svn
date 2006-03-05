@@ -1,4 +1,4 @@
-object NavigateurFrame: TNavigateurFrame
+object Container: TContainer
   Left = 0
   Top = 0
   Width = 668

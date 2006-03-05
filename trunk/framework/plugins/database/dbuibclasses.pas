@@ -64,8 +64,7 @@ type
     property Transaction: TJvUIBTransaction read FTransaction write FTransaction;
   end;
 
-  TDatabaseAccessPlugin = class(TInterfacedObject, IPlugUnknown, IPlugConnection,
-      IPlugDataset)
+  TPlugin = class(TInterfacedObject, IPlugUnknown, IPlugConnection, IPlugDataset)
     function Add(DatasetDef: string): string; stdcall;
     function GetConnected: boolean; stdcall;
     function GetConnectionName: string; stdcall;
@@ -94,7 +93,7 @@ implementation
 
 uses SysUtils;
 
-constructor TDatabaseAccessPlugin.Create;
+constructor TPlugin.Create;
 begin
   inherited;
   FConnection := TJvUIBDataBase.Create(nil);
@@ -107,7 +106,7 @@ begin
   FDatasetList.Transaction := FTransaction;
 end;
 
-destructor TDatabaseAccessPlugin.Destroy;
+destructor TPlugin.Destroy;
 begin
   FDatasetList.Free;
   FTransaction.Free;
@@ -116,33 +115,33 @@ begin
   inherited;
 end;
 
-function TDatabaseAccessPlugin.Add(DatasetDef: string): string;
+function TPlugin.Add(DatasetDef: string): string;
 begin
   FXMLCursor.LoadXML(DatasetDef);
   Result := FDatasetList.Add(FXMLCursor).XML;
 end;
 
-function TDatabaseAccessPlugin.GetConnected: boolean;
+function TPlugin.GetConnected: boolean;
 begin
   Result := FConnection.Connected;
 end;
 
-function TDatabaseAccessPlugin.GetConnectionName: string;
+function TPlugin.GetConnectionName: string;
 begin
   Result := FConnection.DatabaseName;
 end;
 
-function TDatabaseAccessPlugin.GetPassWord: string;
+function TPlugin.GetPassWord: string;
 begin
   Result := FConnection.PassWord;
 end;
 
-function TDatabaseAccessPlugin.GetUserName: string;
+function TPlugin.GetUserName: string;
 begin
   Result := FConnection.UserName;
 end;
 
-function TDatabaseAccessPlugin.GetXML: string;
+function TPlugin.GetXML: string;
 var
   i: Integer;
   DatasetList: IXMLCursor;
@@ -162,12 +161,12 @@ begin
   Result := FXMLCursor.XML;
 end;
 
-function TDatabaseAccessPlugin.GetXMLCursor: IXMLCursor;
+function TPlugin.GetXMLCursor: IXMLCursor;
 begin
   Result := FXMLCursor;
 end;
 
-procedure TDatabaseAccessPlugin.RemoveDataset(AName: string);
+procedure TPlugin.RemoveDataset(AName: string);
 var
   DatasetItem: TDatasetItem;
 begin
@@ -176,27 +175,27 @@ begin
     DatasetItem.Free;
 end;
 
-procedure TDatabaseAccessPlugin.SetConnected(const Value: boolean);
+procedure TPlugin.SetConnected(const Value: boolean);
 begin
   FConnection.Connected := Value;
 end;
 
-procedure TDatabaseAccessPlugin.SetConnectionName(const Value: string);
+procedure TPlugin.SetConnectionName(const Value: string);
 begin
   FConnection.DatabaseName := Value;
 end;
 
-procedure TDatabaseAccessPlugin.SetPassWord(const Value: string);
+procedure TPlugin.SetPassWord(const Value: string);
 begin
   FConnection.PassWord := Value;
 end;
 
-procedure TDatabaseAccessPlugin.SetUserName(const Value: string);
+procedure TPlugin.SetUserName(const Value: string);
 begin
   FConnection.UserName := Value;
 end;
 
-procedure TDatabaseAccessPlugin.SetXMLCursor(XMLCursor: IXMLCursor);
+procedure TPlugin.SetXMLCursor(XMLCursor: IXMLCursor);
 begin
   FXMLCursor := XMLCursor;
 end;

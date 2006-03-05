@@ -1,8 +1,9 @@
-library dbobj;
+library welcome;
 
 uses
   plugintf,
-  dbobjclasses in 'dbobjclasses.pas';
+  welcomegui in 'welcomegui.pas' {Container},
+  welcomeclasses in 'welcomeclasses.pas';
 
 function NewPlugin: IPlugUnknown;
 begin
@@ -11,6 +12,7 @@ end;
 
 exports
   NewPlugin;
+
 {$R *.res}
 
 begin

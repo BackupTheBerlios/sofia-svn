@@ -9,8 +9,8 @@ MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
 DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
-PROJECTS = JvUIBD7R.bpl sofia.exe contact.dll dbuib.dll dbobj.dll \
-  navigateur.dll search.dll
+PROJECTS = JvUIBD7R.bpl sofia.exe contact.dll dbuib.dll dbobj.dll welcome.dll \
+  search.dll
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
@@ -34,7 +34,7 @@ dbobj.dll: plugins\database\dbobj.dpr
 search.dll: plugins\search\search.dpr
   $(DCC)
 
-navigateur.dll: plugins\navigateur\navigateur.dpr
+welcome.dll: plugins\welcome\welcome.dpr
   $(DCC)
 
 

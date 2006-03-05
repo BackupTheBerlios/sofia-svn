@@ -25,9 +25,8 @@ interface
 uses Classes, DB, StdXML_TLB, plugintf;
 
 type
-  TDatabaseObjectPlugin = class(TInterfacedObject, IPlugUnknown,
-      IPlugDatabaseObject)
-    function GetQueryPersonnes(Categorie, Description: string): string; stdcall;
+  TPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDatabaseObject)
+    function GetPersonnes(Categorie, Description: string): string; stdcall;
     function GetXMLCursor: IXMLCursor; stdcall;
     procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
   private
@@ -42,18 +41,18 @@ implementation
 uses SysUtils, dbclient;
 
 
-constructor TDatabaseObjectPlugin.Create;
+constructor TPlugin.Create;
 begin
   inherited;
 end;
 
-destructor TDatabaseObjectPlugin.Destroy;
+destructor TPlugin.Destroy;
 begin
   FXMLCursor := nil;
   inherited;
 end;
 
-function TDatabaseObjectPlugin.GetQueryPersonnes(Categorie, Description:
+function TPlugin.GetPersonnes(Categorie, Description:
     string): string;
 var
   sql: string;
@@ -68,12 +67,12 @@ begin
   Result := Format('<DatasetDef>' + name + sql + param + '</DatasetDef>', [Categorie]);
 end;
 
-function TDatabaseObjectPlugin.GetXMLCursor: IXMLCursor;
+function TPlugin.GetXMLCursor: IXMLCursor;
 begin
   Result := FXMLCursor;
 end;
 
-procedure TDatabaseObjectPlugin.SetXMLCursor(XMLCursor: IXMLCursor);
+procedure TPlugin.SetXMLCursor(XMLCursor: IXMLCursor);
 begin
   FXMLCursor := XMLCursor;
 end;

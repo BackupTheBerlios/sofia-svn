@@ -18,15 +18,15 @@ along with Sofia; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 -------------------------------------------------------------------------------}
 
-unit loading;
+unit welcomegui;
 
 interface
 
 uses
-  Classes, Forms;
+  Forms, Classes, Controls, welcomeclasses, ExtCtrls, stdxml_tlb;
 
 type
-  TLoadingForm = class(TForm)
+  TContainer = class(TFrame)
   private
     { Déclarations privées }
   public
@@ -35,22 +35,49 @@ type
     { Déclarations publiques }
   end;
 
-var
-  LoadingForm: TLoadingForm;
+  TController = class(TInterfacedObject, IController)
+  private
+    FContainer: TContainer;
+  public
+    constructor Create(AContainer: TWinControl);
+    destructor Destroy; override;
+    property Container: TContainer read FContainer write FContainer;
+  end;
+
+function NewController(AControl: TWinControl): IController;
 
 implementation
 
+uses SysUtils;
+
 {$R *.dfm}
 
-constructor TLoadingForm.Create(AOwner: TComponent);
+function NewController(AControl: TWinControl): IController;
+begin
+  Result := TController.Create(AControl);
+end;
+
+constructor TController.Create(AContainer: TWinControl);
+begin
+  FContainer := AContainer as TContainer;
+end;
+
+destructor TController.Destroy;
 begin
   inherited;
 end;
 
-destructor TLoadingForm.Destroy;
+constructor TContainer.Create(AOwner: TComponent);
 begin
   inherited;
 end;
+
+destructor TContainer.Destroy;
+begin
+  inherited Destroy;
+end;
+
+
 
 end.
 

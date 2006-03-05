@@ -6,7 +6,7 @@ uses
 
 function NewPlugin: IPlugUnknown;
 begin
-  Result := TDatabaseAccessPlugin.Create;
+  Result := TPlugin.Create;
 end;
 
 exports

@@ -18,25 +18,23 @@ along with Sofia; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 -------------------------------------------------------------------------------}
 
-unit contactclasses;
+unit welcomeclasses;
 
 interface
 
-uses Controls, plugintf, StdXML_TLB;
+uses Classes, Controls, DB, StdXML_TLB, plugintf;
 
 type
 
   IController = interface(IInterface)
-  ['{B0122448-88BA-44DF-9B33-8198AF276DF6}']
-    function GetNomContact: string; stdcall;
-    procedure SetNomContact(const Value: string); stdcall;
-    property NomContact: string read GetNomContact write SetNomContact;
+  ['{CD5C131C-E966-4743-85B9-D1F2E96D4DDD}']
   end;
 
-  TPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay)
-    procedure Hide; stdcall;
+  TPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay, IPlugIO)
+    function GetContainer: TWinControl; stdcall;
     function GetParent: TWinControl; stdcall;
     function GetXMLCursor: IXMLCursor; stdcall;
+    procedure Hide; stdcall;
     procedure SetXML(const Value: string); stdcall;
     function GetXML: string; stdcall;
     procedure SetParent(const Value: TWinControl); stdcall;
@@ -45,8 +43,8 @@ type
   private
     FContainer: TWinControl;
     FController: IController;
-    FXMLCursor: IXMLCursor;
     FParent: TWinControl;
+    FXMLCursor: IXMLCursor;
   public
     constructor Create;
     destructor Destroy; override;
@@ -54,7 +52,7 @@ type
 
 implementation
 
-uses Classes, contactgui;
+uses welcomegui;
 
 constructor TPlugin.Create;
 begin
@@ -69,9 +67,9 @@ begin
   inherited;
 end;
 
-procedure TPlugin.Hide;
+function TPlugin.GetContainer: TWinControl;
 begin
-  FContainer.Parent := nil;
+  Result := FContainer;
 end;
 
 function TPlugin.GetParent: TWinControl;
@@ -84,22 +82,19 @@ begin
   Result := FXMLCursor;
 end;
 
+procedure TPlugin.Hide;
+begin
+  FContainer.Parent := nil;
+end;
+
 procedure TPlugin.SetXML(const Value: string);
 begin
-  if Length(Value) > 0 then
-  begin
-    FXMLCursor.LoadXML(Value);
-    FController.NomContact := FXMLCursor.GetValue('/NomContact');
-  end;
+
 end;
 
 function TPlugin.GetXML: string;
 begin
-  if FXMLCursor.Count = 0 then
-    FXMLCursor.AppendChild('NomContact', FController.NomContact)
-  else
-    FXMLCursor.SetValue('/NomContact', FController.NomContact);
-  Result := FXMLCursor.XML;
+
 end;
 
 procedure TPlugin.SetParent(const Value: TWinControl);
@@ -115,7 +110,7 @@ end;
 procedure TPlugin.Show;
 begin
   FContainer.Parent := FParent;
-  //FContainer.Align := alClient;
+  FContainer.Align := alClient;
 end;
 
 
