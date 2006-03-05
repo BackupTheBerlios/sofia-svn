@@ -12,6 +12,8 @@ object DisplayForm: TDisplayForm
   Font.Style = []
   OldCreateOrder = False
   Position = poScreenCenter
+  WindowState = wsMaximized
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object Panel2: TPanel
@@ -283,11 +285,5 @@ object DisplayForm: TDisplayForm
         end
       end
     end
-  end
-  object TimerBug: TTimer
-    Interval = 1
-    OnTimer = TimerBugTimer
-    Left = 56
-    Top = 233
   end
 end

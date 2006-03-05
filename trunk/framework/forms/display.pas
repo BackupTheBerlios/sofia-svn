@@ -47,22 +47,24 @@ type
     Label7: TLabel;
     Edit1: TEdit;
     Button1: TButton;
-    TimerBug: TTimer;
     procedure sgPagesDrawCell(Sender: TObject; ACol, ARow: Integer;
       Rect: TRect; State: TGridDrawState);
     procedure pbPagesPaint(Sender: TObject);
     procedure lblMouseEnter(Sender: TObject);
     procedure lblMouseLeave(Sender: TObject);
-    procedure TimerBugTimer(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     FPagesCount: Integer;
     FPageIndex: Integer;
+    procedure RepaintCurrentTab(ATabIndex: Integer);
+    procedure SetPageIndex(const Value: Integer);
     { Déclarations privées }
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     function AddPage(AName, ACaption: string): Integer;
+    property PageIndex: Integer read FPageIndex write SetPageIndex;
     { Déclarations publiques }
   end;
 
@@ -95,6 +97,7 @@ function TDisplayForm.AddPage(AName, ACaption: string): Integer;
 var
   Plug: IPlugDisplay;
   Panel: TPanel;
+  GridRect: TGridRect;
 begin
   Inc(FPagesCount);
   sgPages.ColCount := FPagesCount;
@@ -115,6 +118,7 @@ begin
     Panel.Free;
 
   Result := FPagesCount - 1;
+  RepaintCurrentTab(Result);
 end;
 
 procedure TDisplayForm.sgPagesDrawCell(Sender: TObject; ACol,
@@ -211,7 +215,7 @@ begin
   EraseBackground;
   if (gdSelected in State) then
   begin
-    FPageIndex := ACol;
+    PageIndex := ACol;
     DrawActiveBackground;
     DrawActiveCaption;
   end
@@ -264,17 +268,6 @@ begin
   ALabel.Font.Style := ALabel.Font.Style - [fsUnderline];
 end;
 
-procedure TDisplayForm.TimerBugTimer(Sender: TObject);
-begin
-  if FPagesCount = 1 then
-  begin
-    sgPagesDrawCell(sgPages, 0, 0, sgPages.CellRect(0, 0), [gdSelected]);
-    sgPages.Invalidate;
-    Application.ProcessMessages;
-    TimerBug.Enabled := False;
-  end;
-end;
-
 procedure TDisplayForm.Button1Click(Sender: TObject);
 var
   Res: IPlugIO;
@@ -282,8 +275,6 @@ var
   Dts: IPlugDataset;
   desc: string;
 begin
-  AddPage('search', 'Résultats');
-
   Qry := AppForm.PluginCnt.DatabaseObject['dbobj'];
   Dts := AppForm.PluginCnt.Dataset['dbuib'];
   Res := AppForm.PluginCnt.IO['search'];
@@ -294,6 +285,38 @@ begin
   Dts.Add(Qry.GetPersonnes('client', Format(desc, ['Clients'])));
   Dts.Add(Qry.GetPersonnes('organisation', Format(desc, ['Organisations'])));
   Res.XML := Dts.XML;
+
+  AddPage('search', 'Résultats');
+end;
+
+procedure TDisplayForm.RepaintCurrentTab(ATabIndex: Integer);
+var
+  GridRect: TGridRect;
+begin
+  GridRect.Left := ATabIndex;
+  GridRect.Top := 0;
+  GridRect.Right := ATabIndex;
+  GridRect.Bottom := 0;
+  sgPages.Selection := GridRect;
+  sgPagesDrawCell(sgPages, ATabIndex, 0, sgPages.CellRect(ATabIndex, 0), [gdSelected]);
+  sgPages.Invalidate;
+  Application.ProcessMessages;
+end;
+
+procedure TDisplayForm.SetPageIndex(const Value: Integer);
+begin
+  if Value <> FPageIndex then
+  begin
+    TPanel(sgPages.Cols[FPageIndex].Objects[0]).Visible := False;
+    TPanel(sgPages.Cols[Value].Objects[0]).Visible := True;
+    FPageIndex := Value;
+  end;
+end;
+
+procedure TDisplayForm.FormShow(Sender: TObject);
+begin
+  AddPage('welcome', 'Accueil');
+  RepaintCurrentTab(0);
 end;
 
 end.
