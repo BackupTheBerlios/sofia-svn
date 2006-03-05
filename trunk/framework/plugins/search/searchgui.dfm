@@ -20,7 +20,8 @@ object Container: TContainer
     Width = 320
     Height = 120
     BorderStyle = bsNone
-    Color = 14743786
+    Options = [dgTitles, dgColumnResize, dgRowLines, dgTabs, dgRowSelect]
+    ParentColor = True
     TabOrder = 0
     TitleFont.Charset = ANSI_CHARSET
     TitleFont.Color = clWindowText
