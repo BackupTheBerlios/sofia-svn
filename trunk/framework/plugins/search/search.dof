@@ -97,7 +97,7 @@ PackageDCPOutputDir=
 SearchPath=$(SOFIA)\trunk\src\framework\intf;$(SOFIA)\trunk\src\framework\classes;$(SOFIA)\lib
 Packages=vcl
 Conditionals=
-DebugSourceDirs=D:\Developpement\berlios\sofia\trunk\framework\xmlcursor\
+DebugSourceDirs=
 UsePackages=1
 [Parameters]
 RunParams=
@@ -108,7 +108,7 @@ DebugCWD=
 [Language]
 ActiveLang=
 ProjectLang=
-RootDir=D:\Developpement\berlios\sofia\branches\database\framework\plugins\connexion\
+RootDir=D:\Developpement\berlios\sofia\trunk\framework\plugins\recherche\
 [Version Info]
 IncludeVerInfo=0
 AutoIncBuild=0

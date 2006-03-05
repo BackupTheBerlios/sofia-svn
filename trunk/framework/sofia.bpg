@@ -10,7 +10,7 @@ DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
 PROJECTS = JvUIBD7R.bpl sofia.exe contact.dll dbuib.dll dbobj.dll \
-  navigateur.dll recherche.dll
+  navigateur.dll search.dll
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
@@ -31,7 +31,7 @@ JvUIBD7R.bpl: uib2\packages\JvUIBD7R.dpk
 dbobj.dll: plugins\database\dbobj.dpr
   $(DCC)
 
-recherche.dll: plugins\recherche\recherche.dpr
+search.dll: plugins\search\search.dpr
   $(DCC)
 
 navigateur.dll: plugins\navigateur\navigateur.dpr

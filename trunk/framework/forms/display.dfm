@@ -287,7 +287,7 @@ object DisplayForm: TDisplayForm
   object TimerBug: TTimer
     Interval = 1
     OnTimer = TimerBugTimer
-    Left = 16
-    Top = 17
+    Left = 56
+    Top = 233
   end
 end
