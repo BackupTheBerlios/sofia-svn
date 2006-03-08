@@ -141,7 +141,7 @@ procedure TPluginManager.LoadPlugins;
 begin
   FPlugins.Add(TPlugin.Create(Self, 'dbuib'));
   FPlugins.Add(TPlugin.Create(Self, 'dbobj'));
-  FPlugins.Add(TPlugin.Create(Self, 'contact'));
+  //FPlugins.Add(TPlugin.Create(Self, 'contact'));
   FPlugins.Add(TPlugin.Create(Self, 'welcome'));
   FPlugins.Add(TPlugin.Create(Self, 'search'));
 end;

@@ -19,7 +19,7 @@ object AppForm: TAppForm
     Top = 16
   end
   object XPManifest1: TXPManifest
-    Left = 168
+    Left = 104
     Top = 40
   end
 end

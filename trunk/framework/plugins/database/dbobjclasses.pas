@@ -26,7 +26,7 @@ uses Classes, DB, StdXML_TLB, plugintf;
 
 type
   TPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDatabaseObject)
-    function GetPersonnes(Categorie, Description: string): string; stdcall;
+    function GetPersonnes(Categories: string): string; stdcall;
     function GetXMLCursor: IXMLCursor; stdcall;
     procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
   private
@@ -40,7 +40,6 @@ implementation
 
 uses SysUtils, dbclient;
 
-
 constructor TPlugin.Create;
 begin
   inherited;
@@ -52,19 +51,33 @@ begin
   inherited;
 end;
 
-function TPlugin.GetPersonnes(Categorie, Description:
-    string): string;
+function TPlugin.GetPersonnes(Categories: string): string;
 var
   sql: string;
   param: string;
-  name: string;
   desc: string;
+  ValueList: TStringList;
+  where: string;
+  i: Integer;
 begin
-  name := Format('<Name>prs_%s</Name>', [Categorie]);
-  desc := Format('<Description>%s</Description>', [Description]);
-  sql := '<Sql>select * from personnes where prs_categorie = :categorie</Sql>';
-  param := '<Params><Param><Name>categorie</Name><Type>string</Type><Value>%s</Value></Param></Params>';
-  Result := Format('<DatasetDef>' + name + sql + param + '</DatasetDef>', [Categorie]);
+  ValueList := TStringList.Create;
+  ValueList.Delimiter := ';';
+  ValueList.QuoteChar := '"';
+  ValueList.DelimitedText := Categories;
+  try
+    for i := 0 to ValueList.Count - 1 do
+    begin
+      where := where + Format('(prs_categorie = :categorie%d)', [i]);
+      if i < ValueList.Count - 1 then
+        where := where + ' or ';
+      param := param + Format('<Param><Name>categorie%d</Name><Type>string</Type><Value>%s</Value></Param>', [i, ValueList[i]]);
+    end;
+  finally
+    ValueList.Free;
+  end;
+
+  sql := Format('select * from personnes where %s', [where]);
+  Result := Format('<DatasetDef><Name>Personnes</Name><Sql>%s</Sql><Params>%s</Params></DatasetDef>', [sql, param]);
 end;
 
 function TPlugin.GetXMLCursor: IXMLCursor;

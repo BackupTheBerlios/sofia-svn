@@ -27,10 +27,9 @@ uses Classes, Controls, DB, StdXML_TLB, plugintf;
 type
 
   IController = interface(IInterface)
-  ['{CD5C131C-E966-4743-85B9-D1F2E96D4DDD}']
-    procedure AddSearchResult(Name, Description, XMLData: string); stdcall;
-    procedure ClearSearchResults; stdcall;
-    procedure DisplaySearchResults; stdcall;
+    ['{CD5C131C-E966-4743-85B9-D1F2E96D4DDD}']
+    procedure SetXMLData(const Value: string); stdcall;
+    property XMLData: string write SetXMLData;
   end;
 
   TPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay, IPlugIO)
@@ -95,25 +94,16 @@ var
   DatasetList: IXMLCursor;
   Name: string;
   XMLData: string;
-  Description: string;
 begin
-  FController.ClearSearchResults;
   FXMLCursor.LoadXML(Value);
-  DatasetList := FXMLCursor.Select('/Dataset/*');
+  DatasetList := FXMLCursor.Select('/Dataset/Dataset');
   try
-    while not DatasetList.EOF do
-     begin
-       Name :=  DatasetList.GetValue('Name');
-       Description := DatasetList.GetValue('Description');
-       XMLData := DatasetList.GetValue('XMLData');
-       FController.AddSearchResult(Name, Description, XMLData);
-       DatasetList.Next;
-     end;
-     FController.DisplaySearchResults;
-   finally
-     DatasetList := nil;
-   end;
-
+    Name := DatasetList.GetValue('Name');
+    XMLData := DatasetList.GetValue('XMLData');
+    FController.XMLData := XMLData;
+  finally
+    DatasetList := nil;
+  end;
 end;
 
 function TPlugin.GetXML: string;
@@ -136,7 +126,6 @@ begin
   FContainer.Parent := FParent;
   FContainer.Align := alClient;
 end;
-
 
 end.
 

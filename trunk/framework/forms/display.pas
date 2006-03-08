@@ -276,17 +276,13 @@ var
   Res: IPlugIO;
   Qry: IPlugDatabaseObject;
   Dts: IPlugDataset;
-  desc: string;
 begin
   Qry := AppForm.PluginCnt.DatabaseObject['dbobj'];
   Dts := AppForm.PluginCnt.Dataset['dbuib'];
   Res := AppForm.PluginCnt.IO['search'];
 
-  desc := 'Résultats dans la catégorie "%s"';
 
-  Dts.Add(Qry.GetPersonnes('contact', Format(desc, ['Contact'])));
-  Dts.Add(Qry.GetPersonnes('client', Format(desc, ['Clients'])));
-  Dts.Add(Qry.GetPersonnes('organisation', Format(desc, ['Organisations'])));
+  Dts.Add(Qry.GetPersonnes('contact;client;organisation'));
   Res.XML := Dts.XML;
 
   AddPage('search', 'Résultats de la recherche');
