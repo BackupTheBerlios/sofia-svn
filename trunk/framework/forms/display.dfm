@@ -1,8 +1,8 @@
 object DisplayForm: TDisplayForm
-  Left = 318
-  Top = 218
-  Width = 678
-  Height = 506
+  Left = 296
+  Top = 148
+  Width = 779
+  Height = 586
   Caption = 'DisplayForm'
   Color = clWhite
   Font.Charset = ANSI_CHARSET
@@ -19,8 +19,8 @@ object DisplayForm: TDisplayForm
   object Panel2: TPanel
     Left = 0
     Top = 0
-    Width = 670
-    Height = 472
+    Width = 771
+    Height = 552
     Align = alClient
     BevelOuter = bvNone
     Color = clWindow
@@ -28,8 +28,8 @@ object DisplayForm: TDisplayForm
     object pnlPlugin: TPanel
       Left = 0
       Top = 41
-      Width = 670
-      Height = 431
+      Width = 771
+      Height = 511
       Align = alClient
       BevelOuter = bvNone
       BorderWidth = 8
@@ -38,19 +38,19 @@ object DisplayForm: TDisplayForm
       object Panel1: TPanel
         Left = 8
         Top = 8
-        Width = 654
+        Width = 755
         Height = 48
         Align = alTop
         BevelOuter = bvNone
         Color = 14149867
         TabOrder = 0
         DesignSize = (
-          654
+          755
           48)
         object pbPages: TPaintBox
           Left = 0
           Top = 22
-          Width = 654
+          Width = 755
           Height = 26
           Align = alTop
           OnPaint = pbPagesPaint
@@ -58,13 +58,13 @@ object DisplayForm: TDisplayForm
         object Panel3: TPanel
           Left = 0
           Top = 0
-          Width = 654
+          Width = 755
           Height = 22
           Align = alTop
           BevelOuter = bvNone
           TabOrder = 0
           object pnlScrollRight: TPanel
-            Left = 637
+            Left = 738
             Top = 0
             Width = 17
             Height = 22
@@ -86,7 +86,7 @@ object DisplayForm: TDisplayForm
           object sgPages: TStringGrid
             Left = 17
             Top = 0
-            Width = 620
+            Width = 721
             Height = 22
             Align = alClient
             BorderStyle = bsNone
@@ -105,8 +105,8 @@ object DisplayForm: TDisplayForm
             OnDrawCell = sgPagesDrawCell
           end
         end
-        object ToolBar1: TToolBar
-          Left = 605
+        object ToolBar: TToolBar
+          Left = 706
           Top = 23
           Width = 48
           Height = 24
@@ -115,7 +115,7 @@ object DisplayForm: TDisplayForm
           AutoSize = True
           ButtonHeight = 24
           ButtonWidth = 24
-          Caption = 'ToolBar1'
+          Caption = 'ToolBar'
           EdgeBorders = []
           Flat = True
           TabOrder = 1
@@ -138,19 +138,19 @@ object DisplayForm: TDisplayForm
     object Panel5: TPanel
       Left = 0
       Top = 0
-      Width = 670
+      Width = 771
       Height = 41
       Align = alTop
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 1
       DesignSize = (
-        670
+        771
         41)
       object Image1: TImage
         Left = 0
         Top = 0
-        Width = 670
+        Width = 771
         Height = 24
         Align = alTop
         Picture.Data = {
@@ -187,9 +187,9 @@ object DisplayForm: TDisplayForm
         Stretch = True
       end
       object Panel7: TPanel
-        Left = 178
+        Left = 279
         Top = 19
-        Width = 483
+        Width = 800
         Height = 22
         Anchors = [akTop, akRight]
         BevelOuter = bvNone
@@ -313,6 +313,36 @@ object DisplayForm: TDisplayForm
           ParentFont = False
           TabOrder = 1
           OnClick = Button1Click
+        end
+      end
+      object Panel4: TPanel
+        Left = 7
+        Top = 21
+        Width = 241
+        Height = 17
+        BevelOuter = bvNone
+        Ctl3D = True
+        ParentColor = True
+        ParentCtl3D = False
+        TabOrder = 1
+        object Label3: TLabel
+          Left = 0
+          Top = 0
+          Width = 95
+          Height = 17
+          Cursor = crHandPoint
+          Align = alLeft
+          Caption = 'Nouveau contact'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = 12622444
+          Font.Height = -11
+          Font.Name = 'Verdana'
+          Font.Style = []
+          ParentFont = False
+          Layout = tlCenter
+          OnClick = Label3Click
+          OnMouseEnter = lblMouseEnter
+          OnMouseLeave = lblMouseLeave
         end
       end
     end

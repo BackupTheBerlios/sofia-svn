@@ -115,7 +115,7 @@ end;
 procedure TPlugin.Show;
 begin
   FContainer.Parent := FParent;
-  //FContainer.Align := alClient;
+  FContainer.Align := alClient;
 end;
 
 

@@ -156,12 +156,6 @@ Item0=$(SOFIA)\lib
 [HistoryLists\hlOutputDirectorry]
 Count=1
 Item0=$(SOFIA)\bin
-[HistoryLists\hlBPLOutput]
-Count=1
-Item0=$(SOFIA)\lib
-[HistoryLists\hlDCPOutput]
-Count=1
-Item0=$(SOFIA)\lib
 [Exception Log]
 EurekaLog Version=504
 Activate=0
@@ -479,3 +473,5 @@ Count mtSend_FailureMsg=1
 mtSend_FailureMsg0="Sorry, sending the message didn't work."
 
 
+ d\õ	‡ùö	
+

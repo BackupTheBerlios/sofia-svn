@@ -23,10 +23,11 @@ unit welcomegui;
 interface
 
 uses
-  Forms, Classes, Controls, welcomeclasses, ExtCtrls, stdxml_tlb;
+  Forms, Classes, Controls, welcomeclasses, ExtCtrls, stdxml_tlb, StdCtrls;
 
 type
   TContainer = class(TFrame)
+    Label3: TLabel;
   private
     { Déclarations privées }
   public

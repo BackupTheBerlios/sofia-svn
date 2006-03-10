@@ -24,11 +24,7 @@ interface
 
 uses
   Forms, Classes, Controls, Grids, DBGrids, DB, DBClient,
-  ExtCtrls, contnrs, dbuibclasses, searchclasses, stdxml_tlb;
-
-const
-  COLCOUNT = 3;
-  ROWCOUNT = 3;
+  ExtCtrls, contnrs, dbuibclasses, searchclasses, stdxml_tlb, contactclasses;
 
 type
   TContainer = class(TFrame)
@@ -54,7 +50,7 @@ type
     property Container: TContainer read FContainer write FContainer;
   end;
 
-function NewController(AControl: TWinControl): IController;
+function NewController(AContainer: TWinControl): IController;
 
 implementation
 
@@ -62,9 +58,9 @@ uses SysUtils;
 
 {$R *.dfm}
 
-function NewController(AControl: TWinControl): IController;
+function NewController(AContainer: TWinControl): IController;
 begin
-  Result := TController.Create(AControl);
+  Result := TController.Create(AContainer);
 end;
 
 constructor TController.Create(AContainer: TWinControl);

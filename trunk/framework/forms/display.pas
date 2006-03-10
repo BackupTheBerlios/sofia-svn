@@ -47,9 +47,11 @@ type
     Label7: TLabel;
     Edit1: TEdit;
     Button1: TButton;
-    ToolBar1: TToolBar;
+    ToolBar: TToolBar;
     ToolButton1: TToolButton;
     ToolButton2: TToolButton;
+    Panel4: TPanel;
+    Label3: TLabel;
     procedure sgPagesDrawCell(Sender: TObject; ACol, ARow: Integer;
       Rect: TRect; State: TGridDrawState);
     procedure pbPagesPaint(Sender: TObject);
@@ -57,6 +59,7 @@ type
     procedure lblMouseLeave(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure Label3Click(Sender: TObject);
   private
     FPagesCount: Integer;
     FPageIndex: Integer;
@@ -89,6 +92,7 @@ constructor TDisplayForm.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FPagesCount := 0;
+  ToolBar.Color := clGris;
 end;
 
 destructor TDisplayForm.Destroy;
@@ -316,6 +320,11 @@ procedure TDisplayForm.FormShow(Sender: TObject);
 begin
   AddPage('welcome', 'Accueil');
   RepaintCurrentTab(0);
+end;
+
+procedure TDisplayForm.Label3Click(Sender: TObject);
+begin
+  AddPage('contact', 'Nouveau contact');
 end;
 
 end.
