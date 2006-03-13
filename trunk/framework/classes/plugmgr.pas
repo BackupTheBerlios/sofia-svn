@@ -43,57 +43,52 @@ type
 
   TPluginManager = class;
 
-  TPlugin = class(TObject)
+  TPlugin = class(TInterfacedObject, IPlugin)
+    function GetAsDisplay: IPlugDisplay; stdcall;
+    function GetAsPlugConnection: IPlugConnection; stdcall;
+    function GetAsPlugDatabaseObject: IPlugDatabaseObject; stdcall;
+    function GetAsPlugDataset: IPlugDataset; stdcall;
+    function GetAsPlugIO: IPlugIO; stdcall;
+    function GetName: string; stdcall;
+    function GetPlugin: IPlugUnknown; stdcall;
   private
     FName: string;
     FPlugin: IPlugUnknown;
     FPluginLibrary: TPluginLibrary;
-    FPluginManager: TPluginManager;
-    function GetPlugin: IPlugUnknown;
   public
-    constructor Create(APluginManager: TPluginManager; AName: string);
+    constructor Create(AName: string);
     destructor Destroy; override;
-    property Name: string read FName;
-    property Plugin: IPlugUnknown read GetPlugin;
   end;
 
-  TPluginConnector = class(TInterfacedObject, IPluginConnector)
-    function GetConnection(const PluginName: string): IPlugConnection; stdcall;
-    function GetDatabaseObject(const PluginName: string): IPlugDatabaseObject;
-        stdcall;
-    function GetDataset(const PluginName: string): IPlugDataset; stdcall;
-    function GetDisplay(const PluginName: string): IPlugDisplay; stdcall;
-    function GetIO(const PluginName: string): IPlugIO; stdcall;
-    property Connection[const PluginName: string]: IPlugConnection read
-        GetConnection;
-    property DatabaseObject[const PluginName: string]: IPlugDatabaseObject read
-        GetDatabaseObject;
-    property Dataset[const PluginName: string]: IPlugDataset read GetDataset;
-    property Display[const PluginName: string]: IPlugDisplay read GetDisplay;
-    property IO[const PluginName: string]: IPlugIO read GetIO;
+  TPluginManager = class(TInterfacedObject, IPluginManager)
+    function GetPlugins(const PluginName: string): IPlugin; stdcall;
+    procedure LoadPlugins;
+    procedure UnloadPlugins;
   private
-    FPluginManager: TPluginManager;
-  public
-    constructor Create(PluginManager: TPluginManager);
-    destructor Destroy; override;
-  end;
-  TPluginManager = class(TObject)
-    function GetPlugins(const PluginName: string): TPlugin; stdcall;
-    property Plugins[const PluginName: string]: TPlugin read GetPlugins; default;
-  private
-    FPlugins: TObjectList;
+    FPlugins: TInterfaceList;
   public
     constructor Create;
     destructor Destroy; override;
-    procedure LoadPlugins;
-    procedure UnloadPlugins;
   end;
 
+function NewPlugin(APluginManager: IPluginManager; AName: string): IPlugin;
 
+function NewPluginManager: IPluginManager;
 
 implementation
 
 uses Windows, xmlcursor, Dialogs;
+
+function NewPlugin(APluginManager: IPluginManager; AName: string): IPlugin;
+begin
+  Result := TPlugin.Create(AName);
+  Result.Plugin.PluginManager := APluginManager;
+end;
+
+function NewPluginManager: IPluginManager;
+begin
+  Result := TPluginManager.Create;
+end;
 
 resourcestring
   SUnexistingFile = 'Le fichier ''%s'' n''existe pas';
@@ -109,7 +104,7 @@ const
 
 constructor TPluginManager.Create;
 begin
-  FPlugins := TObjectList.Create;
+  FPlugins := TInterfaceList.Create;
 end;
 
 destructor TPluginManager.Destroy;
@@ -118,7 +113,7 @@ begin
   inherited;
 end;
 
-function TPluginManager.GetPlugins(const PluginName: string): TPlugin;
+function TPluginManager.GetPlugins(const PluginName: string): IPlugin;
 var
   Found: Boolean;
   i: Integer;
@@ -127,23 +122,25 @@ begin
   i := 0;
   while not Found and (i < FPlugins.Count) do
   begin
-    Found := SameText(TPlugin(FPlugins[i]).Name, PluginName);
+    Found := SameText((FPlugins[i] as IPlugin).Name, PluginName);
     if not Found then
       Inc(i)
   end;
   if Found then
-    Result := FPlugins[i] as TPlugin
+    Result := FPlugins[i] as IPlugin
   else
     Result := nil;
 end;
 
 procedure TPluginManager.LoadPlugins;
+var
+  i: Integer;
 begin
-  FPlugins.Add(TPlugin.Create(Self, 'dbuib'));
-  FPlugins.Add(TPlugin.Create(Self, 'dbobj'));
-  FPlugins.Add(TPlugin.Create(Self, 'contact'));
-  FPlugins.Add(TPlugin.Create(Self, 'welcome'));
-  FPlugins.Add(TPlugin.Create(Self, 'search'));
+  FPlugins.Add(NewPlugin(Self, 'dbuib'));
+  FPlugins.Add(NewPlugin(Self, 'dbobj'));
+  FPlugins.Add(NewPlugin(Self, 'contact'));
+  FPlugins.Add(NewPlugin(Self, 'welcome'));
+  FPlugins.Add(NewPlugin(Self, 'search'));
 end;
 
 procedure TPluginManager.UnloadPlugins;
@@ -201,10 +198,9 @@ begin
   Result := NewPlugin;
 end;
 
-constructor TPlugin.Create(APluginManager: TPluginManager; AName: string);
+constructor TPlugin.Create(AName: string);
 begin
   FPluginLibrary := TPluginLibrary.Create(AName + '.dll');
-  FPluginManager := APluginManager;
   FName := AName;
 end;
 
@@ -219,6 +215,56 @@ begin
   inherited;
 end;
 
+function TPlugin.GetAsDisplay: IPlugDisplay;
+begin
+  try
+    Result := FPlugin as IPlugDisplay;
+  except
+    ShowMessage(Format('Le plugin "%s" ne supporte pas l''interface %s', [FName, 'PlugDisplay']));
+  end;
+end;
+
+function TPlugin.GetAsPlugConnection: IPlugConnection;
+begin
+  try
+    Result := FPlugin as IPlugConnection;
+  except
+    ShowMessage(Format('Le plugin "%s" ne supporte pas l''interface %s', [FName, 'PlugConnection']));
+  end;
+end;
+
+function TPlugin.GetAsPlugDatabaseObject: IPlugDatabaseObject;
+begin
+  try
+    Result := FPlugin as IPlugDatabaseObject;
+  except
+    ShowMessage(Format('Le plugin "%s" ne supporte pas l''interface %s', [FName, 'PlugDatabaseObject']));
+  end;
+end;
+
+function TPlugin.GetAsPlugIO: IPlugIO;
+begin
+  try
+    Result := FPlugin as IPlugIO;
+  except
+    ShowMessage(Format('Le plugin "%s" ne supporte pas l''interface %s', [FName, 'PlugIO']));
+  end;
+end;
+
+function TPlugin.GetAsPlugDataset: IPlugDataset;
+begin
+  try
+    Result := FPlugin as IPlugDataset;
+  except
+    ShowMessage(Format('Le plugin "%s" ne supporte pas l''interface %s', [FName, 'PlugDataset']));
+  end;
+end;
+
+function TPlugin.GetName: string;
+begin
+  Result := FName;
+end;
+
 function TPlugin.GetPlugin: IPlugUnknown;
 begin
   if not Assigned(FPlugin) then
@@ -227,47 +273,6 @@ begin
     FPlugin.XMLCursor := TXMLCursor.Create;
   end;
   Result := FPlugin;
-end;
-
-constructor TPluginConnector.Create(PluginManager: TPluginManager);
-begin
-  FPluginManager := PluginManager;
-end;
-
-destructor TPluginConnector.Destroy;
-begin
-  inherited;
-end;
-
-function TPluginConnector.GetConnection(const PluginName: string):
-    IPlugConnection;
-begin
-  Result := FPluginManager[PluginName].Plugin as IPlugConnection;
-end;
-
-function TPluginConnector.GetDatabaseObject(const PluginName: string):
-    IPlugDatabaseObject;
-begin
-  Result := FPluginManager[PluginName].Plugin as IPlugDatabaseObject;
-end;
-
-function TPluginConnector.GetDataset(const PluginName: string): IPlugDataset;
-begin
-  Result := FPluginManager[PluginName].Plugin as IPlugDataset;
-end;
-
-function TPluginConnector.GetDisplay(const PluginName: string): IPlugDisplay;
-begin
-   Result := FPluginManager[PluginName].Plugin as IPlugDisplay;
-end;
-
-function TPluginConnector.GetIO(const PluginName: string): IPlugIO;
-begin
-  try
-    Result := FPluginManager[PluginName].Plugin as IPlugIO;
-  except
-    ShowMessage(Format('Le plugin "%s" ne supporte pas l''interface PlugIO', [PluginName]));
-  end;
 end;
 
 end.

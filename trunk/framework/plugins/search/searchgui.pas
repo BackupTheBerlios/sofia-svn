@@ -24,7 +24,7 @@ interface
 
 uses
   Forms, Classes, Controls, Grids, DBGrids, DB, DBClient,
-  ExtCtrls, contnrs, dbuibclasses, searchclasses, stdxml_tlb, contactclasses;
+  ExtCtrls, contnrs, searchclasses, stdxml_tlb;
 
 type
   TContainer = class(TFrame)

@@ -71,17 +71,18 @@ type
     function GetPassWord: string; stdcall;
     function GetUserName: string; stdcall;
     function GetXML: string; stdcall;
-    function GetXMLCursor: IXMLCursor; stdcall;
     procedure RemoveDataset(AName: string); stdcall;
     procedure SetConnected(const Value: boolean); stdcall;
     procedure SetConnectionName(const Value: string); stdcall;
     procedure SetPassWord(const Value: string); stdcall;
+    procedure SetPluginManager(const Value: IPluginManager); stdcall;
     procedure SetUserName(const Value: string); stdcall;
-    procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
+    procedure SetXMLCursor(const Value: IXMLCursor); stdcall;
     property XML: string read GetXML;
   private
     FConnection: TJvUIBDataBase;
     FDatasetList: TDatasetList;
+    FPluginManager: IPluginManager;
     FTransaction: TJvUIBTransaction;
     FXMLCursor: IXMLCursor;
   public
@@ -161,11 +162,6 @@ begin
   Result := FXMLCursor.XML;
 end;
 
-function TPlugin.GetXMLCursor: IXMLCursor;
-begin
-  Result := FXMLCursor;
-end;
-
 procedure TPlugin.RemoveDataset(AName: string);
 var
   DatasetItem: TDatasetItem;
@@ -190,14 +186,19 @@ begin
   FConnection.PassWord := Value;
 end;
 
+procedure TPlugin.SetPluginManager(const Value: IPluginManager);
+begin
+  FPluginManager := Value;
+end;
+
 procedure TPlugin.SetUserName(const Value: string);
 begin
   FConnection.UserName := Value;
 end;
 
-procedure TPlugin.SetXMLCursor(XMLCursor: IXMLCursor);
+procedure TPlugin.SetXMLCursor(const Value: IXMLCursor);
 begin
-  FXMLCursor := XMLCursor;
+  FXMLCursor := Value;
 end;
 
 constructor TDatasetItem.Create(Owner: TDatasetList; DatasetDef: IXMLCursor);

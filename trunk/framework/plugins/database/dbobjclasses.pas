@@ -28,8 +28,10 @@ type
   TPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDatabaseObject)
     function GetPersonnes(Categories: string): string; stdcall;
     function GetXMLCursor: IXMLCursor; stdcall;
-    procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
+    procedure SetPluginManager(const Value: IPluginManager); stdcall;
+    procedure SetXMLCursor(const Value: IXMLCursor); stdcall;
   private
+    FPluginManager: IPluginManager;
     FXMLCursor: IXMLCursor;
   public
     constructor Create;
@@ -85,9 +87,14 @@ begin
   Result := FXMLCursor;
 end;
 
-procedure TPlugin.SetXMLCursor(XMLCursor: IXMLCursor);
+procedure TPlugin.SetPluginManager(const Value: IPluginManager);
 begin
-  FXMLCursor := XMLCursor;
+  FPluginManager := Value;
+end;
+
+procedure TPlugin.SetXMLCursor(const Value: IXMLCursor);
+begin
+  FXMLCursor := Value;
 end;
 
 end.

@@ -24,7 +24,7 @@ interface
 
 uses
   Forms, Controls, ExtCtrls, Classes, StdCtrls,
-  plugmgr, XPMan;
+  plugmgr, plugintf, XPMan;
 
 type
   TAppForm = class(TForm)
@@ -32,14 +32,13 @@ type
     XPManifest1: TXPManifest;
     procedure tmrLaunchTimer(Sender: TObject);
   private
-    FPluginCnt: TPluginConnector;
-    FPluginMgr: TPluginManager;
+    FPluginManager: IPluginManager;
     //FLoader: TLoaderForm;
     { Déclarations privées }
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    property PluginCnt: TPluginConnector read FPluginCnt;
+    property PluginManager: IPluginManager read FPluginManager;
     { Déclarations publiques }
   end;
 
@@ -48,7 +47,7 @@ var
 
 implementation
 
-uses display, plugintf, xmlcursor;
+uses display, xmlcursor;
 
 {$R *.dfm}
 
@@ -56,14 +55,12 @@ constructor TAppForm.Create(AOwner: TComponent);
 begin
   inherited;
   Application.ShowMainForm := False;
-  FPluginMgr := TPluginManager.Create;
-  FPluginCnt := TPluginConnector.Create(FPluginMgr);
+  FPluginManager := NewPluginManager;
 end;
 
 destructor TAppForm.Destroy;
 begin
-  FPluginMgr.Free;
-  FPluginCnt.Free;
+  FPluginManager := nil;
   inherited;
 end;
 
@@ -71,13 +68,12 @@ procedure TAppForm.tmrLaunchTimer(Sender: TObject);
 begin
   tmrLaunch.Enabled := False;
   try
-    FPluginMgr.LoadPlugins;
+    FPluginManager.LoadPlugins;
   finally
   end;
 
   //initialisation des parametres de cnx
-  if Assigned(PluginCnt.Connection['dbuib']) then
-  with PluginCnt.Connection['dbuib'] do
+  with PluginManager['dbuib'].AsPlugConnection do
   begin
     ConnectionName := 'sofia.fdb';
     UserName := 'sysdba';

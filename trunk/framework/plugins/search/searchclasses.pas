@@ -40,12 +40,14 @@ type
     procedure SetXML(const Value: string); stdcall;
     function GetXML: string; stdcall;
     procedure SetParent(const Value: TWinControl); stdcall;
-    procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
+    procedure SetPluginManager(const Value: IPluginManager); stdcall;
+    procedure SetXMLCursor(const Value: IXMLCursor); stdcall;
     procedure Show; stdcall;
   private
     FContainer: TWinControl;
     FController: IController;
     FParent: TWinControl;
+    FPluginManager: IPluginManager;
     FXMLCursor: IXMLCursor;
   public
     constructor Create;
@@ -116,9 +118,14 @@ begin
   FParent := Value;
 end;
 
-procedure TPlugin.SetXMLCursor(XMLCursor: IXMLCursor);
+procedure TPlugin.SetPluginManager(const Value: IPluginManager);
 begin
-  FXMLCursor := XMLCursor;
+  FPluginManager := Value;
+end;
+
+procedure TPlugin.SetXMLCursor(const Value: IXMLCursor);
+begin
+  FXMLCursor := Value;
 end;
 
 procedure TPlugin.Show;

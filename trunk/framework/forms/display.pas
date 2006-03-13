@@ -111,7 +111,7 @@ begin
   sgPages.Cells[0, FPagesCount - 1] := ACaption;
 
   Panel := TPanel.Create(Self);
-  Plug := AppForm.PluginCnt.Display[AName];
+  Plug := AppForm.PluginManager.Plugins[AName].AsDisplay ;
   if Assigned(Plug) then
   begin
     sgPages.Cols[FPagesCount - 1].Objects[0] := Panel;
@@ -281,9 +281,9 @@ var
   Qry: IPlugDatabaseObject;
   Dts: IPlugDataset;
 begin
-  Qry := AppForm.PluginCnt.DatabaseObject['dbobj'];
-  Dts := AppForm.PluginCnt.Dataset['dbuib'];
-  Res := AppForm.PluginCnt.IO['search'];
+  Qry := AppForm.PluginManager['dbobj'].AsPlugDatabaseObject;
+  Dts := AppForm.PluginManager['dbuib'].AsPlugDataset;
+  Res := AppForm.PluginManager['search'].AsPlugIO;
 
 
   Dts.Add(Qry.GetPersonnes('contact;client;organisation'));

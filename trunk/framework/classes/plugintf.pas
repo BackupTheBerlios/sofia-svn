@@ -26,6 +26,9 @@ uses Controls, stdxml_tlb, dbclient;
 
 type
 
+
+{------------------------------------------------------------------------------}
+
   IPlugConnection = interface(IInterface)
   ['{FA94CE0A-DF1A-4628-A8A8-C599CC785286}']
     function GetConnected: boolean; stdcall;
@@ -47,7 +50,6 @@ type
     function Add(DatasetDef: string): string; stdcall;
     function GetXML: string; stdcall;
     procedure RemoveDataset(AName: string); stdcall;
-    procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
     property XML: string read GetXML;
   end;
 
@@ -95,16 +97,43 @@ type
     property IO[const PluginName: string]: IPlugIO read GetIO;
   end;
 
+  IPluginManager = interface;
+
   IPlugUnknown = interface(IInterface)
   ['{0266191D-1BAA-4063-B95D-A9B4EED9F0DA}']
-    function GetXMLCursor: IXMLCursor; stdcall;
-    procedure SetXMLCursor(XMLCursor: IXMLCursor); stdcall;
-    property XMLCursor: IXMLCursor read GetXMLCursor write SetXMLCursor;
+    procedure SetPluginManager(const Value: IPluginManager); stdcall;
+    procedure SetXMLCursor(const Value: IXMLCursor); stdcall;
+    property PluginManager: IPluginManager write SetPluginManager;
+    property XMLCursor: IXMLCursor write SetXMLCursor;
   end;
 
-
-
 {------------------------------------------------------------------------------}
+
+  IPlugin = interface(IInterface)
+  ['{0B7E1697-F7C9-4D64-BD73-D7A97C4CCBAC}']
+    function GetAsDisplay: IPlugDisplay; stdcall;
+    function GetAsPlugConnection: IPlugConnection; stdcall;
+    function GetAsPlugDatabaseObject: IPlugDatabaseObject; stdcall;
+    function GetAsPlugDataset: IPlugDataset; stdcall;
+    function GetAsPlugIO: IPlugIO; stdcall;
+    function GetName: string; stdcall;
+    function GetPlugin: IPlugUnknown; stdcall;
+    property AsDisplay: IPlugDisplay read GetAsDisplay;
+    property AsPlugConnection: IPlugConnection read GetAsPlugConnection;
+    property AsPlugDatabaseObject: IPlugDatabaseObject read GetAsPlugDatabaseObject;
+    property AsPlugDataset: IPlugDataset read GetAsPlugDataset;
+    property AsPlugIO: IPlugIO read GetAsPlugIO;
+    property Name: string read GetName;
+    property Plugin: IPlugUnknown read GetPlugin;
+  end;
+
+  IPluginManager = interface(IInterface)
+  ['{68B32F47-FF94-44E2-8E56-AC87975D894C}']
+    function GetPlugins(const PluginName: string): IPlugin; stdcall;
+    procedure LoadPlugins;
+    procedure UnloadPlugins;
+    property Plugins[const PluginName: string]: IPlugin read GetPlugins; default;
+  end;
 
 
 implementation

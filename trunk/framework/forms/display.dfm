@@ -1,6 +1,6 @@
 object DisplayForm: TDisplayForm
-  Left = 296
-  Top = 148
+  Left = 274
+  Top = 235
   Width = 779
   Height = 586
   Caption = 'DisplayForm'
