@@ -18,15 +18,16 @@ along with Sofia; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 -------------------------------------------------------------------------------}
 
-unit display;
+unit displaygui;
 
 interface
 
-uses Forms, Classes, Controls, ExtCtrls, ComCtrls, Grids, Types, Graphics,
-  StdCtrls, Buttons, ToolWin;
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, ToolWin, Grids;
 
 type
-  TDisplayForm = class(TForm)
+  TContainer = class(TFrame)
     Panel2: TPanel;
     pnlPlugin: TPanel;
     Panel1: TPanel;
@@ -35,6 +36,9 @@ type
     pnlScrollRight: TPanel;
     pnlScrollLeft: TPanel;
     sgPages: TStringGrid;
+    ToolBar: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
     Panel5: TPanel;
     Image1: TImage;
     Panel7: TPanel;
@@ -47,89 +51,155 @@ type
     Label7: TLabel;
     Edit1: TEdit;
     Button1: TButton;
-    ToolBar: TToolBar;
-    ToolButton1: TToolButton;
-    ToolButton2: TToolButton;
     Panel4: TPanel;
     Label3: TLabel;
-    procedure sgPagesDrawCell(Sender: TObject; ACol, ARow: Integer;
-      Rect: TRect; State: TGridDrawState);
-    procedure pbPagesPaint(Sender: TObject);
+    function AddPage(AName, ACaption: string): TWinControl;
+    procedure Button1Click(Sender: TObject);
+    procedure Label3Click(Sender: TObject);
     procedure lblMouseEnter(Sender: TObject);
     procedure lblMouseLeave(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
-    procedure FormShow(Sender: TObject);
-    procedure Label3Click(Sender: TObject);
+    procedure pbPagesPaint(Sender: TObject);
+    procedure sgPagesDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect;
+      State: TGridDrawState);
   private
-    FPagesCount: Integer;
     FPageIndex: Integer;
+    FPagesCount: Integer;
     procedure RepaintCurrentTab(ATabIndex: Integer);
     procedure SetPageIndex(const Value: Integer);
     { Déclarations privées }
   public
     constructor Create(AOwner: TComponent); override;
-    destructor Destroy; override;
-    function AddPage(AName, ACaption: string): Integer;
     property PageIndex: Integer read FPageIndex write SetPageIndex;
     { Déclarations publiques }
   end;
 
-var
-  DisplayForm: TDisplayForm;
-
-const
-  clBleu = $00C09A6C;
-  clVert = $000FA089;
-  clGris = $00D7E8EB;
-
 implementation
-
-uses DateUtils, Dialogs, app, plugmgr, plugintf, SysUtils, Windows, Messages;
 
 {$R *.dfm}
 
-constructor TDisplayForm.Create(AOwner: TComponent);
+const
+  clGris = clBtnFace;
+  clVert = clActiveBorder;
+
+constructor TContainer.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FPagesCount := 0;
   ToolBar.Color := clGris;
 end;
 
-destructor TDisplayForm.Destroy;
-begin
-  inherited Destroy;
-end;
-
-function TDisplayForm.AddPage(AName, ACaption: string): Integer;
+function TContainer.AddPage(AName, ACaption: string): TWinControl;
 var
-  Plug: IPlugDisplay;
   Panel: TPanel;
-  GridRect: TGridRect;
 begin
   Inc(FPagesCount);
   sgPages.ColCount := FPagesCount;
   sgPages.Cells[0, FPagesCount - 1] := ACaption;
 
   Panel := TPanel.Create(Self);
-  Plug := AppForm.PluginManager.Plugins[AName].AsDisplay ;
-  if Assigned(Plug) then
-  begin
-    sgPages.Cols[FPagesCount - 1].Objects[0] := Panel;
-    Panel.BevelOuter := bvNone;
-    Panel.Align := alClient;
-    Panel.Parent := pnlPlugin;
-    Plug.Parent := Panel;
-    Plug.Show;
-  end
-  else
-    Panel.Free;
+  sgPages.Cols[FPagesCount - 1].Objects[0] := Panel;
+  Panel.BevelOuter := bvNone;
+  Panel.Align := alClient;
+  Panel.Parent := pnlPlugin;
 
-  Result := FPagesCount - 1;
-  RepaintCurrentTab(Result);
+  RepaintCurrentTab(FPagesCount - 1);
+
+  Result := Panel;
 end;
 
-procedure TDisplayForm.sgPagesDrawCell(Sender: TObject; ACol,
-  ARow: Integer; Rect: TRect; State: TGridDrawState);
+procedure TContainer.Button1Click(Sender: TObject);
+{
+var
+  Res: IPlugIO;
+  Qry: IPlugDatabaseObject;
+  Dts: IPlugDataset;
+  }
+begin
+{
+  Qry := AppForm.PluginManager['dbobj'].AsPlugDatabaseObject;
+  Dts := AppForm.PluginManager['dbuib'].AsPlugDataset;
+  Res := AppForm.PluginManager['search'].AsPlugIO;
+
+  Dts.Add(Qry.GetPersonnes('contact;client;organisation'));
+  Res.XML := Dts.XML;
+
+  AddPage('search', 'Résultats de la recherche');
+}
+end;
+
+procedure TContainer.Label3Click(Sender: TObject);
+begin
+  AddPage('contact', 'Nouveau contact');
+end;
+
+procedure TContainer.lblMouseEnter(Sender: TObject);
+var
+  ALabel: TLabel;
+begin
+  if not (Sender is TLabel) then
+    Exit;
+  ALabel := Sender as TLabel;
+  ALabel.Font.Style := ALabel.Font.Style + [fsUnderline]
+end;
+
+procedure TContainer.lblMouseLeave(Sender: TObject);
+var
+  ALabel: TLabel;
+begin
+  if not (Sender is TLabel) then
+    Exit;
+  ALabel := Sender as TLabel;
+  ALabel.Font.Style := ALabel.Font.Style - [fsUnderline];
+end;
+
+procedure TContainer.pbPagesPaint(Sender: TObject);
+var
+  APaintBox: TPaintBox;
+begin
+  if not (Sender is TPaintBox) then
+    Exit;
+  APaintBox := Sender as TPaintBox;
+
+  with APaintBox.Canvas do
+  begin
+    Brush.Color := clGris;
+    FillRect(APaintBox.ClientRect);
+    Pen.Color := clVert;
+    PenPos := Point(sgPages.CellRect(FPageIndex, 0).Left + sgPages.Left, 0);
+    LineTo(0, 0);
+    LineTo(0, APaintBox.Height - 1);
+    LineTo(APaintBox.Width - 1, APaintBox.Height - 1);
+    LineTo(APaintBox.Width - 1, 0);
+    LineTo(sgPages.CellRect(FPageIndex, 0).Right + sgPages.Left - 2, 0);
+  end;
+end;
+
+procedure TContainer.RepaintCurrentTab(ATabIndex: Integer);
+var
+  GridRect: TGridRect;
+begin
+  GridRect.Left := ATabIndex;
+  GridRect.Top := 0;
+  GridRect.Right := ATabIndex;
+  GridRect.Bottom := 0;
+  sgPages.Selection := GridRect;
+  sgPagesDrawCell(sgPages, ATabIndex, 0, sgPages.CellRect(ATabIndex, 0), [gdSelected]);
+  sgPages.Invalidate;
+  Application.ProcessMessages;
+end;
+
+procedure TContainer.SetPageIndex(const Value: Integer);
+begin
+  if Value <> FPageIndex then
+  begin
+    TPanel(sgPages.Cols[FPageIndex].Objects[0]).Visible := False;
+    TPanel(sgPages.Cols[Value].Objects[0]).Visible := True;
+    FPageIndex := Value;
+  end;
+end;
+
+procedure TContainer.sgPagesDrawCell(Sender: TObject; ACol, ARow: Integer; Rect:
+  TRect; State: TGridDrawState);
 var
   ACanvas: TCanvas;
   AGrid: TStringGrid;
@@ -231,100 +301,6 @@ begin
     DrawInactiveBackground;
     DrawInactiveCaption
   end;
-end;
-
-procedure TDisplayForm.pbPagesPaint(Sender: TObject);
-var
-  APaintBox: TPaintBox;
-begin
-  if not (Sender is TPaintBox) then
-    Exit;
-  APaintBox := Sender as TPaintBox;
-
-  with APaintBox.Canvas do
-  begin
-    Brush.Color := clGris;
-    FillRect(APaintBox.ClientRect);
-    Pen.Color := clVert;
-    PenPos := Point(sgPages.CellRect(FPageIndex, 0).Left + sgPages.Left, 0);
-    LineTo(0, 0);
-    LineTo(0, APaintBox.Height - 1);
-    LineTo(APaintBox.Width - 1, APaintBox.Height - 1);
-    LineTo(APaintBox.Width - 1, 0);
-    LineTo(sgPages.CellRect(FPageIndex, 0).Right + sgPages.Left - 2, 0);
-  end;
-end;
-
-procedure TDisplayForm.lblMouseEnter(Sender: TObject);
-var
-  ALabel: TLabel;
-begin
-  if not (Sender is TLabel) then
-    Exit;
-  ALabel := Sender as TLabel;
-  ALabel.Font.Style := ALabel.Font.Style + [fsUnderline]
-end;
-
-procedure TDisplayForm.lblMouseLeave(Sender: TObject);
-var
-  ALabel: TLabel;
-begin
-  if not (Sender is TLabel) then
-    Exit;
-  ALabel := Sender as TLabel;
-  ALabel.Font.Style := ALabel.Font.Style - [fsUnderline];
-end;
-
-procedure TDisplayForm.Button1Click(Sender: TObject);
-var
-  Res: IPlugIO;
-  Qry: IPlugDatabaseObject;
-  Dts: IPlugDataset;
-begin
-  Qry := AppForm.PluginManager['dbobj'].AsPlugDatabaseObject;
-  Dts := AppForm.PluginManager['dbuib'].AsPlugDataset;
-  Res := AppForm.PluginManager['search'].AsPlugIO;
-
-
-  Dts.Add(Qry.GetPersonnes('contact;client;organisation'));
-  Res.XML := Dts.XML;
-
-  AddPage('search', 'Résultats de la recherche');
-end;
-
-procedure TDisplayForm.RepaintCurrentTab(ATabIndex: Integer);
-var
-  GridRect: TGridRect;
-begin
-  GridRect.Left := ATabIndex;
-  GridRect.Top := 0;
-  GridRect.Right := ATabIndex;
-  GridRect.Bottom := 0;
-  sgPages.Selection := GridRect;
-  sgPagesDrawCell(sgPages, ATabIndex, 0, sgPages.CellRect(ATabIndex, 0), [gdSelected]);
-  sgPages.Invalidate;
-  Application.ProcessMessages;
-end;
-
-procedure TDisplayForm.SetPageIndex(const Value: Integer);
-begin
-  if Value <> FPageIndex then
-  begin
-    TPanel(sgPages.Cols[FPageIndex].Objects[0]).Visible := False;
-    TPanel(sgPages.Cols[Value].Objects[0]).Visible := True;
-    FPageIndex := Value;
-  end;
-end;
-
-procedure TDisplayForm.FormShow(Sender: TObject);
-begin
-  AddPage('welcome', 'Accueil');
-  RepaintCurrentTab(0);
-end;
-
-procedure TDisplayForm.Label3Click(Sender: TObject);
-begin
-  AddPage('contact', 'Nouveau contact');
 end;
 
 end.

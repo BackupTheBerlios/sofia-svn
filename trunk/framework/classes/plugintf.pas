@@ -62,40 +62,29 @@ type
 
 {------------------------------------------------------------------------------}
 
-  IPlugIO = interface(IInterface)
+  IPlugSerialize = interface(IInterface)
   ['{26DBC708-70B8-4105-91E1-72911457F912}']
     function GetXML: string; stdcall;
     procedure SetXML(const Value: string); stdcall;
     property XML: string read GetXML write SetXML;
   end;
-  
+
   IPlugDisplay = interface(IInterface)
   ['{570C9B35-15F3-435E-9166-963ACE05F635}']
     procedure Hide; stdcall;
-    function GetParent: TWinControl; stdcall;
     procedure SetParent(const Value: TWinControl); stdcall;
     procedure Show; stdcall;
-    property Parent: TWinControl read GetParent write SetParent;
+    property Parent: TWinControl write SetParent;
   end;
 
 {------------------------------------------------------------------------------}
 
-  IPluginConnector = interface(IInterface)
-  ['{8B5E227A-50DE-4DDE-9B47-FC09A2CF6946}']
-    function GetConnection(const PluginName: string): IPlugConnection; stdcall;
-    function GetDatabaseObject(const PluginName: string): IPlugDatabaseObject;
-        stdcall;
-    function GetDataset(const PluginName: string): IPlugDataset; stdcall;
-    function GetDisplay(const PluginName: string): IPlugDisplay; stdcall;
-    function GetIO(const PluginName: string): IPlugIO; stdcall;
-    property Connection[const PluginName: string]: IPlugConnection read
-        GetConnection;
-    property DatabaseObject[const PluginName: string]: IPlugDatabaseObject read
-        GetDatabaseObject;
-    property Dataset[const PluginName: string]: IPlugDataset read GetDataset;
-    property Display[const PluginName: string]: IPlugDisplay read GetDisplay;
-    property IO[const PluginName: string]: IPlugIO read GetIO;
+  IPlugPages = interface(IInterface)
+  ['{4314ACEC-F4C4-49A4-A2AA-30DE8E408731}']
+    procedure AddPage(AName, ACaption: string); stdcall;
   end;
+
+{------------------------------------------------------------------------------}
 
   IPluginManager = interface;
 
@@ -115,14 +104,14 @@ type
     function GetAsPlugConnection: IPlugConnection; stdcall;
     function GetAsPlugDatabaseObject: IPlugDatabaseObject; stdcall;
     function GetAsPlugDataset: IPlugDataset; stdcall;
-    function GetAsPlugIO: IPlugIO; stdcall;
+    function GetAsPlugSerialize: IPlugSerialize; stdcall;
     function GetName: string; stdcall;
     function GetPlugin: IPlugUnknown; stdcall;
     property AsDisplay: IPlugDisplay read GetAsDisplay;
     property AsPlugConnection: IPlugConnection read GetAsPlugConnection;
     property AsPlugDatabaseObject: IPlugDatabaseObject read GetAsPlugDatabaseObject;
     property AsPlugDataset: IPlugDataset read GetAsPlugDataset;
-    property AsPlugIO: IPlugIO read GetAsPlugIO;
+    property AsPlugSerialize: IPlugSerialize read GetAsPlugSerialize;
     property Name: string read GetName;
     property Plugin: IPlugUnknown read GetPlugin;
   end;

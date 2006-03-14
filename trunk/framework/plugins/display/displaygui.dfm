@@ -1,26 +1,14 @@
-object DisplayForm: TDisplayForm
-  Left = 274
-  Top = 235
-  Width = 779
+object Container: TContainer
+  Left = 0
+  Top = 0
+  Width = 766
   Height = 586
-  Caption = 'DisplayForm'
-  Color = clWhite
-  Font.Charset = ANSI_CHARSET
-  Font.Color = clWindowText
-  Font.Height = -11
-  Font.Name = 'Verdana'
-  Font.Style = []
-  OldCreateOrder = False
-  Position = poScreenCenter
-  WindowState = wsMaximized
-  OnShow = FormShow
-  PixelsPerInch = 96
-  TextHeight = 13
+  TabOrder = 0
   object Panel2: TPanel
     Left = 0
     Top = 0
-    Width = 771
-    Height = 552
+    Width = 766
+    Height = 586
     Align = alClient
     BevelOuter = bvNone
     Color = clWindow
@@ -28,8 +16,8 @@ object DisplayForm: TDisplayForm
     object pnlPlugin: TPanel
       Left = 0
       Top = 41
-      Width = 771
-      Height = 511
+      Width = 766
+      Height = 545
       Align = alClient
       BevelOuter = bvNone
       BorderWidth = 8
@@ -38,19 +26,19 @@ object DisplayForm: TDisplayForm
       object Panel1: TPanel
         Left = 8
         Top = 8
-        Width = 755
+        Width = 750
         Height = 48
         Align = alTop
         BevelOuter = bvNone
         Color = 14149867
         TabOrder = 0
         DesignSize = (
-          755
+          750
           48)
         object pbPages: TPaintBox
           Left = 0
           Top = 22
-          Width = 755
+          Width = 750
           Height = 26
           Align = alTop
           OnPaint = pbPagesPaint
@@ -58,13 +46,13 @@ object DisplayForm: TDisplayForm
         object Panel3: TPanel
           Left = 0
           Top = 0
-          Width = 755
+          Width = 750
           Height = 22
           Align = alTop
           BevelOuter = bvNone
           TabOrder = 0
           object pnlScrollRight: TPanel
-            Left = 738
+            Left = 733
             Top = 0
             Width = 17
             Height = 22
@@ -86,7 +74,7 @@ object DisplayForm: TDisplayForm
           object sgPages: TStringGrid
             Left = 17
             Top = 0
-            Width = 721
+            Width = 716
             Height = 22
             Align = alClient
             BorderStyle = bsNone
@@ -106,7 +94,7 @@ object DisplayForm: TDisplayForm
           end
         end
         object ToolBar: TToolBar
-          Left = 706
+          Left = 693
           Top = 23
           Width = 48
           Height = 24
@@ -138,19 +126,19 @@ object DisplayForm: TDisplayForm
     object Panel5: TPanel
       Left = 0
       Top = 0
-      Width = 771
+      Width = 766
       Height = 41
       Align = alTop
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 1
       DesignSize = (
-        771
+        766
         41)
       object Image1: TImage
         Left = 0
         Top = 0
-        Width = 771
+        Width = 766
         Height = 24
         Align = alTop
         Picture.Data = {
@@ -187,7 +175,7 @@ object DisplayForm: TDisplayForm
         Stretch = True
       end
       object Panel7: TPanel
-        Left = 279
+        Left = 266
         Top = 19
         Width = 800
         Height = 22
@@ -213,7 +201,7 @@ object DisplayForm: TDisplayForm
           Layout = tlCenter
         end
         object lblAide: TLabel
-          Left = 224
+          Left = 214
           Top = 0
           Width = 25
           Height = 22
@@ -231,7 +219,7 @@ object DisplayForm: TDisplayForm
           OnMouseLeave = lblMouseLeave
         end
         object lblQuitter: TLabel
-          Left = 172
+          Left = 167
           Top = 0
           Width = 39
           Height = 22
@@ -251,32 +239,32 @@ object DisplayForm: TDisplayForm
         object Label4: TLabel
           Left = 159
           Top = 0
-          Width = 13
+          Width = 8
           Height = 22
           Align = alLeft
           Caption = ' | '
           Layout = tlCenter
         end
         object Label5: TLabel
-          Left = 211
+          Left = 206
           Top = 0
-          Width = 13
+          Width = 8
           Height = 22
           Align = alLeft
           Caption = ' | '
           Layout = tlCenter
         end
         object Label6: TLabel
-          Left = 249
+          Left = 239
           Top = 0
-          Width = 13
+          Width = 8
           Height = 22
           Align = alLeft
           Caption = ' | '
           Layout = tlCenter
         end
         object Label7: TLabel
-          Left = 262
+          Left = 247
           Top = 0
           Width = 65
           Height = 22

@@ -48,7 +48,7 @@ type
     function GetAsPlugConnection: IPlugConnection; stdcall;
     function GetAsPlugDatabaseObject: IPlugDatabaseObject; stdcall;
     function GetAsPlugDataset: IPlugDataset; stdcall;
-    function GetAsPlugIO: IPlugIO; stdcall;
+    function GetAsPlugSerialize: IPlugSerialize; stdcall;
     function GetName: string; stdcall;
     function GetPlugin: IPlugUnknown; stdcall;
   private
@@ -242,10 +242,10 @@ begin
   end;
 end;
 
-function TPlugin.GetAsPlugIO: IPlugIO;
+function TPlugin.GetAsPlugSerialize: IPlugSerialize;
 begin
   try
-    Result := FPlugin as IPlugIO;
+    Result := FPlugin as IPlugSerialize;
   except
     ShowMessage(Format('Le plugin "%s" ne supporte pas l''interface %s', [FName, 'PlugIO']));
   end;

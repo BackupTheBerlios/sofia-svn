@@ -135,6 +135,7 @@ ProductName=
 ProductVersion=1.0.0.0
 Comments=
 [Excluded Packages]
+E:\Developpement\Composants\ComponentAxiLibrary\Axi_RegControls.bpl=AXI_RegControls (Delphi)
 D:\Developpement\sofia\bin\gdip.bpl=(sans titre)
 C:\WINDOWS\system32\rbIBE77.bpl=ReportBuilder Data Access for Interbase Express
 [HistoryLists\hlDebugSourcePath]
@@ -147,8 +148,8 @@ Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
 [HistoryLists\hlSearchPath]
 Count=3
-Item0=$(SOFIA)\trunk\src\framework\intf;$(SOFIA)\trunk\src\framework\classes;$(SOFIA)\lib
-Item1=$(SOFIA)\lib
+Item0=$(SOFIA)\lib
+Item1=$(SOFIA)\trunk\src\framework\intf;$(SOFIA)\trunk\src\framework\classes;$(SOFIA)\lib
 Item2=$(SOFIA)\lib;..\..\xmlcursor
 [HistoryLists\hlUnitOutputDirectory]
 Count=1
@@ -473,4 +474,5 @@ Count mtSend_FailureMsg=1
 mtSend_FailureMsg0="Sorry, sending the message didn't work."
 
 
- dpïýÚ„
+ck
+Àµ	\j°	D

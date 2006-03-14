@@ -10,7 +10,7 @@ DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
 PROJECTS = JvUIBD7R.bpl sofia.exe dbuib.dll dbobj.dll welcome.dll search.dll \
-  contact.dll
+  contact.dll display.dll
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
@@ -35,6 +35,9 @@ welcome.dll: plugins\welcome\welcome.dpr
   $(DCC)
 
 contact.dll: plugins\contact\contact.dpr
+  $(DCC)
+
+display.dll: plugins\display\display.dpr
   $(DCC)
 
 
