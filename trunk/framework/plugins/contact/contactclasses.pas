@@ -56,12 +56,12 @@ type
 
 implementation
 
-uses Classes, contactgui;
+uses Classes, contactctrl, contactgui;
 
 constructor TPlugin.Create;
 begin
   FContainer := TContainer.Create(nil);
-  FController := NewController(FContainer);
+  FController := NewController(Self, FContainer);
 end;
 
 destructor TPlugin.Destroy;

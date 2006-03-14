@@ -25,12 +25,11 @@ interface
 uses Classes, Controls, DB, StdXML_TLB, plugintf;
 
 type
-
   IController = interface(IInterface)
   ['{CD5C131C-E966-4743-85B9-D1F2E96D4DDD}']
   end;
 
-  TPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay, IPlugIO)
+  TPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay, IPlugSerialize)
     function GetContainer: TWinControl; stdcall;
     function GetParent: TWinControl; stdcall;
     function GetXMLCursor: IXMLCursor; stdcall;
@@ -54,12 +53,12 @@ type
 
 implementation
 
-uses welcomegui;
+uses welcomectrl, welcomegui;
 
 constructor TPlugin.Create;
 begin
   FContainer := TContainer.Create(nil);
-  FController := NewController(FContainer);
+  FController := NewController(Self, FContainer);
 end;
 
 destructor TPlugin.Destroy;

@@ -3,7 +3,8 @@ library contact;
 uses
   plugintf,
   contactclasses in 'contactclasses.pas',
-  contactgui in 'contactgui.pas' {Container: TFrame};
+  contactgui in 'contactgui.pas' {Container: TFrame},
+  contactctrl in 'contactctrl.pas';
 
 function NewPlugin: IPlugUnknown;
 begin

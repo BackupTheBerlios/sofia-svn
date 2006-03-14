@@ -23,7 +23,7 @@ unit welcomegui;
 interface
 
 uses
-  Forms, Classes, Controls, welcomeclasses, ExtCtrls, stdxml_tlb, StdCtrls;
+  Forms, Classes, Controls,  ExtCtrls, stdxml_tlb, StdCtrls;
 
 type
   TContainer = class(TFrame)
@@ -36,37 +36,11 @@ type
     { Déclarations publiques }
   end;
 
-  TController = class(TInterfacedObject, IController)
-  private
-    FContainer: TContainer;
-  public
-    constructor Create(AContainer: TWinControl);
-    destructor Destroy; override;
-    property Container: TContainer read FContainer write FContainer;
-  end;
-
-function NewController(AControl: TWinControl): IController;
-
 implementation
 
 uses SysUtils;
 
 {$R *.dfm}
-
-function NewController(AControl: TWinControl): IController;
-begin
-  Result := TController.Create(AControl);
-end;
-
-constructor TController.Create(AContainer: TWinControl);
-begin
-  FContainer := AContainer as TContainer;
-end;
-
-destructor TController.Destroy;
-begin
-  inherited;
-end;
 
 constructor TContainer.Create(AOwner: TComponent);
 begin

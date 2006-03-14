@@ -1,7 +1,7 @@
 object Container: TContainer
   Left = 0
   Top = 0
-  Width = 668
+  Width = 343
   Height = 390
   HorzScrollBar.Color = clWhite
   HorzScrollBar.ParentColor = False

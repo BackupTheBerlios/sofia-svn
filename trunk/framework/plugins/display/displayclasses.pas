@@ -22,17 +22,24 @@ unit displayclasses;
 
 interface
 
-uses Controls, plugintf, displayctrl, StdXML_TLB;
+uses Controls, StdXML_TLB, plugintf;
 
 type
 
-  TPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay, IPlugPages)
+  IController = interface(IInterface)
+    ['{B0122448-88BA-44DF-9B33-8198AF276DF6}']
+    function AddPage(AName, ACaption: string): TWinControl;
+    procedure Search(Categories: string); stdcall;
+  end;
+
+  TPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay, IPlugDisplayer)
     procedure AddPage(AName, ACaption: string); stdcall;
     procedure Hide; stdcall;
     procedure Show; stdcall;
     procedure SetParent(const Value: TWinControl); stdcall;
     procedure SetXMLCursor(const Value: IXMLCursor); stdcall;
     function GetXML: string; stdcall;
+    procedure Search(Categories: string); stdcall;
     procedure SetPluginManager(const Value: IPluginManager); stdcall;
     procedure SetXML(const Value: string); stdcall;
   private
@@ -48,12 +55,12 @@ type
 
 implementation
 
-uses Classes, displaygui;
+uses Classes, displayctrl, displaygui;
 
 constructor TPlugin.Create;
 begin
   FContainer := TContainer.Create(nil);
-  FController := NewController(FContainer);
+  FController := NewController(Self, FContainer);
 end;
 
 destructor TPlugin.Destroy;
@@ -95,6 +102,22 @@ begin
     {FXMLCursor.SetValue('/Propriete', FController.Propriete)};
   Result := FXMLCursor.XML;
 
+end;
+
+procedure TPlugin.Search(Categories: string);
+var
+  Res: IPlugSerialize;
+  Qry: IPlugDatabaseObject;
+  Dts: IPlugDataset;
+begin
+  Qry := FPluginManager['dbobj'].AsPlugDatabaseObject;
+  Dts := FPluginManager['dbuib'].AsPlugDataset;
+  Res := FPluginManager['search'].AsPlugSerialize;
+
+  Dts.Add(Qry.GetPersonnes(Categories));
+  Res.XML := Dts.XML;
+
+  AddPage('search', 'Résultats de la recherche');
 end;
 
 procedure TPlugin.SetParent(const Value: TWinControl);

@@ -21,42 +21,11 @@ type
     { Déclarations publiques }
   end;
 
-  TController = class(TInterfacedObject, IController)
-    function GetNomContact: string; stdcall;
-    procedure SetNomContact(const Value: string); stdcall;
-  private
-    FContainer: TContainer;
-  public
-    constructor Create(AContainer: TWinControl);
-  end;
-
-function NewController(AContainer: TWinControl): IController;
-
 implementation
 
 uses TypInfo;
 
 {$R *.dfm}
-
-function NewController(AContainer: TWinControl): IController;
-begin
-  Result := TController.Create(AContainer);
-end;
-
-constructor TController.Create(AContainer: TWinControl);
-begin
-  FContainer := AContainer as TContainer;
-end;
-
-function TController.GetNomContact: string;
-begin
-  // TODO -cMM: TController.GetNomContact default body inserted
-end;
-
-procedure TController.SetNomContact(const Value: string);
-begin
-  // TODO -cMM: TController.SetNomContact default body inserted
-end;
 
 procedure TContainer.Image1Click(Sender: TObject);
 var

@@ -39,45 +39,11 @@ type
     { Déclarations publiques }
   end;
 
-  TController = class(TInterfacedObject, IController)
-    procedure SetXMLData(const Value: string); stdcall;
-    property XMLData: string write SetXMLData;
-  private
-    FContainer: TContainer;
-  public
-    constructor Create(AContainer: TWinControl);
-    destructor Destroy; override;
-    property Container: TContainer read FContainer write FContainer;
-  end;
-
-function NewController(AContainer: TWinControl): IController;
-
 implementation
 
 uses SysUtils;
 
 {$R *.dfm}
-
-function NewController(AContainer: TWinControl): IController;
-begin
-  Result := TController.Create(AContainer);
-end;
-
-constructor TController.Create(AContainer: TWinControl);
-begin
-  FContainer := AContainer as TContainer;
-end;
-
-destructor TController.Destroy;
-begin
-  inherited;
-end;
-
-procedure TController.SetXMLData(const Value: string);
-begin
-  FContainer.ClientDataSet.XMLData := Value;
-  FContainer.ClientDataSet.Open;
-end;
 
 constructor TContainer.Create(AOwner: TComponent);
 begin

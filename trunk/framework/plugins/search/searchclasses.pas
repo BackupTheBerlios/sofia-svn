@@ -32,7 +32,7 @@ type
     property XMLData: string write SetXMLData;
   end;
 
-  TPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay, IPlugIO)
+  TPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay, IPlugSerialize)
     function GetContainer: TWinControl; stdcall;
     function GetParent: TWinControl; stdcall;
     function GetXMLCursor: IXMLCursor; stdcall;
@@ -56,12 +56,12 @@ type
 
 implementation
 
-uses searchgui;
+uses searchctrl, searchgui;
 
 constructor TPlugin.Create;
 begin
   FContainer := TContainer.Create(nil);
-  FController := NewController(FContainer);
+  FController := NewController(Self, FContainer);
 end;
 
 destructor TPlugin.Destroy;

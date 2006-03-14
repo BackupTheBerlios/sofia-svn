@@ -1,18 +1,17 @@
-unit displayctrl;
+unit contactctrl;
 
 interface
 
-uses Controls, displaygui, displayclasses;
+uses Controls, contactclasses, contactgui;
 
 type
 
   TController = class(TInterfacedObject, IController)
-    function AddPage(AName, ACaption: string): TWinControl;
-    procedure Search(Categories: string); stdcall;
+    function GetNomContact: string; stdcall;
+    procedure SetNomContact(const Value: string); stdcall;
   private
     FContainer: TContainer;
     FPlugin: TPlugin;
-    procedure BtnSearchClick(Sender: TObject);
   public
     constructor Create(APlugin: TPlugin; AContainer: TWinControl);
   end;
@@ -30,23 +29,16 @@ constructor TController.Create(APlugin: TPlugin; AContainer: TWinControl);
 begin
   FContainer := AContainer as TContainer;
   FPlugin := APlugin;
-
-  FContainer.Button1.OnClick := BtnSearchClick;
 end;
 
-function TController.AddPage(AName, ACaption: string): TWinControl;
+function TController.GetNomContact: string;
 begin
-  Result := FContainer.AddPage(AName, ACaption);
+  // TODO -cMM: TController.GetNomContact default body inserted
 end;
 
-procedure TController.BtnSearchClick(Sender: TObject);
+procedure TController.SetNomContact(const Value: string);
 begin
-  FPlugin.Search('contact;client;organisation');
-end;
-
-procedure TController.Search(Categories: string);
-begin
-  // TODO -cMM: TController.Search default body inserted
+  // TODO -cMM: TController.SetNomContact default body inserted
 end;
 
 

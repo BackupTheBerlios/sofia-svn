@@ -1,20 +1,18 @@
-unit displayctrl;
+unit welcomectrl;
 
 interface
 
-uses Controls, displaygui, displayclasses;
+uses Controls, welcomegui, welcomeclasses;
 
 type
-
   TController = class(TInterfacedObject, IController)
-    function AddPage(AName, ACaption: string): TWinControl;
-    procedure Search(Categories: string); stdcall;
   private
     FContainer: TContainer;
     FPlugin: TPlugin;
-    procedure BtnSearchClick(Sender: TObject);
   public
     constructor Create(APlugin: TPlugin; AContainer: TWinControl);
+    destructor Destroy; override;
+    property Container: TContainer read FContainer write FContainer;
   end;
 
 function NewController(APlugin: TPlugin; AContainer: TWinControl): IController;
@@ -30,23 +28,11 @@ constructor TController.Create(APlugin: TPlugin; AContainer: TWinControl);
 begin
   FContainer := AContainer as TContainer;
   FPlugin := APlugin;
-
-  FContainer.Button1.OnClick := BtnSearchClick;
 end;
 
-function TController.AddPage(AName, ACaption: string): TWinControl;
+destructor TController.Destroy;
 begin
-  Result := FContainer.AddPage(AName, ACaption);
-end;
-
-procedure TController.BtnSearchClick(Sender: TObject);
-begin
-  FPlugin.Search('contact;client;organisation');
-end;
-
-procedure TController.Search(Categories: string);
-begin
-  // TODO -cMM: TController.Search default body inserted
+  inherited;
 end;
 
 

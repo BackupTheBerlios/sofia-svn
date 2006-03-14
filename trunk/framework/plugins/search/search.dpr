@@ -3,7 +3,8 @@ library search;
 uses
   plugintf,
   searchgui in 'searchgui.pas' {Container},
-  searchclasses in 'searchclasses.pas';
+  searchclasses in 'searchclasses.pas',
+  searchctrl in 'searchctrl.pas';
 
 function NewPlugin: IPlugUnknown;
 begin

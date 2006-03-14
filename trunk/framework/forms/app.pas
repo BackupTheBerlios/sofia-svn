@@ -47,7 +47,7 @@ var
 
 implementation
 
-uses display, xmlcursor;
+uses xmlcursor;
 
 {$R *.dfm}
 
@@ -81,7 +81,7 @@ begin
     Connected := True;
   end;
 
-  DisplayForm.ShowModal;
+  //DisplayForm.ShowModal;
   Close;
 end;
 

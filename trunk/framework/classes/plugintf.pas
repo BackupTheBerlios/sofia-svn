@@ -79,9 +79,10 @@ type
 
 {------------------------------------------------------------------------------}
 
-  IPlugPages = interface(IInterface)
+  IPlugDisplayer = interface(IInterface)
   ['{4314ACEC-F4C4-49A4-A2AA-30DE8E408731}']
     procedure AddPage(AName, ACaption: string); stdcall;
+    procedure Search(Categories: string); stdcall;
   end;
 
 {------------------------------------------------------------------------------}
