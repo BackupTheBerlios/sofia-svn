@@ -36,9 +36,6 @@ type
     pnlScrollRight: TPanel;
     pnlScrollLeft: TPanel;
     sgPages: TStringGrid;
-    ToolBar: TToolBar;
-    ToolButton1: TToolButton;
-    ToolButton2: TToolButton;
     Panel5: TPanel;
     Image1: TImage;
     Panel7: TPanel;
@@ -53,8 +50,10 @@ type
     Button1: TButton;
     Panel4: TPanel;
     Label3: TLabel;
+    ToolBar: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
     function AddPage(AName, ACaption: string): TWinControl;
-    procedure Button1Click(Sender: TObject);
     procedure Label3Click(Sender: TObject);
     procedure lblMouseEnter(Sender: TObject);
     procedure lblMouseLeave(Sender: TObject);
@@ -78,7 +77,7 @@ implementation
 {$R *.dfm}
 
 const
-  clGris = clBtnFace;
+  clGris = cl3DLight;
   clVert = clActiveBorder;
 
 constructor TContainer.Create(AOwner: TComponent);
@@ -103,33 +102,14 @@ begin
   Panel.Parent := pnlPlugin;
 
   RepaintCurrentTab(FPagesCount - 1);
+  RepaintCurrentTab(0);
 
   Result := Panel;
 end;
 
-procedure TContainer.Button1Click(Sender: TObject);
-{
-var
-  Res: IPlugIO;
-  Qry: IPlugDatabaseObject;
-  Dts: IPlugDataset;
-  }
-begin
-{
-  Qry := AppForm.PluginManager['dbobj'].AsPlugDatabaseObject;
-  Dts := AppForm.PluginManager['dbuib'].AsPlugDataset;
-  Res := AppForm.PluginManager['search'].AsPlugIO;
-
-  Dts.Add(Qry.GetPersonnes('contact;client;organisation'));
-  Res.XML := Dts.XML;
-
-  AddPage('search', 'Résultats de la recherche');
-}
-end;
-
 procedure TContainer.Label3Click(Sender: TObject);
 begin
-  AddPage('contact', 'Nouveau contact');
+  //AddPage('contact', 'Nouveau contact');
 end;
 
 procedure TContainer.lblMouseEnter(Sender: TObject);

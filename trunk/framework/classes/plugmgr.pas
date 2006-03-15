@@ -138,6 +138,7 @@ var
 begin
   FPlugins.Add(NewPlugin(Self, 'dbuib'));
   FPlugins.Add(NewPlugin(Self, 'dbobj'));
+  FPlugins.Add(NewPlugin(Self, 'display'));
   FPlugins.Add(NewPlugin(Self, 'contact'));
   FPlugins.Add(NewPlugin(Self, 'welcome'));
   FPlugins.Add(NewPlugin(Self, 'search'));

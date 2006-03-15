@@ -19,26 +19,23 @@ object Container: TContainer
       Width = 766
       Height = 545
       Align = alClient
-      BevelOuter = bvNone
       BorderWidth = 8
-      ParentColor = True
+      Ctl3D = False
+      ParentCtl3D = False
       TabOrder = 0
       object Panel1: TPanel
-        Left = 8
-        Top = 8
-        Width = 750
+        Left = 9
+        Top = 9
+        Width = 748
         Height = 48
         Align = alTop
         BevelOuter = bvNone
         Color = 14149867
         TabOrder = 0
-        DesignSize = (
-          750
-          48)
         object pbPages: TPaintBox
           Left = 0
           Top = 22
-          Width = 750
+          Width = 748
           Height = 26
           Align = alTop
           OnPaint = pbPagesPaint
@@ -46,13 +43,13 @@ object Container: TContainer
         object Panel3: TPanel
           Left = 0
           Top = 0
-          Width = 750
+          Width = 748
           Height = 22
           Align = alTop
           BevelOuter = bvNone
           TabOrder = 0
           object pnlScrollRight: TPanel
-            Left = 733
+            Left = 731
             Top = 0
             Width = 17
             Height = 22
@@ -74,7 +71,7 @@ object Container: TContainer
           object sgPages: TStringGrid
             Left = 17
             Top = 0
-            Width = 716
+            Width = 714
             Height = 22
             Align = alClient
             BorderStyle = bsNone
@@ -94,12 +91,11 @@ object Container: TContainer
           end
         end
         object ToolBar: TToolBar
-          Left = 693
+          Left = 1
           Top = 23
           Width = 48
           Height = 24
           Align = alNone
-          Anchors = [akTop, akRight]
           AutoSize = True
           ButtonHeight = 24
           ButtonWidth = 24
@@ -181,9 +177,7 @@ object Container: TContainer
         Height = 22
         Anchors = [akTop, akRight]
         BevelOuter = bvNone
-        Ctl3D = True
-        ParentColor = True
-        ParentCtl3D = False
+        Color = clWindow
         TabOrder = 0
         object lblUser: TLabel
           Left = 0
@@ -300,7 +294,6 @@ object Container: TContainer
           Font.Style = [fsBold]
           ParentFont = False
           TabOrder = 1
-          OnClick = Button1Click
         end
       end
       object Panel4: TPanel

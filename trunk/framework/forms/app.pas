@@ -38,7 +38,6 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    property PluginManager: IPluginManager read FPluginManager;
     { Déclarations publiques }
   end;
 
@@ -54,7 +53,7 @@ uses xmlcursor;
 constructor TAppForm.Create(AOwner: TComponent);
 begin
   inherited;
-  Application.ShowMainForm := False;
+  //Application.ShowMainForm := False;
   FPluginManager := NewPluginManager;
 end;
 
@@ -73,7 +72,7 @@ begin
   end;
 
   //initialisation des parametres de cnx
-  with PluginManager['dbuib'].AsPlugConnection do
+  with FPluginManager['dbuib'].AsPlugConnection do
   begin
     ConnectionName := 'sofia.fdb';
     UserName := 'sysdba';
@@ -81,8 +80,12 @@ begin
     Connected := True;
   end;
 
-  //DisplayForm.ShowModal;
-  Close;
+  with FPluginManager['display'].AsDisplay do
+  begin
+   Parent := Self;
+   Show;
+  end;
+
 end;
 
 end.

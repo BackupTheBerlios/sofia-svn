@@ -32,14 +32,12 @@ type
     procedure Search(Categories: string); stdcall;
   end;
 
-  TPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay, IPlugDisplayer)
-    procedure AddPage(AName, ACaption: string); stdcall;
+  TPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay)
     procedure Hide; stdcall;
     procedure Show; stdcall;
     procedure SetParent(const Value: TWinControl); stdcall;
     procedure SetXMLCursor(const Value: IXMLCursor); stdcall;
     function GetXML: string; stdcall;
-    procedure Search(Categories: string); stdcall;
     procedure SetPluginManager(const Value: IPluginManager); stdcall;
     procedure SetXML(const Value: string); stdcall;
   private
@@ -51,6 +49,8 @@ type
   public
     constructor Create;
     destructor Destroy; override;
+    procedure AddPage(AName, ACaption: string); stdcall;
+    procedure Search(Categories: string); stdcall;
   end;
 
 implementation
