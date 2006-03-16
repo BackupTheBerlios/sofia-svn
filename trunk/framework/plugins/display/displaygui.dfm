@@ -4,14 +4,20 @@ object Container: TContainer
   Width = 780
   Height = 560
   Color = clWindow
+  Font.Charset = ANSI_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Verdana'
+  Font.Style = []
   ParentBackground = False
   ParentColor = False
+  ParentFont = False
   TabOrder = 0
   object Panel2: TPanel
     Left = 0
-    Top = 69
+    Top = 58
     Width = 780
-    Height = 491
+    Height = 502
     Align = alClient
     BevelOuter = bvNone
     Color = clWindow
@@ -20,7 +26,7 @@ object Container: TContainer
       Left = 0
       Top = 0
       Width = 780
-      Height = 491
+      Height = 502
       Align = alClient
       BevelOuter = bvNone
       BorderWidth = 8
@@ -30,8 +36,9 @@ object Container: TContainer
         Left = 8
         Top = 8
         Width = 764
-        Height = 48
+        Height = 27
         Align = alTop
+        AutoSize = True
         BevelOuter = bvNone
         ParentColor = True
         TabOrder = 0
@@ -39,7 +46,7 @@ object Container: TContainer
           Left = 0
           Top = 22
           Width = 764
-          Height = 13
+          Height = 5
           Align = alTop
           OnPaint = pbPagesPaint
         end
@@ -80,7 +87,7 @@ object Container: TContainer
     Left = 0
     Top = 0
     Width = 780
-    Height = 69
+    Height = 58
     Align = alTop
     BevelOuter = bvNone
     ParentColor = True
@@ -123,7 +130,6 @@ object Container: TContainer
         FFD9F7FFD9F7FFD9F7FFD9F7FFD9F7FFD9F7FFD9F7FFD9F7FFD9F7FFD9F7FFD9
         F7FF}
       Stretch = True
-      Visible = False
     end
     object Panel4: TPanel
       Left = 7
@@ -136,60 +142,49 @@ object Container: TContainer
       ParentCtl3D = False
       TabOrder = 0
     end
-    object CoolBar1: TCoolBar
+    object Panel10: TPanel
       Left = 0
       Top = 24
       Width = 780
-      Height = 45
-      AutoSize = True
-      BandMaximize = bmNone
-      Bands = <
-        item
-          Control = Panel5
-          ImageIndex = -1
-          MinHeight = 41
-          Width = 223
-        end
-        item
-          Break = False
-          Control = Panel8
-          ImageIndex = -1
-          MinHeight = 21
-          MinWidth = 250
-          Width = 263
-        end
-        item
-          Break = False
-          Control = Panel7
-          ImageIndex = -1
-          MinWidth = 200
-          Text = 'Rechercher'
-          Width = 286
-        end>
-      FixedOrder = True
+      Height = 39
+      Align = alTop
+      BevelOuter = bvNone
+      BorderWidth = 8
+      ParentColor = True
+      TabOrder = 1
       object Panel7: TPanel
-        Left = 559
+        Left = 528
         Top = 8
-        Width = 213
-        Height = 25
+        Width = 244
+        Height = 23
+        Align = alRight
         BevelOuter = bvNone
         ParentColor = True
         TabOrder = 0
         DesignSize = (
-          213
-          25)
-        object Edit1: TEdit
+          244
+          23)
+        object Label1: TLabel
           Left = 0
+          Top = 0
+          Width = 65
+          Height = 23
+          Align = alLeft
+          Caption = 'Rechercher'
+          Layout = tlCenter
+        end
+        object Edit1: TEdit
+          Left = 70
           Top = 2
-          Width = 174
+          Width = 143
           Height = 21
           Anchors = [akLeft, akTop, akRight]
           Ctl3D = True
           ParentCtl3D = False
           TabOrder = 0
         end
-        object Button1: TButton
-          Left = 177
+        object btnGo: TButton
+          Left = 216
           Top = 1
           Width = 24
           Height = 23
@@ -205,27 +200,28 @@ object Container: TContainer
         end
       end
       object Panel8: TPanel
-        Left = 234
-        Top = 10
-        Width = 250
-        Height = 21
+        Left = 256
+        Top = 8
+        Width = 272
+        Height = 23
+        Align = alRight
         BevelOuter = bvNone
         ParentColor = True
         TabOrder = 1
         object Label2: TLabel
-          Left = 170
+          Left = 169
           Top = 0
-          Width = 8
-          Height = 21
+          Width = 13
+          Height = 23
           Align = alRight
           Caption = ' | '
           Layout = tlCenter
         end
         object Label8: TLabel
-          Left = 178
+          Left = 182
           Top = 0
           Width = 25
-          Height = 21
+          Height = 23
           Cursor = crHandPoint
           Align = alRight
           Caption = 'Aide'
@@ -240,19 +236,19 @@ object Container: TContainer
           OnMouseLeave = lblMouseLeave
         end
         object Label9: TLabel
-          Left = 203
+          Left = 207
           Top = 0
-          Width = 8
-          Height = 21
+          Width = 13
+          Height = 23
           Align = alRight
           Caption = ' | '
           Layout = tlCenter
         end
         object Label10: TLabel
-          Left = 211
+          Left = 220
           Top = 0
           Width = 39
-          Height = 21
+          Height = 23
           Cursor = crHandPoint
           Align = alRight
           Caption = 'Quitter'
@@ -263,14 +259,15 @@ object Container: TContainer
           Font.Style = []
           ParentFont = False
           Layout = tlCenter
+          OnClick = Label10Click
           OnMouseEnter = lblMouseEnter
           OnMouseLeave = lblMouseLeave
         end
         object Label12: TLabel
-          Left = 11
+          Left = 10
           Top = 0
           Width = 159
-          Height = 21
+          Height = 23
           Align = alRight
           Caption = 'Bonjour Anne-Ang'#233'lique'
           Font.Charset = ANSI_CHARSET
@@ -281,20 +278,30 @@ object Container: TContainer
           ParentFont = False
           Layout = tlCenter
         end
+        object Label4: TLabel
+          Left = 259
+          Top = 0
+          Width = 13
+          Height = 23
+          Align = alRight
+          Caption = ' | '
+          Layout = tlCenter
+        end
       end
       object Panel5: TPanel
-        Left = 0
-        Top = 0
-        Width = 219
-        Height = 41
+        Left = 8
+        Top = 8
+        Width = 215
+        Height = 23
+        Align = alLeft
         BevelOuter = bvNone
         ParentColor = True
         TabOrder = 2
-        object Label3: TLabel
+        object lblNouveauContact: TLabel
           Left = 0
           Top = 0
-          Width = 95
-          Height = 41
+          Width = 109
+          Height = 23
           Cursor = crHandPoint
           Align = alLeft
           Caption = 'Nouveau contact'
@@ -302,10 +309,9 @@ object Container: TContainer
           Font.Color = 12622444
           Font.Height = -11
           Font.Name = 'Verdana'
-          Font.Style = []
+          Font.Style = [fsBold]
           ParentFont = False
           Layout = tlCenter
-          OnClick = Label3Click
           OnMouseEnter = lblMouseEnter
           OnMouseLeave = lblMouseLeave
         end

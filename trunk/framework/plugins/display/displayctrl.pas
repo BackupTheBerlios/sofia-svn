@@ -12,7 +12,8 @@ type
   private
     FContainer: TContainer;
     FPlugin: TPlugin;
-    procedure BtnSearchClick(Sender: TObject);
+    procedure DoSearch(Sender: TObject);
+    procedure DoNewContact(Sender: TObject);
   public
     constructor Create(APlugin: TPlugin; AContainer: TWinControl);
   end;
@@ -31,7 +32,8 @@ begin
   FContainer := AContainer as TContainer;
   FPlugin := APlugin;
 
-  FContainer.Button1.OnClick := BtnSearchClick;
+  FContainer.btnGo.OnClick := DoSearch;
+  FContainer.lblNouveauContact.OnClick := DoNewContact;
 end;
 
 function TController.AddPage(AName, ACaption: string): TWinControl;
@@ -39,9 +41,14 @@ begin
   Result := FContainer.AddPage(AName, ACaption);
 end;
 
-procedure TController.BtnSearchClick(Sender: TObject);
+procedure TController.DoSearch(Sender: TObject);
 begin
   FPlugin.Search('contact;client;organisation');
+end;
+
+procedure TController.DoNewContact(Sender: TObject);
+begin
+  FPlugin.NewContact;
 end;
 
 procedure TController.Search(Categories: string);

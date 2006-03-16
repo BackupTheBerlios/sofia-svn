@@ -51,6 +51,7 @@ type
     destructor Destroy; override;
     procedure AddPage(AName, ACaption: string); stdcall;
     procedure Search(Categories: string); stdcall;
+    procedure NewContact; stdcall;
   end;
 
 implementation
@@ -118,6 +119,11 @@ begin
   Res.XML := Dts.XML;
 
   AddPage('search', 'Résultats de la recherche');
+end;
+
+procedure TPlugin.NewContact;
+begin
+  AddPage('contact', 'Nouveau contact');
 end;
 
 procedure TPlugin.SetParent(const Value: TWinControl);

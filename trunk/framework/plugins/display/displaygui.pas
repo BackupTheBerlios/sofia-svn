@@ -35,20 +35,22 @@ type
     Panel3: TPanel;
     sgPages: TStringGrid;
     Panel6: TPanel;
-    Image1: TImage;
     Panel4: TPanel;
-    CoolBar1: TCoolBar;
+    Panel10: TPanel;
     Panel7: TPanel;
     Edit1: TEdit;
-    Button1: TButton;
+    btnGo: TButton;
+    Label1: TLabel;
     Panel8: TPanel;
     Label2: TLabel;
     Label8: TLabel;
     Label9: TLabel;
     Label10: TLabel;
     Label12: TLabel;
+    Label4: TLabel;
     Panel5: TPanel;
-    Label3: TLabel;
+    lblNouveauContact: TLabel;
+    Image1: TImage;
     function AddPage(AName, ACaption: string): TWinControl;
     procedure Label3Click(Sender: TObject);
     procedure lblMouseEnter(Sender: TObject);
@@ -56,6 +58,7 @@ type
     procedure pbPagesPaint(Sender: TObject);
     procedure sgPagesDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect;
       State: TGridDrawState);
+    procedure Label10Click(Sender: TObject);
   private
     FPageIndex: Integer;
     FPagesCount: Integer;
@@ -96,8 +99,8 @@ begin
   Panel.Align := alClient;
   Panel.Parent := pnlPlugin;
 
-  RepaintCurrentTab(FPagesCount - 1);
   RepaintCurrentTab(0);
+  RepaintCurrentTab(FPagesCount - 1);
 
   Result := Panel;
 end;
@@ -276,6 +279,11 @@ begin
     DrawInactiveBackground;
     DrawInactiveCaption
   end;
+end;
+
+procedure TContainer.Label10Click(Sender: TObject);
+begin
+  Application.MainForm.Close;
 end;
 
 end.
