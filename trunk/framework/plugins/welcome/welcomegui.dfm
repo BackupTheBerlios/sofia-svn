@@ -5,12 +5,13 @@ object Container: TContainer
   Height = 390
   HorzScrollBar.Color = clWhite
   HorzScrollBar.ParentColor = False
-  Color = clWhite
+  Color = clWindow
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'Verdana'
   Font.Style = []
+  ParentBackground = False
   ParentColor = False
   ParentFont = False
   TabOrder = 0

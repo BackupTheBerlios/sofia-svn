@@ -101,7 +101,7 @@ DebugSourceDirs=
 UsePackages=1
 [Parameters]
 RunParams=
-HostApplication=
+HostApplication=D:\Developpement\berlios\sofia\bin\sofia.exe
 Launcher=
 UseLauncher=0
 DebugCWD=

@@ -1,6 +1,6 @@
 object AppForm: TAppForm
-  Left = 278
-  Top = 171
+  Left = 296
+  Top = 361
   Width = 800
   Height = 600
   Color = clBtnFace
@@ -20,7 +20,7 @@ object AppForm: TAppForm
     Top = 16
   end
   object XPManifest1: TXPManifest
-    Left = 232
-    Top = 88
+    Left = 288
+    Top = 96
   end
 end
