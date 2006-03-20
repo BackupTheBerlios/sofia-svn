@@ -135,8 +135,9 @@ ProductName=
 ProductVersion=1.0.0.0
 Comments=
 [Excluded Packages]
+E:\Developpement\Composants\ComponentAxiLibrary\Axi_RegControls.bpl=AXI_RegControls (Delphi)
 D:\Developpement\sofia\bin\gdip.bpl=(sans titre)
-D:\Developpement\sofia\bin\GDIPlusControls.bpl=GDI+ Controls
+C:\WINDOWS\system32\rbIBE77.bpl=ReportBuilder Data Access for Interbase Express
 [HistoryLists\hlDebugSourcePath]
 Count=3
 Item0=D:\Developpement\berlios\sofia\trunk\framework\xmlcursor\

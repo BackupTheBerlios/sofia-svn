@@ -4,7 +4,7 @@ interface
 
 uses
   Classes, Controls, Forms, contactclasses, Graphics, ExtCtrls, ImgList,
-  StdCtrls, Contnrs;
+  StdCtrls, Contnrs, ComCtrls, Buttons, ToolWin, ActnList;
 
 type
   TContainer = class(TFrame)
@@ -27,7 +27,43 @@ type
     lblFicheAdm: TLabel;
     lblProfessionnels: TLabel;
     lblDivers: TLabel;
+    pnlSaisie1: TPanel;
+    pnlSaisie2: TPanel;
+    pnlSaisie3: TPanel;
+    edtPrenom: TEdit;
+    edtNom: TEdit;
+    lblNom: TLabel;
+    lblPrenom: TLabel;
+    Bevel2: TBevel;
+    Bevel3: TBevel;
+    Label1: TLabel;
+    pnlMessagerie: TPanel;
+    lvAdresses: TListView;
+    ToolBar1: TToolBar;
+    ToolButton2: TToolButton;
+    ImageList16x16: TImageList;
+    ActionListMessageries: TActionList;
+    actAjouter: TAction;
+    actModifier: TAction;
+    actSupprimer: TAction;
+    actDefaut: TAction;
+    ToolButton1: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    procedure actAjouterExecute(Sender: TObject);
+    procedure actModifierExecute(Sender: TObject);
+    procedure actSupprimerExecute(Sender: TObject);
+    procedure actDefautExecute(Sender: TObject);
+    procedure lvAdressesEditing(Sender: TObject; Item: TListItem;
+      var AllowEdit: Boolean);
+    procedure lvAdressesEdited(Sender: TObject; Item: TListItem;
+      var S: string);
+    procedure lvAdressesKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
+    FAllowEditAdresseMail: Boolean;
     FFieldsZones: TObjectList;
     { Déclarations privées }
   public
@@ -50,7 +86,7 @@ type
     procedure TitleLeave(Sender: TObject);
   public
     constructor Create(ACollapseImages: TImageList; ACollapseImage: TImage;
-        AContainer: TPanel; AExpanded: Boolean; ATitleLabel: TLabel);
+      AContainer: TPanel; AExpanded: Boolean; ATitleLabel: TLabel);
     destructor Destroy; override;
     procedure CollapseClick(Sender: TObject);
     property CollapseImage: TImage read FCollapseImage write FCollapseImage;
@@ -62,7 +98,7 @@ type
 
 implementation
 
-uses TypInfo, SysUtils;
+uses TypInfo, SysUtils, Windows;
 
 {$R *.dfm}
 
@@ -83,7 +119,7 @@ begin
 end;
 
 constructor TFieldsZone.Create(ACollapseImages: TImageList; ACollapseImage:
-    TImage; AContainer: TPanel; AExpanded: Boolean; ATitleLabel: TLabel);
+  TImage; AContainer: TPanel; AExpanded: Boolean; ATitleLabel: TLabel);
 begin
   FCollapseImages := ACollapseImages;
   FCollapseImage := ACollapseImage;
@@ -117,7 +153,7 @@ end;
 
 procedure TFieldsZone.SetExpanded(const Value: Boolean);
 var
-  btmp: TBitmap;
+  btmp: Graphics.TBitmap;
 begin
   FExpanded := Value;
 
@@ -126,7 +162,7 @@ begin
   else
     FContainer.Height := 1;
 
-  btmp := TBitmap.Create;
+  btmp := Graphics.TBitmap.Create;
   try
     FCollapseImages.GetBitmap(Ord(FExpanded), btmp);
     FCollapseImage.Picture.Bitmap.Assign(btmp);
@@ -140,6 +176,63 @@ begin
   FTitleLabel := Value;
   FTitleLabel.OnMouseEnter := TitleEnter;
   FTitleLabel.OnMouseLeave := TitleLeave;
+end;
+
+procedure TContainer.actAjouterExecute(Sender: TObject);
+begin
+  with lvAdresses.Items.Add do
+  begin
+    Caption := 'adresse@email.tld';
+    FAllowEditAdresseMail := True;
+    EditCaption;
+  end;
+end;
+
+procedure TContainer.actModifierExecute(Sender: TObject);
+begin
+  if not Assigned(lvAdresses.Selected) then
+    Exit;
+  FAllowEditAdresseMail := True;
+  lvAdresses.Selected.EditCaption;
+end;
+
+procedure TContainer.actSupprimerExecute(Sender: TObject);
+begin
+  if not Assigned(lvAdresses.Selected) then
+    Exit;
+  lvAdresses.Selected.Delete;
+end;
+
+procedure TContainer.actDefautExecute(Sender: TObject);
+begin
+  if not Assigned(lvAdresses.Selected) then
+    Exit;
+  //TODO Sélectionner l'adresse par défaut et la positionner en premier dans la liste
+end;
+
+procedure TContainer.lvAdressesEditing(Sender: TObject; Item: TListItem;
+  var AllowEdit: Boolean);
+begin
+  AllowEdit := FAllowEditAdresseMail;
+end;
+
+procedure TContainer.lvAdressesEdited(Sender: TObject; Item: TListItem;
+  var S: string);
+begin
+  FAllowEditAdresseMail := False;
+end;
+
+procedure TContainer.lvAdressesKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_INSERT then
+    actAjouter.Execute;
+  if Key = VK_DELETE then
+    actSupprimer.Execute;
+  if Key = VK_RETURN then
+    actModifier.Execute;
+  if Key = VK_SPACE then
+    actDefaut.Execute;
 end;
 
 end.
