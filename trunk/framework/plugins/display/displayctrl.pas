@@ -7,7 +7,7 @@ uses Controls, displaygui, displayclasses;
 type
 
   TController = class(TInterfacedObject, IController)
-    function AddPage(AName, ACaption: string): TWinControl;
+    function AddPage(const AName, ACaption: string): TWinControl;
     procedure Search(Categories: string); stdcall;
   private
     FContainer: TContainer;
@@ -36,7 +36,7 @@ begin
   FContainer.lblNouveauContact.OnClick := DoNewContact;
 end;
 
-function TController.AddPage(AName, ACaption: string): TWinControl;
+function TController.AddPage(const AName, ACaption: string): TWinControl;
 begin
   Result := FContainer.AddPage(AName, ACaption);
 end;

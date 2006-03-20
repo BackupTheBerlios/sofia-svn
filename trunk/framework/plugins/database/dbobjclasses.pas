@@ -57,7 +57,6 @@ function TPlugin.GetPersonnes(Categories: string): string;
 var
   sql: string;
   param: string;
-  desc: string;
   ValueList: TStringList;
   where: string;
   i: Integer;

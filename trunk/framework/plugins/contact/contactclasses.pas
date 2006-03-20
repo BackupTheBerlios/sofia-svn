@@ -33,12 +33,14 @@ type
     property NomContact: string read GetNomContact write SetNomContact;
   end;
 
-  TPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay)
+  TPlugin = class(TInterfacedObject, IPlugUnknown, IPlugMultipleInstance, IPlugDisplay)
+    function GetInstanceName: string; stdcall;
     procedure Hide; stdcall;
     function GetParent: TWinControl; stdcall;
     function GetXMLCursor: IXMLCursor; stdcall;
     procedure SetXML(const Value: string); stdcall;
     function GetXML: string; stdcall;
+    procedure SetInstanceName(const Value: string); stdcall;
     procedure SetParent(const Value: TWinControl); stdcall;
     procedure SetPluginManager(const Value: IPluginManager); stdcall;
     procedure SetXMLCursor(const Value: IXMLCursor); stdcall;
@@ -46,6 +48,7 @@ type
   private
     FContainer: TWinControl;
     FController: IController;
+    FInstanceName: string;
     FXMLCursor: IXMLCursor;
     FParent: TWinControl;
     FPluginManager: IPluginManager;
@@ -69,6 +72,11 @@ begin
   FController := nil;
   FXMLCursor := nil;
   inherited;
+end;
+
+function TPlugin.GetInstanceName: string;
+begin
+  Result := FInstanceName;
 end;
 
 procedure TPlugin.Hide;
@@ -102,6 +110,11 @@ begin
   else
     FXMLCursor.SetValue('/NomContact', FController.NomContact);
   Result := FXMLCursor.XML;
+end;
+
+procedure TPlugin.SetInstanceName(const Value: string);
+begin
+  FInstanceName := Value;
 end;
 
 procedure TPlugin.SetParent(const Value: TWinControl);

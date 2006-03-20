@@ -53,7 +53,6 @@ uses xmlcursor;
 constructor TAppForm.Create(AOwner: TComponent);
 begin
   inherited;
-  //Application.ShowMainForm := False;
   FPluginManager := NewPluginManager;
 end;
 

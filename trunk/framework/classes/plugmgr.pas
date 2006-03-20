@@ -35,7 +35,7 @@ type
     procedure LoadLib;
     procedure UnloadLib;
   protected
-    function GetPluginInterface: IPlugUnknown;
+    function GetPluginInstance: IPlugUnknown;
   public
     constructor Create(ADLLName: string);
     destructor Destroy; override;
@@ -49,15 +49,26 @@ type
     function GetAsPlugDatabaseObject: IPlugDatabaseObject; stdcall;
     function GetAsPlugDataset: IPlugDataset; stdcall;
     function GetAsPlugSerialize: IPlugSerialize; stdcall;
-    function GetName: string; stdcall;
-    function GetPlugin: IPlugUnknown; stdcall;
+    function GetAsPlugMultipleInstance: IPlugMultipleInstance; stdcall;
+    function GetPluginName: string; stdcall;
+    function GetInstances(const InstanceName: string): IPlugin; stdcall;
+    function GetLastInstance: IPlugUnknown; stdcall;
+    procedure CreateInstance(const AInstanceName: string = ''); stdcall;
   private
-    FName: string;
-    FPlugin: IPlugUnknown;
+    FCurrentInstance: IPlugUnknown;
+    FInstanceIndex: Integer;
+    FPluginName: string;
+    FLastInstance: IPlugUnknown;
     FPluginLibrary: TPluginLibrary;
+    FInstances: TInterfaceList;
+    FPluginManager: IPluginManager;
+    function GetCurrentInstance: IPlugUnknown;
   public
-    constructor Create(AName: string);
+    constructor Create(APluginManager: IPluginManager; APluginName: string);
     destructor Destroy; override;
+    function IndexOf(const InstanceName: string): Integer; stdcall;
+    property CurrentInstance: IPlugUnknown read GetCurrentInstance;
+    property PluginManager: IPluginManager read FPluginManager write FPluginManager;
   end;
 
   TPluginManager = class(TInterfacedObject, IPluginManager)
@@ -71,7 +82,8 @@ type
     destructor Destroy; override;
   end;
 
-function NewPlugin(APluginManager: IPluginManager; AName: string): IPlugin;
+function NewPlugin(APluginManager: IPluginManager; APluginName: string):
+    IPlugin;
 
 function NewPluginManager: IPluginManager;
 
@@ -79,10 +91,10 @@ implementation
 
 uses Windows, xmlcursor, Dialogs;
 
-function NewPlugin(APluginManager: IPluginManager; AName: string): IPlugin;
+function NewPlugin(APluginManager: IPluginManager; APluginName: string):
+    IPlugin;
 begin
-  Result := TPlugin.Create(AName);
-  Result.Plugin.PluginManager := APluginManager;
+  Result := TPlugin.Create(APluginManager, APluginName);
 end;
 
 function NewPluginManager: IPluginManager;
@@ -94,7 +106,6 @@ resourcestring
   SUnexistingFile = 'Le fichier ''%s'' n''existe pas';
   SDLLCantBeLoaded = 'La DLL ne peut être chargée';
   SUnexistingFunction = 'La fonction %s n''existe pas';
-  SInterfaceIPlugDisplayNonSupportee = 'Interface IPlugDisplay non supportée par le plugin';
 
 const
   LIBPATH = '';
@@ -110,6 +121,7 @@ end;
 destructor TPluginManager.Destroy;
 begin
   UnloadPlugins;
+  FPlugins := nil;
   inherited;
 end;
 
@@ -122,7 +134,7 @@ begin
   i := 0;
   while not Found and (i < FPlugins.Count) do
   begin
-    Found := SameText((FPlugins[i] as IPlugin).Name, PluginName);
+    Found := SameText((FPlugins[i] as IPlugin).PluginName, PluginName);
     if not Found then
       Inc(i)
   end;
@@ -133,8 +145,6 @@ begin
 end;
 
 procedure TPluginManager.LoadPlugins;
-var
-  i: Integer;
 begin
   FPlugins.Add(NewPlugin(Self, 'dbuib'));
   FPlugins.Add(NewPlugin(Self, 'dbobj'));
@@ -189,7 +199,7 @@ begin
   FDLLHandle := 0;
 end;
 
-function TPluginLibrary.GetPluginInterface: IPlugUnknown;
+function TPluginLibrary.GetPluginInstance: IPlugUnknown;
 var
   NewPlugin: TNewPlugin;
 begin
@@ -199,19 +209,25 @@ begin
   Result := NewPlugin;
 end;
 
-constructor TPlugin.Create(AName: string);
+constructor TPlugin.Create(APluginManager: IPluginManager; APluginName: string);
 begin
-  FPluginLibrary := TPluginLibrary.Create(AName + '.dll');
-  FName := AName;
+  FPluginLibrary := TPluginLibrary.Create(APluginName + '.dll');
+  FPluginName := APluginName;
+  FPluginManager := APluginManager;
+  FInstances := TInterfaceList.Create;
+  FInstanceIndex := 0;
 end;
 
 destructor TPlugin.Destroy;
+var
+  i: Integer;
 begin
-  if Assigned(FPlugin) then
+  for i := 0 to FInstances.Count - 1 do
   begin
-    FPlugin.XMLCursor := nil;
-    FPlugin := nil;
+    (FInstances[i] as IPlugUnknown).XMLCursor := nil;
+    FInstances[i] := nil
   end;
+  FInstances := nil;
   FPluginLibrary.Free;
   inherited;
 end;
@@ -219,61 +235,155 @@ end;
 function TPlugin.GetAsDisplay: IPlugDisplay;
 begin
   try
-    Result := FPlugin as IPlugDisplay;
+    Result := CurrentInstance as IPlugDisplay;
   except
-    ShowMessage(Format('Le plugin "%s" ne supporte pas l''interface %s', [FName, 'PlugDisplay']));
+    ShowMessage(Format('Le plugin "%s" ne supporte pas l''interface %s', [FPluginName, 'PlugDisplay']));
   end;
 end;
 
 function TPlugin.GetAsPlugConnection: IPlugConnection;
 begin
   try
-    Result := FPlugin as IPlugConnection;
+    Result := CurrentInstance as IPlugConnection;
   except
-    ShowMessage(Format('Le plugin "%s" ne supporte pas l''interface %s', [FName, 'PlugConnection']));
+    ShowMessage(Format('Le plugin "%s" ne supporte pas l''interface %s', [FPluginName, 'PlugConnection']));
   end;
 end;
 
 function TPlugin.GetAsPlugDatabaseObject: IPlugDatabaseObject;
 begin
   try
-    Result := FPlugin as IPlugDatabaseObject;
+    Result := CurrentInstance as IPlugDatabaseObject;
   except
-    ShowMessage(Format('Le plugin "%s" ne supporte pas l''interface %s', [FName, 'PlugDatabaseObject']));
+    ShowMessage(Format('Le plugin "%s" ne supporte pas l''interface %s', [FPluginName, 'PlugDatabaseObject']));
   end;
 end;
 
 function TPlugin.GetAsPlugSerialize: IPlugSerialize;
 begin
   try
-    Result := FPlugin as IPlugSerialize;
+    Result := CurrentInstance as IPlugSerialize;
   except
-    ShowMessage(Format('Le plugin "%s" ne supporte pas l''interface %s', [FName, 'PlugIO']));
+    ShowMessage(Format('Le plugin "%s" ne supporte pas l''interface %s', [FPluginName, 'PlugIO']));
   end;
 end;
 
 function TPlugin.GetAsPlugDataset: IPlugDataset;
 begin
   try
-    Result := FPlugin as IPlugDataset;
+    Result := CurrentInstance as IPlugDataset;
   except
-    ShowMessage(Format('Le plugin "%s" ne supporte pas l''interface %s', [FName, 'PlugDataset']));
+    ShowMessage(Format('Le plugin "%s" ne supporte pas l''interface %s', [FPluginName, 'PlugDataset']));
   end;
 end;
 
-function TPlugin.GetName: string;
+function TPlugin.GetAsPlugMultipleInstance: IPlugMultipleInstance;
 begin
-  Result := FName;
+  try
+    Result := CurrentInstance as IPlugMultipleInstance;
+  except
+    ShowMessage(Format('Le plugin "%s" ne supporte pas l''interface %s', [FPluginName, 'IPlugMultipleInstance']));
+  end;
 end;
 
-function TPlugin.GetPlugin: IPlugUnknown;
+function TPlugin.GetPluginName: string;
 begin
-  if not Assigned(FPlugin) then
+  Result := FPluginName;
+end;
+
+function TPlugin.GetInstances(const InstanceName: string): IPlugin;
+var
+  Idx: Integer;
+begin
+  Idx := IndexOf(InstanceName);
+  if Idx = -1 then
+    CreateInstance(InstanceName)
+  else
+    FCurrentInstance := FInstances[Idx] as IPlugUnknown;
+
+  Result := Self;
+end;
+
+function TPlugin.GetLastInstance: IPlugUnknown;
+begin
+  if not Assigned(FLastInstance) then
   begin
-    FPlugin := FPluginLibrary.GetPluginInterface;
-    FPlugin.XMLCursor := TXMLCursor.Create;
+    CreateInstance;
   end;
-  Result := FPlugin;
+  Result := FLastInstance;
+end;
+
+procedure TPlugin.CreateInstance(const AInstanceName: string = '');
+var
+  Instance: IPlugMultipleInstance;
+  IsMultipleInstance: Boolean;
+  Idx: Integer;
+begin
+  //Vérification de l'existance de ce nomm d'instance
+  Idx := IndexOf(AInstanceName);
+  if Idx <> -1 then
+  begin
+    GetInstances(AInstanceName);
+    Exit;
+  end;
+
+  FLastInstance := FPluginLibrary.GetPluginInstance;
+
+  //Nommage de l'instance
+  IsMultipleInstance := Supports(FLastInstance, IPlugMultipleInstance);
+  if  IsMultipleInstance then
+  begin
+    Instance := FLastInstance as IPlugMultipleInstance;
+    if Length(Trim(AInstanceName)) = 0 then
+    begin
+      Inc(FInstanceIndex);
+      Instance.InstanceName := Format('%s%d', [FPluginName, FInstanceIndex]);
+    end else
+      Instance.InstanceName := Trim(AInstanceName);
+  end;
+
+  FLastInstance.XMLCursor := TXMLCursor.Create;
+  FLastInstance.PluginManager := FPluginManager;
+
+  if IsMultipleInstance then
+    FInstances.Add(FLastInstance);
+
+  FCurrentInstance := FLastInstance;
+end;
+
+function TPlugin.GetCurrentInstance: IPlugUnknown;
+begin
+  if not Assigned(FCurrentInstance) then
+    Result := GetLastInstance
+  else
+    Result := FCurrentInstance;
+end;
+
+function TPlugin.IndexOf(const InstanceName: string): Integer;
+var
+  Found: Boolean;
+  i: Integer;
+  Instance: IPlugMultipleInstance;
+begin
+  Found := False;
+  i := 0;
+  while not Found and (i < FInstances.Count) do
+  begin
+    try
+      Instance := FInstances[i] as IPlugMultipleInstance;
+      Found := SameText(Instance.InstanceName, InstanceName);
+      if not Found then
+        Inc(i)
+    except
+      Found := False;
+      Result := -1;
+    end;
+  end;
+
+  if Found then
+    Result := i
+  else
+    Result := -1;
 end;
 
 end.

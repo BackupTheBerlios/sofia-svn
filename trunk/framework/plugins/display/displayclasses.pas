@@ -28,7 +28,7 @@ type
 
   IController = interface(IInterface)
     ['{B0122448-88BA-44DF-9B33-8198AF276DF6}']
-    function AddPage(AName, ACaption: string): TWinControl;
+    function AddPage(const AName, ACaption: string): TWinControl;
     procedure Search(Categories: string); stdcall;
   end;
 
@@ -49,14 +49,14 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-    procedure AddPage(AName, ACaption: string); stdcall;
+    procedure AddPage(const APluginName, AInstanceName, ACaption: string); stdcall;
     procedure Search(Categories: string); stdcall;
     procedure NewContact; stdcall;
   end;
 
 implementation
 
-uses Classes, displayctrl, displaygui;
+uses Classes, displayctrl, displaygui, SysUtils;
 
 constructor TPlugin.Create;
 begin
@@ -71,12 +71,23 @@ begin
   inherited;
 end;
 
-procedure TPlugin.AddPage(AName, ACaption: string);
+procedure TPlugin.AddPage(const APluginName, AInstanceName, ACaption: string);
+var
+  Ctrl: TWinControl;
+  InstanceName: string;
 begin
-  with FPluginManager[AName].AsDisplay do
+  with FPluginManager[APluginName].Instances[AInstanceName].AsDisplay do
   begin
-    Parent := FController.AddPage(AName, ACaption);;
-    Show;
+    if Supports(FPluginManager[APluginName].LastInstance, IPlugMultipleInstance) then
+      InstanceName := FPluginManager[APluginName].AsPlugMultipleInstance.InstanceName
+    else
+      InstanceName := APluginName;
+    Ctrl := FController.AddPage(InstanceName, ACaption);
+    if Assigned(Ctrl) then
+    begin
+      Parent := Ctrl;
+      Show;
+    end;
   end;
 end;
 
@@ -118,12 +129,12 @@ begin
   Dts.Add(Qry.GetPersonnes(Categories));
   Res.XML := Dts.XML;
 
-  AddPage('search', 'Résultats de la recherche');
+  AddPage('search', '', 'Résultats de la recherche');
 end;
 
 procedure TPlugin.NewContact;
 begin
-  AddPage('contact', 'Nouveau contact');
+  AddPage('contact', '', 'Nouveau contact');
 end;
 
 procedure TPlugin.SetParent(const Value: TWinControl);
@@ -146,7 +157,7 @@ begin
   FContainer.Parent := FParent;
   FContainer.Align := alClient;
 
-  AddPage('welcome', 'Accueil');
+  AddPage('welcome', '', 'Accueil');
 end;
 
 end.

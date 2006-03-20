@@ -1,79 +1,258 @@
 object Container: TContainer
   Left = 0
   Top = 0
-  Width = 393
-  Height = 338
+  Width = 699
+  Height = 573
+  Color = clWindow
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'Verdana'
   Font.Style = []
+  ParentColor = False
   ParentFont = False
   TabOrder = 0
-  object Panel3: TPanel
+  object pnlTitreAutresProf: TPanel
     Left = 0
-    Top = 0
-    Width = 17
-    Height = 338
-    Align = alLeft
+    Top = 398
+    Width = 682
+    Height = 21
+    Align = alTop
+    Alignment = taLeftJustify
     BevelOuter = bvNone
+    Color = 16056319
+    ParentBackground = False
     TabOrder = 0
-    object Image1: TImage
-      Tag = 1
-      Left = 5
-      Top = 7
-      Width = 9
-      Height = 9
-      AutoSize = True
-      Picture.Data = {
-        07544269746D617032010000424D320100000000000036000000280000000900
-        0000090000000100180000000000FC0000000000000000000000000000000000
-        0000FF00FFA29594A29594A29594A29594A29594A29594A29594FF00FF00A295
-        94E4DBD5DCD3CBD9CFC5D9CFC5D9CFC5D8CEC4DACEC6A2959400A29594EEEAE6
-        EAE5DFE7E0DAE7E0DAE6DFD9E4DBD5E2D9D3A2959400A29594F7F7F4F6F3F2F4
-        F2EFF3F1EFF3EFECEEEAE6E9E2DDA2959400A29594F9F7F60000000000000000
-        00000000000000EBE6E0A2959400A29594FAFAF9FAFAF9FAF8F7FAF8F7FAF8F7
-        F6F3F2EFEBE7A2959400A29594FDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFA
-        F8F7A2959400A29594FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFA295
-        9400FF00FFA29594A29594A29594A29594A29594A29594A29594FF00FF00}
-      OnClick = Image1Click
+    object lblAutresProf: TLabel
+      Left = 14
+      Top = 0
+      Width = 143
+      Height = 21
+      Cursor = crHandPoint
+      Align = alLeft
+      Caption = 'Autres professionnels'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = 12622444
+      Font.Height = -11
+      Font.Name = 'Verdana'
+      Font.Style = [fsBold]
+      ParentFont = False
+      Layout = tlCenter
     end
-  end
-  object Panel4: TPanel
-    Left = 17
-    Top = 0
-    Width = 376
-    Height = 338
-    Align = alClient
-    BevelOuter = bvNone
-    TabOrder = 1
-    object pnlClient: TPanel
-      Left = 0
-      Top = 22
-      Width = 376
-      Height = 155
-      Align = alTop
-      ParentColor = True
-      TabOrder = 0
-    end
-    object Panel1: TPanel
+    object pnlCollapseAutresProf: TPanel
       Left = 0
       Top = 0
-      Width = 376
-      Height = 22
-      Align = alTop
-      Alignment = taLeftJustify
-      Caption = 'Informations relatives au client'
-      TabOrder = 1
+      Width = 14
+      Height = 21
+      Align = alLeft
+      BevelOuter = bvNone
+      ParentColor = True
+      TabOrder = 0
+      object imgCollapseAutresProf: TImage
+        Tag = 1
+        Left = 0
+        Top = 6
+        Width = 9
+        Height = 15
+        Align = alLeft
+        AutoSize = True
+        Picture.Data = {
+          07544269746D617032010000424D320100000000000036000000280000000900
+          0000090000000100180000000000FC0000000000000000000000000000000000
+          0000FF00FFA29594A29594A29594A29594A29594A29594A29594FF00FF00A295
+          94E4DBD5DCD3CBD9CFC5D9CFC5D9CFC5D8CEC4DACEC6A2959400A29594EEEAE6
+          EAE5DFE7E0DAE7E0DAE6DFD9E4DBD5E2D9D3A2959400A29594F7F7F4F6F3F2F4
+          F2EFF3F1EFF3EFECEEEAE6E9E2DDA2959400A29594F9F7F60000000000000000
+          00000000000000EBE6E0A2959400A29594FAFAF9FAFAF9FAF8F7FAF8F7FAF8F7
+          F6F3F2EFEBE7A2959400A29594FDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFA
+          F8F7A2959400A29594FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFA295
+          9400FF00FFA29594A29594A29594A29594A29594A29594A29594FF00FF00}
+        Transparent = True
+      end
+      object bvCollapseAutresProf: TBevel
+        Left = 0
+        Top = 0
+        Width = 14
+        Height = 6
+        Align = alTop
+        Shape = bsSpacer
+      end
     end
   end
-  object ImageList_9: TImageList
+  object pnlAutresProf: TPanel
+    Left = 0
+    Top = 419
+    Width = 682
+    Height = 178
+    Align = alTop
+    BevelOuter = bvNone
+    Color = 16056319
+    ParentBackground = False
+    TabOrder = 1
+  end
+  object pnlTitrePrescripteur: TPanel
+    Left = 0
+    Top = 199
+    Width = 682
+    Height = 21
+    Align = alTop
+    Alignment = taLeftJustify
+    BevelOuter = bvNone
+    Color = 16054527
+    ParentBackground = False
+    TabOrder = 2
+    object lblPrescripteurs: TLabel
+      Left = 14
+      Top = 0
+      Width = 88
+      Height = 21
+      Cursor = crHandPoint
+      Align = alLeft
+      Caption = 'Prescripteurs'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = 12622444
+      Font.Height = -11
+      Font.Name = 'Verdana'
+      Font.Style = [fsBold]
+      ParentFont = False
+      Layout = tlCenter
+    end
+    object pnlCollapsePrescripteurs: TPanel
+      Left = 0
+      Top = 0
+      Width = 14
+      Height = 21
+      Align = alLeft
+      BevelOuter = bvNone
+      ParentColor = True
+      TabOrder = 0
+      object imgCollapsePrescripteurs: TImage
+        Tag = 1
+        Left = 0
+        Top = 6
+        Width = 9
+        Height = 15
+        Align = alLeft
+        AutoSize = True
+        Picture.Data = {
+          07544269746D617032010000424D320100000000000036000000280000000900
+          0000090000000100180000000000FC0000000000000000000000000000000000
+          0000FF00FFA29594A29594A29594A29594A29594A29594A29594FF00FF00A295
+          94E4DBD5DCD3CBD9CFC5D9CFC5D9CFC5D8CEC4DACEC6A2959400A29594EEEAE6
+          EAE5DFE7E0DA000000E6DFD9E4DBD5E2D9D3A2959400A29594F7F7F4F6F3F2F4
+          F2EF000000F3EFECEEEAE6E9E2DDA2959400A29594F9F7F60000000000000000
+          00000000000000EBE6E0A2959400A29594FAFAF9FAFAF9FAF8F7000000FAF8F7
+          F6F3F2EFEBE7A2959400A29594FDFDFDFDFDFDFDFDFD000000FDFDFDFDFDFDFA
+          F8F7A2959400A29594FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFA295
+          9400FF00FFA29594A29594A29594A29594A29594A29594A29594FF00FF00}
+        Transparent = True
+      end
+      object bvCollapsePrescripteurs: TBevel
+        Left = 0
+        Top = 0
+        Width = 14
+        Height = 6
+        Align = alTop
+        Shape = bsSpacer
+      end
+    end
+  end
+  object pnlPrescripteurs: TPanel
+    Left = 0
+    Top = 220
+    Width = 682
+    Height = 178
+    Align = alTop
+    BevelOuter = bvNone
+    Color = 16054527
+    ParentBackground = False
+    TabOrder = 3
+  end
+  object pnlTitreFicheAdm: TPanel
+    Left = 0
+    Top = 0
+    Width = 682
+    Height = 21
+    Align = alTop
+    Alignment = taLeftJustify
+    BevelOuter = bvNone
+    Color = 16053503
+    ParentBackground = False
+    TabOrder = 4
+    object lblFicheAdm: TLabel
+      Left = 14
+      Top = 0
+      Width = 134
+      Height = 21
+      Cursor = crHandPoint
+      Align = alLeft
+      Caption = 'Fiche administrative'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = 12622444
+      Font.Height = -11
+      Font.Name = 'Verdana'
+      Font.Style = [fsBold]
+      ParentFont = False
+      Layout = tlCenter
+    end
+    object pnlCollapseFicheAdm: TPanel
+      Left = 0
+      Top = 0
+      Width = 14
+      Height = 21
+      Align = alLeft
+      BevelOuter = bvNone
+      ParentColor = True
+      TabOrder = 0
+      object imgCollapseFicheAdm: TImage
+        Tag = 1
+        Left = 0
+        Top = 6
+        Width = 9
+        Height = 15
+        Align = alLeft
+        AutoSize = True
+        Picture.Data = {
+          07544269746D617032010000424D320100000000000036000000280000000900
+          0000090000000100180000000000FC0000000000000000000000000000000000
+          0000FF00FFA29594A29594A29594A29594A29594A29594A29594FF00FF00A295
+          94E4DBD5DCD3CBD9CFC5D9CFC5D9CFC5D8CEC4DACEC6A2959400A29594EEEAE6
+          EAE5DFE7E0DAE7E0DAE6DFD9E4DBD5E2D9D3A2959400A29594F7F7F4F6F3F2F4
+          F2EFF3F1EFF3EFECEEEAE6E9E2DDA2959400A29594F9F7F60000000000000000
+          00000000000000EBE6E0A2959400A29594FAFAF9FAFAF9FAF8F7FAF8F7FAF8F7
+          F6F3F2EFEBE7A2959400A29594FDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFA
+          F8F7A2959400A29594FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFA295
+          9400FF00FFA29594A29594A29594A29594A29594A29594A29594FF00FF00}
+        Transparent = True
+      end
+      object bvCollapseFicheAdm: TBevel
+        Left = 0
+        Top = 0
+        Width = 14
+        Height = 6
+        Align = alTop
+        Shape = bsSpacer
+      end
+    end
+  end
+  object pnlFicheAdmin: TPanel
+    Left = 0
+    Top = 21
+    Width = 682
+    Height = 178
+    Align = alTop
+    BevelOuter = bvNone
+    Color = 16053503
+    ParentBackground = False
+    TabOrder = 5
+  end
+  object ImageList9x9: TImageList
     Height = 9
     Width = 9
     Left = 200
     Top = 112
     Bitmap = {
-      494C010102000400040009000900FFFFFFFFFF00FFFFFFFFFFFFFFFF424D3600
+      494C010102000400040009000900FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000240000000900000001002000000000001005
       00000000000000000000000000000000000000000000A2959400A2959400A295
       9400A2959400A2959400A2959400A29594000000000000000000A2959400A295
@@ -120,6 +299,6 @@ object Container: TContainer
       00000000480000000000000000000000000000000000000000000000FFFFFF00
       80C0400000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
-      80C0400000000000}
+      80C040000000000000000000000000000000000000000000000000000000}
   end
 end

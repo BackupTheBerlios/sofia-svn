@@ -51,7 +51,7 @@ type
     Panel5: TPanel;
     lblNouveauContact: TLabel;
     Image1: TImage;
-    function AddPage(AName, ACaption: string): TWinControl;
+    function AddPage(const AName, ACaption: string): TWinControl;
     procedure Label3Click(Sender: TObject);
     procedure lblMouseEnter(Sender: TObject);
     procedure lblMouseLeave(Sender: TObject);
@@ -61,12 +61,14 @@ type
     procedure Label10Click(Sender: TObject);
   private
     FPageIndex: Integer;
+    FPageObjects: TStringList;
     FPagesCount: Integer;
     procedure RepaintCurrentTab(ATabIndex: Integer);
     procedure SetPageIndex(const Value: Integer);
     { Déclarations privées }
   public
     constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
     property PageIndex: Integer read FPageIndex write SetPageIndex;
     { Déclarations publiques }
   end;
@@ -83,21 +85,39 @@ constructor TContainer.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FPagesCount := 0;
+  FPageObjects := TStringList.Create();
 end;
 
-function TContainer.AddPage(AName, ACaption: string): TWinControl;
+destructor TContainer.Destroy;
+begin
+  FreeAndNil(FPageObjects);
+  inherited Destroy;
+end;
+
+function TContainer.AddPage(const AName, ACaption: string): TWinControl;
 var
   Panel: TPanel;
+  Idx: Integer;
 begin
+  Idx := FPageObjects.IndexOf(UpperCase(AName));
+  if Idx <> -1 then
+  begin
+    RepaintCurrentTab(Idx);
+    Result := nil;
+    Exit;
+  end;
+
   Inc(FPagesCount);
   sgPages.ColCount := FPagesCount;
   sgPages.Cells[0, FPagesCount - 1] := ACaption;
 
   Panel := TPanel.Create(Self);
-  sgPages.Cols[FPagesCount - 1].Objects[0] := Panel;
   Panel.BevelOuter := bvNone;
   Panel.Align := alClient;
   Panel.Parent := pnlPlugin;
+
+  Idx := FPageObjects.AddObject(UpperCase(AName), Panel);
+  sgPages.Cols[FPagesCount - 1].Objects[0] := FPageObjects.Objects[Idx];
 
   RepaintCurrentTab(0);
   RepaintCurrentTab(FPagesCount - 1);

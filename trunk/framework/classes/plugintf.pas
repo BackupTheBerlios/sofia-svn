@@ -77,6 +77,15 @@ type
     property Parent: TWinControl write SetParent;
   end;
 
+{------------------------------------------------------------------------------}
+
+
+  IPlugMultipleInstance = interface(IInterface)
+  ['{0FE8167B-8474-4B2C-94EA-2638AB9E2169}']
+    function GetInstanceName: string; stdcall;
+    procedure SetInstanceName(const Value: string); stdcall;
+    property InstanceName: string read GetInstanceName write SetInstanceName;
+  end;
 
 {------------------------------------------------------------------------------}
 
@@ -99,15 +108,22 @@ type
     function GetAsPlugDatabaseObject: IPlugDatabaseObject; stdcall;
     function GetAsPlugDataset: IPlugDataset; stdcall;
     function GetAsPlugSerialize: IPlugSerialize; stdcall;
-    function GetName: string; stdcall;
-    function GetPlugin: IPlugUnknown; stdcall;
+    function GetPluginName: string; stdcall;
+    function GetLastInstance: IPlugUnknown; stdcall;
+    function GetInstances(const InstanceName: string): IPlugin; stdcall;
+    procedure CreateInstance(const AInstanceName: string = ''); stdcall;
+    function GetAsPlugMultipleInstance: IPlugMultipleInstance; stdcall;
     property AsDisplay: IPlugDisplay read GetAsDisplay;
     property AsPlugConnection: IPlugConnection read GetAsPlugConnection;
     property AsPlugDatabaseObject: IPlugDatabaseObject read GetAsPlugDatabaseObject;
     property AsPlugDataset: IPlugDataset read GetAsPlugDataset;
+    property AsPlugMultipleInstance: IPlugMultipleInstance read
+        GetAsPlugMultipleInstance;
     property AsPlugSerialize: IPlugSerialize read GetAsPlugSerialize;
-    property Name: string read GetName;
-    property Plugin: IPlugUnknown read GetPlugin;
+    property PluginName: string read GetPluginName;
+    property LastInstance: IPlugUnknown read GetLastInstance;
+    property Instances[const InstanceName: string]: IPlugin read GetInstances;
+        default;
   end;
 
   IPluginManager = interface(IInterface)
@@ -117,7 +133,6 @@ type
     procedure UnloadPlugins;
     property Plugins[const PluginName: string]: IPlugin read GetPlugins; default;
   end;
-
 
 implementation
 
