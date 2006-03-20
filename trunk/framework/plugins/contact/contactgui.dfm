@@ -1,8 +1,8 @@
 object Container: TContainer
   Left = 0
   Top = 0
-  Width = 699
-  Height = 573
+  Width = 681
+  Height = 542
   Color = clWindow
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -12,10 +12,10 @@ object Container: TContainer
   ParentColor = False
   ParentFont = False
   TabOrder = 0
-  object pnlTitreAutresProf: TPanel
+  object pnlTitreDivers: TPanel
     Left = 0
-    Top = 398
-    Width = 682
+    Top = 321
+    Width = 681
     Height = 21
     Align = alTop
     Alignment = taLeftJustify
@@ -23,14 +23,14 @@ object Container: TContainer
     Color = 16056319
     ParentBackground = False
     TabOrder = 0
-    object lblAutresProf: TLabel
+    object lblDivers: TLabel
       Left = 14
       Top = 0
-      Width = 143
+      Width = 42
       Height = 21
       Cursor = crHandPoint
       Align = alLeft
-      Caption = 'Autres professionnels'
+      Caption = 'Divers'
       Font.Charset = ANSI_CHARSET
       Font.Color = 12622444
       Font.Height = -11
@@ -39,7 +39,7 @@ object Container: TContainer
       ParentFont = False
       Layout = tlCenter
     end
-    object pnlCollapseAutresProf: TPanel
+    object pnlCollapseDivers: TPanel
       Left = 0
       Top = 0
       Width = 14
@@ -48,7 +48,7 @@ object Container: TContainer
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 0
-      object imgCollapseAutresProf: TImage
+      object imgCollapseDivers: TImage
         Tag = 1
         Left = 0
         Top = 6
@@ -69,7 +69,7 @@ object Container: TContainer
           9400FF00FFA29594A29594A29594A29594A29594A29594A29594FF00FF00}
         Transparent = True
       end
-      object bvCollapseAutresProf: TBevel
+      object bvCollapseDivers: TBevel
         Left = 0
         Top = 0
         Width = 14
@@ -79,11 +79,11 @@ object Container: TContainer
       end
     end
   end
-  object pnlAutresProf: TPanel
+  object pnlDivers: TPanel
     Left = 0
-    Top = 419
-    Width = 682
-    Height = 178
+    Top = 342
+    Width = 681
+    Height = 91
     Align = alTop
     BevelOuter = bvNone
     Color = 16056319
@@ -93,7 +93,7 @@ object Container: TContainer
   object pnlTitrePrescripteur: TPanel
     Left = 0
     Top = 199
-    Width = 682
+    Width = 681
     Height = 21
     Align = alTop
     Alignment = taLeftJustify
@@ -101,14 +101,14 @@ object Container: TContainer
     Color = 16054527
     ParentBackground = False
     TabOrder = 2
-    object lblPrescripteurs: TLabel
+    object lblProfessionnels: TLabel
       Left = 14
       Top = 0
-      Width = 88
+      Width = 96
       Height = 21
       Cursor = crHandPoint
       Align = alLeft
-      Caption = 'Prescripteurs'
+      Caption = 'Professionnels'
       Font.Charset = ANSI_CHARSET
       Font.Color = 12622444
       Font.Height = -11
@@ -117,7 +117,7 @@ object Container: TContainer
       ParentFont = False
       Layout = tlCenter
     end
-    object pnlCollapsePrescripteurs: TPanel
+    object pnlCollapseProfessionnels: TPanel
       Left = 0
       Top = 0
       Width = 14
@@ -126,7 +126,7 @@ object Container: TContainer
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 0
-      object imgCollapsePrescripteurs: TImage
+      object imgCollapseProfessionnels: TImage
         Tag = 1
         Left = 0
         Top = 6
@@ -147,7 +147,7 @@ object Container: TContainer
           9400FF00FFA29594A29594A29594A29594A29594A29594A29594FF00FF00}
         Transparent = True
       end
-      object bvCollapsePrescripteurs: TBevel
+      object bvCollapseProfessionnels: TBevel
         Left = 0
         Top = 0
         Width = 14
@@ -157,11 +157,11 @@ object Container: TContainer
       end
     end
   end
-  object pnlPrescripteurs: TPanel
+  object pnlProfessionnels: TPanel
     Left = 0
     Top = 220
-    Width = 682
-    Height = 178
+    Width = 681
+    Height = 101
     Align = alTop
     BevelOuter = bvNone
     Color = 16054527
@@ -171,7 +171,7 @@ object Container: TContainer
   object pnlTitreFicheAdm: TPanel
     Left = 0
     Top = 0
-    Width = 682
+    Width = 681
     Height = 21
     Align = alTop
     Alignment = taLeftJustify
@@ -238,7 +238,7 @@ object Container: TContainer
   object pnlFicheAdmin: TPanel
     Left = 0
     Top = 21
-    Width = 682
+    Width = 681
     Height = 178
     Align = alTop
     BevelOuter = bvNone

@@ -24,7 +24,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, ExtCtrls, ComCtrls, ToolWin, Grids;
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, ToolWin, Grids, ActnList, ImgList;
 
 type
   TContainer = class(TFrame)
@@ -40,7 +40,6 @@ type
     Panel7: TPanel;
     Edit1: TEdit;
     btnGo: TButton;
-    Label1: TLabel;
     Panel8: TPanel;
     Label2: TLabel;
     Label8: TLabel;
@@ -51,6 +50,21 @@ type
     Panel5: TPanel;
     lblNouveauContact: TLabel;
     Image1: TImage;
+    pnlGeneral: TPanel;
+    pnlIconeNouveauContact: TPanel;
+    Bevel1: TBevel;
+    Image2: TImage;
+    Panel9: TPanel;
+    Bevel2: TBevel;
+    Image3: TImage;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    Shape1: TShape;
+    ImageList24x24: TImageList;
+    ActionList: TActionList;
+    actConfirmer: TAction;
+    actFermer: TAction;
+    ToolButton2: TToolButton;
     function AddPage(const AName, ACaption: string): TWinControl;
     procedure Label3Click(Sender: TObject);
     procedure lblMouseEnter(Sender: TObject);
@@ -59,6 +73,8 @@ type
     procedure sgPagesDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect;
       State: TGridDrawState);
     procedure Label10Click(Sender: TObject);
+    procedure actConfirmerExecute(Sender: TObject);
+    procedure actFermerExecute(Sender: TObject);
   private
     FPageIndex: Integer;
     FPageObjects: TStringList;
@@ -304,6 +320,16 @@ end;
 procedure TContainer.Label10Click(Sender: TObject);
 begin
   Application.MainForm.Close;
+end;
+
+procedure TContainer.actConfirmerExecute(Sender: TObject);
+begin
+ //
+end;
+
+procedure TContainer.actFermerExecute(Sender: TObject);
+begin
+ //
 end;
 
 end.

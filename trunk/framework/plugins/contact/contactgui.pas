@@ -9,24 +9,24 @@ uses
 type
   TContainer = class(TFrame)
     ImageList9x9: TImageList;
-    pnlTitreAutresProf: TPanel;
-    pnlAutresProf: TPanel;
-    pnlCollapseAutresProf: TPanel;
-    imgCollapseAutresProf: TImage;
-    bvCollapseAutresProf: TBevel;
+    pnlTitreDivers: TPanel;
+    pnlDivers: TPanel;
+    pnlCollapseDivers: TPanel;
+    imgCollapseDivers: TImage;
+    bvCollapseDivers: TBevel;
     pnlTitrePrescripteur: TPanel;
-    pnlCollapsePrescripteurs: TPanel;
-    imgCollapsePrescripteurs: TImage;
-    bvCollapsePrescripteurs: TBevel;
-    pnlPrescripteurs: TPanel;
+    pnlCollapseProfessionnels: TPanel;
+    imgCollapseProfessionnels: TImage;
+    bvCollapseProfessionnels: TBevel;
+    pnlProfessionnels: TPanel;
     pnlTitreFicheAdm: TPanel;
     pnlCollapseFicheAdm: TPanel;
     imgCollapseFicheAdm: TImage;
     bvCollapseFicheAdm: TBevel;
     pnlFicheAdmin: TPanel;
     lblFicheAdm: TLabel;
-    lblPrescripteurs: TLabel;
-    lblAutresProf: TLabel;
+    lblProfessionnels: TLabel;
+    lblDivers: TLabel;
   private
     FFieldsZones: TObjectList;
     { Déclarations privées }
@@ -42,6 +42,7 @@ type
     FCollapseImages: TImageList;
     FContainer: TPanel;
     FExpanded: Boolean;
+    FOriginalHeight: Integer;
     FTitleLabel: TLabel;
     procedure SetExpanded(const Value: Boolean);
     procedure SetTitleLabel(const Value: TLabel);
@@ -71,8 +72,8 @@ begin
   FFieldsZones := TObjectList.Create;
 
   FFieldsZones.Add(TFieldsZone.Create(ImageList9x9, imgCollapseFicheAdm, pnlFicheAdmin, True, lblFicheAdm));
-  FFieldsZones.Add(TFieldsZone.Create(ImageList9x9, imgCollapsePrescripteurs, pnlPrescripteurs, False, lblPrescripteurs));
-  FFieldsZones.Add(TFieldsZone.Create(ImageList9x9, imgCollapseAutresProf, pnlAutresProf, False, lblAutresProf));
+  FFieldsZones.Add(TFieldsZone.Create(ImageList9x9, imgCollapseProfessionnels, pnlProfessionnels, False, lblProfessionnels));
+  FFieldsZones.Add(TFieldsZone.Create(ImageList9x9, imgCollapseDivers, pnlDivers, False, lblDivers));
 end;
 
 destructor TContainer.Destroy;
@@ -88,6 +89,7 @@ begin
   FCollapseImage := ACollapseImage;
   FCollapseImage.OnClick := CollapseClick;
   FContainer := AContainer;
+  FOriginalHeight := FContainer.ClientHeight;
   TitleLabel := ATitleLabel;
   TitleLabel.OnClick := CollapseClick;
   Expanded := AExpanded;
@@ -119,7 +121,10 @@ var
 begin
   FExpanded := Value;
 
-  FContainer.Visible := FExpanded;
+  if FExpanded then
+    FContainer.Height := FOriginalHeight
+  else
+    FContainer.Height := 1;
 
   btmp := TBitmap.Create;
   try
