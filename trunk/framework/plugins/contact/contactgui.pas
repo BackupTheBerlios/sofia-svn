@@ -4,13 +4,12 @@ interface
 
 uses
   Classes, Controls, Forms, contactclasses, Graphics, ExtCtrls, ImgList,
-  StdCtrls, Contnrs, ComCtrls, Buttons, ToolWin, ActnList;
+  StdCtrls, Contnrs, ComCtrls, Buttons, ActnList, ToolWin, Types, Menus;
 
 type
   TContainer = class(TFrame)
     ImageList9x9: TImageList;
     pnlTitreDivers: TPanel;
-    pnlDivers: TPanel;
     pnlCollapseDivers: TPanel;
     imgCollapseDivers: TImage;
     bvCollapseDivers: TBevel;
@@ -30,28 +29,104 @@ type
     pnlSaisie1: TPanel;
     pnlSaisie2: TPanel;
     pnlSaisie3: TPanel;
-    edtPrenom: TEdit;
-    edtNom: TEdit;
-    lblNom: TLabel;
-    lblPrenom: TLabel;
-    Bevel2: TBevel;
     Bevel3: TBevel;
-    Label1: TLabel;
-    pnlMessagerie: TPanel;
-    lvAdresses: TListView;
-    ToolBar1: TToolBar;
-    ToolButton2: TToolButton;
     ImageList16x16: TImageList;
     ActionListMessageries: TActionList;
     actAjouter: TAction;
     actModifier: TAction;
     actSupprimer: TAction;
     actDefaut: TAction;
-    ToolButton1: TToolButton;
-    ToolButton3: TToolButton;
-    ToolButton4: TToolButton;
-    ToolButton5: TToolButton;
-    ToolButton6: TToolButton;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Label3: TLabel;
+    Bevel2: TBevel;
+    Label4: TLabel;
+    Panel3: TPanel;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    memoRue: TMemo;
+    ActionListChamps: TActionList;
+    actAdresseDomicile: TAction;
+    PopupMenu1: TPopupMenu;
+    Domicile1: TMenuItem;
+    actAdresseBureau: TAction;
+    actAdresseAutre: TAction;
+    Panel5: TPanel;
+    ToolBar1: TToolBar;
+    btnAdresse: TToolButton;
+    Bureau1: TMenuItem;
+    Autre1: TMenuItem;
+    Panel6: TPanel;
+    Shape1: TShape;
+    Label6: TLabel;
+    Panel9: TPanel;
+    Bevel5: TBevel;
+    Image2: TImage;
+    Bevel8: TBevel;
+    Panel10: TPanel;
+    Shape3: TShape;
+    Label8: TLabel;
+    Panel11: TPanel;
+    Bevel9: TBevel;
+    Image3: TImage;
+    Bevel10: TBevel;
+    Panel7: TPanel;
+    Panel8: TPanel;
+    Shape2: TShape;
+    Label1: TLabel;
+    Panel12: TPanel;
+    Bevel1: TBevel;
+    Image1: TImage;
+    Bevel6: TBevel;
+    pnlDivers: TPanel;
+    Panel13: TPanel;
+    Panel14: TPanel;
+    Label9: TLabel;
+    Panel15: TPanel;
+    Panel17: TPanel;
+    Shape4: TShape;
+    Label10: TLabel;
+    Panel18: TPanel;
+    Bevel12: TBevel;
+    Image4: TImage;
+    Bevel13: TBevel;
+    Panel4: TPanel;
+    lvAdresses: TListView;
+    ToolBar2: TToolBar;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton12: TToolButton;
+    Bevel4: TBevel;
+    Label2: TLabel;
+    Edit3: TEdit;
+    Bevel7: TBevel;
+    Label5: TLabel;
+    Edit4: TEdit;
+    Panel16: TPanel;
+    Panel19: TPanel;
+    Panel20: TPanel;
+    ToolBar3: TToolBar;
+    btnTelephone1: TToolButton;
+    Bevel11: TBevel;
+    actTelephoneAssistant: TAction;
+    Edit5: TEdit;
+    Panel21: TPanel;
+    ToolBar4: TToolBar;
+    btnTelephone2: TToolButton;
+    Bevel14: TBevel;
+    Bevel15: TBevel;
+    Panel22: TPanel;
+    ToolBar5: TToolBar;
+    btnTelephone3: TToolButton;
+    Panel23: TPanel;
+    ToolBar6: TToolBar;
+    btnTelephone4: TToolButton;
+    Edit6: TEdit;
+    Edit7: TEdit;
+    Edit8: TEdit;
     procedure actAjouterExecute(Sender: TObject);
     procedure actModifierExecute(Sender: TObject);
     procedure actSupprimerExecute(Sender: TObject);
@@ -62,6 +137,9 @@ type
       var S: string);
     procedure lvAdressesKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure lvAdressesDrawItem(Sender: TCustomListView; Item: TListItem;
+      Rect: TRect; State: TOwnerDrawState);
+    procedure actAdresseExecute(Sender: TObject);
   private
     FAllowEditAdresseMail: Boolean;
     FFieldsZones: TObjectList;
@@ -98,7 +176,7 @@ type
 
 implementation
 
-uses TypInfo, SysUtils, Windows;
+uses SysUtils, Windows;
 
 {$R *.dfm}
 
@@ -183,6 +261,7 @@ begin
   with lvAdresses.Items.Add do
   begin
     Caption := 'adresse@email.tld';
+    StateIndex := -1;
     FAllowEditAdresseMail := True;
     EditCaption;
   end;
@@ -201,13 +280,34 @@ begin
   if not Assigned(lvAdresses.Selected) then
     Exit;
   lvAdresses.Selected.Delete;
+  if Assigned(lvAdresses.ItemFocused) then
+    lvAdresses.ItemFocused.Selected := True;
 end;
 
 procedure TContainer.actDefautExecute(Sender: TObject);
+var
+  DefaultIndex: Integer;
+  PreviousDefault: Boolean;
+  i: Integer;
+  OldItem: TListItem;
 begin
   if not Assigned(lvAdresses.Selected) then
     Exit;
-  //TODO Sélectionner l'adresse par défaut et la positionner en premier dans la liste
+
+  OldItem := lvAdresses.Selected;
+  with lvAdresses.Items.Insert(0) do
+  begin
+    Caption := OldItem.Caption;
+    StateIndex := 0;
+  end;
+
+  OldItem.Free;
+  lvAdresses.Items[1].StateIndex := -1;
+  lvAdresses.Items[0].Selected := True;
+  lvAdresses.Items[0].Focused := True;
+
+  lvAdresses.UpdateItems(0, 1);
+
 end;
 
 procedure TContainer.lvAdressesEditing(Sender: TObject; Item: TListItem;
@@ -233,6 +333,118 @@ begin
     actModifier.Execute;
   if Key = VK_SPACE then
     actDefaut.Execute;
+end;
+
+procedure TContainer.lvAdressesDrawItem(Sender: TCustomListView;
+  Item: TListItem; Rect: TRect; State: TOwnerDrawState);
+{
+    TOwnerDrawState = set of (odSelected, odGrayed, odDisabled, odChecked,
+    odFocused, odDefault, odHotLight, odInactive, odNoAccel, odNoFocusRect,
+    odReserved1, odReserved2, odComboBoxEdit);
+}
+  procedure DrawDefaultBitmap;
+  var
+    btmp: Graphics.TBitmap;
+  begin
+    btmp := Graphics.TBitmap.Create;
+    try
+      ImageList16x16.GetBitmap(0, btmp);
+      Sender.Canvas.Draw(Rect.Left + 1, Rect.Top, btmp);
+    finally
+      btmp.Free;
+    end;
+  end;
+
+  procedure DrawCaption;
+  begin
+    with Sender.Canvas do
+    begin
+      if Item.StateIndex = 0 then
+      begin
+        Font.Style := [fsBold];
+        DrawDefaultBitmap;
+        TextOut(Rect.Left + 21, Rect.Top, Item.Caption)
+      end
+      else
+        TextOut(Rect.Left + 2, Rect.Top, Item.Caption);
+    end;
+  end;
+
+  procedure DrawInactiveCaption;
+  begin
+    with Sender.Canvas do
+    begin
+      Brush.Style := bsClear;
+      Font.Name := 'Verdana';
+      Font.Size := 8;
+      Font.Color := clInactiveCaptionText;
+      Font.Style := [];
+      DrawCaption;
+    end;
+  end;
+
+  procedure DrawActiveCaption;
+  begin
+    with Sender.Canvas do
+    begin
+      Brush.Style := bsClear;
+      Font.Name := 'Verdana';
+      Font.Size := 8;
+      Font.Color := clHighlightText;
+      Font.Style := [];
+      DrawCaption;
+    end;
+  end;
+
+  procedure DrawActiveBackground;
+  begin
+    with Sender.Canvas do
+    begin
+      Brush.Color := cl3DLight;
+      FillRect(Rect);
+    end;
+  end;
+
+  procedure DrawInactiveBackground;
+  begin
+    with Sender.Canvas do
+    begin
+      Brush.Color := clWindow;
+      FillRect(Rect);
+    end;
+  end;
+
+begin
+  if (odSelected in State) or (odFocused in State) then
+  begin
+    DrawActiveBackground;
+    DrawActiveCaption;
+  end
+  else
+  begin
+    DrawInactiveBackground;
+    DrawInactiveCaption;
+  end;
+end;
+
+procedure TContainer.actAdresseExecute(Sender: TObject);
+var
+  Action: TAction;
+begin
+  if not (Sender is TAction) then
+    Exit;
+  Action := Sender as TAction;
+
+  if SameText(Action.Category, 'adresse') then
+    btnAdresse.Caption := Caption + '...';
+
+  if SameText(Action.Category, 'telephone') then
+  begin
+    btnTelephone1.Caption := Caption + '...';
+    btnTelephone2.Caption := Caption + '...';
+    btnTelephone3.Caption := Caption + '...';
+    btnTelephone4.Caption := Caption + '...';
+  end;
 end;
 
 end.
