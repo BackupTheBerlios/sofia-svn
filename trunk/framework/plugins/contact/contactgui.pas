@@ -47,7 +47,7 @@ type
     memoRue: TMemo;
     ActionListChamps: TActionList;
     actAdresseDomicile: TAction;
-    PopupMenu1: TPopupMenu;
+    popAdresse: TPopupMenu;
     Domicile1: TMenuItem;
     actAdresseBureau: TAction;
     actAdresseAutre: TAction;
@@ -127,6 +127,14 @@ type
     Edit6: TEdit;
     Edit7: TEdit;
     Edit8: TEdit;
+    popTelephone: TPopupMenu;
+    actTelephoneBureau: TAction;
+    actTelephoneBureau2: TAction;
+    actTelephoneTelecopieBureau: TAction;
+    Assistante1: TMenuItem;
+    Bureau2: TMenuItem;
+    Bureau21: TMenuItem;
+    lcopiebureau1: TMenuItem;
     procedure actAjouterExecute(Sender: TObject);
     procedure actModifierExecute(Sender: TObject);
     procedure actSupprimerExecute(Sender: TObject);

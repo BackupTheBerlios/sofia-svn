@@ -274,7 +274,7 @@ object Container: TContainer
           ParentColor = True
           TabOrder = 0
           object ToolBar1: TToolBar
-            Left = 81
+            Left = 94
             Top = 0
             Width = 69
             Height = 30
@@ -293,7 +293,7 @@ object Container: TContainer
               Top = 0
               Hint = 'Adresse du domicile'
               Caption = 'Domicile'
-              DropdownMenu = PopupMenu1
+              DropdownMenu = popAdresse
               Style = tbsDropDown
             end
           end
@@ -763,7 +763,7 @@ object Container: TContainer
           ParentColor = True
           TabOrder = 0
           object ToolBar3: TToolBar
-            Left = 97
+            Left = 114
             Top = 0
             Width = 73
             Height = 30
@@ -783,7 +783,7 @@ object Container: TContainer
               Hint = 'T'#233'l'#233'phone du domicile'
               AutoSize = True
               Caption = 'Domicile'
-              DropdownMenu = PopupMenu1
+              DropdownMenu = popTelephone
               Style = tbsDropDown
             end
           end
@@ -799,7 +799,7 @@ object Container: TContainer
           ParentColor = True
           TabOrder = 1
           object ToolBar4: TToolBar
-            Left = 105
+            Left = 122
             Top = 0
             Width = 65
             Height = 30
@@ -819,7 +819,7 @@ object Container: TContainer
               Hint = 'T'#233'l'#233'phone du bureau'
               AutoSize = True
               Caption = 'Bureau'
-              DropdownMenu = PopupMenu1
+              DropdownMenu = popTelephone
               Style = tbsDropDown
             end
           end
@@ -835,7 +835,7 @@ object Container: TContainer
           ParentColor = True
           TabOrder = 2
           object ToolBar5: TToolBar
-            Left = 38
+            Left = 55
             Top = 0
             Width = 132
             Height = 30
@@ -855,7 +855,7 @@ object Container: TContainer
               Hint = 'T'#233'l'#233'copie du bureau'
               AutoSize = True
               Caption = 'T'#233'l'#233'copie (bureau)'
-              DropdownMenu = PopupMenu1
+              DropdownMenu = popTelephone
               Style = tbsDropDown
             end
           end
@@ -871,7 +871,7 @@ object Container: TContainer
           ParentColor = True
           TabOrder = 3
           object ToolBar6: TToolBar
-            Left = 110
+            Left = 127
             Top = 0
             Width = 60
             Height = 30
@@ -891,7 +891,7 @@ object Container: TContainer
               Hint = 'T'#233'l'#233'phone mobile'
               AutoSize = True
               Caption = 'Mobile'
-              DropdownMenu = PopupMenu1
+              DropdownMenu = popTelephone
               Style = tbsDropDown
             end
           end
@@ -1693,8 +1693,8 @@ object Container: TContainer
   end
   object ActionListMessageries: TActionList
     Images = ImageList16x16
-    Left = 104
-    Top = 136
+    Left = 424
+    Top = 168
     object actAjouter: TAction
       Caption = 'Ajouter'
       Hint = 'Ajouter une adresse e-mail'
@@ -1746,10 +1746,25 @@ object Container: TContainer
       Caption = 'Assistant(e)'
       Hint = 'T'#233'l'#233'phone de l'#39'assistant(e)'
     end
+    object actTelephoneBureau: TAction
+      Category = 'Telephone'
+      Caption = 'Bureau'
+      Hint = 'T'#233'l'#233'phone du bureau'
+    end
+    object actTelephoneBureau2: TAction
+      Category = 'Telephone'
+      Caption = 'Bureau 2'
+      Hint = 'T'#233'l'#233'phone du bureau'
+    end
+    object actTelephoneTelecopieBureau: TAction
+      Category = 'Telephone'
+      Caption = 'T'#233'l'#233'copie (bureau)'
+      Hint = 'T'#233'l'#233'copie du bureau'
+    end
   end
-  object PopupMenu1: TPopupMenu
-    Left = 464
-    Top = 344
+  object popAdresse: TPopupMenu
+    Left = 456
+    Top = 360
     object Domicile1: TMenuItem
       Action = actAdresseDomicile
     end
@@ -1758,6 +1773,22 @@ object Container: TContainer
     end
     object Autre1: TMenuItem
       Action = actAdresseAutre
+    end
+  end
+  object popTelephone: TPopupMenu
+    Left = 456
+    Top = 424
+    object Assistante1: TMenuItem
+      Action = actTelephoneAssistant
+    end
+    object Bureau2: TMenuItem
+      Action = actTelephoneBureau
+    end
+    object Bureau21: TMenuItem
+      Action = actTelephoneBureau2
+    end
+    object lcopiebureau1: TMenuItem
+      Action = actTelephoneTelecopieBureau
     end
   end
 end
