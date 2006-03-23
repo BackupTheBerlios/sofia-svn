@@ -26,7 +26,7 @@ type
     lblFicheAdm: TLabel;
     lblProfessionnels: TLabel;
     lblDivers: TLabel;
-    pnlSaisie1: TPanel;
+    pnlAdresse: TPanel;
     pnlSaisie2: TPanel;
     pnlSaisie3: TPanel;
     Bevel3: TBevel;
@@ -36,7 +36,7 @@ type
     actModifier: TAction;
     actSupprimer: TAction;
     actDefaut: TAction;
-    Panel1: TPanel;
+    pnlIdentification: TPanel;
     Panel2: TPanel;
     Label3: TLabel;
     Bevel2: TBevel;
@@ -53,7 +53,7 @@ type
     actAdresseAutre: TAction;
     Panel5: TPanel;
     ToolBar1: TToolBar;
-    btnAdresse: TToolButton;
+    btnAdresse1: TToolButton;
     Bureau1: TMenuItem;
     Autre1: TMenuItem;
     Panel6: TPanel;
@@ -70,7 +70,7 @@ type
     Bevel9: TBevel;
     Image3: TImage;
     Bevel10: TBevel;
-    Panel7: TPanel;
+    pnlNumeroTel: TPanel;
     Panel8: TPanel;
     Shape2: TShape;
     Label1: TLabel;
@@ -135,6 +135,62 @@ type
     Bureau2: TMenuItem;
     Bureau21: TMenuItem;
     lcopiebureau1: TMenuItem;
+    actTelephoneSociete: TAction;
+    actTelephoneDomicile: TAction;
+    actTelephoneDomicile2: TAction;
+    actTelephoneTelecopieDomicile: TAction;
+    actTelephoneMobile: TAction;
+    actTelephoneAutre: TAction;
+    Socit1: TMenuItem;
+    Domicile2: TMenuItem;
+    Domicile21: TMenuItem;
+    lcopiedomicile1: TMenuItem;
+    Mobile1: TMenuItem;
+    Autre2: TMenuItem;
+    Bevel16: TBevel;
+    Label7: TLabel;
+    Edit9: TEdit;
+    Panel24: TPanel;
+    Panel25: TPanel;
+    Label11: TLabel;
+    Bevel17: TBevel;
+    Label12: TLabel;
+    Bevel18: TBevel;
+    Label13: TLabel;
+    Panel26: TPanel;
+    Edit10: TEdit;
+    Edit11: TEdit;
+    Edit12: TEdit;
+    Panel27: TPanel;
+    Shape5: TShape;
+    Label14: TLabel;
+    Panel28: TPanel;
+    Bevel19: TBevel;
+    Image5: TImage;
+    Bevel20: TBevel;
+    Label15: TLabel;
+    Bevel21: TBevel;
+    Edit13: TEdit;
+    Panel29: TPanel;
+    Label16: TLabel;
+    Bevel22: TBevel;
+    Panel30: TPanel;
+    Memo1: TMemo;
+    Panel31: TPanel;
+    Panel32: TPanel;
+    Bevel23: TBevel;
+    Panel33: TPanel;
+    ToolBar7: TToolBar;
+    btnAdresse2: TToolButton;
+    Panel34: TPanel;
+    Memo2: TMemo;
+    Panel35: TPanel;
+    Shape6: TShape;
+    Label17: TLabel;
+    Panel36: TPanel;
+    Bevel24: TBevel;
+    Image6: TImage;
+    Bevel25: TBevel;
     procedure actAjouterExecute(Sender: TObject);
     procedure actModifierExecute(Sender: TObject);
     procedure actSupprimerExecute(Sender: TObject);
@@ -147,9 +203,11 @@ type
       Shift: TShiftState);
     procedure lvAdressesDrawItem(Sender: TCustomListView; Item: TListItem;
       Rect: TRect; State: TOwnerDrawState);
-    procedure actAdresseExecute(Sender: TObject);
+    procedure CustomFieldExecute(Sender: TObject);
+    procedure CustomFieldPopup(Sender: TObject);
   private
     FAllowEditAdresseMail: Boolean;
+    FCustomFieldButton: TToolButton;
     FFieldsZones: TObjectList;
     { Déclarations privées }
   public
@@ -184,7 +242,7 @@ type
 
 implementation
 
-uses SysUtils, Windows;
+uses SysUtils, Windows, Dialogs;
 
 {$R *.dfm}
 
@@ -196,7 +254,9 @@ begin
   FFieldsZones.Add(TFieldsZone.Create(ImageList9x9, imgCollapseFicheAdm, pnlFicheAdmin, True, lblFicheAdm));
   FFieldsZones.Add(TFieldsZone.Create(ImageList9x9, imgCollapseProfessionnels, pnlProfessionnels, False, lblProfessionnels));
   FFieldsZones.Add(TFieldsZone.Create(ImageList9x9, imgCollapseDivers, pnlDivers, False, lblDivers));
-end;
+
+  pnlFicheAdmin.Height := pnlIdentification.Height + pnlAdresse.Height + pnlNumeroTel.Height;
+  end;
 
 destructor TContainer.Destroy;
 begin
@@ -294,9 +354,6 @@ end;
 
 procedure TContainer.actDefautExecute(Sender: TObject);
 var
-  DefaultIndex: Integer;
-  PreviousDefault: Boolean;
-  i: Integer;
   OldItem: TListItem;
 begin
   if not Assigned(lvAdresses.Selected) then
@@ -315,7 +372,6 @@ begin
   lvAdresses.Items[0].Focused := True;
 
   lvAdresses.UpdateItems(0, 1);
-
 end;
 
 procedure TContainer.lvAdressesEditing(Sender: TObject; Item: TListItem;
@@ -435,7 +491,7 @@ begin
   end;
 end;
 
-procedure TContainer.actAdresseExecute(Sender: TObject);
+procedure TContainer.CustomFieldExecute(Sender: TObject);
 var
   Action: TAction;
 begin
@@ -443,16 +499,19 @@ begin
     Exit;
   Action := Sender as TAction;
 
-  if SameText(Action.Category, 'adresse') then
-    btnAdresse.Caption := Caption + '...';
+  FCustomFieldButton.Caption := Action.Caption;
+end;
 
-  if SameText(Action.Category, 'telephone') then
-  begin
-    btnTelephone1.Caption := Caption + '...';
-    btnTelephone2.Caption := Caption + '...';
-    btnTelephone3.Caption := Caption + '...';
-    btnTelephone4.Caption := Caption + '...';
-  end;
+procedure TContainer.CustomFieldPopup(Sender: TObject);
+var
+  PopupMenu: TPopupMenu;
+begin
+  if not (Sender is TPopupMenu) then
+    Exit;
+
+  PopupMenu := TPopupMenu(Sender);
+
+  FCustomFieldButton := TToolBar(PopupMenu.PopupComponent).Buttons[0];
 end;
 
 end.

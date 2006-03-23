@@ -2,7 +2,7 @@ object Container: TContainer
   Left = 0
   Top = 0
   Width = 685
-  Height = 742
+  Height = 724
   Color = clWindow
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -14,7 +14,7 @@ object Container: TContainer
   TabOrder = 0
   object pnlTitreDivers: TPanel
     Left = 0
-    Top = 547
+    Top = 785
     Width = 668
     Height = 21
     Align = alTop
@@ -22,7 +22,7 @@ object Container: TContainer
     BevelOuter = bvNone
     Color = 16056319
     ParentBackground = False
-    TabOrder = 0
+    TabOrder = 3
     object lblDivers: TLabel
       Left = 14
       Top = 0
@@ -81,7 +81,7 @@ object Container: TContainer
   end
   object pnlTitrePrescripteur: TPanel
     Left = 0
-    Top = 425
+    Top = 465
     Width = 668
     Height = 21
     Align = alTop
@@ -89,7 +89,7 @@ object Container: TContainer
     BevelOuter = bvNone
     Color = 16054527
     ParentBackground = False
-    TabOrder = 1
+    TabOrder = 4
     object lblProfessionnels: TLabel
       Left = 14
       Top = 0
@@ -148,14 +148,493 @@ object Container: TContainer
   end
   object pnlProfessionnels: TPanel
     Left = 0
-    Top = 446
+    Top = 486
     Width = 668
-    Height = 101
+    Height = 299
     Align = alTop
     BevelOuter = bvNone
     Color = 16054527
     ParentBackground = False
-    TabOrder = 2
+    TabOrder = 1
+    object Panel24: TPanel
+      Left = 0
+      Top = 0
+      Width = 668
+      Height = 161
+      Align = alTop
+      BevelOuter = bvNone
+      ParentBackground = False
+      ParentColor = True
+      TabOrder = 0
+      object Panel25: TPanel
+        Left = 0
+        Top = 31
+        Width = 170
+        Height = 130
+        Align = alLeft
+        BevelOuter = bvNone
+        BorderWidth = 10
+        ParentBackground = False
+        ParentColor = True
+        TabOrder = 0
+        object Label11: TLabel
+          Left = 10
+          Top = 10
+          Width = 150
+          Height = 13
+          Align = alTop
+          Alignment = taRightJustify
+          Caption = 'Profession'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Verdana'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Bevel17: TBevel
+          Left = 10
+          Top = 23
+          Width = 150
+          Height = 20
+          Align = alTop
+          Shape = bsSpacer
+        end
+        object Label12: TLabel
+          Left = 10
+          Top = 76
+          Width = 150
+          Height = 13
+          Align = alTop
+          Alignment = taRightJustify
+          Caption = 'Titre'
+        end
+        object Bevel18: TBevel
+          Left = 10
+          Top = 89
+          Width = 150
+          Height = 20
+          Align = alTop
+          Shape = bsSpacer
+        end
+        object Label13: TLabel
+          Left = 10
+          Top = 43
+          Width = 150
+          Height = 13
+          Align = alTop
+          Alignment = taRightJustify
+          Caption = 'Soci'#233't'#233
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Verdana'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label15: TLabel
+          Left = 10
+          Top = 109
+          Width = 150
+          Height = 13
+          Align = alTop
+          Alignment = taRightJustify
+          Caption = 'Service'
+        end
+        object Bevel21: TBevel
+          Left = 10
+          Top = 56
+          Width = 150
+          Height = 20
+          Align = alTop
+          Shape = bsSpacer
+        end
+      end
+      object Panel26: TPanel
+        Left = 170
+        Top = 31
+        Width = 158
+        Height = 130
+        Align = alLeft
+        BevelOuter = bvNone
+        ParentBackground = False
+        ParentColor = True
+        TabOrder = 1
+        object Edit10: TEdit
+          Left = 0
+          Top = 41
+          Width = 153
+          Height = 21
+          TabOrder = 1
+        end
+        object Edit11: TEdit
+          Left = 0
+          Top = 7
+          Width = 153
+          Height = 21
+          TabOrder = 0
+        end
+        object Edit12: TEdit
+          Left = 0
+          Top = 74
+          Width = 153
+          Height = 21
+          TabOrder = 2
+        end
+        object Edit13: TEdit
+          Left = 0
+          Top = 106
+          Width = 153
+          Height = 21
+          TabOrder = 3
+        end
+      end
+      object Panel27: TPanel
+        Left = 0
+        Top = 0
+        Width = 668
+        Height = 31
+        Align = alTop
+        BevelOuter = bvNone
+        ParentBackground = False
+        ParentColor = True
+        TabOrder = 2
+        DesignSize = (
+          668
+          31)
+        object Shape5: TShape
+          Left = 88
+          Top = 16
+          Width = 590
+          Height = 2
+          Anchors = [akLeft, akTop, akRight]
+          Pen.Color = cl3DLight
+          Pen.Width = 2
+        end
+        object Label14: TLabel
+          Left = 34
+          Top = 0
+          Width = 50
+          Height = 31
+          Cursor = crHandPoint
+          Align = alLeft
+          Caption = 'Activit'#233
+          Font.Charset = ANSI_CHARSET
+          Font.Color = 33023
+          Font.Height = -11
+          Font.Name = 'Verdana'
+          Font.Style = [fsBold]
+          ParentFont = False
+          Layout = tlCenter
+        end
+        object Panel28: TPanel
+          Left = 0
+          Top = 0
+          Width = 34
+          Height = 31
+          Align = alLeft
+          BevelOuter = bvNone
+          ParentBackground = True
+          ParentColor = True
+          TabOrder = 0
+          object Bevel19: TBevel
+            Left = 0
+            Top = 0
+            Width = 34
+            Height = 9
+            Align = alTop
+            Shape = bsSpacer
+          end
+          object Image5: TImage
+            Left = 14
+            Top = 9
+            Width = 16
+            Height = 22
+            Align = alLeft
+            AutoSize = True
+            Picture.Data = {
+              07544269746D617036030000424D360300000000000036000000280000001000
+              000010000000010018000000000000030000120B0000120B0000000000000000
+              0000FF00FFFF00FFD3DDE2D3DDE2D3DDE2D3DDE2D3DDE2D3DDE2D3DDE2D3DDE2
+              D3DDE2D3DDE2D3DDE2D3DDE2FF00FFFF00FFFF00FFD3DDE2A6BBC5A6BBC5A6BB
+              C5A6BBC5A6BBC5A6BBC5A6BBC5A6BBC5A6BBC5A6BBC5A6BBC5A6BBC5D3DDE2FF
+              00FFFF00FFD3DDE26A8D9F2E5F79053F5D053F5D053F5D053F5D053F5D053F5D
+              053F5D053F5D2E5F796A8D9FD3DDE2FF00FFFF00FF7798A92A5F7A7DA3B6A7C5
+              D490BAC085B4B685B4B6A6C7D2B2CEDCB2CEDCA7C5D47DA3B62A5F7A7798A9FF
+              00FFFF00FF134E6BE6EDF1B5D1D96AA9A4147A5C0BA975058C6063A4A09ABED1
+              8FB8CC91B9CD9CC0D2A7C5D4134E6BFF00FFFF00FF376A84F7FAFB56A3921AA8
+              7A28C59128C59126C08D1CA87A4BA38DB2CEDC94BBCF94BBCFB2CEDC1A5572FF
+              00FFFF00FF225C79F1F5F6C8DEE249AA8F48AA8F1A916C2BB28645CDA011976C
+              CFE0E9A4C5D59DC0D2A9C7D6225C79FF00FFFF00FF799DAF94B1BFF2F7F949B0
+              923AB68E51C7A162D4AF47C39B57B59BD9E7EEAECBDAACCAD96D98AE799DAFFF
+              00FFFF00FFFF00FF4A7C96D8E3E82FB2887FDCBE4DC49E2BAE852AAC83E4EEF3
+              E4EEF3B5D0DD9ABBCC447993FF00FFFF00FFFF00FFFF00FFFF00FF51839CC2E5
+              DD6FD3B293E0C778D4B66CD1B095D8C5E1ECF1AAC8D7477C98FF00FFFF00FFFF
+              00FFFF00FFFF00FFFF00FFFF00FF6391A9CBE1E344C89D71D7B674D5B6EDF8F5
+              ABC7D54D839EFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00
+              FF5D8FA88FBFC4BFEDDEEFFAF6AAC4D2588CA6FF00FFFF00FFFF00FFFF00FFFF
+              00FFFF00FFFF00FFFF00FFFF00FFFF00FFC4C394898628898628898628898628
+              C4C394FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00
+              FFFF00FF5F94AEF4F7F9F4F7F95F94AEFF00FFFF00FFFF00FFFF00FFFF00FFFF
+              00FFFF00FFFF00FFFF00FFFF00FFFF00FF70A1BACBDDE6FFFFFFFFFFFFCBDDE6
+              70A1BAFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00
+              FF639BB7639BB7639BB7639BB7639BB7639BB7FF00FFFF00FFFF00FFFF00FFFF
+              00FF}
+            Transparent = True
+          end
+          object Bevel20: TBevel
+            Left = 0
+            Top = 9
+            Width = 14
+            Height = 22
+            Align = alLeft
+            Shape = bsSpacer
+          end
+        end
+      end
+      object Panel29: TPanel
+        Left = 328
+        Top = 31
+        Width = 130
+        Height = 130
+        Align = alLeft
+        BevelOuter = bvNone
+        BorderWidth = 10
+        ParentBackground = False
+        ParentColor = True
+        TabOrder = 3
+        object Label16: TLabel
+          Left = 10
+          Top = 10
+          Width = 110
+          Height = 13
+          Align = alTop
+          Alignment = taRightJustify
+          Caption = 'Notes sur l'#39'activit'#233
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Verdana'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Bevel22: TBevel
+          Left = 10
+          Top = 23
+          Width = 110
+          Height = 20
+          Align = alTop
+          Shape = bsSpacer
+        end
+      end
+      object Panel30: TPanel
+        Left = 458
+        Top = 31
+        Width = 187
+        Height = 130
+        Align = alLeft
+        BevelOuter = bvNone
+        ParentBackground = False
+        ParentColor = True
+        TabOrder = 4
+        object Memo1: TMemo
+          Left = 0
+          Top = 7
+          Width = 185
+          Height = 106
+          ScrollBars = ssVertical
+          TabOrder = 0
+        end
+      end
+    end
+    object Panel31: TPanel
+      Left = 0
+      Top = 161
+      Width = 668
+      Height = 129
+      Align = alTop
+      BevelOuter = bvNone
+      ParentBackground = False
+      ParentColor = True
+      TabOrder = 1
+      object Panel32: TPanel
+        Left = 0
+        Top = 31
+        Width = 170
+        Height = 98
+        Align = alLeft
+        BevelOuter = bvNone
+        BorderWidth = 10
+        ParentBackground = False
+        ParentColor = True
+        TabOrder = 0
+        object Bevel23: TBevel
+          Left = 10
+          Top = 40
+          Width = 150
+          Height = 21
+          Align = alTop
+          Shape = bsSpacer
+        end
+        object Panel33: TPanel
+          Left = 10
+          Top = 10
+          Width = 150
+          Height = 30
+          Align = alTop
+          BevelOuter = bvNone
+          ParentBackground = False
+          ParentColor = True
+          TabOrder = 0
+          object ToolBar7: TToolBar
+            Left = 89
+            Top = 0
+            Width = 61
+            Height = 30
+            Align = alRight
+            AutoSize = True
+            ButtonHeight = 21
+            ButtonWidth = 48
+            Caption = 'ToolBar1'
+            EdgeBorders = []
+            Flat = True
+            ShowCaptions = True
+            TabOrder = 0
+            Transparent = True
+            object btnAdresse2: TToolButton
+              Left = 0
+              Top = 0
+              Hint = 'Adresse du domicile'
+              Caption = 'Bureau'
+              DropdownMenu = popAdresse
+              Style = tbsDropDown
+            end
+          end
+        end
+      end
+      object Panel34: TPanel
+        Left = 170
+        Top = 31
+        Width = 498
+        Height = 98
+        Align = alClient
+        BevelOuter = bvNone
+        ParentBackground = False
+        ParentColor = True
+        TabOrder = 1
+        object Memo2: TMemo
+          Left = 0
+          Top = 7
+          Width = 185
+          Height = 90
+          ScrollBars = ssVertical
+          TabOrder = 0
+        end
+      end
+      object Panel35: TPanel
+        Left = 0
+        Top = 0
+        Width = 668
+        Height = 31
+        Align = alTop
+        BevelOuter = bvNone
+        ParentBackground = False
+        ParentColor = True
+        TabOrder = 2
+        DesignSize = (
+          668
+          31)
+        object Shape6: TShape
+          Left = 90
+          Top = 16
+          Width = 595
+          Height = 2
+          Anchors = [akLeft, akTop, akRight]
+          Pen.Color = cl3DLight
+          Pen.Width = 2
+        end
+        object Label17: TLabel
+          Left = 34
+          Top = 0
+          Width = 53
+          Height = 31
+          Cursor = crHandPoint
+          Align = alLeft
+          Caption = 'Adresse'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = 33023
+          Font.Height = -11
+          Font.Name = 'Verdana'
+          Font.Style = [fsBold]
+          ParentFont = False
+          Layout = tlCenter
+        end
+        object Panel36: TPanel
+          Left = 0
+          Top = 0
+          Width = 34
+          Height = 31
+          Align = alLeft
+          BevelOuter = bvNone
+          ParentBackground = True
+          ParentColor = True
+          TabOrder = 0
+          object Bevel24: TBevel
+            Left = 0
+            Top = 0
+            Width = 34
+            Height = 9
+            Align = alTop
+            Shape = bsSpacer
+          end
+          object Image6: TImage
+            Left = 14
+            Top = 9
+            Width = 16
+            Height = 22
+            Align = alLeft
+            AutoSize = True
+            Picture.Data = {
+              07544269746D617036030000424D360300000000000036000000280000001000
+              000010000000010018000000000000030000120B0000120B0000000000000000
+              0000FF00FFD3DDE2D3DDE2D3DDE2D3DDE2D3DDE2D3DDE2D3DDE2D3DDE2D3DDE2
+              D3DDE2D3DDE2D3DDE2D3DDE2D3DDE2FF00FFA6BBC5A6BBC5A6BBC5A6BBC5A6BB
+              C5A6BBC5A6BBC5A6BBC5A6BBC5A6BBC5A6BBC5A6BBC5A6BBC5A6BBC5A6BBC5D3
+              DDE2A6BBC506415F06415F06415F06415F06415F06415F06415F06415F06415F
+              06415F06415F06415F06415FA6BBC5D3DDE2D3DDE20F4A67FFFFFFB7D1DEB7D1
+              DEB7D1DE6E6B11C8C78A6E6B11B7D1DE8EB7CC8EB7CCB2CEDC0F4A67D3DDE2FF
+              00FFFF00FF185270FFFFFFC0D7E2C0D7E2C0D7E27A771CD0CE9A7A771CC0D7E2
+              92BACE92BACEB2CEDC185270FF00FFFF00FFFF00FF215B79FFFFFF99A17999A1
+              79C9DCE6878427D7D5A9878427C9DCE697BDD097BDD0B2CEDC215B79FF00FFFF
+              00FFFF00FF2B6582FFFFFFA9B086BCC19ED1E1EA949131F3F3E7949131D1E1EA
+              9BBFD29BBFD2B2CEDC2B6582FF00FFFF00FFFF00FF346E8BFCFDFEBAC093BAC0
+              93D9E7EEA19E3CA19E3CA19E3CC2CDC26363125F5C055F5C055F5C055F5C055F
+              5C05605D064A6D5E81A7B9E2ECF1E2ECF1E2ECF1E2ECF1E2ECF1CBD3C7747220
+              A19F52AFAC63AFAC63AFAC63AFAC6369660D6B680FE5E4C76D908684AABEEBF2
+              F5EBF2F5EBF2F5D4D9CB7E7B28AAA75FD3D1A3C8C78AC8C78ADCDBB5D3D2AD7B
+              78237E7B26D5D3B0B7B57175978E8DB2C5F3F7F9DCE0D087842FAFAD65D8D7AE
+              D0CE9A9C9A53A5A467A19F628B8836FF00FFFF00FF848434D1D0A7BCBA777C9F
+              9694B0AD908D37B4B16BDEDDBAD7D5A9E1E0BFB3B174F3F3E7827F23FF00FFFF
+              00FFFF00FF548288999643D8D7B2B8B6708F903AB9B671E3E3C5DAD9B1A9A750
+              9C99389C99389C99389C9938FF00FFFF00FF69660D69660D726F159B983DD2D0
+              A6FFFFFFFFFFFFFDFDFBFDFDFBFDFDFBEAE9D5A5A24DFF00FFFF00FFFF00FFFF
+              00FF827F23D6D4A7D6D4A7CDCB96A5A244A29F3DA29F3DA29F3DA29F3DA29F3D
+              A8A548FF00FFFF00FFFF00FFFF00FFFF00FF9C99389C99389C99389C99389C99
+              389C9938FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF
+              00FF}
+            Transparent = True
+          end
+          object Bevel25: TBevel
+            Left = 0
+            Top = 9
+            Width = 14
+            Height = 22
+            Align = alLeft
+            Shape = bsSpacer
+          end
+        end
+      end
+    end
   end
   object pnlTitreFicheAdm: TPanel
     Left = 0
@@ -167,7 +646,7 @@ object Container: TContainer
     BevelOuter = bvNone
     Color = 16053503
     ParentBackground = False
-    TabOrder = 3
+    TabOrder = 5
     object lblFicheAdm: TLabel
       Left = 14
       Top = 0
@@ -228,22 +707,22 @@ object Container: TContainer
     Left = 0
     Top = 21
     Width = 668
-    Height = 404
+    Height = 444
     Align = alTop
     BevelOuter = bvNone
     Color = 16053503
     ParentBackground = False
-    TabOrder = 4
-    object pnlSaisie1: TPanel
+    TabOrder = 0
+    object pnlAdresse: TPanel
       Left = 0
-      Top = 93
+      Top = 145
       Width = 668
       Height = 129
       Align = alTop
       BevelOuter = bvNone
       ParentBackground = False
       ParentColor = True
-      TabOrder = 0
+      TabOrder = 1
       object pnlSaisie2: TPanel
         Left = 0
         Top = 31
@@ -254,7 +733,7 @@ object Container: TContainer
         BorderWidth = 10
         ParentBackground = False
         ParentColor = True
-        TabOrder = 0
+        TabOrder = 1
         object Bevel3: TBevel
           Left = 10
           Top = 40
@@ -274,7 +753,7 @@ object Container: TContainer
           ParentColor = True
           TabOrder = 0
           object ToolBar1: TToolBar
-            Left = 94
+            Left = 81
             Top = 0
             Width = 69
             Height = 30
@@ -288,7 +767,7 @@ object Container: TContainer
             ShowCaptions = True
             TabOrder = 0
             Transparent = True
-            object btnAdresse: TToolButton
+            object btnAdresse1: TToolButton
               Left = 0
               Top = 0
               Hint = 'Adresse du domicile'
@@ -308,7 +787,7 @@ object Container: TContainer
         BevelOuter = bvNone
         ParentBackground = False
         ParentColor = True
-        TabOrder = 1
+        TabOrder = 2
         object memoRue: TMemo
           Left = 0
           Top = 7
@@ -327,7 +806,7 @@ object Container: TContainer
         BevelOuter = bvNone
         ParentBackground = False
         ParentColor = True
-        TabOrder = 2
+        TabOrder = 0
         DesignSize = (
           668
           31)
@@ -422,27 +901,27 @@ object Container: TContainer
         end
       end
     end
-    object Panel1: TPanel
+    object pnlIdentification: TPanel
       Left = 0
       Top = 0
       Width = 668
-      Height = 93
+      Height = 145
       Align = alTop
       BevelOuter = bvNone
       ParentBackground = False
       ParentColor = True
-      TabOrder = 1
+      TabOrder = 0
       object Panel2: TPanel
         Left = 0
         Top = 31
         Width = 170
-        Height = 62
+        Height = 114
         Align = alLeft
         BevelOuter = bvNone
         BorderWidth = 10
         ParentBackground = False
         ParentColor = True
-        TabOrder = 0
+        TabOrder = 1
         object Label3: TLabel
           Left = 10
           Top = 10
@@ -450,12 +929,12 @@ object Container: TContainer
           Height = 13
           Align = alTop
           Alignment = taRightJustify
-          Caption = 'Nom'
+          Caption = 'Civilit'#233
           Font.Charset = ANSI_CHARSET
           Font.Color = clWindowText
           Font.Height = -11
           Font.Name = 'Verdana'
-          Font.Style = [fsBold]
+          Font.Style = []
           ParentFont = False
         end
         object Bevel2: TBevel
@@ -468,37 +947,67 @@ object Container: TContainer
         end
         object Label4: TLabel
           Left = 10
-          Top = 43
+          Top = 76
           Width = 150
           Height = 13
           Align = alTop
           Alignment = taRightJustify
           Caption = 'Pr'#233'nom'
         end
+        object Bevel16: TBevel
+          Left = 10
+          Top = 56
+          Width = 150
+          Height = 20
+          Align = alTop
+          Shape = bsSpacer
+        end
+        object Label7: TLabel
+          Left = 10
+          Top = 43
+          Width = 150
+          Height = 13
+          Align = alTop
+          Alignment = taRightJustify
+          Caption = 'Nom'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Verdana'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
       end
       object Panel3: TPanel
         Left = 170
         Top = 31
         Width = 498
-        Height = 62
+        Height = 114
         Align = alClient
         BevelOuter = bvNone
         ParentBackground = False
         ParentColor = True
-        TabOrder = 1
+        TabOrder = 2
         object Edit1: TEdit
           Left = 0
-          Top = 40
+          Top = 41
+          Width = 153
+          Height = 21
+          TabOrder = 1
+        end
+        object Edit2: TEdit
+          Left = 0
+          Top = 7
           Width = 153
           Height = 21
           TabOrder = 0
         end
-        object Edit2: TEdit
+        object Edit9: TEdit
           Left = 0
-          Top = 6
+          Top = 74
           Width = 153
           Height = 21
-          TabOrder = 1
+          TabOrder = 2
         end
       end
       object Panel10: TPanel
@@ -510,7 +1019,7 @@ object Container: TContainer
         BevelOuter = bvNone
         ParentBackground = False
         ParentColor = True
-        TabOrder = 2
+        TabOrder = 0
         DesignSize = (
           668
           31)
@@ -605,11 +1114,11 @@ object Container: TContainer
         end
       end
     end
-    object Panel7: TPanel
+    object pnlNumeroTel: TPanel
       Left = 0
-      Top = 222
+      Top = 274
       Width = 668
-      Height = 186
+      Height = 188
       Align = alTop
       BevelOuter = bvNone
       ParentBackground = False
@@ -722,7 +1231,7 @@ object Container: TContainer
         Left = 0
         Top = 31
         Width = 170
-        Height = 155
+        Height = 157
         Align = alLeft
         BevelOuter = bvNone
         ParentBackground = True
@@ -763,7 +1272,7 @@ object Container: TContainer
           ParentColor = True
           TabOrder = 0
           object ToolBar3: TToolBar
-            Left = 114
+            Left = 97
             Top = 0
             Width = 73
             Height = 30
@@ -799,7 +1308,7 @@ object Container: TContainer
           ParentColor = True
           TabOrder = 1
           object ToolBar4: TToolBar
-            Left = 122
+            Left = 105
             Top = 0
             Width = 65
             Height = 30
@@ -835,7 +1344,7 @@ object Container: TContainer
           ParentColor = True
           TabOrder = 2
           object ToolBar5: TToolBar
-            Left = 55
+            Left = 38
             Top = 0
             Width = 132
             Height = 30
@@ -871,7 +1380,7 @@ object Container: TContainer
           ParentColor = True
           TabOrder = 3
           object ToolBar6: TToolBar
-            Left = 127
+            Left = 110
             Top = 0
             Width = 60
             Height = 30
@@ -901,7 +1410,7 @@ object Container: TContainer
         Left = 170
         Top = 31
         Width = 498
-        Height = 155
+        Height = 157
         Align = alClient
         BevelOuter = bvNone
         ParentBackground = True
@@ -940,19 +1449,19 @@ object Container: TContainer
   end
   object pnlDivers: TPanel
     Left = 0
-    Top = 568
+    Top = 806
     Width = 668
-    Height = 334
+    Height = 219
     Align = alTop
     BevelOuter = bvNone
     Color = 16056319
     ParentBackground = False
-    TabOrder = 5
+    TabOrder = 2
     object Panel13: TPanel
       Left = 0
       Top = 0
       Width = 668
-      Height = 232
+      Height = 209
       Align = alTop
       BevelOuter = bvNone
       ParentBackground = False
@@ -962,7 +1471,7 @@ object Container: TContainer
         Left = 0
         Top = 31
         Width = 170
-        Height = 201
+        Height = 178
         Align = alLeft
         BevelOuter = bvNone
         BorderWidth = 10
@@ -1017,7 +1526,7 @@ object Container: TContainer
         Left = 170
         Top = 31
         Width = 498
-        Height = 201
+        Height = 178
         Align = alClient
         BevelOuter = bvNone
         ParentBackground = False
@@ -1232,8 +1741,8 @@ object Container: TContainer
   object ImageList9x9: TImageList
     Height = 9
     Width = 9
-    Left = 488
-    Top = 288
+    Left = 424
+    Top = 72
     Bitmap = {
       494C010102000400040009000900FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000240000000900000001002000000000001005
@@ -1285,8 +1794,8 @@ object Container: TContainer
       80C040000000000000000000000000000000000000000000000000000000}
   end
   object ImageList16x16: TImageList
-    Left = 544
-    Top = 304
+    Left = 480
+    Top = 88
     Bitmap = {
       494C010104000900040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000003000000001002000000000000030
@@ -1693,8 +2202,8 @@ object Container: TContainer
   end
   object ActionListMessageries: TActionList
     Images = ImageList16x16
-    Left = 424
-    Top = 168
+    Left = 176
+    Top = 608
     object actAjouter: TAction
       Caption = 'Ajouter'
       Hint = 'Ajouter une adresse e-mail'
@@ -1721,50 +2230,91 @@ object Container: TContainer
     end
   end
   object ActionListChamps: TActionList
-    Left = 464
-    Top = 232
+    Left = 432
+    Top = 144
     object actAdresseDomicile: TAction
       Category = 'Adresse'
       Caption = 'Domicile'
       Hint = 'Adresse du domicile'
-      OnExecute = actAdresseExecute
+      OnExecute = CustomFieldExecute
     end
     object actAdresseBureau: TAction
       Category = 'Adresse'
       Caption = 'Bureau'
       Hint = 'Adresse du bureau'
-      OnExecute = actAdresseExecute
+      OnExecute = CustomFieldExecute
     end
     object actAdresseAutre: TAction
       Category = 'Adresse'
       Caption = 'Autre'
-      Hint = 'Autre type d'#39'adresse'
-      OnExecute = actAdresseExecute
+      Hint = 'Autre adresse'
+      OnExecute = CustomFieldExecute
     end
     object actTelephoneAssistant: TAction
       Category = 'Telephone'
       Caption = 'Assistant(e)'
       Hint = 'T'#233'l'#233'phone de l'#39'assistant(e)'
+      OnExecute = CustomFieldExecute
     end
     object actTelephoneBureau: TAction
       Category = 'Telephone'
       Caption = 'Bureau'
       Hint = 'T'#233'l'#233'phone du bureau'
+      OnExecute = CustomFieldExecute
     end
     object actTelephoneBureau2: TAction
       Category = 'Telephone'
       Caption = 'Bureau 2'
       Hint = 'T'#233'l'#233'phone du bureau'
+      OnExecute = CustomFieldExecute
     end
     object actTelephoneTelecopieBureau: TAction
       Category = 'Telephone'
       Caption = 'T'#233'l'#233'copie (bureau)'
       Hint = 'T'#233'l'#233'copie du bureau'
+      OnExecute = CustomFieldExecute
+    end
+    object actTelephoneSociete: TAction
+      Category = 'Telephone'
+      Caption = 'Soci'#233't'#233
+      Hint = 'T'#233'l'#233'phone de la soci'#233't'#233
+      OnExecute = CustomFieldExecute
+    end
+    object actTelephoneDomicile: TAction
+      Category = 'Telephone'
+      Caption = 'Domicile'
+      Hint = 'T'#233'l'#233'phone du domicile'
+      OnExecute = CustomFieldExecute
+    end
+    object actTelephoneDomicile2: TAction
+      Category = 'Telephone'
+      Caption = 'Domicile 2'
+      Hint = 'T'#233'l'#233'phone du domicile'
+      OnExecute = CustomFieldExecute
+    end
+    object actTelephoneTelecopieDomicile: TAction
+      Category = 'Telephone'
+      Caption = 'T'#233'l'#233'copie (domicile)'
+      Hint = 'T'#233'l'#233'copie du domicile'
+      OnExecute = CustomFieldExecute
+    end
+    object actTelephoneMobile: TAction
+      Category = 'Telephone'
+      Caption = 'Mobile'
+      Hint = 'T'#233'l'#233'phone mobile'
+      OnExecute = CustomFieldExecute
+    end
+    object actTelephoneAutre: TAction
+      Category = 'Telephone'
+      Caption = 'Autre'
+      Hint = 'Autre t'#233'l'#233'phone'
+      OnExecute = CustomFieldExecute
     end
   end
   object popAdresse: TPopupMenu
-    Left = 456
-    Top = 360
+    OnPopup = CustomFieldPopup
+    Left = 368
+    Top = 144
     object Domicile1: TMenuItem
       Action = actAdresseDomicile
     end
@@ -1776,8 +2326,9 @@ object Container: TContainer
     end
   end
   object popTelephone: TPopupMenu
-    Left = 456
-    Top = 424
+    OnPopup = CustomFieldPopup
+    Left = 400
+    Top = 144
     object Assistante1: TMenuItem
       Action = actTelephoneAssistant
     end
@@ -1789,6 +2340,24 @@ object Container: TContainer
     end
     object lcopiebureau1: TMenuItem
       Action = actTelephoneTelecopieBureau
+    end
+    object Socit1: TMenuItem
+      Action = actTelephoneSociete
+    end
+    object Domicile2: TMenuItem
+      Action = actTelephoneDomicile
+    end
+    object Domicile21: TMenuItem
+      Action = actTelephoneDomicile2
+    end
+    object lcopiedomicile1: TMenuItem
+      Action = actTelephoneTelecopieDomicile
+    end
+    object Mobile1: TMenuItem
+      Action = actTelephoneMobile
+    end
+    object Autre2: TMenuItem
+      Action = actTelephoneAutre
     end
   end
 end
