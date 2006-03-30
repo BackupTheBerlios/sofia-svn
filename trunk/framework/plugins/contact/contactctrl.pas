@@ -7,6 +7,7 @@ uses Controls, contactclasses, contactgui;
 type
 
   TController = class(TInterfacedObject, IController)
+    procedure Activate; stdcall;
     function GetNomContact: string; stdcall;
     procedure SetNomContact(const Value: string); stdcall;
   private
@@ -29,6 +30,11 @@ constructor TController.Create(APlugin: TPlugin; AContainer: TWinControl);
 begin
   FContainer := AContainer as TContainer;
   FPlugin := APlugin;
+end;
+
+procedure TController.Activate;
+begin
+  FContainer.edtCivilite.SetFocus;
 end;
 
 function TController.GetNomContact: string;

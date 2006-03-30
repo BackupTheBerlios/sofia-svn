@@ -28,6 +28,7 @@ type
 
   IController = interface(IInterface)
   ['{B0122448-88BA-44DF-9B33-8198AF276DF6}']
+    procedure Activate; stdcall;
     function GetNomContact: string; stdcall;
     procedure SetNomContact(const Value: string); stdcall;
     property NomContact: string read GetNomContact write SetNomContact;
@@ -136,6 +137,7 @@ procedure TPlugin.Show;
 begin
   FContainer.Parent := FParent;
   FContainer.Align := alClient;
+  FController.Activate;
 end;
 
 
