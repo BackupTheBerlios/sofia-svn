@@ -87,12 +87,12 @@ end;
 
 function TController.GetActivite: string;
 begin
-  Result := FContainer.ctrlActivite.Text;
+  Result := FContainer.ctrlActivite.Lines.Text;
 end;
 
 function TController.GetAdresse1Contenu: string;
 begin
-  Result := FContainer.ctrlAdresse1.Text;
+  Result := FContainer.ctrlAdresse1.Lines.Text;
 end;
 
 function TController.GetAdresse1Libelle: string;
@@ -139,7 +139,7 @@ end;
 
 function TController.GetNotes: string;
 begin
-  Result := FContainer.ctrlNotes.Text;
+  Result := FContainer.ctrlNotes.Lines.Text;
 end;
 
 function TController.GetNumero1Contenu: string;
@@ -214,17 +214,19 @@ end;
 
 procedure TController.SetActivite(const Value: string);
 begin
-  // TODO -cMM: TController.SetActivite default body inserted
+  FContainer.ctrlActivite.Clear;
+  FContainer.ctrlActivite.Lines.Text := Value;
 end;
 
 procedure TController.SetAdresse1Contenu(const Value: string);
 begin
-  // TODO -cMM: TController.SetAdresse1Contenu default body inserted
+  FContainer.ctrlAdresse1.Clear;
+  FContainer.ctrlAdresse1.Lines.Text := Value;
 end;
 
 procedure TController.SetAdresse1Libelle(const Value: string);
 begin
-  // TODO -cMM: TController.SetAdresse1Libelle default body inserted
+  FContainer
 end;
 
 procedure TController.SetAdresse2Contenu(const Value: string);
