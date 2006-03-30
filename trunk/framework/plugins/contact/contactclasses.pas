@@ -29,9 +29,82 @@ type
   IController = interface(IInterface)
   ['{B0122448-88BA-44DF-9B33-8198AF276DF6}']
     procedure Activate; stdcall;
-    function GetNomContact: string; stdcall;
-    procedure SetNomContact(const Value: string); stdcall;
-    property NomContact: string read GetNomContact write SetNomContact;
+    function GetActivite: string; stdcall;
+    function GetAdresse1Contenu: string; stdcall;
+    function GetAdresse1Libelle: string; stdcall;
+    function GetAdresse2Contenu: string; stdcall;
+    function GetAdresse2Libelle: string; stdcall;
+    function GetAdressesMail: string; stdcall;
+    function GetCivilite: string; stdcall;
+    function GetMessenger: string; stdcall;
+    function GetNom: string; stdcall;
+    function GetNotes: string; stdcall;
+    function GetNumero1Contenu: string; stdcall;
+    function GetNumero1Libelle: string; stdcall;
+    function GetNumero2Contenu: string; stdcall;
+    function GetNumero2Libelle: string; stdcall;
+    function GetNumero3Contenu: string; stdcall;
+    function GetNumero3Libelle: string; stdcall;
+    function GetNumero4Contenu: string; stdcall;
+    function GetNumero4Libelle: string; stdcall;
+    function GetPageWeb: string; stdcall;
+    function GetPrenom: string; stdcall;
+    function GetProfession: string; stdcall;
+    function GetService: string; stdcall;
+    function GetSociete: string; stdcall;
+    function GetTitre: string; stdcall;
+    procedure SetActivite(const Value: string); stdcall;
+    procedure SetAdresse1Contenu(const Value: string); stdcall;
+    procedure SetAdresse1Libelle(const Value: string); stdcall;
+    procedure SetAdresse2Contenu(const Value: string); stdcall;
+    procedure SetAdresse2Libelle(const Value: string); stdcall;
+    procedure SetAdressesMail(const Value: string); stdcall;
+    procedure SetCivilite(const Value: string); stdcall;
+    procedure SetMessenger(const Value: string); stdcall;
+    procedure SetNom(const Value: string); stdcall;
+    procedure SetNotes(const Value: string); stdcall;
+    procedure SetNumero1Contenu(const Value: string); stdcall;
+    procedure SetNumero1Libelle(const Value: string); stdcall;
+    procedure SetNumero2Contenu(const Value: string); stdcall;
+    procedure SetNumero2Libelle(const Value: string); stdcall;
+    procedure SetNumero3Contenu(const Value: string); stdcall;
+    procedure SetNumero3Libelle(const Value: string); stdcall;
+    procedure SetNumero4Contenu(const Value: string); stdcall;
+    procedure SetNumero4Libelle(const Value: string); stdcall;
+    procedure SetPageWeb(const Value: string); stdcall;
+    procedure SetPrenom(const Value: string); stdcall;
+    procedure SetProfession(const Value: string); stdcall;
+    procedure SetService(const Value: string); stdcall;
+    procedure SetSociete(const Value: string); stdcall;
+    procedure SetTitre(const Value: string); stdcall;
+    property Activite: string read GetActivite write SetActivite;
+    property Adresse1Contenu: string read GetAdresse1Contenu write
+        SetAdresse1Contenu;
+    property Adresse1Libelle: string read GetAdresse1Libelle write
+        SetAdresse1Libelle;
+    property Adresse2Contenu: string read GetAdresse2Contenu write
+        SetAdresse2Contenu;
+    property Adresse2Libelle: string read GetAdresse2Libelle write
+        SetAdresse2Libelle;
+    property AdressesMail: string read GetAdressesMail write SetAdressesMail;
+    property Civilite: string read GetCivilite write SetCivilite;
+    property Messenger: string read GetMessenger write SetMessenger;
+    property Nom: string read GetNom write SetNom;
+    property Notes: string read GetNotes write SetNotes;
+    property Numero1Contenu: string read GetNumero1Contenu write SetNumero1Contenu;
+    property Numero1Libelle: string read GetNumero1Libelle write SetNumero1Libelle;
+    property Numero2Contenu: string read GetNumero2Contenu write SetNumero2Contenu;
+    property Numero2Libelle: string read GetNumero2Libelle write SetNumero2Libelle;
+    property Numero3Contenu: string read GetNumero3Contenu write SetNumero3Contenu;
+    property Numero3Libelle: string read GetNumero3Libelle write SetNumero3Libelle;
+    property Numero4Contenu: string read GetNumero4Contenu write SetNumero4Contenu;
+    property Numero4Libelle: string read GetNumero4Libelle write SetNumero4Libelle;
+    property PageWeb: string read GetPageWeb write SetPageWeb;
+    property Prenom: string read GetPrenom write SetPrenom;
+    property Profession: string read GetProfession write SetProfession;
+    property Service: string read GetService write SetService;
+    property Societe: string read GetSociete write SetSociete;
+    property Titre: string read GetTitre write SetTitre;
   end;
 
   TPlugin = class(TInterfacedObject, IPlugUnknown, IPlugMultipleInstance, IPlugDisplay)

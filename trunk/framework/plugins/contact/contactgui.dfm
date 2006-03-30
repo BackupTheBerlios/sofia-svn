@@ -19,6 +19,7 @@ object Container: TContainer
     Top = 0
     Width = 685
     Height = 724
+    VertScrollBar.Position = 451
     Align = alClient
     BevelEdges = []
     BevelInner = bvNone
@@ -26,7 +27,7 @@ object Container: TContainer
     TabOrder = 0
     object pnlTitreDivers: TPanel
       Left = 0
-      Top = 794
+      Top = 343
       Width = 668
       Height = 21
       Align = alTop
@@ -93,7 +94,7 @@ object Container: TContainer
     end
     object pnlTitrePrescripteur: TPanel
       Left = 0
-      Top = 472
+      Top = 21
       Width = 668
       Height = 21
       Align = alTop
@@ -160,7 +161,7 @@ object Container: TContainer
     end
     object pnlProfessionnels: TPanel
       Left = 0
-      Top = 493
+      Top = 42
       Width = 668
       Height = 301
       Align = alTop
@@ -272,28 +273,28 @@ object Container: TContainer
           ParentBackground = False
           ParentColor = True
           TabOrder = 1
-          object Edit10: TEdit
+          object ctrlSociete: TEdit
             Left = 0
             Top = 41
             Width = 153
             Height = 21
             TabOrder = 1
           end
-          object Edit11: TEdit
+          object ctrlProfession: TEdit
             Left = 0
             Top = 7
             Width = 153
             Height = 21
             TabOrder = 0
           end
-          object Edit12: TEdit
+          object ctrlTitre: TEdit
             Left = 0
             Top = 74
             Width = 153
             Height = 21
             TabOrder = 2
           end
-          object Edit13: TEdit
+          object ctrlService: TEdit
             Left = 0
             Top = 106
             Width = 153
@@ -449,7 +450,7 @@ object Container: TContainer
           ParentBackground = False
           ParentColor = True
           TabOrder = 4
-          object Memo1: TMemo
+          object ctrlActivite: TMemo
             Left = 0
             Top = 7
             Width = 185
@@ -534,7 +535,7 @@ object Container: TContainer
           ParentBackground = False
           ParentColor = True
           TabOrder = 1
-          object Memo2: TMemo
+          object ctrlAdresse2: TMemo
             Left = 0
             Top = 7
             Width = 185
@@ -650,7 +651,7 @@ object Container: TContainer
     end
     object pnlTitreFicheAdm: TPanel
       Left = 0
-      Top = 0
+      Top = -451
       Width = 668
       Height = 21
       Align = alTop
@@ -717,7 +718,7 @@ object Container: TContainer
     end
     object pnlFicheAdmin: TPanel
       Left = 0
-      Top = 21
+      Top = -430
       Width = 668
       Height = 451
       Align = alTop
@@ -800,7 +801,7 @@ object Container: TContainer
           ParentBackground = False
           ParentColor = True
           TabOrder = 2
-          object memoRue: TMemo
+          object ctrlAdresse1: TMemo
             Left = 0
             Top = 7
             Width = 185
@@ -1000,21 +1001,21 @@ object Container: TContainer
           ParentBackground = False
           ParentColor = True
           TabOrder = 2
-          object Edit1: TEdit
+          object ctrlNom: TEdit
             Left = 0
             Top = 41
             Width = 153
             Height = 21
             TabOrder = 1
           end
-          object edtCivilite: TEdit
+          object ctrlCivilite: TEdit
             Left = 0
             Top = 7
             Width = 153
             Height = 21
             TabOrder = 0
           end
-          object Edit9: TEdit
+          object ctrlPrenom: TEdit
             Left = 0
             Top = 74
             Width = 153
@@ -1428,28 +1429,28 @@ object Container: TContainer
           ParentBackground = True
           ParentColor = True
           TabOrder = 2
-          object Edit5: TEdit
+          object ctrlNumero1: TEdit
             Left = 0
             Top = 6
             Width = 153
             Height = 21
             TabOrder = 0
           end
-          object Edit6: TEdit
+          object ctrlNumero2: TEdit
             Left = 0
             Top = 40
             Width = 153
             Height = 21
             TabOrder = 1
           end
-          object Edit7: TEdit
+          object ctrlNumero3: TEdit
             Left = 0
             Top = 76
             Width = 153
             Height = 21
             TabOrder = 2
           end
-          object Edit8: TEdit
+          object ctrlNumero4: TEdit
             Left = 0
             Top = 110
             Width = 153
@@ -1461,7 +1462,7 @@ object Container: TContainer
     end
     object pnlDivers: TPanel
       Left = 0
-      Top = 815
+      Top = 364
       Width = 668
       Height = 421
       Align = alTop
@@ -1554,7 +1555,7 @@ object Container: TContainer
             ParentBackground = False
             ParentColor = True
             TabOrder = 0
-            object lvAdresses: TListView
+            object ctrlAdressesMail: TListView
               Left = 0
               Top = 0
               Width = 222
@@ -1571,10 +1572,10 @@ object Container: TContainer
               ShowColumnHeaders = False
               TabOrder = 0
               ViewStyle = vsReport
-              OnDrawItem = lvAdressesDrawItem
-              OnEdited = lvAdressesEdited
-              OnEditing = lvAdressesEditing
-              OnKeyDown = lvAdressesKeyDown
+              OnDrawItem = ctrlAdressesMailDrawItem
+              OnEdited = ctrlAdressesMailEdited
+              OnEditing = ctrlAdressesMailEditing
+              OnKeyDown = ctrlAdressesMailKeyDown
             end
             object ToolBar2: TToolBar
               Left = 111
@@ -1630,14 +1631,14 @@ object Container: TContainer
               end
             end
           end
-          object Edit3: TEdit
+          object ctrlPageWeb: TEdit
             Left = 0
             Top = 119
             Width = 417
             Height = 21
             TabOrder = 1
           end
-          object Edit4: TEdit
+          object ctrlMessenger: TEdit
             Left = 0
             Top = 153
             Width = 225
@@ -1877,7 +1878,7 @@ object Container: TContainer
           ParentColor = True
           TabOrder = 1
         end
-        object Memo3: TMemo
+        object ctrlNotes: TMemo
           Left = 19
           Top = 41
           Width = 636
