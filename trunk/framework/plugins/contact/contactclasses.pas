@@ -173,16 +173,45 @@ begin
   if Length(Value) > 0 then
   begin
     FXMLCursor.LoadXML(Value);
-    FController.NomContact := FXMLCursor.GetValue('/NomContact');
+    //FController.NomContact := FXMLCursor.GetValue('/NomContact');
   end;
 end;
 
 function TPlugin.GetXML: string;
+var
+  Document: IXMLCursor;
+  Data: IXMLCursor;
 begin
-  if FXMLCursor.Count = 0 then
-    FXMLCursor.AppendChild('NomContact', FController.NomContact)
-  else
-    FXMLCursor.SetValue('/NomContact', FController.NomContact);
+  FXMLCursor.Delete;
+  Document := FXMLCursor.AppendChild('Document', '');
+  Document.AppendChild('Version', '1.0');
+  Data := Document.AppendChild('Data', '');
+
+  Data.AppendChild('Activite', FController.Activite);
+  Data.AppendChild('Adresse1Contenu', FController.Adresse1Contenu);
+  Data.AppendChild('Adresse1Libelle', FController.Adresse1Libelle);
+  Data.AppendChild('Adresse2Contenu', FController.Adresse2Contenu);
+  Data.AppendChild('Adresse2Libelle', FController.Adresse2Libelle);
+  Data.AppendChild('AdressesMail', FController.AdressesMail);
+  Data.AppendChild('Civilite', FController.Civilite);
+  Data.AppendChild('Messenger', FController.Messenger);
+  Data.AppendChild('Nom', FController.Nom);
+  Data.AppendChild('Notes', FController.Notes);
+  Data.AppendChild('Numero1Contenu', FController.Numero1Contenu);
+  Data.AppendChild('Numero1Libelle', FController.Numero1Libelle);
+  Data.AppendChild('Numero2Contenu', FController.Numero2Contenu);
+  Data.AppendChild('Numero2Libelle', FController.Numero2Libelle);
+  Data.AppendChild('Numero3Contenu', FController.Numero3Contenu);
+  Data.AppendChild('Numero3Libelle', FController.Numero3Libelle);
+  Data.AppendChild('Numero4Contenu', FController.Numero4Contenu);
+  Data.AppendChild('Numero4Libelle', FController.Numero4Libelle);
+  Data.AppendChild('PageWeb', FController.PageWeb);
+  Data.AppendChild('Prenom', FController.Prenom);
+  Data.AppendChild('Profession', FController.Profession);
+  Data.AppendChild('Service', FController.Service);
+  Data.AppendChild('Societe', FController.Societe);
+  Data.AppendChild('Titre', FController.Titre);
+
   Result := FXMLCursor.XML;
 end;
 

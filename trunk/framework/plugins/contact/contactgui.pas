@@ -228,6 +228,7 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
+     procedure AddAdresseMail(const AdrCaption: string);
     { Déclarations publiques }
   end;
 
@@ -343,13 +344,7 @@ end;
 
 procedure TContainer.actAjouterExecute(Sender: TObject);
 begin
-  with ctrlAdressesMail.Items.Add do
-  begin
-    Caption := 'adresse@email.tld';
-    StateIndex := -1;
-    FAllowEditAdresseMail := True;
-    EditCaption;
-  end;
+  AddAdresseMail('adresse@email.tld');
 end;
 
 procedure TContainer.actModifierExecute(Sender: TObject);
@@ -389,6 +384,17 @@ begin
   ctrlAdressesMail.Items[0].Focused := True;
 
   ctrlAdressesMail.UpdateItems(0, 1);
+end;
+
+procedure TContainer.AddAdresseMail(const AdrCaption: string);
+begin
+  with ctrlAdressesMail.Items.Add do
+  begin
+    Caption := AdrCaption;
+    StateIndex := -1;
+    FAllowEditAdresseMail := True;
+    EditCaption;
+  end;
 end;
 
 procedure TContainer.ctrlAdressesMailEditing(Sender: TObject; Item: TListItem;

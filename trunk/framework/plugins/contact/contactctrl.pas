@@ -67,7 +67,7 @@ function NewController(APlugin: TPlugin; AContainer: TWinControl): IController;
 
 implementation
 
-uses ComCtrls;
+uses ComCtrls, classes;
 
 function NewController(APlugin: TPlugin; AContainer: TWinControl): IController;
 begin
@@ -117,8 +117,8 @@ begin
   for i := 0 to FContainer.ctrlAdressesMail.Items.Count - 1 do
   begin
     if i <> 0 then
-      Result := Result + ';';
-    Result := Result + FContainer.ctrlAdressesMail.Items[i].Caption;
+      Result := Result + ',';
+    Result := Result + '"' + FContainer.ctrlAdressesMail.Items[i].Caption + '"';
   end;
 end;
 
@@ -226,112 +226,122 @@ end;
 
 procedure TController.SetAdresse1Libelle(const Value: string);
 begin
-  FContainer
+  FContainer.btnAdresse1.Caption := Value;
 end;
 
 procedure TController.SetAdresse2Contenu(const Value: string);
 begin
-  // TODO -cMM: TController.SetAdresse2Contenu default body inserted
+  FContainer.ctrlAdresse2.Lines.Text := Value;
 end;
 
 procedure TController.SetAdresse2Libelle(const Value: string);
 begin
-  // TODO -cMM: TController.SetAdresse2Libelle default body inserted
+  FContainer.btnAdresse2.Caption := Value;
 end;
 
 procedure TController.SetAdressesMail(const Value: string);
+var
+  AdrList: TStringList;
+  i: Integer;
 begin
-  // TODO -cMM: TController.SetAdressesMail default body inserted
+  AdrList := TStringList.Create;
+  try
+    AdrList.CommaText := Value;
+    for i := 0 to AdrList.Count - 1 do
+      FContainer.AddAdresseMail(AdrList[i]);
+  finally
+    AdrList.Free;
+  end;
 end;
 
 procedure TController.SetCivilite(const Value: string);
 begin
-  // TODO -cMM: TController.SetCivilite default body inserted
+  FContainer.ctrlCivilite.Text := Value;
 end;
 
 procedure TController.SetMessenger(const Value: string);
 begin
-  // TODO -cMM: TController.SetMessenger default body inserted
+  FContainer.ctrlMessenger.Text := Value;
 end;
 
 procedure TController.SetNom(const Value: string);
 begin
-  // TODO -cMM: TController.SetNom default body inserted
+  FContainer.ctrlNom.Text := Value;
 end;
 
 procedure TController.SetNotes(const Value: string);
 begin
-  // TODO -cMM: TController.SetNotes default body inserted
+  FContainer.ctrlNotes.Lines.Text := Value;
 end;
 
 procedure TController.SetNumero1Contenu(const Value: string);
 begin
-  // TODO -cMM: TController.SetNumero1Contenu default body inserted
+  FContainer.ctrlNumero1.Text := Value;
 end;
 
 procedure TController.SetNumero1Libelle(const Value: string);
 begin
-  // TODO -cMM: TController.SetNumero1Libelle default body inserted
+  FContainer.btnTelephone1.Caption := Value;
 end;
 
 procedure TController.SetNumero2Contenu(const Value: string);
 begin
-  // TODO -cMM: TController.SetNumero2Contenu default body inserted
+  FContainer.ctrlNumero2.Text := Value;
 end;
 
 procedure TController.SetNumero2Libelle(const Value: string);
 begin
-  // TODO -cMM: TController.SetNumero2Libelle default body inserted
+  FContainer.btnTelephone2.Caption := Value;
 end;
 
 procedure TController.SetNumero3Contenu(const Value: string);
 begin
-  // TODO -cMM: TController.SetNumero3Contenu default body inserted
+  FContainer.ctrlNumero3.Text := Value;
 end;
 
 procedure TController.SetNumero3Libelle(const Value: string);
 begin
-  // TODO -cMM: TController.SetNumero3Libelle default body inserted
+  FContainer.btnTelephone3.Caption := Value;
 end;
 
 procedure TController.SetNumero4Contenu(const Value: string);
 begin
-  // TODO -cMM: TController.SetNumero4Contenu default body inserted
+  FContainer.ctrlNumero4.Text := Value;
 end;
 
 procedure TController.SetNumero4Libelle(const Value: string);
 begin
-  // TODO -cMM: TController.SetNumero4Libelle default body inserted
+  FContainer.btnTelephone4.Caption := Value;
 end;
 
 procedure TController.SetPageWeb(const Value: string);
 begin
-  // TODO -cMM: TController.SetPageWeb default body inserted
+  FContainer.ctrlPageWeb.Text := Value;
 end;
 
 procedure TController.SetPrenom(const Value: string);
 begin
-  // TODO -cMM: TController.SetPrenom default body inserted
+  FContainer.ctrlPrenom.Text := Value;
 end;
 
 procedure TController.SetProfession(const Value: string);
 begin
-  // TODO -cMM: TController.SetProfession default body inserted
+  FContainer.ctrlProfession.Text := Value;
 end;
 
 procedure TController.SetService(const Value: string);
 begin
-  // TODO -cMM: TController.SetService default body inserted
+  FContainer.ctrlService.Text := Value;
 end;
 
 procedure TController.SetSociete(const Value: string);
 begin
-  // TODO -cMM: TController.SetSociete default body inserted
+  FContainer.ctrlSociete.Text := Value;
 end;
 
 procedure TController.SetTitre(const Value: string);
 begin
-  // TODO -cMM: TController.SetTitre default body inserted
+  FContainer.ctrlTitre.Text := Value;
 end;
 
 end.
