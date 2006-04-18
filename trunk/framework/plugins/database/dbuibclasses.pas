@@ -22,7 +22,7 @@ unit dbuibclasses;
 
 interface
 
-uses Classes, jvuib, jvuibdataset, contnrs, DBClient, provider, StdXML_TLB, plugintf;
+uses Classes, jvuib, jvuibdataset, contnrs, DBClient, provider, StdXML_TLB, plugintf, dbintf;
 
 type
   TDatasetList = class;
@@ -165,10 +165,12 @@ end;
 procedure TPlugin.RemoveDataset(AName: string);
 var
   DatasetItem: TDatasetItem;
+  Index: integer;
 begin
   DatasetItem := FDatasetList.DatasetByName[AName];
-  if Assigned(DatasetItem) then
-    DatasetItem.Free;
+  Index := FDatasetList.IndexOf(DatasetItem);
+  if Index >= 0 then
+    FDatasetList.Delete(Index);
 end;
 
 procedure TPlugin.SetConnected(const Value: boolean);

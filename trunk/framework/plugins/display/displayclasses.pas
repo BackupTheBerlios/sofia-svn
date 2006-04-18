@@ -22,7 +22,7 @@ unit displayclasses;
 
 interface
 
-uses Controls, StdXML_TLB, plugintf;
+uses Controls, StdXML_TLB, plugintf, dbintf, usrintf;
 
 type
 

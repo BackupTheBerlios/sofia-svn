@@ -22,63 +22,13 @@ unit plugintf;
 
 interface
 
-uses Controls, stdxml_tlb, dbclient;
+uses stdxml_tlb, dbintf, usrintf;
 
 type
 
+  IPluginManager = interface;
 
 {------------------------------------------------------------------------------}
-
-  IPlugConnection = interface(IInterface)
-  ['{FA94CE0A-DF1A-4628-A8A8-C599CC785286}']
-    function GetConnected: boolean; stdcall;
-    function GetConnectionName: string; stdcall;
-    function GetPassWord: string; stdcall;
-    function GetUserName: string; stdcall;
-    procedure SetConnected(const Value: boolean); stdcall;
-    procedure SetConnectionName(const Value: string); stdcall;
-    procedure SetPassWord(const Value: string); stdcall;
-    procedure SetUserName(const Value: string); stdcall;
-    property Connected: boolean read GetConnected write SetConnected;
-    property ConnectionName: string read GetConnectionName write SetConnectionName;
-    property PassWord: string read GetPassWord write SetPassWord;
-    property UserName: string read GetUserName write SetUserName;
-  end;
-
-  IPlugDataset = interface(IInterface)
-  ['{2BBE4585-C2A2-4383-A723-73715CB61AC7}']
-    function Add(DatasetDef: string): string; stdcall;
-    function GetXML: string; stdcall;
-    procedure RemoveDataset(AName: string); stdcall;
-    property XML: string read GetXML;
-  end;
-
-{------------------------------------------------------------------------------}
-
-  IPlugDatabaseObject = interface(IInterface)
-  ['{87078381-3F7D-4020-B4FB-7C3097CA91C7}']
-    function GetPersonnes(Categories: string): string; stdcall;
-  end;
-
-{------------------------------------------------------------------------------}
-
-  IPlugSerialize = interface(IInterface)
-  ['{26DBC708-70B8-4105-91E1-72911457F912}']
-    function GetXML: string; stdcall;
-    procedure SetXML(const Value: string); stdcall;
-    property XML: string read GetXML write SetXML;
-  end;
-
-  IPlugDisplay = interface(IInterface)
-  ['{570C9B35-15F3-435E-9166-963ACE05F635}']
-    procedure Hide; stdcall;
-    procedure SetParent(const Value: TWinControl); stdcall;
-    procedure Show; stdcall;
-    property Parent: TWinControl write SetParent;
-  end;
-
-{------------------------------------------------------------------------------}
-
 
   IPlugMultipleInstance = interface(IInterface)
   ['{0FE8167B-8474-4B2C-94EA-2638AB9E2169}']
@@ -88,8 +38,6 @@ type
   end;
 
 {------------------------------------------------------------------------------}
-
-  IPluginManager = interface;
 
   IPlugUnknown = interface(IInterface)
   ['{0266191D-1BAA-4063-B95D-A9B4EED9F0DA}']

@@ -22,7 +22,7 @@ unit plugmgr;
 
 interface
 
-uses Classes, Controls, SysUtils, Contnrs, plugintf, StdXML_TLB;
+uses Classes, Controls, SysUtils, Contnrs, plugintf, dbintf, usrintf, StdXML_TLB;
 
 type
   EPluginError = class(Exception);

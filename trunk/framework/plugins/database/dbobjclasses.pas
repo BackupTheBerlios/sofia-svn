@@ -22,7 +22,7 @@ unit dbobjclasses;
 
 interface
 
-uses Classes, DB, StdXML_TLB, plugintf;
+uses Classes, DB, StdXML_TLB, plugintf, dbintf;
 
 type
   TPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDatabaseObject)

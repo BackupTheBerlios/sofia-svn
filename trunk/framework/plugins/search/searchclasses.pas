@@ -22,7 +22,7 @@ unit searchclasses;
 
 interface
 
-uses Classes, Controls, DB, StdXML_TLB, plugintf;
+uses Classes, Controls, DB, StdXML_TLB, plugintf, usrintf;
 
 type
 
