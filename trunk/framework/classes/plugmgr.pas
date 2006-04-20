@@ -22,7 +22,7 @@ unit plugmgr;
 
 interface
 
-uses Classes, Controls, SysUtils, Contnrs, plugintf, dbintf, usrintf, StdXML_TLB;
+uses Classes, Controls, SysUtils, Contnrs, plugintf, dbintf, entintf, usrintf, StdXML_TLB;
 
 type
   EPluginError = class(Exception);
@@ -224,7 +224,7 @@ var
 begin
   for i := 0 to FInstances.Count - 1 do
   begin
-    (FInstances[i] as IPlugUnknown).XMLCursor := nil;
+    //(FInstances[i] as IPlugUnknown).XMLCursor := nil;
     FInstances[i] := nil
   end;
   FInstances := nil;
@@ -342,7 +342,7 @@ begin
       Instance.InstanceName := Trim(AInstanceName);
   end;
 
-  FLastInstance.XMLCursor := TXMLCursor.Create;
+  //FLastInstance.XMLCursor := TXMLCursor.Create;
   FLastInstance.PluginManager := FPluginManager;
 
   if IsMultipleInstance then
@@ -376,7 +376,6 @@ begin
         Inc(i)
     except
       Found := False;
-      Result := -1;
     end;
   end;
 

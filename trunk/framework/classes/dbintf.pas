@@ -50,13 +50,6 @@ type
     property XML: string read GetXML;
   end;
 
-{------------------------------------------------------------------------------}
-
-  IPlugDatabaseObject = interface(IInterface)
-  ['{87078381-3F7D-4020-B4FB-7C3097CA91C7}']
-    function GetPersonnes(Categories: string): string; stdcall;
-  end;
-
 
 implementation
 

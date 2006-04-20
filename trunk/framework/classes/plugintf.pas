@@ -22,35 +22,35 @@ unit plugintf;
 
 interface
 
-uses stdxml_tlb, dbintf, usrintf;
+uses stdxml_tlb, dbintf, entintf, usrintf;
 
 type
 
   IPluginManager = interface;
 
-{------------------------------------------------------------------------------}
+  {------------------------------------------------------------------------------}
 
   IPlugMultipleInstance = interface(IInterface)
-  ['{0FE8167B-8474-4B2C-94EA-2638AB9E2169}']
+    ['{0FE8167B-8474-4B2C-94EA-2638AB9E2169}']
     function GetInstanceName: string; stdcall;
     procedure SetInstanceName(const Value: string); stdcall;
     property InstanceName: string read GetInstanceName write SetInstanceName;
   end;
 
-{------------------------------------------------------------------------------}
+  {------------------------------------------------------------------------------}
 
   IPlugUnknown = interface(IInterface)
-  ['{0266191D-1BAA-4063-B95D-A9B4EED9F0DA}']
+    ['{0266191D-1BAA-4063-B95D-A9B4EED9F0DA}']
     procedure SetPluginManager(const Value: IPluginManager); stdcall;
-    procedure SetXMLCursor(const Value: IXMLCursor); stdcall;
+    //procedure SetXMLCursor(const Value: IXMLCursor); stdcall;
     property PluginManager: IPluginManager write SetPluginManager;
-    property XMLCursor: IXMLCursor write SetXMLCursor;
+    //property XMLCursor: IXMLCursor write SetXMLCursor;
   end;
 
-{------------------------------------------------------------------------------}
+  {------------------------------------------------------------------------------}
 
   IPlugin = interface(IInterface)
-  ['{0B7E1697-F7C9-4D64-BD73-D7A97C4CCBAC}']
+    ['{0B7E1697-F7C9-4D64-BD73-D7A97C4CCBAC}']
     function GetAsDisplay: IPlugDisplay; stdcall;
     function GetAsPlugConnection: IPlugConnection; stdcall;
     function GetAsPlugDatabaseObject: IPlugDatabaseObject; stdcall;
@@ -66,16 +66,16 @@ type
     property AsPlugDatabaseObject: IPlugDatabaseObject read GetAsPlugDatabaseObject;
     property AsPlugDataset: IPlugDataset read GetAsPlugDataset;
     property AsPlugMultipleInstance: IPlugMultipleInstance read
-        GetAsPlugMultipleInstance;
+      GetAsPlugMultipleInstance;
     property AsPlugSerialize: IPlugSerialize read GetAsPlugSerialize;
     property PluginName: string read GetPluginName;
     property LastInstance: IPlugUnknown read GetLastInstance;
     property Instances[const InstanceName: string]: IPlugin read GetInstances;
-        default;
+    default;
   end;
 
   IPluginManager = interface(IInterface)
-  ['{68B32F47-FF94-44E2-8E56-AC87975D894C}']
+    ['{68B32F47-FF94-44E2-8E56-AC87975D894C}']
     function GetPlugins(const PluginName: string): IPlugin; stdcall;
     procedure LoadPlugins;
     procedure UnloadPlugins;

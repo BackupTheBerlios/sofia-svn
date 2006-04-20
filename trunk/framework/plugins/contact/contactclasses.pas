@@ -22,7 +22,7 @@ unit contactclasses;
 
 interface
 
-uses Controls, stdxml_tlb, plugintf, usrintf;
+uses Controls, StdXML_TLB, plugintf, usrintf;
 
 type
 
@@ -111,19 +111,19 @@ type
     function GetInstanceName: string; stdcall;
     procedure Hide; stdcall;
     function GetParent: TWinControl; stdcall;
-    function GetXMLCursor: IXMLCursor; stdcall;
+    //function GetXMLCursor: IXMLCursor; stdcall;
     procedure SetXML(const Value: string); stdcall;
     function GetXML: string; stdcall;
     procedure SetInstanceName(const Value: string); stdcall;
     procedure SetParent(const Value: TWinControl); stdcall;
     procedure SetPluginManager(const Value: IPluginManager); stdcall;
-    procedure SetXMLCursor(const Value: IXMLCursor); stdcall;
+    //procedure SetXMLCursor(const Value: IXMLCursor); stdcall;
     procedure Show; stdcall;
   private
     FContainer: TWinControl;
     FController: IController;
     FInstanceName: string;
-    FXMLCursor: IXMLCursor;
+    FXMLDoc: IXMLCursor;
     FParent: TWinControl;
     FPluginManager: IPluginManager;
   public
@@ -133,18 +133,19 @@ type
 
 implementation
 
-uses Classes, contactctrl, contactgui;
+uses Classes, contactctrl, contactgui, xmlcursor;
 
 constructor TPlugin.Create;
 begin
   FContainer := TContainer.Create(nil);
   FController := NewController(Self, FContainer);
+  FXMLDoc := TXMLCursor.Create;
 end;
 
 destructor TPlugin.Destroy;
 begin
   FController := nil;
-  FXMLCursor := nil;
+  FXMLDoc := nil;
   inherited;
 end;
 
@@ -162,17 +163,18 @@ function TPlugin.GetParent: TWinControl;
 begin
   Result := FParent;
 end;
-
+{
 function TPlugin.GetXMLCursor: IXMLCursor;
 begin
   Result := FXMLCursor;
 end;
+}
 
 procedure TPlugin.SetXML(const Value: string);
 begin
   if Length(Value) > 0 then
   begin
-    FXMLCursor.LoadXML(Value);
+    FXMLDoc.LoadXML(Value);
     //FController.NomContact := FXMLCursor.GetValue('/NomContact');
   end;
 end;
@@ -182,8 +184,9 @@ var
   Document: IXMLCursor;
   Data: IXMLCursor;
 begin
-  FXMLCursor.Delete;
-  Document := FXMLCursor.AppendChild('Document', '');
+  FXMLDoc.Delete;
+  Document := TXMLCursor.Create;
+  Document := FXMLDoc.AppendChild('Document', '');
   Document.AppendChild('Version', '1.0');
   Data := Document.AppendChild('Data', '');
 
@@ -212,7 +215,7 @@ begin
   Data.AppendChild('Societe', FController.Societe);
   Data.AppendChild('Titre', FController.Titre);
 
-  Result := FXMLCursor.XML;
+  Result := FXMLDoc.XML;
 end;
 
 procedure TPlugin.SetInstanceName(const Value: string);
@@ -230,10 +233,12 @@ begin
   FPluginManager := Value;
 end;
 
+{
 procedure TPlugin.SetXMLCursor(const Value: IXMLCursor);
 begin
   FXMLCursor := Value;
 end;
+}
 
 procedure TPlugin.Show;
 begin

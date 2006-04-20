@@ -24,8 +24,8 @@ interface
 
 type
 
-  IFldsPersonnes = interface(IInterface)
-  ['{CA61979C-76A2-43B8-89F6-36DB30BDAB8E}']
+  IFieldsPersonnes = interface(IInterface)
+    ['{CA61979C-76A2-43B8-89F6-36DB30BDAB8E}']
     function GetCategoriePersonne: string; stdcall;
     function GetIdentifiantPersonne: string; stdcall;
     function GetNomPersonne: string; stdcall;
@@ -35,22 +35,44 @@ type
     procedure SetNomPersonne(const Value: string); stdcall;
     procedure SetPrenomPersonne(const Value: string); stdcall;
     property CategoriePersonne: string read GetCategoriePersonne write
-        SetCategoriePersonne;
+      SetCategoriePersonne;
     property IdentifiantPersonne: string read GetIdentifiantPersonne write
-        SetIdentifiantPersonne;
+      SetIdentifiantPersonne;
     property NomPersonne: string read GetNomPersonne write SetNomPersonne;
     property PrenomPersonne: string read GetPrenomPersonne write SetPrenomPersonne;
   end;
 
-  IEntPersonnes = interface(IInterface)
+  ITableEntity = interface(IInterface)
   ['{6435EEC2-A1F0-4A14-A4DC-7749F78D4212}']
     procedure CreateEntity; stdcall;
+    function GetEntityName: string; stdcall;
+    function GetFieldNames: string; stdcall;
+    function GetInsertCommand: string; stdcall;
+    function GetParamNames: string; stdcall;
     function GetRevision: integer; stdcall;
     procedure Patch; stdcall;
+    procedure SetEntityName(const Value: string); stdcall;
+    procedure SetFieldNames(const Value: string); stdcall;
+    procedure SetInsertCommand(const Value: string); stdcall;
+    procedure SetParamNames(const Value: string); stdcall;
     procedure SetRevision(const Value: integer); stdcall;
+    property EntityName: string read GetEntityName write SetEntityName;
+    property FieldNames: string read GetFieldNames write SetFieldNames;
+    property InsertCommand: string read GetInsertCommand write SetInsertCommand;
+    property ParamNames: string read GetParamNames write SetParamNames;
     property Revision: integer read GetRevision write SetRevision;
+  end;
+
+  {------------------------------------------------------------------------------}
+
+  IPlugDatabaseObject = interface(IInterface)
+    ['{87078381-3F7D-4020-B4FB-7C3097CA91C7}']
+    procedure InsertUpdateContact(Entity: ITableEntity; Fields: IFieldsPersonnes);
+        stdcall;
+    function GetPersonnes(Categories: string): string; stdcall;
   end;
 
 implementation
 
 end.
+

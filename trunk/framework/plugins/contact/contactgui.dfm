@@ -19,7 +19,6 @@ object Container: TContainer
     Top = 0
     Width = 685
     Height = 724
-    VertScrollBar.Position = 451
     Align = alClient
     BevelEdges = []
     BevelInner = bvNone
@@ -27,7 +26,7 @@ object Container: TContainer
     TabOrder = 0
     object pnlTitreDivers: TPanel
       Left = 0
-      Top = 343
+      Top = 794
       Width = 668
       Height = 21
       Align = alTop
@@ -94,7 +93,7 @@ object Container: TContainer
     end
     object pnlTitrePrescripteur: TPanel
       Left = 0
-      Top = 21
+      Top = 472
       Width = 668
       Height = 21
       Align = alTop
@@ -161,7 +160,7 @@ object Container: TContainer
     end
     object pnlProfessionnels: TPanel
       Left = 0
-      Top = 42
+      Top = 493
       Width = 668
       Height = 301
       Align = alTop
@@ -651,7 +650,7 @@ object Container: TContainer
     end
     object pnlTitreFicheAdm: TPanel
       Left = 0
-      Top = -451
+      Top = 0
       Width = 668
       Height = 21
       Align = alTop
@@ -718,7 +717,7 @@ object Container: TContainer
     end
     object pnlFicheAdmin: TPanel
       Left = 0
-      Top = -430
+      Top = 21
       Width = 668
       Height = 451
       Align = alTop
@@ -1462,7 +1461,7 @@ object Container: TContainer
     end
     object pnlDivers: TPanel
       Left = 0
-      Top = 364
+      Top = 815
       Width = 668
       Height = 421
       Align = alTop
