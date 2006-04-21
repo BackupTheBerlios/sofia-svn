@@ -118,16 +118,16 @@ end;
 
 procedure TPlugin.Search(Categories: string);
 var
-  Res: IPlugSerialize;
-  Qry: IPlugDatabaseObject;
-  Dts: IPlugDataset;
+  XMLResult: IPlugSerialize;
+  DatabaseObject: IPlugDatabaseObject;
+  Dataset: IPlugDataset;
 begin
-  Qry := FPluginManager['dbobj'].AsPlugDatabaseObject;
-  Dts := FPluginManager['dbuib'].AsPlugDataset;
-  Res := FPluginManager['search'].AsPlugSerialize;
+  DatabaseObject := FPluginManager['dbobj'].AsPlugDatabaseObject;
+  Dataset := FPluginManager['dbuib'].AsPlugDataset;
+  XMLResult := FPluginManager['search'].AsPlugSerialize;
 
-  Dts.Add(Qry.GetPersonnes(Categories));
-  Res.XML := Dts.XML;
+  Dataset.Add(DatabaseObject.GetPersonnes(Categories));
+  XMLResult.XML := Dataset.XML;
 
   AddPage('search', '', 'Résultats de la recherche');
 end;
