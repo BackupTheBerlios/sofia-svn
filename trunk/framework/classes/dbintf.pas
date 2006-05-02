@@ -22,6 +22,8 @@ unit dbintf;
 
 interface
 
+uses DBClient;
+
 type
 
 {------------------------------------------------------------------------------}
@@ -44,9 +46,12 @@ type
 
   IPlugDataset = interface(IInterface)
   ['{2BBE4585-C2A2-4383-A723-73715CB61AC7}']
-    function Add(DatasetDef: string): string; stdcall;
+    function AddDataReader(const XMLDef: string): string; stdcall;
+    function GetDataReader(const Name: string): TClientDataset; stdcall;
     function GetXML: string; stdcall;
-    procedure RemoveDataset(AName: string); stdcall;
+    procedure RemoveDataReader(const Name: string); stdcall;
+    property DataReader[const Name: string]: TClientDataset read GetDataReader;
+        default;
     property XML: string read GetXML;
   end;
 

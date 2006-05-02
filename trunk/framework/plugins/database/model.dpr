@@ -1,8 +1,8 @@
-library dbuib;
+library model;
 
 uses
   plugintf,
-  dbuibclasses in 'dbuibclasses.pas';
+  modelclasses in 'modelclasses.pas';
 
 function NewPlugin: IPlugUnknown;
 begin

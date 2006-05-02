@@ -18,7 +18,7 @@ along with Sofia; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 -------------------------------------------------------------------------------}
 
-unit dbuibclasses;
+unit uibclasses;
 
 interface
 
@@ -37,9 +37,10 @@ type
     FProvider: TDataSetProvider;
     function GetXML: string;
   public
-    constructor Create(Owner: TDatasetList; DatasetDef: IXMLCursor); reintroduce;
+    constructor Create(Owner: TDatasetList; XMLDef: IXMLCursor); reintroduce;
       overload;
     destructor Destroy; override;
+    property ClientDataset: TClientDataset read FClientDataset;
     property Description: string read FDescription;
     property Name: string read FName;
     property XML: string read GetXML;
@@ -51,27 +52,28 @@ type
     FQueryList: TObjectList;
     FTransaction: TJvUIBTransaction;
     function GetCount: Integer;
-    function GetDatasetByName(const Name: string): TDatasetItem;
+    function GetItemByName(const Name: string): TDatasetItem;
     function GetItems(Index: Integer): TDatasetItem;
   public
     constructor Create;
     destructor Destroy; override;
-    function Add(DatasetDef: IXMLCursor): TDatasetItem;
+    function Add(XMLDef: IXMLCursor): TDatasetItem;
     property Connection: TJvUIBDatabase read FConnection write FConnection;
     property Count: Integer read GetCount;
-    property DatasetByName[const Name: string]: TDatasetItem read GetDatasetByName;
+    property ItemByName[const Name: string]: TDatasetItem read GetItemByName;
     property Items[Index: Integer]: TDatasetItem read GetItems; default;
     property Transaction: TJvUIBTransaction read FTransaction write FTransaction;
   end;
 
   TPlugin = class(TInterfacedObject, IPlugUnknown, IPlugConnection, IPlugDataset)
-    function Add(DatasetDef: string): string; stdcall;
+    function AddDataReader(const XMLDef: string): string; stdcall;
     function GetConnected: boolean; stdcall;
     function GetConnectionName: string; stdcall;
+    function GetDataReader(const Name: string): TClientDataset; stdcall;
     function GetPassWord: string; stdcall;
     function GetUserName: string; stdcall;
     function GetXML: string; stdcall;
-    procedure RemoveDataset(AName: string); stdcall;
+    procedure RemoveDataReader(const Name: string); stdcall;
     procedure SetConnected(const Value: boolean); stdcall;
     procedure SetConnectionName(const Value: string); stdcall;
     procedure SetPassWord(const Value: string); stdcall;
@@ -116,9 +118,9 @@ begin
   inherited;
 end;
 
-function TPlugin.Add(DatasetDef: string): string;
+function TPlugin.AddDataReader(const XMLDef: string): string;
 begin
-  FXMLCursor.LoadXML(DatasetDef);
+  FXMLCursor.LoadXML(XMLDef);
   Result := FDatasetList.Add(FXMLCursor).XML;
 end;
 
@@ -130,6 +132,17 @@ end;
 function TPlugin.GetConnectionName: string;
 begin
   Result := FConnection.DatabaseName;
+end;
+
+function TPlugin.GetDataReader(const Name: string): TClientDataset;
+var
+  Item: TDatasetItem;
+begin
+  Item := FDatasetList.ItemByName[Name];
+  if Assigned(Item) then
+    Result := Item.ClientDataset
+  else
+    Result := nil;
 end;
 
 function TPlugin.GetPassWord: string;
@@ -149,12 +162,11 @@ var
   Dataset: IXMLCursor;
 begin
   //Constituer un flux global en parcourant tous les Datasets
-  FXMLCursor.Delete;
-  FXMLCursor.LoadXML('<Dataset></Dataset>');
+  FXMLCursor.LoadXML('<Dataset></DataReader>');
   DatasetList := FXMLCursor.Select('/Dataset');
   for i := 0 to FDatasetList.Count - 1 do
   begin
-    Dataset := DatasetList.AppendChild('Dataset', '');
+    Dataset := DatasetList.AppendChild('DataReader', '');
     Dataset.SetValue('Name', FDatasetList.Items[i].Name);
     Dataset.SetValue('Description', FDatasetList.Items[i].Description);
     Dataset.SetValue('XMLData', FDatasetList[i].XML);
@@ -162,12 +174,12 @@ begin
   Result := FXMLCursor.XML;
 end;
 
-procedure TPlugin.RemoveDataset(AName: string);
+procedure TPlugin.RemoveDataReader(const Name: string);
 var
   DatasetItem: TDatasetItem;
   Index: integer;
 begin
-  DatasetItem := FDatasetList.DatasetByName[AName];
+  DatasetItem := FDatasetList.ItemByName[Name];
   Index := FDatasetList.IndexOf(DatasetItem);
   if Index >= 0 then
     FDatasetList.Delete(Index);
@@ -203,7 +215,7 @@ begin
   FXMLCursor := Value;
 end;
 
-constructor TDatasetItem.Create(Owner: TDatasetList; DatasetDef: IXMLCursor);
+constructor TDatasetItem.Create(Owner: TDatasetList; XMLDef: IXMLCursor);
 var
   Params: IXMLCursor;
   ParamType: string;
@@ -212,16 +224,16 @@ var
   IntValue: Integer;
 begin
   FOwner := Owner;
-  FName := DatasetDef.GetValue('/DatasetDef/Name');
-  FDescription := DatasetDef.GetValue('/DatasetDef/Description');
+  FName := XMLDef.GetValue('/DataReader/Name');
+  FDescription := XMLDef.GetValue('/DataReader/Description');
   FDataset := TJvUIBDataset.Create(nil);
   FDataset.Transaction := Owner.Transaction;
   FDataset.DataBase := Owner.Connection;
   FDataset.FetchBlobs := True;
-  FDataset.SQL.Text := DatasetDef.GetValue('/DatasetDef/Sql');
+  FDataset.SQL.Text := XMLDef.GetValue('/DataReader/Sql');
 
   //affectation des parametres xml
-  Params := DatasetDef.Select('/DatasetDef/Params/*');
+  Params := XMLDef.Select('/DataReader/Params/*');
   try
     while not Params.EOF do
     begin
@@ -247,7 +259,7 @@ begin
   FProvider.DataSet := FDataset;
   FClientDataset.SetProvider(FProvider);
 
-  FDataset.Open;
+  //FDataset.Open;
 end;
 
 destructor TDatasetItem.Destroy;
@@ -277,9 +289,9 @@ begin
   inherited;
 end;
 
-function TDatasetList.Add(DatasetDef: IXMLCursor): TDatasetItem;
+function TDatasetList.Add(XMLDef: IXMLCursor): TDatasetItem;
 begin
-  Result := TDatasetItem.Create(Self, DatasetDef);
+  Result := TDatasetItem.Create(Self, XMLDef);
   FQueryList.Add(Result);
 end;
 
@@ -288,7 +300,7 @@ begin
   Result := FQueryList.Count;
 end;
 
-function TDatasetList.GetDatasetByName(const Name: string): TDatasetItem;
+function TDatasetList.GetItemByName(const Name: string): TDatasetItem;
 var
   Found: Boolean;
   i: Integer;

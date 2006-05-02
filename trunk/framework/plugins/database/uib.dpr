@@ -1,8 +1,8 @@
-library dbobj;
+library uib;
 
 uses
   plugintf,
-  dbobjclasses in 'dbobjclasses.pas';
+  uibclasses in 'uibclasses.pas';
 
 function NewPlugin: IPlugUnknown;
 begin

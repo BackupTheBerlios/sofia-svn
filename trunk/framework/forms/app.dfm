@@ -1,6 +1,6 @@
 object AppForm: TAppForm
-  Left = 296
-  Top = 361
+  Left = 220
+  Top = 219
   Width = 800
   Height = 600
   Color = clBtnFace

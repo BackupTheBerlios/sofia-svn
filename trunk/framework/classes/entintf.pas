@@ -67,8 +67,6 @@ type
 
   IPlugDatabaseObject = interface(IInterface)
     ['{87078381-3F7D-4020-B4FB-7C3097CA91C7}']
-    procedure InsertUpdateContact(Entity: ITableEntity; Fields: IFieldsPersonnes);
-        stdcall;
     function GetPersonnes(Categories: string): string; stdcall;
   end;
 

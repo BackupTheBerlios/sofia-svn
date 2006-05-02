@@ -22,7 +22,7 @@ unit displayclasses;
 
 interface
 
-uses Controls, StdXML_TLB, plugintf, dbintf, usrintf;
+uses Controls, StdXML_TLB, plugintf, dbintf, entintf, usrintf;
 
 type
 
@@ -126,7 +126,7 @@ begin
   Dataset := FPluginManager['dbuib'].AsPlugDataset;
   XMLResult := FPluginManager['search'].AsPlugSerialize;
 
-  Dataset.Add(DatabaseObject.GetPersonnes(Categories));
+  Dataset.AddDataReader(DatabaseObject.GetPersonnes(Categories));
   XMLResult.XML := Dataset.XML;
 
   AddPage('search', '', 'Résultats de la recherche');

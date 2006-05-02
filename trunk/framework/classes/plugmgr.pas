@@ -319,7 +319,7 @@ var
   IsMultipleInstance: Boolean;
   Idx: Integer;
 begin
-  //Vérification de l'existance de ce nomm d'instance
+  //Vérification de l'existance de ce nom d'instance
   Idx := IndexOf(AInstanceName);
   if Idx <> -1 then
   begin

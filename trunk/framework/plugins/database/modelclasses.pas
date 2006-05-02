@@ -18,7 +18,7 @@ along with Sofia; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 -------------------------------------------------------------------------------}
 
-unit dbobjclasses;
+unit modelclasses;
 
 interface
 
@@ -35,21 +35,6 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-  end;
-
-  TTablePersonnes = class(TObject, ITableEntity)
-    procedure CreateEntity; stdcall;
-    function GetEntityName: string; stdcall;
-    function GetFieldNames: string; stdcall;
-    function GetInsertCommand: string; stdcall;
-    function GetParamNames: string; stdcall;
-    function GetRevision: integer; stdcall;
-    procedure Patch; stdcall;
-    procedure SetEntityName(const Value: string); stdcall;
-    procedure SetFieldNames(const Value: string); stdcall;
-    procedure SetInsertCommand(const Value: string); stdcall;
-    procedure SetParamNames(const Value: string); stdcall;
-    procedure SetRevision(const Value: integer); stdcall;
   end;
 
 implementation
@@ -77,7 +62,7 @@ var
 begin
   name := 'AppendUpdateContact';
   sql := Format('insert into personnes (%s) values (%s)', [Entity.FieldNames, Entity.ParamNames]);
-      Result := Format('<DatasetDef><Name>%s</Name><Sql>%s</Sql><Params>%s</Params></DatasetDef>', [name, sql, params]);
+  //Result := Format('<DatasetDef><Name>%s</Name><Sql>%s</Sql><Params>%s</Params></DatasetDef>', [name, sql, params]);
 
 end;
 
@@ -112,66 +97,6 @@ end;
 procedure TPlugin.SetPluginManager(const Value: IPluginManager);
 begin
   FPluginManager := Value;
-end;
-
-procedure TTablePersonnes.CreateEntity;
-begin
-  // TODO -cMM: TTablePersonnes.CreateEntity default body inserted
-end;
-
-function TTablePersonnes.GetEntityName: string;
-begin
-  // TODO -cMM: TTablePersonnes.GetEntityName default body inserted
-end;
-
-function TTablePersonnes.GetFieldNames: string;
-begin
-  // TODO -cMM: TTablePersonnes.GetFieldNames default body inserted
-end;
-
-function TTablePersonnes.GetInsertCommand: string;
-begin
-  // TODO -cMM: TTablePersonnes.GetInsertCommand default body inserted
-end;
-
-function TTablePersonnes.GetParamNames: string;
-begin
-  // TODO -cMM: TTablePersonnes.GetParamNames default body inserted
-end;
-
-function TTablePersonnes.GetRevision: integer;
-begin
-  // TODO -cMM: TTablePersonnes.GetRevision default body inserted
-end;
-
-procedure TTablePersonnes.Patch;
-begin
-  // TODO -cMM: TTablePersonnes.Patch default body inserted
-end;
-
-procedure TTablePersonnes.SetEntityName(const Value: string);
-begin
-  // TODO -cMM: TTablePersonnes.SetEntityName default body inserted
-end;
-
-procedure TTablePersonnes.SetFieldNames(const Value: string);
-begin
-  // TODO -cMM: TTablePersonnes.SetFieldNames default body inserted
-end;
-
-procedure TTablePersonnes.SetInsertCommand(const Value: string);
-begin
-  // TODO -cMM: TTablePersonnes.SetInsertCommand default body inserted
-end;
-
-procedure TTablePersonnes.SetParamNames(const Value: string);
-begin
-  // TODO -cMM: TTablePersonnes.SetParamNames default body inserted
-end;
-
-procedure TTablePersonnes.SetRevision(const Value: integer);
-begin
-  // TODO -cMM: TTablePersonnes.SetRevision default body inserted
 end;
 
 end.
