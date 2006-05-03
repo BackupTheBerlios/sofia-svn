@@ -53,7 +53,7 @@ type
     ['{0B7E1697-F7C9-4D64-BD73-D7A97C4CCBAC}']
     function GetAsDisplay: IPlugDisplay; stdcall;
     function GetAsPlugConnection: IPlugConnection; stdcall;
-    function GetAsPlugDatabaseObject: IPlugDatabaseObject; stdcall;
+    function GetAsPlugBusinessObject: IPlugBusinessObject; stdcall;
     function GetAsPlugDataset: IPlugDataset; stdcall;
     function GetAsPlugSerialize: IPlugSerialize; stdcall;
     function GetPluginName: string; stdcall;
@@ -63,7 +63,7 @@ type
     function GetAsPlugMultipleInstance: IPlugMultipleInstance; stdcall;
     property AsDisplay: IPlugDisplay read GetAsDisplay;
     property AsPlugConnection: IPlugConnection read GetAsPlugConnection;
-    property AsPlugDatabaseObject: IPlugDatabaseObject read GetAsPlugDatabaseObject;
+    property AsPlugBusinessObject: IPlugBusinessObject read GetAsPlugBusinessObject;
     property AsPlugDataset: IPlugDataset read GetAsPlugDataset;
     property AsPlugMultipleInstance: IPlugMultipleInstance read
       GetAsPlugMultipleInstance;

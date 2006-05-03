@@ -22,7 +22,7 @@ unit dbintf;
 
 interface
 
-uses DBClient;
+uses stdxml_tlb, DBClient;
 
 type
 
@@ -44,16 +44,36 @@ type
     property UserName: string read GetUserName write SetUserName;
   end;
 
+{------------------------------------------------------------------------------}
+
+  ITableEntity = interface(IInterface)
+  ['{6435EEC2-A1F0-4A14-A4DC-7749F78D4212}']
+    function GetCreateCommand: string; stdcall;
+    function GetDeleteCommand: string; stdcall;
+    function GetEntityName: string; stdcall;
+    function GetInsertCommand: string; stdcall;
+    function GetParams: IXMLCursor; stdcall;
+    function GetSelectCommand: string; stdcall;
+    function GetUpdateCommand: string; stdcall;
+    property CreateCommand: string read GetCreateCommand;
+    property DeleteCommand: string read GetDeleteCommand;
+    property EntityName: string read GetEntityName;
+    property InsertCommand: string read GetInsertCommand;
+    property Params: IXMLCursor read GetParams;
+    property SelectCommand: string read GetSelectCommand;
+    property UpdateCommand: string read GetUpdateCommand;
+  end;
+
+{------------------------------------------------------------------------------}
+
   IPlugDataset = interface(IInterface)
   ['{2BBE4585-C2A2-4383-A723-73715CB61AC7}']
-    function AddDataReader(const XMLDef: string): string; stdcall;
-    function GetDataReader(const Name: string): TClientDataset; stdcall;
-    function GetXML: string; stdcall;
-    procedure RemoveDataReader(const Name: string); stdcall;
-    property DataReader[const Name: string]: TClientDataset read GetDataReader;
-        default;
-    property XML: string read GetXML;
+    procedure AddEntity(TableEntity: ITableEntity); stdcall;
+    function GetEntityReader(const Name: string): TClientDataset; stdcall;
+    procedure RemoveEntity(const Name: string); stdcall;
+    property EntityReader[const Name: string]: TClientDataset read GetEntityReader;
   end;
+
 
 
 implementation

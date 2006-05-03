@@ -135,6 +135,7 @@ ProductName=
 ProductVersion=1.0.0.0
 Comments=
 [Excluded Packages]
+E:\Developpement\Composants\ComponentAxiLibrary\Axi_RegControls.bpl=AXI_RegControls (Delphi)
 D:\Developpement\sofia\bin\gdip.bpl=(sans titre)
 C:\WINDOWS\system32\rbIBE77.bpl=ReportBuilder Data Access for Interbase Express
 [HistoryLists\hlDebugSourcePath]

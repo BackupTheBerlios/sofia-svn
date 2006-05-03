@@ -46,7 +46,7 @@ type
   TPlugin = class(TInterfacedObject, IPlugin)
     function GetAsDisplay: IPlugDisplay; stdcall;
     function GetAsPlugConnection: IPlugConnection; stdcall;
-    function GetAsPlugDatabaseObject: IPlugDatabaseObject; stdcall;
+    function GetAsPlugBusinessObject: IPlugBusinessObject; stdcall;
     function GetAsPlugDataset: IPlugDataset; stdcall;
     function GetAsPlugSerialize: IPlugSerialize; stdcall;
     function GetAsPlugMultipleInstance: IPlugMultipleInstance; stdcall;
@@ -146,9 +146,9 @@ end;
 
 procedure TPluginManager.LoadPlugins;
 begin
-  FPlugins.Add(NewPlugin(Self, 'dbuib'));
-  FPlugins.Add(NewPlugin(Self, 'dbobj'));
-  FPlugins.Add(NewPlugin(Self, 'display'));
+  FPlugins.Add(NewPlugin(Self, 'uib'));
+  FPlugins.Add(NewPlugin(Self, 'bo'));
+  FPlugins.Add(NewPlugin(Self, 'mainview'));
   FPlugins.Add(NewPlugin(Self, 'contact'));
   FPlugins.Add(NewPlugin(Self, 'welcome'));
   FPlugins.Add(NewPlugin(Self, 'search'));
@@ -250,12 +250,12 @@ begin
   end;
 end;
 
-function TPlugin.GetAsPlugDatabaseObject: IPlugDatabaseObject;
+function TPlugin.GetAsPlugBusinessObject: IPlugBusinessObject;
 begin
   try
-    Result := CurrentInstance as IPlugDatabaseObject;
+    Result := CurrentInstance as IPlugBusinessObject;
   except
-    ShowMessage(Format('Le plugin "%s" ne supporte pas l''interface %s', [FPluginName, 'PlugDatabaseObject']));
+    ShowMessage(Format('Le plugin "%s" ne supporte pas l''interface %s', [FPluginName, 'PlugBusinessObject']));
   end;
 end;
 

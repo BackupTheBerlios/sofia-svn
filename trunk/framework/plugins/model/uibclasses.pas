@@ -32,16 +32,18 @@ type
     FClientDataset: TClientDataset;
     FName: string;
     FDataset: TJvUIBDataset;
-    FDescription: string;
     FOwner: TDatasetList;
+    FParams: IXMLCursor;
     FProvider: TDataSetProvider;
+    FTableEntity: ITableEntity;
     function GetXML: string;
   public
-    constructor Create(Owner: TDatasetList; XMLDef: IXMLCursor); reintroduce;
-      overload;
+    constructor Create(Owner: TDatasetList; TableEntity: ITableEntity);
+      reintroduce; overload;
     destructor Destroy; override;
+    procedure ExecuteSelect;
+    procedure SyncParams;
     property ClientDataset: TClientDataset read FClientDataset;
-    property Description: string read FDescription;
     property Name: string read FName;
     property XML: string read GetXML;
   end;
@@ -57,7 +59,7 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-    function Add(XMLDef: IXMLCursor): TDatasetItem;
+    function Add(TableEntity: ITableEntity): TDatasetItem;
     property Connection: TJvUIBDatabase read FConnection write FConnection;
     property Count: Integer read GetCount;
     property ItemByName[const Name: string]: TDatasetItem read GetItemByName;
@@ -66,27 +68,23 @@ type
   end;
 
   TPlugin = class(TInterfacedObject, IPlugUnknown, IPlugConnection, IPlugDataset)
-    function AddDataReader(const XMLDef: string): string; stdcall;
+    procedure AddEntity(TableEntity: ITableEntity); stdcall;
     function GetConnected: boolean; stdcall;
     function GetConnectionName: string; stdcall;
-    function GetDataReader(const Name: string): TClientDataset; stdcall;
+    function GetEntityReader(const Name: string): TClientDataset; stdcall;
     function GetPassWord: string; stdcall;
     function GetUserName: string; stdcall;
-    function GetXML: string; stdcall;
-    procedure RemoveDataReader(const Name: string); stdcall;
+    procedure RemoveEntity(const Name: string); stdcall;
     procedure SetConnected(const Value: boolean); stdcall;
     procedure SetConnectionName(const Value: string); stdcall;
     procedure SetPassWord(const Value: string); stdcall;
     procedure SetPluginManager(const Value: IPluginManager); stdcall;
     procedure SetUserName(const Value: string); stdcall;
-    procedure SetXMLCursor(const Value: IXMLCursor); stdcall;
-    property XML: string read GetXML;
   private
     FConnection: TJvUIBDataBase;
     FDatasetList: TDatasetList;
     FPluginManager: IPluginManager;
     FTransaction: TJvUIBTransaction;
-    FXMLCursor: IXMLCursor;
   public
     constructor Create;
     destructor Destroy; override;
@@ -94,7 +92,7 @@ type
 
 implementation
 
-uses SysUtils;
+uses SysUtils, xmlcursor;
 
 constructor TPlugin.Create;
 begin
@@ -114,14 +112,12 @@ begin
   FDatasetList.Free;
   FTransaction.Free;
   FConnection.Free;
-  FXMLCursor := nil;
   inherited;
 end;
 
-function TPlugin.AddDataReader(const XMLDef: string): string;
+procedure TPlugin.AddEntity(TableEntity: ITableEntity);
 begin
-  FXMLCursor.LoadXML(XMLDef);
-  Result := FDatasetList.Add(FXMLCursor).XML;
+  FDatasetList.Add(TableEntity);
 end;
 
 function TPlugin.GetConnected: boolean;
@@ -134,13 +130,16 @@ begin
   Result := FConnection.DatabaseName;
 end;
 
-function TPlugin.GetDataReader(const Name: string): TClientDataset;
+function TPlugin.GetEntityReader(const Name: string): TClientDataset;
 var
   Item: TDatasetItem;
 begin
   Item := FDatasetList.ItemByName[Name];
   if Assigned(Item) then
-    Result := Item.ClientDataset
+  begin
+    Item.ExecuteSelect;
+    Result := Item.ClientDataset;
+  end
   else
     Result := nil;
 end;
@@ -155,26 +154,7 @@ begin
   Result := FConnection.UserName;
 end;
 
-function TPlugin.GetXML: string;
-var
-  i: Integer;
-  DatasetList: IXMLCursor;
-  Dataset: IXMLCursor;
-begin
-  //Constituer un flux global en parcourant tous les Datasets
-  FXMLCursor.LoadXML('<Dataset></DataReader>');
-  DatasetList := FXMLCursor.Select('/Dataset');
-  for i := 0 to FDatasetList.Count - 1 do
-  begin
-    Dataset := DatasetList.AppendChild('DataReader', '');
-    Dataset.SetValue('Name', FDatasetList.Items[i].Name);
-    Dataset.SetValue('Description', FDatasetList.Items[i].Description);
-    Dataset.SetValue('XMLData', FDatasetList[i].XML);
-  end;
-  Result := FXMLCursor.XML;
-end;
-
-procedure TPlugin.RemoveDataReader(const Name: string);
+procedure TPlugin.RemoveEntity(const Name: string);
 var
   DatasetItem: TDatasetItem;
   Index: integer;
@@ -210,56 +190,22 @@ begin
   FConnection.UserName := Value;
 end;
 
-procedure TPlugin.SetXMLCursor(const Value: IXMLCursor);
-begin
-  FXMLCursor := Value;
-end;
-
-constructor TDatasetItem.Create(Owner: TDatasetList; XMLDef: IXMLCursor);
-var
-  Params: IXMLCursor;
-  ParamType: string;
-  ParamValue: string;
-  ParamName: string;
-  IntValue: Integer;
+constructor TDatasetItem.Create(Owner: TDatasetList; TableEntity: ITableEntity);
 begin
   FOwner := Owner;
-  FName := XMLDef.GetValue('/DataReader/Name');
-  FDescription := XMLDef.GetValue('/DataReader/Description');
+  FTableEntity := TableEntity;
+  FParams := TableEntity.Params;
+  FName := TableEntity.EntityName;
+
   FDataset := TJvUIBDataset.Create(nil);
   FDataset.Transaction := Owner.Transaction;
   FDataset.DataBase := Owner.Connection;
   FDataset.FetchBlobs := True;
-  FDataset.SQL.Text := XMLDef.GetValue('/DataReader/Sql');
-
-  //affectation des parametres xml
-  Params := XMLDef.Select('/DataReader/Params/*');
-  try
-    while not Params.EOF do
-    begin
-      ParamName := Params.GetValue('Name');
-      ParamType := Params.GetValue('Type');
-      ParamValue := Params.GetValue('Value');
-
-      if SameText(ParamType, 'string') then
-        FDataset.Params.ByNameAsString[ParamName] := ParamValue;
-
-      if SameText(ParamType, 'integer') then
-        if TryStrToInt(ParamValue, IntValue) then
-          FDataset.Params.ByNameAsInteger[ParamName] := IntValue;
-
-      Params.Next;
-    end;
-  finally
-    Params := nil;
-  end;
 
   FClientDataset := TClientDataSet.Create(nil);
   FProvider := TDataSetProvider.Create(nil);
   FProvider.DataSet := FDataset;
   FClientDataset.SetProvider(FProvider);
-
-  //FDataset.Open;
 end;
 
 destructor TDatasetItem.Destroy;
@@ -271,10 +217,51 @@ begin
   inherited;
 end;
 
+procedure TDatasetItem.ExecuteSelect;
+begin
+  FDataset.SQL.Text := FTableEntity.SelectCommand;
+  SyncParams;
+  FDataset.Open;
+end;
+
 function TDatasetItem.GetXML: string;
 begin
   FClientDataset.Open;
   Result := FClientDataset.XMLData;
+end;
+
+procedure TDatasetItem.SyncParams;
+var
+  ParamName: string;
+  ParamType: string;
+  ParamValue: string;
+  IntValue: Integer;
+begin
+  FParams := FParams.Document.Select('Params/*');
+  while not FParams.EOF do
+  begin
+    ParamName := FParams.GetValue('Name');
+    ParamType := FParams.GetValue('Type');
+    ParamValue := FParams.GetValue('Value');
+
+    //vérification de l'existence du parametre
+    try
+      FDataset.Params.GetFieldIndex(ParamName);
+    except
+      Continue;
+    end;
+
+    //affectation de la valeur du parametre
+    if SameText(ParamType, 'string') then
+      FDataset.Params.ByNameAsString[ParamName] := ParamValue;
+
+    if SameText(ParamType, 'integer') then
+      if TryStrToInt(ParamValue, IntValue) then
+        FDataset.Params.ByNameAsInteger[ParamName] := IntValue;
+
+    FParams.Next;
+  end;
+
 end;
 
 constructor TDatasetList.Create;
@@ -289,9 +276,9 @@ begin
   inherited;
 end;
 
-function TDatasetList.Add(XMLDef: IXMLCursor): TDatasetItem;
+function TDatasetList.Add(TableEntity: ITableEntity): TDatasetItem;
 begin
-  Result := TDatasetItem.Create(Self, XMLDef);
+  Result := TDatasetItem.Create(Self, TableEntity);
   FQueryList.Add(Result);
 end;
 
