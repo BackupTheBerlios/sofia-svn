@@ -94,21 +94,21 @@ OutputDir=$(SOFIA)\bin
 UnitOutputDir=$(SOFIA)\lib
 PackageDLLOutputDir=
 PackageDCPOutputDir=
-SearchPath=$(SOFIA)\trunk\src\framework\intf;$(SOFIA)\trunk\src\framework\classes;$(SOFIA)\lib
+SearchPath=..\..\classes;$(SOFIA)\lib
 Packages=vcl
 Conditionals=
 DebugSourceDirs=
 UsePackages=1
 [Parameters]
 RunParams=
-HostApplication=D:\Developpement\berlios\sofia\bin\sofia.exe
+HostApplication=D:\Developpement\sofia\bin\sofia.exe
 Launcher=
 UseLauncher=0
 DebugCWD=
 [Language]
 ActiveLang=
 ProjectLang=
-RootDir=D:\Developpement\berlios\sofia\trunk\framework\plugins\recherche\
+RootDir=D:\Developpement\berlios\sofia\branches\database\framework\plugins\connexion\
 [Version Info]
 IncludeVerInfo=0
 AutoIncBuild=0
@@ -135,6 +135,7 @@ ProductName=
 ProductVersion=1.0.0.0
 Comments=
 [Excluded Packages]
+E:\Developpement\Composants\ComponentAxiLibrary\Axi_RegControls.bpl=AXI_RegControls (Delphi)
 D:\Developpement\sofia\bin\gdip.bpl=(sans titre)
 C:\WINDOWS\system32\rbIBE77.bpl=ReportBuilder Data Access for Interbase Express
 [HistoryLists\hlDebugSourcePath]
@@ -473,6 +474,3 @@ Count mtSend_FailureMsg=1
 mtSend_FailureMsg0="Sorry, sending the message didn't work."
 
 
-pH¥f“
-¥f“
-

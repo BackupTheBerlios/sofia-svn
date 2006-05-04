@@ -9,7 +9,8 @@ uses
   plugintf in 'classes\plugintf.pas',
   entintf in 'classes\entintf.pas',
   dbintf in 'classes\dbintf.pas',
-  usrintf in 'classes\usrintf.pas';
+  usrintf in 'classes\usrintf.pas',
+  observer in 'classes\observer.pas';
 
 {$R *.res}
 
