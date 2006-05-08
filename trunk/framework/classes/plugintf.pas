@@ -22,7 +22,7 @@ unit plugintf;
 
 interface
 
-uses stdxml_tlb, dbintf, entintf, usrintf;
+uses stdxml_tlb, dbintf, entintf, viewintf;
 
 type
 
@@ -30,7 +30,7 @@ type
 
   {------------------------------------------------------------------------------}
 
-  IPlugMultipleInstance = interface(IInterface)
+  INamedPluginInstance = interface(IInterface)
     ['{0FE8167B-8474-4B2C-94EA-2638AB9E2169}']
     function GetInstanceName: string; stdcall;
     procedure SetInstanceName(const Value: string); stdcall;
@@ -39,7 +39,7 @@ type
 
   {------------------------------------------------------------------------------}
 
-  IPlugUnknown = interface(IInterface)
+  IUnknownPlugin = interface(IInterface)
     ['{0266191D-1BAA-4063-B95D-A9B4EED9F0DA}']
     procedure SetPluginManager(const Value: IPluginManager); stdcall;
     //procedure SetXMLCursor(const Value: IXMLCursor); stdcall;
@@ -51,27 +51,27 @@ type
 
   IPlugin = interface(IInterface)
     ['{0B7E1697-F7C9-4D64-BD73-D7A97C4CCBAC}']
-    function GetAsDisplay: IPlugDisplay; stdcall;
-    function GetAsPlugConnection: IPlugConnection; stdcall;
-    function GetAsPlugBusinessObject: IPlugBusinessObject; stdcall;
-    function GetAsPlugDataset: IPlugDataset; stdcall;
-    function GetAsPlugSerialize: IPlugSerialize; stdcall;
+    function GetAsView: IView; stdcall;
+    function GetAsConnectionAdapter: IConnectionAdapter; stdcall;
+    function GetAsBusinessObject: IBusinessObject; stdcall;
+    function GetAsDatasetAdapter: IDatasetAdapter; stdcall;
+    function GetAsSerializable: ISerializable; stdcall;
     function GetPluginName: string; stdcall;
-    function GetLastInstance: IPlugUnknown; stdcall;
-    function GetInstances(const InstanceName: string): IPlugin; stdcall;
+    function GetLastPluginInstance: IUnknownPlugin; stdcall;
+    function GetPluginInstance(const InstanceName: string): IPlugin; stdcall;
     procedure CreateInstance(const AInstanceName: string = ''); stdcall;
-    function GetAsPlugMultipleInstance: IPlugMultipleInstance; stdcall;
-    property AsDisplay: IPlugDisplay read GetAsDisplay;
-    property AsPlugConnection: IPlugConnection read GetAsPlugConnection;
-    property AsPlugBusinessObject: IPlugBusinessObject read GetAsPlugBusinessObject;
-    property AsPlugDataset: IPlugDataset read GetAsPlugDataset;
-    property AsPlugMultipleInstance: IPlugMultipleInstance read
-      GetAsPlugMultipleInstance;
-    property AsPlugSerialize: IPlugSerialize read GetAsPlugSerialize;
+    function GetAsNamedPluginInstance: INamedPluginInstance; stdcall;
+    property AsView: IView read GetAsView;
+    property AsConnectionAdapter: IConnectionAdapter read GetAsConnectionAdapter;
+    property AsBusinessObject: IBusinessObject read GetAsBusinessObject;
+    property AsDatasetAdapter: IDatasetAdapter read GetAsDatasetAdapter;
+    property AsNamedPluginInstance: INamedPluginInstance read
+      GetAsNamedPluginInstance;
+    property AsSerializable: ISerializable read GetAsSerializable;
     property PluginName: string read GetPluginName;
-    property LastInstance: IPlugUnknown read GetLastInstance;
-    property Instances[const InstanceName: string]: IPlugin read GetInstances;
-    default;
+    property LastPluginInstance: IUnknownPlugin read GetLastPluginInstance;
+    property PluginInstance[const InstanceName: string]: IPlugin read
+        GetPluginInstance; default;
   end;
 
   IPluginManager = interface(IInterface)

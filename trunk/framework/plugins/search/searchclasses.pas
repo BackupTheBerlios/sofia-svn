@@ -32,7 +32,7 @@ type
     property XMLData: string write SetXMLData;
   end;
 
-  TPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay, IPlugSerialize)
+  TPlugin = class(TInterfacedObject, IUnknownPlugin, IView, ISerializable)
     function GetContainer: TWinControl; stdcall;
     function GetParent: TWinControl; stdcall;
     function GetXMLCursor: IXMLCursor; stdcall;

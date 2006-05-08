@@ -26,14 +26,14 @@ uses Controls;
 
 type
 
-  IPlugSerialize = interface(IInterface)
+  ISerializable = interface(IInterface)
   ['{26DBC708-70B8-4105-91E1-72911457F912}']
     function GetXML: string; stdcall;
     procedure SetXML(const Value: string); stdcall;
     property XML: string read GetXML write SetXML;
   end;
 
-  IPlugDisplay = interface(IInterface)
+  IView = interface(IInterface)
   ['{570C9B35-15F3-435E-9166-963ACE05F635}']
     procedure Hide; stdcall;
     procedure SetParent(const Value: TWinControl); stdcall;

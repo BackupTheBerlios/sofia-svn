@@ -107,7 +107,7 @@ type
     property Titre: string read GetTitre write SetTitre;
   end;
 
-  TPlugin = class(TInterfacedObject, IPlugUnknown, IPlugMultipleInstance, IPlugDisplay)
+  TPlugin = class(TInterfacedObject, IUnknownPlugin, INamedPluginInstance, IView)
     function GetInstanceName: string; stdcall;
     procedure Hide; stdcall;
     function GetParent: TWinControl; stdcall;

@@ -25,7 +25,7 @@ interface
 uses Classes, DBClient, plugintf, entintf, dbintf, stdxml_tlb;
 
 type
-  TPlugin = class(TInterfacedObject, IPlugUnknown, IPlugBusinessObject)
+  TPlugin = class(TInterfacedObject, IUnknownPlugin, IBusinessObject)
     function GetPersonnes(Categorie: string): TClientDataset; stdcall;
     procedure SetPluginManager(const Value: IPluginManager); stdcall;
   private
@@ -65,10 +65,10 @@ end;
 
 function TPlugin.GetPersonnes(Categorie: string): TClientDataset;
 var
-  Dataset: IPlugDataset;
+  Dataset: IDatasetAdapter;
   Personne: ITableEntity;
 begin
-  Dataset := FPluginManager['uib'].AsPlugDataset;
+  Dataset := FPluginManager['uib'].AsDatasetAdapter;
   Personne := TTablePersonne.Create;
   Personne.Params.Select('Param[@Name=toto]').SetAttributeValue('Value', Categorie);
   Dataset.AddEntity(Personne);

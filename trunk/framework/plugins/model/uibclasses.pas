@@ -67,7 +67,7 @@ type
     property Transaction: TJvUIBTransaction read FTransaction write FTransaction;
   end;
 
-  TPlugin = class(TInterfacedObject, IPlugUnknown, IPlugConnection, IPlugDataset)
+  TPlugin = class(TInterfacedObject, IUnknownPlugin, IConnectionAdapter, IDatasetAdapter)
     procedure AddEntity(TableEntity: ITableEntity); stdcall;
     function GetConnected: boolean; stdcall;
     function GetConnectionName: string; stdcall;

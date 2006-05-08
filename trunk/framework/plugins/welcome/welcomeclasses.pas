@@ -29,7 +29,7 @@ type
   ['{CD5C131C-E966-4743-85B9-D1F2E96D4DDD}']
   end;
 
-  TPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay, IPlugSerialize)
+  TPlugin = class(TInterfacedObject, IUnknownPlugin, IView, ISerializable)
     function GetContainer: TWinControl; stdcall;
     function GetParent: TWinControl; stdcall;
     function GetXMLCursor: IXMLCursor; stdcall;

@@ -71,7 +71,7 @@ begin
   end;
 
   //initialisation des parametres de cnx
-  with FPluginManager['uib'].AsPlugConnection do
+  with FPluginManager['uib'].AsConnectionAdapter do
   begin
     ConnectionName := 'sofia.fdb';
     UserName := 'sysdba';
@@ -79,7 +79,7 @@ begin
     Connected := True;
   end;
 
-  with FPluginManager['mainview'].AsDisplay do
+  with FPluginManager['mainview'].AsView do
   begin
    Parent := Self;
    Show;

@@ -28,7 +28,7 @@ type
 
 {------------------------------------------------------------------------------}
 
-  IPlugConnection = interface(IInterface)
+  IConnectionAdapter = interface(IInterface)
   ['{FA94CE0A-DF1A-4628-A8A8-C599CC785286}']
     function GetConnected: boolean; stdcall;
     function GetConnectionName: string; stdcall;
@@ -66,7 +66,7 @@ type
 
 {------------------------------------------------------------------------------}
 
-  IPlugDataset = interface(IInterface)
+  IDatasetAdapter = interface(IInterface)
   ['{2BBE4585-C2A2-4383-A723-73715CB61AC7}']
     procedure AddEntity(TableEntity: ITableEntity); stdcall;
     function GetEntityReader(const Name: string): TClientDataset; stdcall;
