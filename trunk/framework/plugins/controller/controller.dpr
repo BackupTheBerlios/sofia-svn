@@ -1,8 +1,8 @@
-library uib;
+library controller;
 
 uses
   plugintf,
-  uibclasses in 'uibclasses.pas';
+  controllerclasses in 'controllerclasses.pas';
 
 function NewPlugin: IUnknownPlugin;
 begin
@@ -11,6 +11,7 @@ end;
 
 exports
   NewPlugin;
+
 {$R *.res}
 
 begin

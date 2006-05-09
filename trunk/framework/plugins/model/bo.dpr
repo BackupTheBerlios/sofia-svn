@@ -4,7 +4,7 @@ uses
   plugintf,
   boclasses in 'boclasses.pas';
 
-function NewPlugin: IPlugUnknown;
+function NewPlugin: IUnknownPlugin;
 begin
   Result := TPlugin.Create;
 end;

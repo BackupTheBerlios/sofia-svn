@@ -22,7 +22,7 @@ unit contactclasses;
 
 interface
 
-uses Controls, StdXML_TLB, plugintf, usrintf;
+uses Controls, StdXML_TLB, plugintf, viewintf;
 
 type
 

@@ -18,24 +18,15 @@ along with Sofia; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 -------------------------------------------------------------------------------}
 
-library mainview;
+unit ctrlintf;
 
-uses
-  plugintf,
-  mainviewclasses in 'mainviewclasses.pas',
-  mainviewgui in 'mainviewgui.pas' {Container: TFrame},
-  mainviewctrl in 'mainviewctrl.pas';
+interface
 
-function NewPlugin: IUnknownPlugin;
-begin
-  Result := TPlugin.Create;
-end;
+type
+  IController = interface(IInterface)
+  ['{E6787C94-AD02-4916-A973-01D868DDE08C}']
+  end;
 
-exports
-  NewPlugin;
+implementation
 
-{$R *.res}
-
-begin
 end.
- 

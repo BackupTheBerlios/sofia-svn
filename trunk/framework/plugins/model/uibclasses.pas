@@ -22,7 +22,8 @@ unit uibclasses;
 
 interface
 
-uses Classes, jvuib, jvuibdataset, contnrs, DBClient, provider, StdXML_TLB, plugintf, dbintf;
+uses Classes, jvuib, jvuibdataset, contnrs, DBClient, provider, StdXML_TLB,
+  plugintf, dbintf, ctrlintf;
 
 type
   TDatasetList = class;
@@ -83,7 +84,6 @@ type
   private
     FConnection: TJvUIBDataBase;
     FDatasetList: TDatasetList;
-    FPluginManager: IPluginManager;
     FTransaction: TJvUIBTransaction;
   public
     constructor Create;
@@ -182,7 +182,6 @@ end;
 
 procedure TPlugin.SetPluginManager(const Value: IPluginManager);
 begin
-  FPluginManager := Value;
 end;
 
 procedure TPlugin.SetUserName(const Value: string);

@@ -22,7 +22,7 @@ unit plugintf;
 
 interface
 
-uses stdxml_tlb, dbintf, entintf, viewintf;
+uses stdxml_tlb, dbintf, entintf, viewintf, ctrlintf;
 
 type
 
@@ -58,7 +58,7 @@ type
     function GetAsSerializable: ISerializable; stdcall;
     function GetPluginName: string; stdcall;
     function GetLastPluginInstance: IUnknownPlugin; stdcall;
-    function GetPluginInstance(const InstanceName: string): IPlugin; stdcall;
+    function GetNamedInstance(const InstanceName: string): IPlugin; stdcall;
     procedure CreateInstance(const AInstanceName: string = ''); stdcall;
     function GetAsNamedPluginInstance: INamedPluginInstance; stdcall;
     property AsView: IView read GetAsView;
@@ -70,8 +70,8 @@ type
     property AsSerializable: ISerializable read GetAsSerializable;
     property PluginName: string read GetPluginName;
     property LastPluginInstance: IUnknownPlugin read GetLastPluginInstance;
-    property PluginInstance[const InstanceName: string]: IPlugin read
-        GetPluginInstance; default;
+    property NamedInstance[const InstanceName: string]: IPlugin read
+        GetNamedInstance; default;
   end;
 
   IPluginManager = interface(IInterface)

@@ -22,41 +22,37 @@ unit mainviewclasses;
 
 interface
 
-uses Controls, StdXML_TLB, plugintf, dbintf, entintf, usrintf;
+uses Controls, StdXML_TLB, plugintf, dbintf, entintf, viewintf;
 
 type
 
-  IController = interface(IInterface)
+  ILocalController = interface(IInterface)
     ['{B0122448-88BA-44DF-9B33-8198AF276DF6}']
     function AddPage(const AName, ACaption: string): TWinControl;
     procedure Search(Categories: string); stdcall;
+    procedure SetPluginManager(const Value: IPluginManager); stdcall;
   end;
 
-  TPlugin = class(TInterfacedObject, IPlugUnknown, IPlugDisplay)
+  TPlugin = class(TInterfacedObject, IUnknownPlugin, IView)
     procedure Hide; stdcall;
     procedure Show; stdcall;
     procedure SetParent(const Value: TWinControl); stdcall;
-    procedure SetXMLCursor(const Value: IXMLCursor); stdcall;
-    function GetXML: string; stdcall;
     procedure SetPluginManager(const Value: IPluginManager); stdcall;
-    procedure SetXML(const Value: string); stdcall;
   private
     FContainer: TWinControl;
-    FController: IController;
-    FXMLCursor: IXMLCursor;
+    FController: ILocalController;
     FParent: TWinControl;
     FPluginManager: IPluginManager;
   public
     constructor Create;
     destructor Destroy; override;
-    procedure AddPage(const APluginName, AInstanceName, ACaption: string); stdcall;
     procedure Search(Categories: string); stdcall;
     procedure NewContact; stdcall;
   end;
 
 implementation
 
-uses Classes, viewsctrl, displaygui, SysUtils;
+uses Classes, mainviewctrl, mainviewgui, SysUtils;
 
 constructor TPlugin.Create;
 begin
@@ -71,63 +67,23 @@ begin
   inherited;
 end;
 
-procedure TPlugin.AddPage(const APluginName, AInstanceName, ACaption: string);
-var
-  Ctrl: TWinControl;
-  InstanceName: string;
-begin
-  with FPluginManager[APluginName].Instances[AInstanceName].AsDisplay do
-  begin
-    if Supports(FPluginManager[APluginName].LastInstance, IPlugMultipleInstance) then
-      InstanceName := FPluginManager[APluginName].AsPlugMultipleInstance.InstanceName
-    else
-      InstanceName := APluginName;
-    Ctrl := FController.AddPage(InstanceName, ACaption);
-    if Assigned(Ctrl) then
-    begin
-      Parent := Ctrl;
-      Show;
-    end;
-  end;
-end;
-
 procedure TPlugin.Hide;
 begin
   FContainer.Parent := nil;
 end;
 
-procedure TPlugin.SetXML(const Value: string);
-begin
-  if Length(Value) > 0 then
-  begin
-    FXMLCursor.LoadXML(Value);
-    //FController.Propriete := FXMLCursor.GetValue('Propriete');
-  end;
-end;
-
-function TPlugin.GetXML: string;
-begin
-
-  if FXMLCursor.Count = 0 then
-    //FXMLCursor.AppendChild('Propriete', FController.Propriete)
-  else
-    {FXMLCursor.SetValue('/Propriete', FController.Propriete)};
-  Result := FXMLCursor.XML;
-
-end;
-
 procedure TPlugin.Search(Categories: string);
 var
-  XMLResult: IPlugSerialize;
-  BusinessObject: IPlugBusinessObject;
-  Dataset: IPlugDataset;
+  XMLResult: ISerializable;
+  BusinessObject: IBusinessObject;
+  Dataset: IDatasetAdapter;
 begin
-  BusinessObject := FPluginManager['model'].AsPlugBusinessObject;
-  Dataset := FPluginManager['dbuib'].AsPlugDataset;
-  XMLResult := FPluginManager['search'].AsPlugSerialize;
+  BusinessObject := FPluginManager['model'].AsBusinessObject;
+  Dataset := FPluginManager['dbuib'].AsDatasetAdapter;
+  XMLResult := FPluginManager['search'].AsSerializable;
 
-  Dataset.AddDataReader(BusinessObject.GetPersonnes(Categories));
-  XMLResult.XML := Dataset.XML;
+  //Dataset.AddEntity(BusinessObject.GetPersonnes(Categories));
+  //XMLResult.XML := Dataset.XML;
 
   AddPage('search', '', 'Résultats de la recherche');
 end;
@@ -145,11 +101,6 @@ end;
 procedure TPlugin.SetPluginManager(const Value: IPluginManager);
 begin
   FPluginManager := Value;
-end;
-
-procedure TPlugin.SetXMLCursor(const Value: IXMLCursor);
-begin
-  FXMLCursor := Value;
 end;
 
 procedure TPlugin.Show;

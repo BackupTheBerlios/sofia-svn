@@ -6,7 +6,7 @@ uses
   welcomeclasses in 'welcomeclasses.pas',
   welcomectrl in 'welcomectrl.pas';
 
-function NewPlugin: IPlugUnknown;
+function NewPlugin: IUnknownPlugin;
 begin
   Result := TPlugin.Create;
 end;

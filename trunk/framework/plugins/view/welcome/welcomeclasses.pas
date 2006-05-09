@@ -22,7 +22,7 @@ unit welcomeclasses;
 
 interface
 
-uses Classes, Controls, DB, StdXML_TLB, plugintf, usrintf;
+uses Classes, Controls, DB, StdXML_TLB, plugintf, viewintf;
 
 type
   IController = interface(IInterface)

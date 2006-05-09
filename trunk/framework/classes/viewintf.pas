@@ -18,24 +18,29 @@ along with Sofia; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 -------------------------------------------------------------------------------}
 
-library mainview;
+unit viewintf;
 
-uses
-  plugintf,
-  mainviewclasses in 'mainviewclasses.pas',
-  mainviewgui in 'mainviewgui.pas' {Container: TFrame},
-  mainviewctrl in 'mainviewctrl.pas';
+interface
 
-function NewPlugin: IUnknownPlugin;
-begin
-  Result := TPlugin.Create;
-end;
+uses Controls;
 
-exports
-  NewPlugin;
+type
 
-{$R *.res}
+  ISerializable = interface(IInterface)
+  ['{26DBC708-70B8-4105-91E1-72911457F912}']
+    function GetXML: string; stdcall;
+    procedure SetXML(const Value: string); stdcall;
+    property XML: string read GetXML write SetXML;
+  end;
 
-begin
+  IView = interface(IInterface)
+  ['{570C9B35-15F3-435E-9166-963ACE05F635}']
+    procedure Hide; stdcall;
+    procedure SetParent(const Value: TWinControl); stdcall;
+    procedure Show; stdcall;
+    property Parent: TWinControl write SetParent;
+  end;
+
+implementation
+
 end.
- 

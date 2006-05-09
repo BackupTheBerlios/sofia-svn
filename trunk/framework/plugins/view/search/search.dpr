@@ -6,7 +6,7 @@ uses
   searchclasses in 'searchclasses.pas',
   searchctrl in 'searchctrl.pas';
 
-function NewPlugin: IPlugUnknown;
+function NewPlugin: IUnknownPlugin;
 begin
   Result := TPlugin.Create;
 end;

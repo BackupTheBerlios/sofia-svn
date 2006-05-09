@@ -51,8 +51,8 @@ type
     function GetAsSerializable: ISerializable; stdcall;
     function GetAsNamedPluginInstance: INamedPluginInstance; stdcall;
     function GetPluginName: string; stdcall;
-    function GetInstances(const InstanceName: string): IPlugin; stdcall;
-    function GetLastInstance: IUnknownPlugin; stdcall;
+    function GetNamedInstance(const InstanceName: string): IPlugin; stdcall;
+    function GetLastPluginInstance: IUnknownPlugin; stdcall;
     procedure CreateInstance(const AInstanceName: string = ''); stdcall;
   private
     FCurrentInstance: IUnknownPlugin;
@@ -61,14 +61,14 @@ type
     FLastInstance: IUnknownPlugin;
     FPluginLibrary: TPluginLibrary;
     FInstances: TInterfaceList;
-    FController: IController;
+    FPluginManager: IPluginManager;
     function GetCurrentInstance: IUnknownPlugin;
   public
-    constructor Create(APluginManager: IPluginManager; APluginName: string);
+    constructor Create(APluginManager: IPluginManager; PluginName: string);
     destructor Destroy; override;
     function IndexOf(const InstanceName: string): Integer; stdcall;
     property CurrentInstance: IUnknownPlugin read GetCurrentInstance;
-    property Controller: IController read FController write FController;
+    property PluginManager: IPluginManager read FPluginManager write FPluginManager;
   end;
 
   TPluginManager = class(TInterfacedObject, IPluginManager)
@@ -82,8 +82,7 @@ type
     destructor Destroy; override;
   end;
 
-function NewPlugin(APluginManager: IPluginManager; APluginName: string):
-    IPlugin;
+function NewPlugin(PluginManager: IPluginManager; PluginName: string): IPlugin;
 
 function NewPluginManager: IPluginManager;
 
@@ -91,10 +90,9 @@ implementation
 
 uses Windows, xmlcursor, Dialogs;
 
-function NewPlugin(APluginManager: IPluginManager; APluginName: string):
-    IPlugin;
+function NewPlugin(PluginManager: IPluginManager; PluginName: string): IPlugin;
 begin
-  Result := TPlugin.Create(APluginManager, APluginName);
+  Result := TPlugin.Create(PluginManager, PluginName);
 end;
 
 function NewPluginManager: IPluginManager;
@@ -146,12 +144,18 @@ end;
 
 procedure TPluginManager.LoadPlugins;
 begin
-  FPlugins.Add(NewPlugin(Self, 'uib'));
-  FPlugins.Add(NewPlugin(Self, 'bo'));
-  FPlugins.Add(NewPlugin(Self, 'mainview'));
-  FPlugins.Add(NewPlugin(Self, 'contact'));
-  FPlugins.Add(NewPlugin(Self, 'welcome'));
-  FPlugins.Add(NewPlugin(Self, 'search'));
+  //Controller
+  FPlugins.Add(NewPlugin(self, 'controller'));
+
+  //Plugins noyau
+  FPlugins.Add(NewPlugin(self, 'uib'));
+  FPlugins.Add(NewPlugin(self, 'bo'));
+
+  //Views
+  FPlugins.Add(NewPlugin(self, 'mainview'));
+  FPlugins.Add(NewPlugin(self, 'contact'));
+  FPlugins.Add(NewPlugin(self, 'welcome'));
+  FPlugins.Add(NewPlugin(self, 'search'));
 end;
 
 procedure TPluginManager.UnloadPlugins;
@@ -209,11 +213,11 @@ begin
   Result := NewPlugin;
 end;
 
-constructor TPlugin.Create(APluginManager: IPluginManager; APluginName: string);
+constructor TPlugin.Create(APluginManager: IPluginManager; PluginName: string);
 begin
-  FPluginLibrary := TPluginLibrary.Create(APluginName + '.dll');
-  FPluginName := APluginName;
-  FController := APluginManager;
+  FPluginLibrary := TPluginLibrary.Create(PluginName + '.dll');
+  FPluginName := PluginName;
+  FPluginManager := APluginManager;
   FInstances := TInterfaceList.Create;
   FInstanceIndex := 0;
 end;
@@ -291,7 +295,7 @@ begin
   Result := FPluginName;
 end;
 
-function TPlugin.GetInstances(const InstanceName: string): IPlugin;
+function TPlugin.GetNamedInstance(const InstanceName: string): IPlugin;
 var
   Idx: Integer;
 begin
@@ -304,7 +308,7 @@ begin
   Result := Self;
 end;
 
-function TPlugin.GetLastInstance: IUnknownPlugin;
+function TPlugin.GetLastPluginInstance: IUnknownPlugin;
 begin
   if not Assigned(FLastInstance) then
   begin
@@ -319,11 +323,11 @@ var
   IsNamedPluginInstance: Boolean;
   Idx: Integer;
 begin
-  //Vérification de l'existance de ce nom d'instance
+  //Vérification de l'existence de ce nom d'instance
   Idx := IndexOf(AInstanceName);
   if Idx <> -1 then
   begin
-    GetInstances(AInstanceName);
+    GetNamedInstance(AInstanceName);
     Exit;
   end;
 
@@ -343,7 +347,7 @@ begin
   end;
 
   //FLastInstance.XMLCursor := TXMLCursor.Create;
-  FLastInstance.PluginManager := FController;
+  FLastInstance.PluginManager := FPluginManager;
 
   if IsNamedPluginInstance then
     FInstances.Add(FLastInstance);
@@ -354,7 +358,7 @@ end;
 function TPlugin.GetCurrentInstance: IUnknownPlugin;
 begin
   if not Assigned(FCurrentInstance) then
-    Result := GetLastInstance
+    Result := GetLastPluginInstance
   else
     Result := FCurrentInstance;
 end;

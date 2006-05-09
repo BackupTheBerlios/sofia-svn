@@ -6,7 +6,7 @@ uses
   contactgui in 'contactgui.pas' {Container: TFrame},
   contactctrl in 'contactctrl.pas';
 
-function NewPlugin: IPlugUnknown;
+function NewPlugin: IUnknownPlugin;
 begin
   Result := TPlugin.Create;
 end;

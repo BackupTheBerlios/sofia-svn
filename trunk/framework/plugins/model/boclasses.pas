@@ -22,7 +22,7 @@ unit boclasses;
 
 interface
 
-uses Classes, DBClient, plugintf, entintf, dbintf, stdxml_tlb;
+uses Classes, DBClient, plugintf, entintf, dbintf, stdxml_tlb, ctrlintf;
 
 type
   TPlugin = class(TInterfacedObject, IUnknownPlugin, IBusinessObject)
@@ -70,7 +70,7 @@ var
 begin
   Dataset := FPluginManager['uib'].AsDatasetAdapter;
   Personne := TTablePersonne.Create;
-  Personne.Params.Select('Param[@Name=toto]').SetAttributeValue('Value', Categorie);
+  Personne.Params.Select('Param[@Name=prs_categorie]').SetAttributeValue('Value', Categorie);
   Dataset.AddEntity(Personne);
   Result := Dataset.EntityReader['personne'];
 end;
