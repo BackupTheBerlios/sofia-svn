@@ -9,8 +9,8 @@ MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
 DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
-PROJECTS = JvUIBD7R.bpl sofia.exe uib.dll bo.dll welcome.dll search.dll \
-  contact.dll
+PROJECTS = JvUIBD7R.bpl sofia.exe uib.dll bo.dll mainview.dll welcome.dll \
+  contact.dll search.dll
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
@@ -28,13 +28,16 @@ JvUIBD7R.bpl: uib2\packages\JvUIBD7R.dpk
 bo.dll: plugins\model\bo.dpr
   $(DCC)
 
-search.dll: plugins\search\search.dpr
+mainview.dll: plugins\view\main\mainview.dpr
   $(DCC)
 
-welcome.dll: plugins\welcome\welcome.dpr
+contact.dll: plugins\view\contact\contact.dpr
   $(DCC)
 
-contact.dll: plugins\contact\contact.dpr
+search.dll: plugins\view\search\search.dpr
+  $(DCC)
+
+welcome.dll: plugins\view\welcome\welcome.dpr
   $(DCC)
 
 
