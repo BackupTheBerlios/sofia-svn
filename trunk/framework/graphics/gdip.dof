@@ -90,27 +90,27 @@ MaxStackSize=1048576
 ImageBase=4194304
 ExeDescription=
 [Directories]
-OutputDir=$(SOFIA)\bin
+OutputDir=
 UnitOutputDir=$(SOFIA)\lib
-PackageDLLOutputDir=
-PackageDCPOutputDir=
-SearchPath=$(SOFIA)\trunk\src\framework\intf;$(SOFIA)\trunk\src\framework\classes;$(SOFIA)\lib
-Packages=vcl
+PackageDLLOutputDir=$(SOFIA)\bin
+PackageDCPOutputDir=$(SOFIA)\lib
+SearchPath=
+Packages=
 Conditionals=
 DebugSourceDirs=
-UsePackages=1
+UsePackages=0
 [Parameters]
 RunParams=
-HostApplication=D:\Developpement\berlios\sofia\bin\sofia.exe
+HostApplication=
 Launcher=
 UseLauncher=0
 DebugCWD=
 [Language]
 ActiveLang=
 ProjectLang=
-RootDir=D:\Developpement\berlios\sofia\trunk\framework\plugins\navigateur\
+RootDir=
 [Version Info]
-IncludeVerInfo=0
+IncludeVerInfo=1
 AutoIncBuild=0
 MajorVer=1
 MinorVer=0
@@ -135,28 +135,37 @@ ProductName=
 ProductVersion=1.0.0.0
 Comments=
 [Excluded Packages]
-D:\Developpement\sofia\bin\gdip.bpl=(sans titre)
-C:\WINDOWS\system32\rbIBE77.bpl=ReportBuilder Data Access for Interbase Express
-[HistoryLists\hlDebugSourcePath]
-Count=3
-Item0=D:\Developpement\berlios\sofia\trunk\framework\xmlcursor\
-Item1=..\..\xmlcursor
-Item2=D:\Developpement\berlios\sofia\branches\database\framework\xmlcursor\
+D:\Developpement\sofia\bin\GDIPlusControls.bpl=GDI+ Controls
+[HistoryLists\hlConditionals]
+Count=1
+Item0=TNT
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
 [HistoryLists\hlSearchPath]
-Count=3
-Item0=$(SOFIA)\lib
-Item1=$(SOFIA)\trunk\src\framework\intf;$(SOFIA)\trunk\src\framework\classes;$(SOFIA)\lib
-Item2=$(SOFIA)\lib;..\..\xmlcursor
+Count=10
+Item0=$(SOFIA)\trunk\src\framework\intf;$(SOFIA)\trunk\src\framework\classes
+Item1=$(SOFIA)\lib
+Item2=$(SOFIA)\trunk\src\framework\intf;$(SOFIA)\trunk\src\gdiplus\api;$(SOFIA)\trunk\src\gdiplus\controls
+Item3=$(SOFIA)\trunk\src\framework\intf;$(SOFIA)\trunk\src\gdiplus\api
+Item4=$(DELPHI)\Lib\Debug;D:\code\HSV Library;D:\Code\Mylib
+Item5=$(SOFIA)\trunk\src\framework\intf;$(sofia)\lib
+Item6=$(SOFIA)\trunk\src\framework\intf
+Item7=$(SOFIA)\trunk\src\framework\intf;$(SOFIA)\lib;$(SOFIA)\trunk\src\gdiplus\api
+Item8=$(SOFIA)\trunk\src\framework\intf;$(SOFIA)\lib;D:\Developpement\sofia\trunk\src\gdiplus\controls
+Item9=$(DELPHI)\Lib\Debug;D:\code\VirtualTrees\Source;D:\code\xmlpartner\source;D:\code\Abbrevia\source;D:\Code\Mylib;D:\Code\pngimage;D:\code\virtualshelltools\Source;D:\Code\GDI+Controls;D:\Code\GDI+;D:\Code\Tnt;D:\Code\unitntctrls;D:\Code\HSV Library;D:\Code\VirtualTreeEditors;D:\Code\tntExtendedEditors;D:\Code\PBEditPack
 [HistoryLists\hlUnitOutputDirectory]
 Count=1
 Item0=$(SOFIA)\lib
 [HistoryLists\hlOutputDirectorry]
 Count=1
 Item0=$(SOFIA)\bin
-<<<<<<< .mine
+[HistoryLists\hlBPLOutput]
+Count=1
+Item0=$(SOFIA)\bin
+[HistoryLists\hlDCPOutput]
+Count=1
+Item0=$(SOFIA)\lib
 [Exception Log]
 EurekaLog Version=504
 Activate=0
@@ -474,8 +483,3 @@ Count mtSend_FailureMsg=1
 mtSend_FailureMsg0="Sorry, sending the message didn't work."
 
 
-n=´fÒ
-´fÒ
-
-=======
->>>>>>> .r77

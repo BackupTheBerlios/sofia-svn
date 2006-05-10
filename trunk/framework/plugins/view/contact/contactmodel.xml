@@ -1,31 +1,32 @@
+<!-- edited with XML Spy v4.3 U (http://www.xmlspy.com) by eric vantroeyen (AXILOG) -->
 <Model>
-  <Domains>
-    <Domain Name="VARCHAR32" Type="VARCHAR(32)"/>
-    <Domain Name="VARCHAR250" Type="VARCHAR(250)"/>
-    <Domain Name="VARCHAR100" Type="VARCHAR(100)"/>
-  </Domains>
-  <Entities>
-    <Entity Name="personnes">
-      <Fields>
-        <Field Name="PRS_ID" Type="VARCHAR32" Nullable="false" Label="Identifiant"/>
-        <Field Name="PRS_CATEGORIE" Type="VARCHAR250" Nullable="false" Label="Catégorie"/>
-        <Field Name="PRS_NOM" Type="VARCHAR100" Nullable="false" Label="Nom"/>
-        <Field Name="PRS_PRENOM" Type="VARCHAR100" Nullable="false" Label="Prénom"/>
-      </Fields>
-      <Indices>
-        <Indice Name="IDX_PRS_CATEGORIE" Primary="true">
-          <Fields>
-            <Field Name="PRS_CATEGORIE"/>
-          <Fields>
-      </Indices>
-      <SelectCommand Text="select * from personnes where prs_categorie = :prs_categorie">
-        <Params>
-          <Param Name="prs_categorie" Type="string" Value="">
-        </Params>
-      </SelectCommand> 
-      <InsertCommand Text=""/>
-      <UpdateCommand Text=""/>
-      <DeleteCommand Text=""/>
-    </Entity>
-  </Entities>
+	<Domains>
+		<Domain Name="VARCHAR32" Type="VARCHAR(32)"/>
+		<Domain Name="VARCHAR250" Type="VARCHAR(250)"/>
+		<Domain Name="VARCHAR100" Type="VARCHAR(100)"/>
+	</Domains>
+	<Entities>
+		<Entity Name="personnes">
+			<Fields>
+				<Field Name="PRS_ID" Type="VARCHAR32" Nullable="false" Label="Identifiant"/>
+				<Field Name="PRS_CATEGORIE" Type="VARCHAR250" Nullable="false" Label="Catè¦¯rie"/>
+				<Field Name="PRS_NOM" Type="VARCHAR100" Nullable="false" Label="Nom"/>
+				<Field Name="PRS_PRENOM" Type="VARCHAR100" Nullable="false" Label="Prè­¯m"/>
+			</Fields>
+			<Indices>
+				<Indice Name="IDX_PRS_CATEGORIE" Primary="true"/>
+				<Fields>
+					<Field Name="PRS_CATEGORIE"/>
+				</Fields>
+			</Indices>
+			<SelectCommand Text="select * from personnes where prs_categorie = :prs_categorie">
+				<Params>
+					<Param Name="prs_categorie" Type="string" Value=""/>
+				</Params>
+			</SelectCommand>
+			<InsertCommand Text=""/>
+			<UpdateCommand Text=""/>
+			<DeleteCommand Text=""/>
+		</Entity>
+	</Entities>
 </Model>

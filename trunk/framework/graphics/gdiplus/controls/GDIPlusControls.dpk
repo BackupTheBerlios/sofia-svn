@@ -1,0 +1,54 @@
+package GDIPlusControls;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'GDI+ Controls'}
+{$DESIGNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  rtl,
+  vclx,
+  vcl,
+  VclSmp,
+  vclactnband,
+  dsnap,
+  dbrtl,
+  vcldb;
+
+contains
+  GDIPControlsReg in 'GDIPControlsReg.pas',
+  GDIPAPI in '..\api\GDIPAPI.pas',
+  GDIPOBJ in '..\api\GDIPOBJ.pas',
+  GDIPUTIL in '..\api\GDIPUTIL.pas',
+  ColorSelectorFrame in 'ColorSelectorFrame.pas' {GDIPColorSelector: TFrame},
+  GDIPExtensions in 'GDIPExtensions.pas',
+  GDIPFontCombo in 'GDIPFontCombo.pas',
+  GPWinControl in 'GPWinControl.pas',
+  IEEE754 in '..\hsv\IEEE754.pas',
+  HSVLibrary in '..\hsv\HSVLibrary.pas',
+  GDIPColorDisplay in 'GDIPColorDisplay.pas',
+  ColorSelectorDialogForm in 'ColorSelectorDialogForm.pas' {ColorSelectorDialog},
+  DirectDraw in '..\api\DirectDraw.pas';
+
+end.

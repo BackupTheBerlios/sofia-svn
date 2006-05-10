@@ -15,7 +15,8 @@ uses
   StdXML_TLB in 'xmlcursor\stdxml_tlb.pas',
   DAC_TLB in 'xmlcursor\dac_tlb.pas',
   XMLCursor in 'xmlcursor\xmlcursor.pas',
-  MSXML2_TLB in 'xmlcursor\msxml2_tlb.pas';
+  MSXML2_TLB in 'xmlcursor\msxml2_tlb.pas',
+  cmdintf in 'classes\cmdintf.pas';
 
 {$R *.res}
 

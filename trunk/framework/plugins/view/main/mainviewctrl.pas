@@ -2,25 +2,43 @@ unit mainviewctrl;
 
 interface
 
-uses Controls, mainviewgui, mainviewclasses, plugintf;
+uses Controls, mainviewgui, mainviewclasses, plugintf, cmdintf;
 
 type
 
+  TSearchCommand = class(TInterfacedObject, IPluginCommand)
+    procedure Cancel; stdcall;
+    procedure Execute; stdcall;
+  private
+    FController: ILocalController;
+  public
+    constructor Create(Controller: ILocalController);
+  end;
+
+  TOpenViewCommand = class(TInterfacedObject, IPluginCommand)
+    procedure Cancel; stdcall;
+    procedure Execute; stdcall;
+  private
+    FController: ILocalController;
+  public
+    constructor Create(Controller: ILocalController);
+  end;
+
+
+
   TLocalController = class(TInterfacedObject, ILocalController)
-    function AddPage(const PluginName: string; InstanceName: string; const Caption:
-        string): TWinControl;
-    procedure Search(Categories: string); stdcall;
+    function OpenView(const PluginName: string; InstanceName: string; const
+        Caption: string): TWinControl;
     procedure SetPluginManager(const Value: IPluginManager); stdcall;
   private
     FContainer: TContainer;
-    FPlugin: TPlugin;
     FPluginManager: IPluginManager;
-    procedure DoSearch(Sender: TObject);
-    procedure DoNewContact(Sender: TObject);
+    procedure ExecuteSearchAction;
+    procedure ExecuteNewContactAction;
   public
-    constructor Create(APlugin: TPlugin; AContainer: TWinControl);
-    procedure NewContact; stdcall;
+    constructor Create(AContainer: TWinControl);
   end;
+
 
 function NewLocalController(APlugin: TPlugin; AContainer: TWinControl):
     ILocalController;
@@ -33,16 +51,15 @@ begin
   Result := TLocalController.Create(APlugin, AContainer);
 end;
 
-constructor TLocalController.Create(APlugin: TPlugin; AContainer: TWinControl);
+constructor TLocalController.Create(AContainer: TWinControl);
 begin
   FContainer := AContainer as TContainer;
-  FPlugin := APlugin;
 
   FContainer.btnGo.OnClick := DoSearch;
   FContainer.lblNouveauContact.OnClick := DoNewContact;
 end;
 
-function TLocalController.AddPage(const PluginName: string; InstanceName:
+function TLocalController.OpenView(const PluginName: string; InstanceName:
     string; const Caption: string): TWinControl;
 var
   Ctrl: TWinControl;
@@ -64,30 +81,72 @@ begin
   Result := Ctrl;
 end;
 
-procedure TLocalController.DoSearch(Sender: TObject);
+procedure TLocalController.ExecuteSearchAction;
+{
+var
+  XMLResult: ISerializable;
+  BusinessObject: IBusinessObject;
+  Dataset: IDatasetAdapter;
+}
 begin
-  FPlugin.Search('contact');
+{
+  BusinessObject := FPluginManager['model'].AsBusinessObject;
+  Dataset := FPluginManager['dbuib'].AsDatasetAdapter;
+  XMLResult := FPluginManager['search'].AsSerializable;
+  }
+
+  //Dataset.AddEntity(BusinessObject.GetPersonnes(Categories));
+  //XMLResult.XML := Dataset.XML;
+
+  //AddPage('search', '', 'Résultats de la recherche');
 end;
 
-procedure TLocalController.DoNewContact(Sender: TObject);
+procedure TLocalController.ExecuteNewContactAction;
 begin
-  FPlugin.NewContact;
-end;
-
-procedure TLocalController.NewContact;
-begin
-  FContainer.AddPage('contact', 'Nouveau contact');
-end;
-
-procedure TLocalController.Search(Categories: string);
-begin
-  // TODO -cMM: TController.Search default body inserted
+  AddPage('contact', 'Nouveau contact');
 end;
 
 procedure TLocalController.SetPluginManager(const Value: IPluginManager);
 begin
   FPluginManager := Value;
 end;
+
+{------------------------------------------------------------------------------}
+
+constructor TSearchCommand.Create(Controller: ILocalController);
+begin
+  inherited;
+  FController := Controller;
+end;
+
+procedure TSearchCommand.Cancel;
+begin
+  //Impossible d'annuler la recherche
+end;
+
+procedure TSearchCommand.Execute;
+begin
+  FController.ExecuteSearchAction;
+end;
+
+{------------------------------------------------------------------------------}
+
+constructor TOpenViewCommand.Create(Controller: ILocalController);
+begin
+  inherited;
+  FController := Controller;
+end;
+
+procedure TOpenViewCommand.Cancel;
+begin
+  //Impossible d'annuler la recherche
+end;
+
+procedure TOpenViewCommand.Execute;
+begin
+  FController.ExecuteSearchAction;
+end;
+
 
 
 end.
