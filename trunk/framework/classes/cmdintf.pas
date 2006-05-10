@@ -22,15 +22,94 @@ unit cmdintf;
 
 interface
 
-uses stdxml_tlb;
+uses classes;
 
 type
-  IPluginAction = interface(IInterface)
+  IPluginCommand = interface(IInterface)
   ['{BE8A74DB-B925-43EA-9CF8-66F6AA035B9B}']
     procedure Cancel; stdcall;
-    procedure Execute(Parameters: IXMLCursor); stdcall;
+    procedure Execute; stdcall;
+  end;
+
+  IPluginCommandReceiver = interface(IInterface)
+  ['{E0BFBAB3-D085-4065-87E1-A8D3892BB2E2}']
+  end;
+
+  TPluginCommand = class(TInterfacedObject, IPluginCommand)
+  private
+    FReceiver: IPluginCommandReceiver;
+  protected
+    procedure Cancel; virtual; stdcall;
+    procedure Execute; virtual; stdcall;
+  public
+    constructor Create(AReceiver: IPluginCommandReceiver); virtual;
+    property Receiver: IPluginCommandReceiver read FReceiver;
+  end;
+
+  TPluginMacro = class(TInterfacedObject, IPluginCommand)
+  private
+    FCommands: TInterfaceList;
+  protected
+  public
+    constructor Create;
+    destructor Destroy; override;
+    procedure Cancel; stdcall;
+    procedure Execute; stdcall;
+    property Commands: TInterfaceList read FCommands;
   end;
 
 implementation
+
+{------------------------------------------------------------------------------}
+
+procedure TPluginCommand.Cancel;
+begin
+end;
+
+procedure TPluginCommand.Execute;
+begin
+end;
+
+constructor TPluginCommand.Create(AReceiver: IPluginCommandReceiver);
+begin
+  FReceiver := AReceiver;
+end;
+
+constructor TPluginMacro.Create;
+begin
+  inherited Create;
+  FCommands := TInterfaceList.Create();
+end;
+
+destructor TPluginMacro.Destroy;
+begin
+  FCommands.Free;
+  inherited Destroy;
+end;
+
+procedure TPluginMacro.Cancel;
+var
+  i: Integer;
+  Command: IPluginCommand;
+begin
+  for i := FCommands.Count - 1 downto 0 do
+  begin
+    Command := FCommands[i] as IPluginCommand;
+    Command.Cancel;
+  end;
+end;
+
+procedure TPluginMacro.Execute;
+var
+  i: Integer;
+  Command: IPluginCommand;
+begin
+  for i := 0 to FCommands.Count - 1 do
+  begin
+    Command := FCommands[i] as IPluginCommand;
+    Command.Execute;
+  end;
+end;
+
 
 end.
