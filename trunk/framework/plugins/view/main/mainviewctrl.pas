@@ -59,8 +59,9 @@ constructor TLocalController.Create(AContainer: TWinControl);
 begin
   FContainer := AContainer as TContainer;
 
-  //instancier ici les TableEntity
-  
+  //instancier ici les DataAdapter
+  FDAPersonnes
+
 
   //instancier ici les receivers
   //instancier ici les commandes

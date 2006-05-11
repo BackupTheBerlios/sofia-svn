@@ -45,9 +45,9 @@ type
 
   TPlugin = class(TInterfacedObject, IPlugin)
     function GetAsView: IView; stdcall;
-    function GetAsConnectionAdapter: IConnectionAdapter; stdcall;
+    function GetAsConnection: IConnection; stdcall;
     function GetAsBusinessObject: IBusinessObject; stdcall;
-    function GetAsDatasetAdapter: IDatasetAdapter; stdcall;
+    function GetAsDataset: IDataset; stdcall;
     function GetAsSerializable: ISerializable; stdcall;
     function GetAsNamedPluginInstance: INamedPluginInstance; stdcall;
     function GetPluginName: string; stdcall;
@@ -245,10 +245,10 @@ begin
   end;
 end;
 
-function TPlugin.GetAsConnectionAdapter: IConnectionAdapter;
+function TPlugin.GetAsConnection: IConnection;
 begin
   try
-    Result := CurrentInstance as IConnectionAdapter;
+    Result := CurrentInstance as IConnection;
   except
     ShowMessage(Format('Le plugin "%s" ne supporte pas l''interface %s', [FPluginName, 'Connection']));
   end;
@@ -272,10 +272,10 @@ begin
   end;
 end;
 
-function TPlugin.GetAsDatasetAdapter: IDatasetAdapter;
+function TPlugin.GetAsDataset: IDataset;
 begin
   try
-    Result := CurrentInstance as IDatasetAdapter;
+    Result := CurrentInstance as IDataset;
   except
     ShowMessage(Format('Le plugin "%s" ne supporte pas l''interface %s', [FPluginName, 'DatasetAdapter']));
   end;

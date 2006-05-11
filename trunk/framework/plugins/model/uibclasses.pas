@@ -34,18 +34,20 @@ type
     FName: string;
     FDataset: TJvUIBDataset;
     FOwner: TDatasetList;
-    FParams: IXMLCursor;
     FProvider: TDataSetProvider;
-    FTableEntity: ITableEntity;
+    FDataTable: IDataTable;
+    FParams: IXMLCursor;
     function GetXML: string;
+    procedure SetParams(const Value: IXMLCursor);
   public
-    constructor Create(Owner: TDatasetList; TableEntity: ITableEntity);
-      reintroduce; overload;
+    constructor Create(Owner: TDatasetList; DataTable: IDataTable); reintroduce;
+        overload;
     destructor Destroy; override;
     procedure ExecuteSelect;
     procedure SyncParams;
     property ClientDataset: TClientDataset read FClientDataset;
     property Name: string read FName;
+    property Params: IXMLCursor read FParams write SetParams;
     property XML: string read GetXML;
   end;
 
@@ -60,7 +62,7 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-    function Add(TableEntity: ITableEntity): TDatasetItem;
+    function Add(DataTable: IDataTable): TDatasetItem;
     property Connection: TJvUIBDatabase read FConnection write FConnection;
     property Count: Integer read GetCount;
     property ItemByName[const Name: string]: TDatasetItem read GetItemByName;
@@ -68,14 +70,14 @@ type
     property Transaction: TJvUIBTransaction read FTransaction write FTransaction;
   end;
 
-  TPlugin = class(TInterfacedObject, IUnknownPlugin, IConnectionAdapter, IDatasetAdapter)
-    procedure AddEntity(TableEntity: ITableEntity); stdcall;
+  TPlugin = class(TInterfacedObject, IUnknownPlugin, IConnection, IDataset)
+    procedure AddDataTable(DataTable: IDataTable); stdcall;
     function GetConnected: boolean; stdcall;
     function GetConnectionName: string; stdcall;
-    function GetEntityReader(const Name: string): TClientDataset; stdcall;
+    function GetDataReader(const Name: string): TClientDataset; stdcall;
     function GetPassWord: string; stdcall;
     function GetUserName: string; stdcall;
-    procedure RemoveEntity(const Name: string); stdcall;
+    procedure RemoveDataTable(const Name: string); stdcall;
     procedure SetConnected(const Value: boolean); stdcall;
     procedure SetConnectionName(const Value: string); stdcall;
     procedure SetPassWord(const Value: string); stdcall;
@@ -115,9 +117,9 @@ begin
   inherited;
 end;
 
-procedure TPlugin.AddEntity(TableEntity: ITableEntity);
+procedure TPlugin.AddDataTable(DataTable: IDataTable);
 begin
-  FDatasetList.Add(TableEntity);
+  FDatasetList.Add(DataTable);
 end;
 
 function TPlugin.GetConnected: boolean;
@@ -130,7 +132,7 @@ begin
   Result := FConnection.DatabaseName;
 end;
 
-function TPlugin.GetEntityReader(const Name: string): TClientDataset;
+function TPlugin.GetDataReader(const Name: string): TClientDataset;
 var
   Item: TDatasetItem;
 begin
@@ -154,7 +156,7 @@ begin
   Result := FConnection.UserName;
 end;
 
-procedure TPlugin.RemoveEntity(const Name: string);
+procedure TPlugin.RemoveDataTable(const Name: string);
 var
   DatasetItem: TDatasetItem;
   Index: integer;
@@ -189,12 +191,11 @@ begin
   FConnection.UserName := Value;
 end;
 
-constructor TDatasetItem.Create(Owner: TDatasetList; TableEntity: ITableEntity);
+constructor TDatasetItem.Create(Owner: TDatasetList; DataTable: IDataTable);
 begin
   FOwner := Owner;
-  FTableEntity := TableEntity;
-  FParams := TableEntity.Params;
-  FName := TableEntity.EntityName;
+  FDataTable := DataTable;
+  FName := DataTable.Name;
 
   FDataset := TJvUIBDataset.Create(nil);
   FDataset.Transaction := Owner.Transaction;
@@ -218,8 +219,8 @@ end;
 
 procedure TDatasetItem.ExecuteSelect;
 begin
-  FDataset.SQL.Text := FTableEntity.SelectCommand;
-  SyncParams;
+  FDataset.SQL.Text := FDataTable.DataAdapter.SelectCommand.SqlText;
+  Params := FDataTable.DataAdapter.SelectCommand.Params;
   FDataset.Open;
 end;
 
@@ -227,6 +228,12 @@ function TDatasetItem.GetXML: string;
 begin
   FClientDataset.Open;
   Result := FClientDataset.XMLData;
+end;
+
+procedure TDatasetItem.SetParams(const Value: IXMLCursor);
+begin
+  FParams := Value;
+  SyncParams;
 end;
 
 procedure TDatasetItem.SyncParams;
@@ -275,9 +282,9 @@ begin
   inherited;
 end;
 
-function TDatasetList.Add(TableEntity: ITableEntity): TDatasetItem;
+function TDatasetList.Add(DataTable: IDataTable): TDatasetItem;
 begin
-  Result := TDatasetItem.Create(Self, TableEntity);
+  Result := TDatasetItem.Create(Self, DataTable);
   FQueryList.Add(Result);
 end;
 

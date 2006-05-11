@@ -28,7 +28,7 @@ type
 
 {------------------------------------------------------------------------------}
 
-  IConnectionAdapter = interface(IInterface)
+  IConnection = interface(IInterface)
   ['{FA94CE0A-DF1A-4628-A8A8-C599CC785286}']
     function GetConnected: boolean; stdcall;
     function GetConnectionName: string; stdcall;
@@ -46,34 +46,55 @@ type
 
 {------------------------------------------------------------------------------}
 
-  ITableEntity = interface(IInterface)
-  ['{6435EEC2-A1F0-4A14-A4DC-7749F78D4212}']
-    function GetCreateCommand: string; stdcall;
-    function GetDeleteCommand: string; stdcall;
-    function GetEntityName: string; stdcall;
-    function GetInsertCommand: string; stdcall;
+  ISqlCommand = interface(IInterface)
+  ['{72AB9079-CE10-48DF-9D4B-27E088EC9D42}']
     function GetParams: IXMLCursor; stdcall;
-    function GetSelectCommand: string; stdcall;
-    function GetUpdateCommand: string; stdcall;
-    property CreateCommand: string read GetCreateCommand;
-    property DeleteCommand: string read GetDeleteCommand;
-    property EntityName: string read GetEntityName;
-    property InsertCommand: string read GetInsertCommand;
+    function GetSqlText: string; stdcall;
+    procedure SetSqlText(const Value: string); stdcall;
     property Params: IXMLCursor read GetParams;
-    property SelectCommand: string read GetSelectCommand;
-    property UpdateCommand: string read GetUpdateCommand;
+    property SqlText: string read GetSqlText write SetSqlText;
   end;
+
+  IDataAdapter = interface(IInterface)
+  ['{6435EEC2-A1F0-4A14-A4DC-7749F78D4212}']
+    function GetDeleteCommand: ISqlCommand; stdcall;
+    function GetInsertCommand: ISqlCommand; stdcall;
+    function GetSelectCommand: ISqlCommand; stdcall;
+    function GetUpdateCommand: ISqlCommand; stdcall;
+    procedure SetDeleteCommand(const Value: ISqlCommand); stdcall;
+    procedure SetInsertCommand(const Value: ISqlCommand); stdcall;
+    procedure SetSelectCommand(const Value: ISqlCommand); stdcall;
+    procedure SetUpdateCommand(const Value: ISqlCommand); stdcall;
+    property DeleteCommand: ISqlCommand read GetDeleteCommand write
+        SetDeleteCommand;
+    property InsertCommand: ISqlCommand read GetInsertCommand write
+        SetInsertCommand;
+    property SelectCommand: ISqlCommand read GetSelectCommand write
+        SetSelectCommand;
+    property UpdateCommand: ISqlCommand read GetUpdateCommand write
+        SetUpdateCommand;
+  end;
+
+  IDataTable = interface(IInterface)
+  ['{151ADDE0-A0E8-4FF3-83A6-5CEDF1DEFD44}']
+    function GetDataAdapter: IDataAdapter; stdcall;
+    function GetName: string; stdcall;
+    procedure SetDataAdapter(const Value: IDataAdapter); stdcall;
+    procedure SetName(const Value: string); stdcall;
+    property DataAdapter: IDataAdapter read GetDataAdapter write SetDataAdapter;
+    property Name: string read GetName write SetName;
+  end;
+
 
 {------------------------------------------------------------------------------}
 
-  IDatasetAdapter = interface(IInterface)
+  IDataset = interface(IInterface)
   ['{2BBE4585-C2A2-4383-A723-73715CB61AC7}']
-    procedure AddEntity(TableEntity: ITableEntity); stdcall;
-    function GetEntityReader(const Name: string): TClientDataset; stdcall;
-    procedure RemoveEntity(const Name: string); stdcall;
-    property EntityReader[const Name: string]: TClientDataset read GetEntityReader;
+    procedure AddDataTable(DataTable: IDataTable); stdcall;
+    function GetDataReader(const Name: string): TClientDataset; stdcall;
+    procedure RemoveDataTable(const Name: string); stdcall;
+    property DataReader[const Name: string]: TClientDataset read GetDataReader;
   end;
-
 
 
 implementation

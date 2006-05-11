@@ -71,7 +71,7 @@ begin
   end;
 
   //initialisation des parametres de cnx
-  with FPluginManager['uib'].AsConnectionAdapter do
+  with FPluginManager['uib'].AsConnection do
   begin
     ConnectionName := 'sofia.fdb';
     UserName := 'sysdba';

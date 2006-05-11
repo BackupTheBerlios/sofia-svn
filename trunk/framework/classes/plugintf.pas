@@ -52,9 +52,9 @@ type
   IPlugin = interface(IInterface)
     ['{0B7E1697-F7C9-4D64-BD73-D7A97C4CCBAC}']
     function GetAsView: IView; stdcall;
-    function GetAsConnectionAdapter: IConnectionAdapter; stdcall;
+    function GetAsConnection: IConnection; stdcall;
     function GetAsBusinessObject: IBusinessObject; stdcall;
-    function GetAsDatasetAdapter: IDatasetAdapter; stdcall;
+    function GetAsDataset: IDataset; stdcall;
     function GetAsSerializable: ISerializable; stdcall;
     function GetPluginName: string; stdcall;
     function GetLastPluginInstance: IUnknownPlugin; stdcall;
@@ -62,9 +62,9 @@ type
     procedure CreateInstance(const AInstanceName: string = ''); stdcall;
     function GetAsNamedPluginInstance: INamedPluginInstance; stdcall;
     property AsView: IView read GetAsView;
-    property AsConnectionAdapter: IConnectionAdapter read GetAsConnectionAdapter;
+    property AsConnection: IConnection read GetAsConnection;
     property AsBusinessObject: IBusinessObject read GetAsBusinessObject;
-    property AsDatasetAdapter: IDatasetAdapter read GetAsDatasetAdapter;
+    property AsDataset: IDataset read GetAsDataset;
     property AsNamedPluginInstance: INamedPluginInstance read
       GetAsNamedPluginInstance;
     property AsSerializable: ISerializable read GetAsSerializable;
