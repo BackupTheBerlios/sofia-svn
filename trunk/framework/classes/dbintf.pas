@@ -50,29 +50,24 @@ type
   ['{72AB9079-CE10-48DF-9D4B-27E088EC9D42}']
     function GetParams: IXMLCursor; stdcall;
     function GetSqlText: string; stdcall;
-    procedure SetSqlText(const Value: string); stdcall;
     property Params: IXMLCursor read GetParams;
-    property SqlText: string read GetSqlText write SetSqlText;
+    property SqlText: string read GetSqlText;
   end;
 
   IDataAdapter = interface(IInterface)
   ['{6435EEC2-A1F0-4A14-A4DC-7749F78D4212}']
     function GetDeleteCommand: ISqlCommand; stdcall;
+    function GetDocument: IXMLCursor; stdcall;
     function GetInsertCommand: ISqlCommand; stdcall;
+    function GetName: string; stdcall;
     function GetSelectCommand: ISqlCommand; stdcall;
     function GetUpdateCommand: ISqlCommand; stdcall;
-    procedure SetDeleteCommand(const Value: ISqlCommand); stdcall;
-    procedure SetInsertCommand(const Value: ISqlCommand); stdcall;
-    procedure SetSelectCommand(const Value: ISqlCommand); stdcall;
-    procedure SetUpdateCommand(const Value: ISqlCommand); stdcall;
-    property DeleteCommand: ISqlCommand read GetDeleteCommand write
-        SetDeleteCommand;
-    property InsertCommand: ISqlCommand read GetInsertCommand write
-        SetInsertCommand;
-    property SelectCommand: ISqlCommand read GetSelectCommand write
-        SetSelectCommand;
-    property UpdateCommand: ISqlCommand read GetUpdateCommand write
-        SetUpdateCommand;
+    property DeleteCommand: ISqlCommand read GetDeleteCommand;
+    property Document: IXMLCursor read GetDocument;
+    property InsertCommand: ISqlCommand read GetInsertCommand;
+    property Name: string read GetName;
+    property SelectCommand: ISqlCommand read GetSelectCommand;
+    property UpdateCommand: ISqlCommand read GetUpdateCommand;
   end;
 
   IDataTable = interface(IInterface)
@@ -80,9 +75,8 @@ type
     function GetDataAdapter: IDataAdapter; stdcall;
     function GetName: string; stdcall;
     procedure SetDataAdapter(const Value: IDataAdapter); stdcall;
-    procedure SetName(const Value: string); stdcall;
     property DataAdapter: IDataAdapter read GetDataAdapter write SetDataAdapter;
-    property Name: string read GetName write SetName;
+    property Name: string read GetName;
   end;
 
 
@@ -90,12 +84,14 @@ type
 
   IDataset = interface(IInterface)
   ['{2BBE4585-C2A2-4383-A723-73715CB61AC7}']
-    procedure AddDataTable(DataTable: IDataTable); stdcall;
+    function AddDataTable(XMLFileName, DataAdapterName: string): IDataTable;
+        stdcall;
     function GetDataReader(const Name: string): TClientDataset; stdcall;
     procedure RemoveDataTable(const Name: string); stdcall;
     property DataReader[const Name: string]: TClientDataset read GetDataReader;
   end;
 
+{------------------------------------------------------------------------------}
 
 implementation
 

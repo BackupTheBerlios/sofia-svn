@@ -71,7 +71,8 @@ type
   end;
 
   TPlugin = class(TInterfacedObject, IUnknownPlugin, IConnection, IDataset)
-    procedure AddDataTable(DataTable: IDataTable); stdcall;
+    function AddDataTable(XMLFileName, DataAdapterName: string): IDataTable;
+        stdcall;
     function GetConnected: boolean; stdcall;
     function GetConnectionName: string; stdcall;
     function GetDataReader(const Name: string): TClientDataset; stdcall;
@@ -90,6 +91,40 @@ type
   public
     constructor Create;
     destructor Destroy; override;
+  end;
+
+  TDataTable = class(TInterfacedObject, IDataTable)
+    function GetDataAdapter: IDataAdapter; stdcall;
+    function GetName: string; stdcall;
+    procedure SetDataAdapter(const Value: IDataAdapter); stdcall;
+  private
+    FDataAdapter: IDataAdapter;
+  public
+  end;
+
+  TDataAdapter = class(TInterfacedObject, IDataAdapter)
+    function GetDeleteCommand: ISqlCommand; stdcall;
+    function GetDocument: IXMLCursor; stdcall;
+    function GetInsertCommand: ISqlCommand; stdcall;
+    function GetName: string; stdcall;
+    function GetSelectCommand: ISqlCommand; stdcall;
+    function GetUpdateCommand: ISqlCommand; stdcall;
+  private
+    FDocument: IXMLCursor;
+    FName: string;
+  public
+    constructor Create(XMLFileName, DataAdapterName: string);
+    property Document: IXMLCursor read FDocument;
+  end;
+
+  TSqlSelectCommand = class(TInterfacedObject, ISqlCommand)
+    function GetParams: IXMLCursor; stdcall;
+    function GetSqlText: string; stdcall;
+  private
+    FDocument: IXMLCursor;
+  public
+    constructor Create(DataAdapter: IDataAdapter);
+    property Document: IXMLCursor read FDocument;
   end;
 
 implementation
@@ -117,9 +152,17 @@ begin
   inherited;
 end;
 
-procedure TPlugin.AddDataTable(DataTable: IDataTable);
+function TPlugin.AddDataTable(XMLFileName, DataAdapterName: string): IDataTable;
+var
+  DataTable: IDataTable;
+  DataAdapter: IDataAdapter;
 begin
+  DataTable := TDataTable.Create;
+  DataAdapter := TDataAdapter.Create(XMLFileName, DataAdapterName);
+  DataTable.DataAdapter := DataAdapter;
+
   FDatasetList.Add(DataTable);
+  Result := DataTable;
 end;
 
 function TPlugin.GetConnected: boolean;
@@ -315,6 +358,74 @@ end;
 function TDatasetList.GetItems(Index: Integer): TDatasetItem;
 begin
   Result := TDatasetItem(FQueryList.Items[Index]);
+end;
+
+function TDataTable.GetDataAdapter: IDataAdapter;
+begin
+  Result := FDataAdapter;
+end;
+
+function TDataTable.GetName: string;
+begin
+  Result := FDataAdapter.Name;
+end;
+
+procedure TDataTable.SetDataAdapter(const Value: IDataAdapter);
+begin
+  FDataAdapter := Value;
+end;
+
+constructor TDataAdapter.Create(XMLFileName, DataAdapterName: string);
+begin
+  FDocument := TXMLCursor.Create;
+  FDocument.Load(XMLFileName);
+  FDocument := FDocument.Select(Format('/DataAdapters/DataAdapter[@Name=%s]', [DataAdapterName]));
+  FName := DataAdapterName;
+end;
+
+function TDataAdapter.GetDeleteCommand: ISqlCommand;
+begin
+
+end;
+
+function TDataAdapter.GetDocument: IXMLCursor;
+begin
+  Result := FDocument;
+end;
+
+function TDataAdapter.GetInsertCommand: ISqlCommand;
+begin
+  // TODO -cMM: TDataAdapter.GetInsertCommand default body inserted
+end;
+
+function TDataAdapter.GetName: string;
+begin
+  Result := FName;
+end;
+
+function TDataAdapter.GetSelectCommand: ISqlCommand;
+begin
+  Result := TSqlSelectCommand.Create(Self);
+end;
+
+function TDataAdapter.GetUpdateCommand: ISqlCommand;
+begin
+  // TODO -cMM: TDataAdapter.GetUpdateCommand default body inserted
+end;
+
+constructor TSqlSelectCommand.Create(DataAdapter: IDataAdapter);
+begin
+  FDocument := DataAdapter.Document.Select('SelectCommand');
+end;
+
+function TSqlSelectCommand.GetParams: IXMLCursor;
+begin
+  Result := FDocument.Select('Params/*');
+end;
+
+function TSqlSelectCommand.GetSqlText: string;
+begin
+  Result := FDocument.GetValue('@SqlText');
 end;
 
 end.

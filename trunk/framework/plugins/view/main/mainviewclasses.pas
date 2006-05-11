@@ -28,8 +28,6 @@ type
 
   ILocalController = interface(IInterface)
     ['{B0122448-88BA-44DF-9B33-8198AF276DF6}']
-    function AddPage(const AName, ACaption: string): TWinControl;
-    procedure Search(Categories: string); stdcall;
     procedure SetPluginManager(const Value: IPluginManager); stdcall;
   end;
 

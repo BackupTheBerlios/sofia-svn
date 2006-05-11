@@ -18,13 +18,6 @@ type
     procedure Execute; override; stdcall;
   end;
 
-  TModelReceiver = class(TInterfacedObject, IPluginCommandReceiver)
-  private
-    FPluginManager: IPluginManager;
-  public
-    constructor Create(APluginManager: IPluginManager);
-  end;
-
   TViewReceiver = class(TInterfacedObject, IPluginCommandReceiver)
   private
     FContainer: TWinControl;
@@ -44,24 +37,28 @@ type
     constructor Create(AContainer: TWinControl);
   end;
 
-function NewLocalController(APlugin: TPlugin; AContainer: TWinControl):
-    ILocalController;
+  TModelReceiver = class(TInterfacedObject, IPluginCommandReceiver)
+  private
+    FPluginManager: IPluginManager;
+  public
+    constructor Create(APluginManager: IPluginManager);
+    procedure GetPersonnes(Categorie: string);
+  end;
+
+function NewLocalController(AContainer: TWinControl): ILocalController;
 
 implementation
 
-function NewLocalController(APlugin: TPlugin; AContainer: TWinControl):
-    ILocalController;
+uses dbintf;
+
+function NewLocalController(AContainer: TWinControl): ILocalController;
 begin
-  Result := TLocalController.Create(APlugin, AContainer);
+  Result := TLocalController.Create(AContainer);
 end;
 
 constructor TLocalController.Create(AContainer: TWinControl);
 begin
   FContainer := AContainer as TContainer;
-
-  //instancier ici les DataAdapter
-  FDAPersonnes
-
 
   //instancier ici les receivers
   //instancier ici les commandes
@@ -79,7 +76,7 @@ end;
 
 procedure TSearchCommand.Execute;
 begin
-  Receiver.ExecuteSearchAction;
+  TModelReceiver(Receiver).GetPersonnes('contact');
 end;
 
 procedure TNewContactCommand.Execute;
@@ -94,11 +91,9 @@ begin
   FContainer := AContainer;
 end;
 
-procedure TViewReceiver.OpenView(const PluginName: string; InstanceName:
-    string; const Caption: string);
+procedure TViewReceiver.OpenView(const PluginName: string; InstanceName: string; const Caption: string);
 var
   Ctrl: TWinControl;
-  InstanceName: string;
 begin
   with FPluginManager[PluginName].NamedInstance[InstanceName].AsView do
   begin
@@ -119,23 +114,16 @@ end;
 constructor TModelReceiver.Create(APluginManager: IPluginManager);
 begin
   FPluginManager := APluginManager;
+  FContainer := AContainer;
 end;
 
-{
-procedure TLocalController.ExecuteSearchAction;
+procedure TModelReceiver.GetPersonnes(Categorie: string);
 var
-  XMLResult: ISerializable;
-  BusinessObject: IBusinessObject;
-  Dataset: IDatasetAdapter;
+  DataTable: IDataTable;
 begin
-  BusinessObject := FPluginManager['model'].AsBusinessObject;
-  Dataset := FPluginManager['dbuib'].AsDatasetAdapter;
-  XMLResult := FPluginManager['search'].AsSerializable;
-  Dataset.AddEntity(BusinessObject.GetPersonnes(Categories));
-  XMLResult.XML := Dataset.XML;
-
-  AddPage('search', '', 'Résultats de la recherche');
+  DataTable := FPluginManager['uib'].AsDataset.AddDataTable('contactmodel.xml', 'personnes');
+  DataTable.DataAdapter.SelectCommand.Params.Select(Format('/Param[@Name=%s]', ['prs_categorie'])).SetAttributeValue('Value', 'contact');
+  FPluginManager['search'].AsSerializable.XML := FPluginManager['uib'].AsDataset.DataReader['personnes'].XMLData;
 end;
-}
 
 end.
