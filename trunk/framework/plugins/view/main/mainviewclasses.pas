@@ -31,21 +31,24 @@ type
     procedure SetPluginManager(const Value: IPluginManager); stdcall;
   end;
 
+  IContainerActions = interface(IInterface)
+  ['{515D874A-2735-4536-B859-C77A53D9ECEA}']
+    function AddPage(const AName, ACaption: string): TWinControl;
+  end;
+
   TPlugin = class(TInterfacedObject, IUnknownPlugin, IView)
     procedure Hide; stdcall;
     procedure Show; stdcall;
     procedure SetParent(const Value: TWinControl); stdcall;
     procedure SetPluginManager(const Value: IPluginManager); stdcall;
   private
-    FContainer: TWinControl;
+    FContainerActions: IContainerActions;
+    FContainerFrame: TWinControl;
     FController: ILocalController;
     FParent: TWinControl;
     FPluginManager: IPluginManager;
   public
     constructor Create;
-    destructor Destroy; override;
-    procedure Search(Categories: string); stdcall;
-    procedure NewContact; stdcall;
   end;
 
 implementation
@@ -54,41 +57,14 @@ uses Classes, mainviewctrl, mainviewgui, SysUtils;
 
 constructor TPlugin.Create;
 begin
-  FContainer := TContainer.Create(nil);
-  FController := NewController(Self, FContainer);
-end;
-
-destructor TPlugin.Destroy;
-begin
-  FController := nil;
-  FXMLCursor := nil;
-  inherited;
+  FContainerFrame := TContainerFrame.Create(nil);
+  FContainerActions := TContainerActions.Create(FContainerFrame);
+  FController := TLocalController.Create(FContainerActions);
 end;
 
 procedure TPlugin.Hide;
 begin
-  FContainer.Parent := nil;
-end;
-
-procedure TPlugin.Search(Categories: string);
-var
-  XMLResult: ISerializable;
-  BusinessObject: IBusinessObject;
-  Dataset: IDatasetAdapter;
-begin
-  BusinessObject := FPluginManager['model'].AsBusinessObject;
-  Dataset := FPluginManager['dbuib'].AsDatasetAdapter;
-  XMLResult := FPluginManager['search'].AsSerializable;
-
-  //Dataset.AddEntity(BusinessObject.GetPersonnes(Categories));
-  //XMLResult.XML := Dataset.XML;
-
-  AddPage('search', '', 'Résultats de la recherche');
-end;
-
-procedure TPlugin.NewContact;
-begin
-  AddPage('contact', '', 'Nouveau contact');
+  FContainerFrame.Parent := nil;
 end;
 
 procedure TPlugin.SetParent(const Value: TWinControl);
@@ -103,10 +79,9 @@ end;
 
 procedure TPlugin.Show;
 begin
-  FContainer.Parent := FParent;
-  FContainer.Align := alClient;
-
-  AddPage('welcome', '', 'Accueil');
+  FContainerFrame.Parent := FParent;
+  FContainerFrame.Align := alClient;
+  //AddPage('welcome', '', 'Accueil');
 end;
 
 end.

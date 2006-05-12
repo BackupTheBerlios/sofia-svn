@@ -5,11 +5,6 @@ interface
 uses Controls, mainviewclasses, plugintf, cmdintf;
 
 type
-  IContainerActions = interface(IInterface)
-  ['{515D874A-2735-4536-B859-C77A53D9ECEA}']
-    function AddPage(const AName, ACaption: string): TWinControl;
-  end;
-
   TSearchCommand = class(TPluginCommand)
   private
   public
@@ -22,31 +17,45 @@ type
     procedure Execute; override; stdcall;
   end;
 
-  TViewReceiver = class(TInterfacedObject, IPluginCommandReceiver)
+  TShowSearchResultsCommand = class(TPluginCommand)
   private
-    FContainer: IContainerActions;
+  public
+    procedure Execute; override; stdcall;
+  end;
+
+  TViewReceiver = class(TInterfacedObject, IPluginCommandReceiver)
+    procedure SetPluginManager(const Value: IPluginManager); stdcall;
+  private
+    FContainerActions: IContainerActions;
     FPluginManager: IPluginManager;
   public
-    constructor Create(APluginManager: IPluginManager; AContainer: IContainerActions);
-    procedure OpenView(const PluginName: string; InstanceName: string; const
-        Caption: string);
+    constructor Create(AContainer: IContainerActions);
+    procedure Show(const PluginName: string; InstanceName: string; const Caption:
+        string);
+  end;
+
+  TModelReceiver = class(TInterfacedObject, IPluginCommandReceiver)
+    procedure SetPluginManager(const Value: IPluginManager); stdcall;
+  private
+    FPluginManager: IPluginManager;
+  public
+    procedure GetPersonnes(Categorie: string);
   end;
 
   TLocalController = class(TInterfacedObject, ILocalController)
     procedure SetPluginManager(const Value: IPluginManager); stdcall;
   private
     FContainerActions: IContainerActions;
+    FModelReceiver: TModelReceiver;
+    FNewContactCommand: IPluginCommand;
     FPluginManager: IPluginManager;
+    FSearchAndDisplayCommand: IPluginCommand;
+    FSearchCommand: IPluginCommand;
+    FShowSearchResultsCommand: IPluginCommand;
+    FViewReceiver: TViewReceiver;
   public
     constructor Create(AContainerActions: IContainerActions);
-  end;
-
-  TModelReceiver = class(TInterfacedObject, IPluginCommandReceiver)
-  private
-    FPluginManager: IPluginManager;
-  public
-    constructor Create(APluginManager: IPluginManager);
-    procedure GetPersonnes(Categorie: string);
+    property ContainerActions: IContainerActions read FContainerActions;
   end;
 
 implementation
@@ -58,10 +67,25 @@ constructor TLocalController.Create(AContainerActions: IContainerActions);
 begin
   FContainerActions := AContainerActions;
 
-  //instancier ici les receivers
-  //instancier ici les commandes
-  //instancier ici les macros
+  //instancier les recepteurs
+  FModelReceiver := TModelReceiver.Create;
+  FViewReceiver := TViewReceiver.Create(FContainerActions);
+
+  //instancier les commandes
+  FSearchCommand := TSearchCommand.Create(FModelReceiver);
+  FNewContactCommand := TNewContactCommand.Create(FViewReceiver);
+  FShowSearchResultsCommand := TShowSearchResultsCommand.Create(FViewReceiver);
+
+  //instancier les macros
+  FSearchAndDisplayCommand := TPluginMacro.Create;
+  with FSearchAndDisplayCommand as IPluginMacro do
+  begin
+    Commands.Add(FSearchCommand);
+    Commands.Add(FShowSearchResultsCommand);
+  end;
+
   //affecter les commandes/macros aux controles graphiques
+  FContainerActions.
 
   //FContainer.btnGo.OnClick := DoSearch;
   //FContainer.lblNouveauContact.OnClick := DoNewContact;
@@ -70,6 +94,8 @@ end;
 procedure TLocalController.SetPluginManager(const Value: IPluginManager);
 begin
   FPluginManager := Value;
+  FModelReceiver.SetPluginManager(Value);
+  FViewReceiver.SetPluginManager(Value);
 end;
 
 procedure TSearchCommand.Execute;
@@ -79,17 +105,16 @@ end;
 
 procedure TNewContactCommand.Execute;
 begin
-  TViewReceiver(Receiver).OpenView('contact', '', 'Nouveau contact');
+  TViewReceiver(Receiver).Show('contact', '', 'Nouveau contact');
 end;
 
-constructor TViewReceiver.Create(APluginManager: IPluginManager; AContainer:
-    IContainerActions);
+constructor TViewReceiver.Create(AContainer: IContainerActions);
 begin
-  FPluginManager := APluginManager;
-  FContainer := AContainer;
+  FContainerActions := AContainer;
 end;
 
-procedure TViewReceiver.OpenView(const PluginName: string; InstanceName: string; const Caption: string);
+procedure TViewReceiver.Show(const PluginName: string; InstanceName: string;
+    const Caption: string);
 var
   Ctrl: TWinControl;
 begin
@@ -99,19 +124,18 @@ begin
       InstanceName := FPluginManager[PluginName].AsNamedPluginInstance.InstanceName
     else
       InstanceName := PluginName;
-    Ctrl := FContainer.AddPage(InstanceName, Caption);
+    Ctrl := FContainerActions.AddPage(InstanceName, Caption);
     if Assigned(Ctrl) then
     begin
       Parent := Ctrl;
       Show;
     end;
   end;
-  //Result := Ctrl;
 end;
 
-constructor TModelReceiver.Create(APluginManager: IPluginManager);
+procedure TViewReceiver.SetPluginManager(const Value: IPluginManager);
 begin
-  FPluginManager := APluginManager;
+  FPluginManager := Value;
 end;
 
 procedure TModelReceiver.GetPersonnes(Categorie: string);
@@ -122,5 +146,16 @@ begin
   DataTable.DataAdapter.SelectCommand.Params.Select(Format('/Param[@Name=%s]', ['prs_categorie'])).SetAttributeValue('Value', 'contact');
   FPluginManager['search'].AsSerializable.XML := FPluginManager['uib'].AsDataset.DataReader['personnes'].XMLData;
 end;
+
+procedure TModelReceiver.SetPluginManager(const Value: IPluginManager);
+begin
+  FPluginManager := Value;
+end;
+
+procedure TShowSearchResultsCommand.Execute;
+begin
+  TViewReceiver(Receiver).Show('search', '', 'Résultat de la recherche');
+end;
+
 
 end.

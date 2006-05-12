@@ -1,4 +1,4 @@
-object Container: TContainer
+object ContainerFrame: TContainerFrame
   Left = 0
   Top = 0
   Width = 780

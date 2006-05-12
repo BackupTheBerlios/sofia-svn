@@ -25,7 +25,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, ComCtrls, ToolWin, Grids, ActnList, ImgList,
-  mainviewctrl;
+  mainviewctrl, mainviewclasses;
 
 type
   TContainerFrame = class(TFrame)
@@ -77,24 +77,25 @@ type
     procedure actFermerExecute(Sender: TObject);
   private
     FPageIndex: Integer;
-    procedure RepaintCurrentTab(ATabIndex: Integer);
+    FPageObjects: TStringList;
+    FPagesCount: Integer;
+    procedure SetActiveTab(ATabIndex: Integer);
     procedure SetPageIndex(const Value: Integer);
     { Déclarations privées }
   public
     constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    function AddPage(const AName, ACaption: string): TWinControl;
     property PageIndex: Integer read FPageIndex write SetPageIndex;
     { Déclarations publiques }
   end;
 
   TContainerActions = class(TInterfacedObject, IContainerActions)
-    function AddViewPage(const AName, ACaption: string): TWinControl;
+    function AddPage(const AName, ACaption: string): TWinControl;
   private
     FControl: TWinControl;
-    FPageObjects: TStringList;
-    FPagesCount: Integer;
   public
     constructor Create(AControl: TWinControl);
-    destructor Destroy; override;
   end;
 
 implementation
@@ -108,6 +109,14 @@ const
 constructor TContainerFrame.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
+  FPageObjects := TStringList.Create();
+  FPagesCount := 0;
+end;
+
+destructor TContainerFrame.Destroy;
+begin
+  FreeAndNil(FPageObjects);
+  inherited Destroy;
 end;
 
 procedure TContainerFrame.Label3Click(Sender: TObject);
@@ -157,7 +166,7 @@ begin
   end;
 end;
 
-procedure TContainerFrame.RepaintCurrentTab(ATabIndex: Integer);
+procedure TContainerFrame.SetActiveTab(ATabIndex: Integer);
 var
   GridRect: TGridRect;
 begin
@@ -301,21 +310,7 @@ begin
  //
 end;
 
-constructor TContainerActions.Create(AControl: TWinControl);
-begin
-  FControl := AControl;
-  FPageObjects := TStringList.Create();
-  FPageCount = 0;
-end;
-
-destructor TContainerActions.Destroy;
-begin
-  FreeAndNil(FPageObjects);
-  inherited Destroy;
-end;
-
-function TContainerActions.AddViewPage(const AName, ACaption: string):
-    TWinControl;
+function TContainerFrame.AddPage(const AName, ACaption: string): TWinControl;
 var
   Panel: TPanel;
   Idx: Integer;
@@ -323,11 +318,10 @@ begin
   Idx := FPageObjects.IndexOf(UpperCase(AName));
   if Idx <> -1 then
   begin
-    FControl.SetActiveTab(Idx);
+    SetActiveTab(Idx);
     Result := nil;
-  end else
-  begin
-    FControl.AddTab(AName, ACaption);
+    Exit;
+  end;
 
   Inc(FPagesCount);
   sgPages.ColCount := FPagesCount;
@@ -341,11 +335,21 @@ begin
   Idx := FPageObjects.AddObject(UpperCase(AName), Panel);
   sgPages.Cols[FPagesCount - 1].Objects[0] := FPageObjects.Objects[Idx];
 
-  RepaintCurrentTab(0);
-  RepaintCurrentTab(FPagesCount - 1);
+  SetActiveTab(0);
+  SetActiveTab(FPagesCount - 1);
 
   Result := Panel;
 
+end;
+
+constructor TContainerActions.Create(AControl: TWinControl);
+begin
+  FControl := AControl;
+end;
+
+function TContainerActions.AddPage(const AName, ACaption: string): TWinControl;
+begin
+  TContainerFrame(FControl).AddPage(AName, ACaption);
 end;
 
 end.

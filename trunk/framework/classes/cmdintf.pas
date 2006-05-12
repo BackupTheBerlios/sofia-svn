@@ -22,7 +22,7 @@ unit cmdintf;
 
 interface
 
-uses classes;
+uses classes, plugintf;
 
 type
   IPluginCommand = interface(IInterface)
@@ -33,6 +33,14 @@ type
 
   IPluginCommandReceiver = interface(IInterface)
   ['{E0BFBAB3-D085-4065-87E1-A8D3892BB2E2}']
+    procedure SetPluginManager(const Value: IPluginManager); stdcall;
+    property PluginManager: IPluginManager write SetPluginManager;
+  end;
+
+  IPluginMacro = interface(IInterface)
+  ['{F23E94E0-A350-49AA-B8AD-1F69B8EFA01E}']
+    function GetCommands: IInterfaceList; stdcall;
+    property Commands: IInterfaceList read GetCommands;
   end;
 
   TPluginCommand = class(TInterfacedObject, IPluginCommand)
@@ -46,7 +54,8 @@ type
     property Receiver: IPluginCommandReceiver read FReceiver;
   end;
 
-  TPluginMacro = class(TInterfacedObject, IPluginCommand)
+  TPluginMacro = class(TInterfacedObject, IPluginCommand, IPluginMacro)
+    function GetCommands: IInterfaceList; stdcall;
   private
     FCommands: TInterfaceList;
   protected
@@ -55,7 +64,6 @@ type
     destructor Destroy; override;
     procedure Cancel; stdcall;
     procedure Execute; stdcall;
-    property Commands: TInterfaceList read FCommands;
   end;
 
 implementation
@@ -109,6 +117,11 @@ begin
     Command := FCommands[i] as IPluginCommand;
     Command.Execute;
   end;
+end;
+
+function TPluginMacro.GetCommands: IInterfaceList;
+begin
+  Result := FCommands;
 end;
 
 
