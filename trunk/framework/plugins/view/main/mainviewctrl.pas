@@ -2,9 +2,13 @@ unit mainviewctrl;
 
 interface
 
-uses Controls, mainviewgui, mainviewclasses, plugintf, cmdintf;
+uses Controls, mainviewclasses, plugintf, cmdintf;
 
 type
+  IContainerActions = interface(IInterface)
+  ['{515D874A-2735-4536-B859-C77A53D9ECEA}']
+    function AddPage(const AName, ACaption: string): TWinControl;
+  end;
 
   TSearchCommand = class(TPluginCommand)
   private
@@ -20,10 +24,10 @@ type
 
   TViewReceiver = class(TInterfacedObject, IPluginCommandReceiver)
   private
-    FContainer: TWinControl;
+    FContainer: IContainerActions;
     FPluginManager: IPluginManager;
   public
-    constructor Create(APluginManager: IPluginManager; AContainer: TWinControl);
+    constructor Create(APluginManager: IPluginManager; AContainer: IContainerActions);
     procedure OpenView(const PluginName: string; InstanceName: string; const
         Caption: string);
   end;
@@ -31,10 +35,10 @@ type
   TLocalController = class(TInterfacedObject, ILocalController)
     procedure SetPluginManager(const Value: IPluginManager); stdcall;
   private
-    FContainer: TContainer;
+    FContainerActions: IContainerActions;
     FPluginManager: IPluginManager;
   public
-    constructor Create(AContainer: TWinControl);
+    constructor Create(AContainerActions: IContainerActions);
   end;
 
   TModelReceiver = class(TInterfacedObject, IPluginCommandReceiver)
@@ -45,20 +49,14 @@ type
     procedure GetPersonnes(Categorie: string);
   end;
 
-function NewLocalController(AContainer: TWinControl): ILocalController;
-
 implementation
 
-uses dbintf;
+uses dbintf, SysUtils;
 
-function NewLocalController(AContainer: TWinControl): ILocalController;
-begin
-  Result := TLocalController.Create(AContainer);
-end;
 
-constructor TLocalController.Create(AContainer: TWinControl);
+constructor TLocalController.Create(AContainerActions: IContainerActions);
 begin
-  FContainer := AContainer as TContainer;
+  FContainerActions := AContainerActions;
 
   //instancier ici les receivers
   //instancier ici les commandes
@@ -85,7 +83,7 @@ begin
 end;
 
 constructor TViewReceiver.Create(APluginManager: IPluginManager; AContainer:
-    TWinControl);
+    IContainerActions);
 begin
   FPluginManager := APluginManager;
   FContainer := AContainer;
@@ -114,7 +112,6 @@ end;
 constructor TModelReceiver.Create(APluginManager: IPluginManager);
 begin
   FPluginManager := APluginManager;
-  FContainer := AContainer;
 end;
 
 procedure TModelReceiver.GetPersonnes(Categorie: string);

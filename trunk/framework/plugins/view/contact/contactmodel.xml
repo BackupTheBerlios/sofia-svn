@@ -1,4 +1,4 @@
-<Model>
+<Model xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="..\..\model\model.xsd">
 	<Domains>
 		<Domain Name="VARCHAR32" Type="VARCHAR(32)"/>
 		<Domain Name="VARCHAR250" Type="VARCHAR(250)"/>

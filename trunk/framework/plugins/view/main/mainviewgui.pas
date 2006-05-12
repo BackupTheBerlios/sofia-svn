@@ -24,10 +24,11 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, ExtCtrls, ComCtrls, ToolWin, Grids, ActnList, ImgList;
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, ToolWin, Grids, ActnList, ImgList,
+  mainviewctrl;
 
 type
-  TContainer = class(TFrame)
+  TContainerFrame = class(TFrame)
     Panel2: TPanel;
     pnlPlugin: TPanel;
     Panel1: TPanel;
@@ -65,7 +66,6 @@ type
     actConfirmer: TAction;
     actFermer: TAction;
     ToolButton2: TToolButton;
-    function AddPage(const AName, ACaption: string): TWinControl;
     procedure Label3Click(Sender: TObject);
     procedure lblMouseEnter(Sender: TObject);
     procedure lblMouseLeave(Sender: TObject);
@@ -77,16 +77,24 @@ type
     procedure actFermerExecute(Sender: TObject);
   private
     FPageIndex: Integer;
-    FPageObjects: TStringList;
-    FPagesCount: Integer;
     procedure RepaintCurrentTab(ATabIndex: Integer);
     procedure SetPageIndex(const Value: Integer);
     { Déclarations privées }
   public
     constructor Create(AOwner: TComponent); override;
-    destructor Destroy; override;
     property PageIndex: Integer read FPageIndex write SetPageIndex;
     { Déclarations publiques }
+  end;
+
+  TContainerActions = class(TInterfacedObject, IContainerActions)
+    function AddViewPage(const AName, ACaption: string): TWinControl;
+  private
+    FControl: TWinControl;
+    FPageObjects: TStringList;
+    FPagesCount: Integer;
+  public
+    constructor Create(AControl: TWinControl);
+    destructor Destroy; override;
   end;
 
 implementation
@@ -97,56 +105,17 @@ const
   clGris = cl3DLight;
   clVert = clActiveBorder;
 
-constructor TContainer.Create(AOwner: TComponent);
+constructor TContainerFrame.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  FPagesCount := 0;
-  FPageObjects := TStringList.Create();
 end;
 
-destructor TContainer.Destroy;
-begin
-  FreeAndNil(FPageObjects);
-  inherited Destroy;
-end;
-
-function TContainer.AddPage(const AName, ACaption: string): TWinControl;
-var
-  Panel: TPanel;
-  Idx: Integer;
-begin
-  Idx := FPageObjects.IndexOf(UpperCase(AName));
-  if Idx <> -1 then
-  begin
-    RepaintCurrentTab(Idx);
-    Result := nil;
-    Exit;
-  end;
-
-  Inc(FPagesCount);
-  sgPages.ColCount := FPagesCount;
-  sgPages.Cells[0, FPagesCount - 1] := ACaption;
-
-  Panel := TPanel.Create(Self);
-  Panel.BevelOuter := bvNone;
-  Panel.Align := alClient;
-  Panel.Parent := pnlPlugin;
-
-  Idx := FPageObjects.AddObject(UpperCase(AName), Panel);
-  sgPages.Cols[FPagesCount - 1].Objects[0] := FPageObjects.Objects[Idx];
-
-  RepaintCurrentTab(0);
-  RepaintCurrentTab(FPagesCount - 1);
-
-  Result := Panel;
-end;
-
-procedure TContainer.Label3Click(Sender: TObject);
+procedure TContainerFrame.Label3Click(Sender: TObject);
 begin
   //AddPage('contact', 'Nouveau contact');
 end;
 
-procedure TContainer.lblMouseEnter(Sender: TObject);
+procedure TContainerFrame.lblMouseEnter(Sender: TObject);
 var
   ALabel: TLabel;
 begin
@@ -156,7 +125,7 @@ begin
   ALabel.Font.Style := ALabel.Font.Style + [fsUnderline]
 end;
 
-procedure TContainer.lblMouseLeave(Sender: TObject);
+procedure TContainerFrame.lblMouseLeave(Sender: TObject);
 var
   ALabel: TLabel;
 begin
@@ -166,7 +135,7 @@ begin
   ALabel.Font.Style := ALabel.Font.Style - [fsUnderline];
 end;
 
-procedure TContainer.pbPagesPaint(Sender: TObject);
+procedure TContainerFrame.pbPagesPaint(Sender: TObject);
 var
   APaintBox: TPaintBox;
 begin
@@ -188,7 +157,7 @@ begin
   end;
 end;
 
-procedure TContainer.RepaintCurrentTab(ATabIndex: Integer);
+procedure TContainerFrame.RepaintCurrentTab(ATabIndex: Integer);
 var
   GridRect: TGridRect;
 begin
@@ -202,7 +171,7 @@ begin
   Application.ProcessMessages;
 end;
 
-procedure TContainer.SetPageIndex(const Value: Integer);
+procedure TContainerFrame.SetPageIndex(const Value: Integer);
 begin
   if Value <> FPageIndex then
   begin
@@ -212,7 +181,7 @@ begin
   end;
 end;
 
-procedure TContainer.sgPagesDrawCell(Sender: TObject; ACol, ARow: Integer; Rect:
+procedure TContainerFrame.sgPagesDrawCell(Sender: TObject; ACol, ARow: Integer; Rect:
   TRect; State: TGridDrawState);
 var
   ACanvas: TCanvas;
@@ -317,19 +286,66 @@ begin
   end;
 end;
 
-procedure TContainer.Label10Click(Sender: TObject);
+procedure TContainerFrame.Label10Click(Sender: TObject);
 begin
   Application.MainForm.Close;
 end;
 
-procedure TContainer.actConfirmerExecute(Sender: TObject);
+procedure TContainerFrame.actConfirmerExecute(Sender: TObject);
 begin
  //
 end;
 
-procedure TContainer.actFermerExecute(Sender: TObject);
+procedure TContainerFrame.actFermerExecute(Sender: TObject);
 begin
  //
+end;
+
+constructor TContainerActions.Create(AControl: TWinControl);
+begin
+  FControl := AControl;
+  FPageObjects := TStringList.Create();
+  FPageCount = 0;
+end;
+
+destructor TContainerActions.Destroy;
+begin
+  FreeAndNil(FPageObjects);
+  inherited Destroy;
+end;
+
+function TContainerActions.AddViewPage(const AName, ACaption: string):
+    TWinControl;
+var
+  Panel: TPanel;
+  Idx: Integer;
+begin
+  Idx := FPageObjects.IndexOf(UpperCase(AName));
+  if Idx <> -1 then
+  begin
+    FControl.SetActiveTab(Idx);
+    Result := nil;
+  end else
+  begin
+    FControl.AddTab(AName, ACaption);
+
+  Inc(FPagesCount);
+  sgPages.ColCount := FPagesCount;
+  sgPages.Cells[0, FPagesCount - 1] := ACaption;
+
+  Panel := TPanel.Create(Self);
+  Panel.BevelOuter := bvNone;
+  Panel.Align := alClient;
+  Panel.Parent := pnlPlugin;
+
+  Idx := FPageObjects.AddObject(UpperCase(AName), Panel);
+  sgPages.Cols[FPagesCount - 1].Objects[0] := FPageObjects.Objects[Idx];
+
+  RepaintCurrentTab(0);
+  RepaintCurrentTab(FPagesCount - 1);
+
+  Result := Panel;
+
 end;
 
 end.
