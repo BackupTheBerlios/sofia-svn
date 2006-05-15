@@ -2,7 +2,7 @@ unit mainviewctrl;
 
 interface
 
-uses Controls, mainviewclasses, plugintf, cmdintf;
+uses Controls, mainviewclasses, plugintf, cmdintf, classes;
 
 type
   TSearchCommand = class(TPluginCommand)
@@ -23,15 +23,15 @@ type
     procedure Execute; override; stdcall;
   end;
 
-  TViewReceiver = class(TInterfacedObject, IPluginCommandReceiver)
+  TContainerReceiver = class(TInterfacedObject, IPluginCommandReceiver)
     procedure SetPluginManager(const Value: IPluginManager); stdcall;
   private
     FContainerActions: IContainerActions;
     FPluginManager: IPluginManager;
   public
     constructor Create(AContainer: IContainerActions);
-    procedure Show(const PluginName: string; InstanceName: string; const Caption:
-        string);
+    procedure AddPage(const PluginName: string; InstanceName: string; const
+        Caption: string);
   end;
 
   TModelReceiver = class(TInterfacedObject, IPluginCommandReceiver)
@@ -45,6 +45,7 @@ type
   TLocalController = class(TInterfacedObject, ILocalController)
     procedure SetPluginManager(const Value: IPluginManager); stdcall;
   private
+    FCommandList: IInterfaceList;
     FContainerActions: IContainerActions;
     FModelReceiver: TModelReceiver;
     FNewContactCommand: IPluginCommand;
@@ -52,9 +53,10 @@ type
     FSearchAndDisplayCommand: IPluginCommand;
     FSearchCommand: IPluginCommand;
     FShowSearchResultsCommand: IPluginCommand;
-    FViewReceiver: TViewReceiver;
+    FContainerReceiver: TContainerReceiver;
   public
     constructor Create(AContainerActions: IContainerActions);
+    property CommandList: IInterfaceList read FCommandList write FCommandList;
     property ContainerActions: IContainerActions read FContainerActions;
   end;
 
@@ -65,37 +67,33 @@ uses dbintf, SysUtils;
 
 constructor TLocalController.Create(AContainerActions: IContainerActions);
 begin
-  FContainerActions := AContainerActions;
-
   //instancier les recepteurs
   FModelReceiver := TModelReceiver.Create;
-  FViewReceiver := TViewReceiver.Create(FContainerActions);
+  FContainerReceiver := TContainerReceiver.Create(FContainerActions);
 
   //instancier les commandes
   FSearchCommand := TSearchCommand.Create(FModelReceiver);
-  FNewContactCommand := TNewContactCommand.Create(FViewReceiver);
-  FShowSearchResultsCommand := TShowSearchResultsCommand.Create(FViewReceiver);
+  FNewContactCommand := TNewContactCommand.Create(FContainerReceiver);
+  FShowSearchResultsCommand := TShowSearchResultsCommand.Create(FContainerReceiver);
 
   //instancier les macros
-  FSearchAndDisplayCommand := TPluginMacro.Create;
-  with FSearchAndDisplayCommand as IPluginMacro do
+  FSearchAndDisplayCommand := TPluginCommandList.Create;
+  with (FSearchAndDisplayCommand as IPluginMacro) do
   begin
     Commands.Add(FSearchCommand);
     Commands.Add(FShowSearchResultsCommand);
   end;
 
-  //affecter les commandes/macros aux controles graphiques
-  FContainerActions.
+  //affectation des commandes
 
-  //FContainer.btnGo.OnClick := DoSearch;
-  //FContainer.lblNouveauContact.OnClick := DoNewContact;
+
 end;
 
 procedure TLocalController.SetPluginManager(const Value: IPluginManager);
 begin
   FPluginManager := Value;
   FModelReceiver.SetPluginManager(Value);
-  FViewReceiver.SetPluginManager(Value);
+  FContainerReceiver.SetPluginManager(Value);
 end;
 
 procedure TSearchCommand.Execute;
@@ -105,16 +103,16 @@ end;
 
 procedure TNewContactCommand.Execute;
 begin
-  TViewReceiver(Receiver).Show('contact', '', 'Nouveau contact');
+  TContainerReceiver(Receiver).AddPage('contact', '', 'Nouveau contact');
 end;
 
-constructor TViewReceiver.Create(AContainer: IContainerActions);
+constructor TContainerReceiver.Create(AContainer: IContainerActions);
 begin
   FContainerActions := AContainer;
 end;
 
-procedure TViewReceiver.Show(const PluginName: string; InstanceName: string;
-    const Caption: string);
+procedure TContainerReceiver.AddPage(const PluginName: string; InstanceName:
+    string; const Caption: string);
 var
   Ctrl: TWinControl;
 begin
@@ -133,7 +131,7 @@ begin
   end;
 end;
 
-procedure TViewReceiver.SetPluginManager(const Value: IPluginManager);
+procedure TContainerReceiver.SetPluginManager(const Value: IPluginManager);
 begin
   FPluginManager := Value;
 end;
@@ -154,7 +152,7 @@ end;
 
 procedure TShowSearchResultsCommand.Execute;
 begin
-  TViewReceiver(Receiver).Show('search', '', 'Résultat de la recherche');
+  TContainerReceiver(Receiver).AddPage('search', '', 'Résultat de la recherche');
 end;
 
 

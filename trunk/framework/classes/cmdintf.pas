@@ -26,26 +26,32 @@ uses classes, plugintf;
 
 type
   IPluginCommand = interface(IInterface)
-  ['{BE8A74DB-B925-43EA-9CF8-66F6AA035B9B}']
+    ['{BE8A74DB-B925-43EA-9CF8-66F6AA035B9B}']
     procedure Cancel; stdcall;
     procedure Execute; stdcall;
+    function GetName: string; stdcall;
+    procedure SetName(const Value: string); stdcall;
+    property Name: string read GetName write SetName;
   end;
 
   IPluginCommandReceiver = interface(IInterface)
-  ['{E0BFBAB3-D085-4065-87E1-A8D3892BB2E2}']
+    ['{E0BFBAB3-D085-4065-87E1-A8D3892BB2E2}']
     procedure SetPluginManager(const Value: IPluginManager); stdcall;
     property PluginManager: IPluginManager write SetPluginManager;
   end;
 
   IPluginMacro = interface(IInterface)
-  ['{F23E94E0-A350-49AA-B8AD-1F69B8EFA01E}']
+    ['{F23E94E0-A350-49AA-B8AD-1F69B8EFA01E}']
     function GetCommands: IInterfaceList; stdcall;
     property Commands: IInterfaceList read GetCommands;
   end;
 
   TPluginCommand = class(TInterfacedObject, IPluginCommand)
+    function GetName: string; stdcall;
+    procedure SetName(const Value: string); stdcall;
   private
     FReceiver: IPluginCommandReceiver;
+    FName: string;
   protected
     procedure Cancel; virtual; stdcall;
     procedure Execute; virtual; stdcall;
@@ -54,16 +60,20 @@ type
     property Receiver: IPluginCommandReceiver read FReceiver;
   end;
 
-  TPluginMacro = class(TInterfacedObject, IPluginCommand, IPluginMacro)
+  TPluginCommandList = class(TInterfacedObject, IPluginCommand, IPluginMacro)
     function GetCommands: IInterfaceList; stdcall;
+    function GetName: string; stdcall;
+    procedure SetName(const Value: string); stdcall;
   private
     FCommands: TInterfaceList;
+    FName: string;
   protected
   public
     constructor Create;
     destructor Destroy; override;
     procedure Cancel; stdcall;
-    procedure Execute; stdcall;
+    procedure Execute; overload; stdcall;
+    procedure Execute(CommandName: string); overload; stdcall;
   end;
 
 implementation
@@ -83,19 +93,29 @@ begin
   FReceiver := AReceiver;
 end;
 
-constructor TPluginMacro.Create;
+function TPluginCommand.GetName: string;
+begin
+  FName := FName;
+end;
+
+procedure TPluginCommand.SetName(const Value: string);
+begin
+  FName := Value;
+end;
+
+constructor TPluginCommandList.Create;
 begin
   inherited Create;
   FCommands := TInterfaceList.Create();
 end;
 
-destructor TPluginMacro.Destroy;
+destructor TPluginCommandList.Destroy;
 begin
   FCommands.Free;
   inherited Destroy;
 end;
 
-procedure TPluginMacro.Cancel;
+procedure TPluginCommandList.Cancel;
 var
   i: Integer;
   Command: IPluginCommand;
@@ -107,7 +127,7 @@ begin
   end;
 end;
 
-procedure TPluginMacro.Execute;
+procedure TPluginCommandList.Execute;
 var
   i: Integer;
   Command: IPluginCommand;
@@ -119,10 +139,41 @@ begin
   end;
 end;
 
-function TPluginMacro.GetCommands: IInterfaceList;
+procedure TPluginCommandList.Execute(CommandName: string);
+var
+  i: Integer;
+  Command: IPluginCommand;
+  Found: Boolean;
+begin
+  i := 0;
+  Found := False;
+
+  while (i < FCommands.Count) and not Found do
+  begin
+    Command := FCommands[i] as IPluginCommand;
+    Found := Command.Name = CommandName;
+    if not Found then
+      i := i + 1;
+  end;
+
+  if Found then
+    Command.Execute;
+end;
+
+function TPluginCommandList.GetCommands: IInterfaceList;
 begin
   Result := FCommands;
 end;
 
+function TPluginCommandList.GetName: string;
+begin
+  FName := FName;
+end;
+
+procedure TPluginCommandList.SetName(const Value: string);
+begin
+  FName := Value;
+end;
 
 end.
+

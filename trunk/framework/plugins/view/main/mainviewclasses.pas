@@ -26,13 +26,12 @@ uses Controls, StdXML_TLB, plugintf, dbintf, entintf, viewintf;
 
 type
 
-  ILocalController = interface(IInterface)
-    ['{B0122448-88BA-44DF-9B33-8198AF276DF6}']
-    procedure SetPluginManager(const Value: IPluginManager); stdcall;
+  ILocalController = interface(IPluginController)
+  ['{6B527F75-943F-412B-8F82-0D4AC57687EF}']
   end;
 
-  IContainerActions = interface(IInterface)
-  ['{515D874A-2735-4536-B859-C77A53D9ECEA}']
+  IContainerActions = interface(IPluginContainerActions)
+  ['{BD493971-6242-4EB9-B704-A7FE11CBCE9C}']
     function AddPage(const AName, ACaption: string): TWinControl;
   end;
 
@@ -43,7 +42,7 @@ type
     procedure SetPluginManager(const Value: IPluginManager); stdcall;
   private
     FContainerActions: IContainerActions;
-    FContainerFrame: TWinControl;
+    FPluginContainer: TWinControl;
     FController: ILocalController;
     FParent: TWinControl;
     FPluginManager: IPluginManager;
@@ -53,18 +52,18 @@ type
 
 implementation
 
-uses Classes, mainviewctrl, mainviewgui, SysUtils;
+uses Classes, mainviewgui, mainviewctrl, SysUtils;
 
 constructor TPlugin.Create;
 begin
-  FContainerFrame := TContainerFrame.Create(nil);
-  FContainerActions := TContainerActions.Create(FContainerFrame);
+  FPluginContainer := TContainerFrame.Create(nil);
+  FContainerActions := TContainerActions.Create(FPluginContainer as TContainerFrame);
   FController := TLocalController.Create(FContainerActions);
 end;
 
 procedure TPlugin.Hide;
 begin
-  FContainerFrame.Parent := nil;
+  FPluginContainer.Parent := nil;
 end;
 
 procedure TPlugin.SetParent(const Value: TWinControl);
@@ -79,9 +78,9 @@ end;
 
 procedure TPlugin.Show;
 begin
-  FContainerFrame.Parent := FParent;
-  FContainerFrame.Align := alClient;
-  //AddPage('welcome', '', 'Accueil');
+  FPluginContainer.Parent := FParent;
+  FPluginContainer.Align := alClient;
+  FContainerActions.AddPage('welcome', 'Accueil');
 end;
 
 end.

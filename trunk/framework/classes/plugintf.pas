@@ -30,6 +30,18 @@ type
 
   {------------------------------------------------------------------------------}
 
+  IPluginController = interface(IInterface)
+    ['{B0122448-88BA-44DF-9B33-8198AF276DF6}']
+    procedure SetPluginManager(const Value: IPluginManager); stdcall;
+    property PluginManager: IPluginManager write SetPluginManager;
+  end;
+
+  IPluginContainerActions = interface(IInterface)
+    ['{515D874A-2735-4536-B859-C77A53D9ECEA}']
+  end;
+
+  {------------------------------------------------------------------------------}
+
   INamedPluginInstance = interface(IInterface)
     ['{0FE8167B-8474-4B2C-94EA-2638AB9E2169}']
     function GetInstanceName: string; stdcall;
@@ -71,7 +83,7 @@ type
     property PluginName: string read GetPluginName;
     property LastPluginInstance: IUnknownPlugin read GetLastPluginInstance;
     property NamedInstance[const InstanceName: string]: IPlugin read
-        GetNamedInstance; default;
+    GetNamedInstance; default;
   end;
 
   IPluginManager = interface(IInterface)

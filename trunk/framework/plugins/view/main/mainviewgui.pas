@@ -25,7 +25,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, ComCtrls, ToolWin, Grids, ActnList, ImgList,
-  mainviewctrl, mainviewclasses;
+  mainviewctrl, mainviewclasses, plugintf;
 
 type
   TContainerFrame = class(TFrame)
@@ -92,10 +92,14 @@ type
 
   TContainerActions = class(TInterfacedObject, IContainerActions)
     function AddPage(const AName, ACaption: string): TWinControl;
+    procedure SetPluginController(const Value: IPluginController); stdcall;
   private
-    FControl: TWinControl;
+    FContainerFrame: TContainerFrame;
+    FPluginController: IPluginController;
   public
-    constructor Create(AControl: TWinControl);
+    constructor Create(AContainerFrame: TContainerFrame);
+    property ContainerFrame: TContainerFrame read FContainerFrame write
+        FContainerFrame;
   end;
 
 implementation
@@ -342,14 +346,22 @@ begin
 
 end;
 
-constructor TContainerActions.Create(AControl: TWinControl);
+constructor TContainerActions.Create(AContainerFrame: TContainerFrame);
 begin
-  FControl := AControl;
+  FContainerFrame := AContainerFrame;
+
+  //affectation des commandes
+  
 end;
 
 function TContainerActions.AddPage(const AName, ACaption: string): TWinControl;
 begin
-  TContainerFrame(FControl).AddPage(AName, ACaption);
+  FContainerFrame.AddPage(AName, ACaption);
+end;
+
+procedure TContainerActions.SetPluginController(const Value: IPluginController);
+begin
+  FPluginController := Value;
 end;
 
 end.
