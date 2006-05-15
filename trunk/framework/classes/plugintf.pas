@@ -28,17 +28,7 @@ type
 
   IPluginManager = interface;
 
-  {------------------------------------------------------------------------------}
 
-  IPluginController = interface(IInterface)
-    ['{B0122448-88BA-44DF-9B33-8198AF276DF6}']
-    procedure SetPluginManager(const Value: IPluginManager); stdcall;
-    property PluginManager: IPluginManager write SetPluginManager;
-  end;
-
-  IPluginContainerActions = interface(IInterface)
-    ['{515D874A-2735-4536-B859-C77A53D9ECEA}']
-  end;
 
   {------------------------------------------------------------------------------}
 

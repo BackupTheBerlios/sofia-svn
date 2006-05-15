@@ -92,10 +92,8 @@ type
 
   TContainerActions = class(TInterfacedObject, IContainerActions)
     function AddPage(const AName, ACaption: string): TWinControl;
-    procedure SetPluginController(const Value: IPluginController); stdcall;
   private
     FContainerFrame: TContainerFrame;
-    FPluginController: IPluginController;
   public
     constructor Create(AContainerFrame: TContainerFrame);
     property ContainerFrame: TContainerFrame read FContainerFrame write
@@ -357,11 +355,6 @@ end;
 function TContainerActions.AddPage(const AName, ACaption: string): TWinControl;
 begin
   FContainerFrame.AddPage(AName, ACaption);
-end;
-
-procedure TContainerActions.SetPluginController(const Value: IPluginController);
-begin
-  FPluginController := Value;
 end;
 
 end.

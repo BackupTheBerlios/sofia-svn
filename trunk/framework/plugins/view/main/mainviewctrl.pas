@@ -23,6 +23,11 @@ type
     procedure Execute; override; stdcall;
   end;
 
+  TShowWelcome = class(TPluginCommand)
+  public
+    procedure Execute; override; stdcall;
+  end;
+
   TContainerReceiver = class(TInterfacedObject, IPluginCommandReceiver)
     procedure SetPluginManager(const Value: IPluginManager); stdcall;
   private
@@ -43,20 +48,17 @@ type
   end;
 
   TLocalController = class(TInterfacedObject, ILocalController)
+    function GetPluginCommandList: IPluginMacro; stdcall;
     procedure SetPluginManager(const Value: IPluginManager); stdcall;
   private
-    FCommandList: IInterfaceList;
+    FCommandList: IPluginMacro;
     FContainerActions: IContainerActions;
     FModelReceiver: TModelReceiver;
-    FNewContactCommand: IPluginCommand;
     FPluginManager: IPluginManager;
-    FSearchAndDisplayCommand: IPluginCommand;
-    FSearchCommand: IPluginCommand;
-    FShowSearchResultsCommand: IPluginCommand;
     FContainerReceiver: TContainerReceiver;
   public
     constructor Create(AContainerActions: IContainerActions);
-    property CommandList: IInterfaceList read FCommandList write FCommandList;
+    destructor Destroy; override;
     property ContainerActions: IContainerActions read FContainerActions;
   end;
 
@@ -66,27 +68,39 @@ uses dbintf, SysUtils;
 
 
 constructor TLocalController.Create(AContainerActions: IContainerActions);
+var
+  cmdlst: IPluginMacro;
 begin
+  FCommandList := TPluginCommandList.Create();
+
   //instancier les recepteurs
   FModelReceiver := TModelReceiver.Create;
   FContainerReceiver := TContainerReceiver.Create(FContainerActions);
 
   //instancier les commandes
-  FSearchCommand := TSearchCommand.Create(FModelReceiver);
-  FNewContactCommand := TNewContactCommand.Create(FContainerReceiver);
-  FShowSearchResultsCommand := TShowSearchResultsCommand.Create(FContainerReceiver);
+  FCommandList.Add(TSearchCommand.Create(FModelReceiver), 'search');
+  FCommandList.Add(TNewContactCommand.Create(FContainerReceiver), 'new_contact');
+  FCommandList.Add(TShowSearchResultsCommand.Create(FContainerReceiver), 'show_search_results');
+  FCommandList.Add(TShowWelcome.Create(FContainerReceiver), 'show_welcome');
 
   //instancier les macros
-  FSearchAndDisplayCommand := TPluginCommandList.Create;
-  with (FSearchAndDisplayCommand as IPluginMacro) do
-  begin
-    Commands.Add(FSearchCommand);
-    Commands.Add(FShowSearchResultsCommand);
-  end;
+  cmdlst := TPluginCommandList.Create;
+  cmdlst.Add(FCommandList['search']);
+  cmdlst.Add(FCommandList['show_search_results']);
+  FCommandList.Add(cmdlst as IPluginCommand, 'search_and_display_command');
 
   //affectation des commandes
+end;
 
+destructor TLocalController.Destroy;
+begin
+  FreeAndNil(FCommandList);
+  inherited Destroy;
+end;
 
+function TLocalController.GetPluginCommandList: IPluginMacro;
+begin
+  Result := FCommandList;
 end;
 
 procedure TLocalController.SetPluginManager(const Value: IPluginManager);
@@ -153,6 +167,11 @@ end;
 procedure TShowSearchResultsCommand.Execute;
 begin
   TContainerReceiver(Receiver).AddPage('search', '', 'Résultat de la recherche');
+end;
+
+procedure TShowWelcome.Execute;
+begin
+  TContainerReceiver(Receiver).AddPage('welcome', '', 'Page de démarrage');
 end;
 
 

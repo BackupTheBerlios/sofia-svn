@@ -22,7 +22,7 @@ unit mainviewclasses;
 
 interface
 
-uses Controls, StdXML_TLB, plugintf, dbintf, entintf, viewintf;
+uses Controls, StdXML_TLB, plugintf, dbintf, entintf, viewintf, cmdintf;
 
 type
 
@@ -43,7 +43,7 @@ type
   private
     FContainerActions: IContainerActions;
     FPluginContainer: TWinControl;
-    FController: ILocalController;
+    FLocalController: ILocalController;
     FParent: TWinControl;
     FPluginManager: IPluginManager;
   public
@@ -58,7 +58,7 @@ constructor TPlugin.Create;
 begin
   FPluginContainer := TContainerFrame.Create(nil);
   FContainerActions := TContainerActions.Create(FPluginContainer as TContainerFrame);
-  FController := TLocalController.Create(FContainerActions);
+  FLocalController := TLocalController.Create(FContainerActions);
 end;
 
 procedure TPlugin.Hide;
@@ -80,7 +80,7 @@ procedure TPlugin.Show;
 begin
   FPluginContainer.Parent := FParent;
   FPluginContainer.Align := alClient;
-  FContainerActions.AddPage('welcome', 'Accueil');
+  FLocalController.PluginCommandList['show_welcome'].Execute;
 end;
 
 end.
