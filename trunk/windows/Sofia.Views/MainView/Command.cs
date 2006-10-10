@@ -9,18 +9,18 @@ namespace Sofia.Views.MainView
 	///</summary>
 	public class NewCommand : BaseCommand
 	{	
-		CommandReceiver cmdRcv;
+		CommandReceiver commandReceiver;
 		IController controller;
 		
-		public  NewCommand(CommandReceiver cmdRcv, IController controller, string id, string text, string icon, string accelKey, string description) : base (id, text, icon, accelKey, description) 
+		public  NewCommand(CommandReceiver commandReceiver, IController controller, string id, string text, string icon, string accelKey, string description) : base (id, text, icon, accelKey, description) 
 		{
-			this.cmdRcv  = cmdRcv;
+			this.commandReceiver  = commandReceiver;
 			this.controller = controller;
 		}
 		
 		public override void Execute(string parameters)
 		{			
-			cmdRcv.CreateGui(controller);
+			commandReceiver.CreateGui(controller);
 		}
 		
 	}
@@ -31,19 +31,19 @@ namespace Sofia.Views.MainView
 	public class NewViewCommand : BaseCommand
 	{
 	
-		CommandReceiver cmdRcv;
+		CommandReceiver commandReceiver;
 		string viewName;
 		
-		public NewViewCommand(CommandReceiver cmdRcv, string viewName, string id, string text, string icon, string accelKey, string description) : base (id, text, icon, accelKey, description)
+		public NewViewCommand(CommandReceiver commandReceiver, string viewName, string id, string text, string icon, string accelKey, string description) : base (id, text, icon, accelKey, description)
 		{
-			this.cmdRcv = cmdRcv;
+			this.commandReceiver = commandReceiver;
 			this.viewName = viewName;
 		}
 		
 		public override void Execute(string parameters)
 		{
 			if (viewName.Length != 0) {
-				cmdRcv.NewView(viewName);
+				commandReceiver.NewView(viewName);
 			}
 	    }
 	 }
@@ -53,16 +53,16 @@ namespace Sofia.Views.MainView
 	///</summary>
 	public class SaveCurrentViewCommand : BaseCommand
 	{
-		CommandReceiver cmdRcv;
+		CommandReceiver commandReceiver;
 		
-		public SaveCurrentViewCommand(CommandReceiver cmdRcv, string id, string text, string icon, string accelKey, string description) : base (id, text, icon, accelKey, description)
+		public SaveCurrentViewCommand(CommandReceiver commandReceiver, string id, string text, string icon, string accelKey, string description) : base (id, text, icon, accelKey, description)
 		{
-			this.cmdRcv = cmdRcv;
+			this.commandReceiver = commandReceiver;
 		}
 		
 		public override void Execute(string parameters)
 		{
-			cmdRcv.SaveCurrentView();
+			commandReceiver.SaveCurrentView();
 	    }
 	 }
 	 
@@ -71,12 +71,11 @@ namespace Sofia.Views.MainView
 	///</summary>
 	public class OpenViewCommand : BaseCommand
 	{
-	
-		CommandReceiver cmdRcv;
+		CommandReceiver commandReceiver;
 				
-		public OpenViewCommand(CommandReceiver cmdRcv, string id, string text, string icon, string accelKey, string description) : base (id, text, icon, accelKey, description)
+		public OpenViewCommand(CommandReceiver commandReceiver, string id, string text, string icon, string accelKey, string description) : base (id, text, icon, accelKey, description)
 		{
-			this.cmdRcv = cmdRcv;
+			this.commandReceiver = commandReceiver;
 		}
 		
 		public override void Execute(string parameters)
@@ -84,9 +83,9 @@ namespace Sofia.Views.MainView
     		base.Execute(parameters);
     		
      		string name = ParamList["name"].ToString();
-     		string documentid = ParamList["documentid"].ToString();;
+     		string documentid = ParamList["documentid"].ToString();
      		
-			cmdRcv.OpenView(name, documentid);
+			commandReceiver.OpenView(name, documentid);
 	    }
 	 }
 

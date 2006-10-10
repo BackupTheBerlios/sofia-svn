@@ -12,6 +12,12 @@ namespace Sofia.Core.Model
     public class Model : IModel
     {
 		ObjectContainer db;
+		XPathNavigatorFacade xpn;
+		
+		public Model()
+		{
+			xpn = new XPathNavigatorFacade();
+		}
 		
     	#region implémentation de l'interface
     	
@@ -19,8 +25,7 @@ namespace Sofia.Core.Model
     	{
     		db = Db4o.OpenFile("sofia.data");
     		try
-    		{    	  		
-    			XPathNavigatorFacade xpn = new XPathNavigatorFacade();
+    		{    	  		    			
     			xpn.LoadXML(request);
     			ArrayList operations = xpn.GetAttributes("//Request", "operation");
      			ArrayList objects = xpn.GetAttributes("//Request", "object");
@@ -30,20 +35,14 @@ namespace Sofia.Core.Model
      				string ope = operations[i].ToString();
      				string obj = objects[i].ToString();
      		    
-					string xValue = "//Request[@object='{0}']/Fields//Field[@name='{1}']";
-     		    
      		    	if (ope == "Insert") {
      		    		
-     		    		if (obj == "Dossier")  {
-     		    		
-     		    			string documentId = xpn.GetValue(string.Format(xValue, obj, "documentid"));
-     		    			string creation = xpn.GetValue(string.Format(xValue, obj, "creation"));
-     		    			string caption = xpn.GetValue(string.Format(xValue, obj, "caption"));
-							AddDossier(documentId, creation, caption);
-    					}
-    				}
+     		    		if (obj == "Dossier") 
+     		    			AddDossier();
+							
+    				}      				
     			}
-    					
+    			
     	  		return null;
     	  		
     	  	}
@@ -55,12 +54,22 @@ namespace Sofia.Core.Model
     	
     	#endregion
     	
-    	
-    	void AddDossier(string documentId, string creation, string caption)
+    	private string GetValue(string objectName, string attributeName)
     	{
+    	 	string xValue = "//Request[@object='{0}']/Fields//Field[@name='{1}']";
+    	 	return xpn.GetValue(string.Format(xValue, objectName, attributeName));
+    	}
+    	
+       	void AddDossier()
+    	{
+    		string objectName = "Dossier";
+    		string folderId = GetValue(objectName, "folderid");
+     		string creation = GetValue(objectName, "creation");
+     		string caption = GetValue(objectName, "caption");
+    	
     		System.IFormatProvider frmt = new System.Globalization.CultureInfo("fr-FR", true);
 			DateTime dt = DateTime.ParseExact(creation, "dd/MM/yyyy HH:mm:ss", frmt);
-    		Dossier dossier = new Dossier(documentId, dt, caption);
+    		Dossier dossier = new Dossier(folderId, dt, caption);
     		db.Set(dossier);
     		Console.WriteLine("Dossier ajouté : " + dossier.ToString());
     	}

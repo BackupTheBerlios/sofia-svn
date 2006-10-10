@@ -6,19 +6,19 @@ namespace Sofia.Core.Model
 	
 	public class Dossier
     {
-    	string documentId;
+    	string folderId;
         string caption;
         DateTime creation;
         
-        public Dossier(string documentId, DateTime creation, string caption)
+        public Dossier(string folderId, DateTime creation, string caption)
         {
-        	this.documentId = documentId;
+        	this.folderId = folderId;
         	this.creation = creation;
             this.caption = caption;            
         }
         
-        public string DocumentId { 
-        	get { return documentId; } 
+        public string FolderId { 
+        	get { return folderId; } 
         }
         
         public string Caption { 

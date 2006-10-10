@@ -4,11 +4,10 @@ using System.Reflection;
 using com.db4o;
 
 namespace Sofia.Core
-{  
+{
 	
 	public class Proxy: MarshalByRefObject
-	{
-		
+	{		
 		public ModelRequest LoadModel(string assemblyFilename, string request)
 		{
 			Assembly Dynamic = Assembly.LoadFrom(assemblyFilename);

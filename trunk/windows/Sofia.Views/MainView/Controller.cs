@@ -11,15 +11,12 @@ using Sofia.Core.XmlTools;
 namespace Sofia.Views.MainView
 {
 
-
-
 	/// <summary>
 	/// Controleur de la vue principale
 	/// </summary>	
 	public class Controller : Core.BaseController
 	{
-		CommandReceiver cmdRcv;
-		CommandManager cmdMgr;
+		CommandReceiver commandReceiver;
 		
   		ArrayList views;
 		
@@ -27,15 +24,12 @@ namespace Sofia.Views.MainView
 			//Initisalisation de l'application
 			Application.Init();			
 			
-		  	//Création du gestionnaire de commande
-		  	cmdMgr = new CommandManager();
-		  	
 		  	//Création du receiver des commandes
-		  	cmdRcv = new CommandReceiver();
+		  	commandReceiver = new CommandReceiver();
 		  	 		  	
 		  	//Création des commandes
-		  	cmdMgr.RegisterCommand(new NewCommand(cmdRcv, this, "New", "", "", "", ""));
-		  	cmdMgr.RegisterCommand(new SaveCurrentViewCommand(cmdRcv, "SaveCurrentView", "Sauver",  Gtk.Stock.Save, "", "Enregistrer les modifications apportées dans le document actif."));
+		  	CommandManager.RegisterCommand(new NewCommand(commandReceiver, this, "New", "", "", "", ""));
+		  	CommandManager.RegisterCommand(new SaveCurrentViewCommand(commandReceiver, "SaveCurrentView", "Sauver",  Gtk.Stock.Save, "", "Enregistrer les modifications apportées dans le document actif."));
 
 		  	RegisterNewViewCommands();
 		  	
@@ -44,25 +38,18 @@ namespace Sofia.Views.MainView
 		  	
 		  	//Création des bouton d'instanciation de vues
 		  	CreateToolButtons();
-
+		  	
 		  	//Boucle principale de l'application
 		  	Application.Run ();
 		}		
-
-		/// <summary>
-		/// Retourne les actions de l'interface graphique de la vue
-		/// </summary>
-    	public override ICommandReceiver CommandReceiver {
-			get { return (ICommandReceiver)cmdRcv; }
-		}
 		
 		/// <summary>
-		/// Retourne le gestionnaire d'actions de la vue
+		/// Implémentationde l'interface 
 		/// </summary>
-		public override CommandManager CommandManager { 
-			get { return cmdMgr; } 
+		public override IView View {
+			get { return commandReceiver.View; }
 		}
-    	
+
 		/// <summary>
 		/// Chargement de l'assembly d'une vue 
 		/// </summary>
@@ -74,12 +61,9 @@ namespace Sofia.Views.MainView
       		assemblyName.CodeBase = String.Concat("file:///", Directory.GetCurrentDirectory());
 
 			Console.WriteLine("Chargement de " + assemblyName.CodeBase + "/" + assemblyName.FullName + ".dll...");
-      		Assembly a = Assembly.Load(assemblyName);
-      	
+      		Assembly assembly = Assembly.Load(assemblyName);
       		
-      		//object o = a.CreateInstance("Sofia.Views." + ident + ".Controller");
-      		//return (o as IController);      
-      		return null;
+     		return (IController) assembly.CreateInstance("Sofia.Views." + ident + ".Controller");      		
     	}
     	
 		/// <summary>
@@ -88,19 +72,19 @@ namespace Sofia.Views.MainView
     	public void RegisterNewViewCommand(string viewName)
     	{
     		//Récupération du controleur de la vue
-	    	IController newController = LoadController(viewName);
-       		if (newController == null) 
+	    	IController controller = LoadController(viewName);
+       		if (controller == null) 
 	   			throw new InvalidOperationException("L'assembly n'a pas défini de controleur.");
-       		
+	   			
          	//Récupère les propriété de la commande New dans la vue	
 	       	string cmdId = string.Format("New_{0}", viewName);
-	       	CommandProperties cmdProp = newController.CommandManager.GetProperties("New");
-       		if (cmdProp == null) 
+	       	CommandProperties commandProperties = controller.CommandManager.GetProperties("New");
+       		if (commandProperties == null) 
 	   			throw new InvalidOperationException(string.Format("La commande {0} n'existe pas dans la vue {1}",  cmdId, viewName));
 
 			//Enregistre la commande d'insertion de l'interface graphique dans la vue principale
-	       	ICommand cmd = new NewViewCommand(cmdRcv, viewName, cmdId, cmdProp.Text, cmdProp.Icon, cmdProp.AccelKey, cmdProp.Description);
-	       	cmdMgr.RegisterCommand(cmd);
+	       	ICommand command = new NewViewCommand(commandReceiver, viewName, cmdId, commandProperties.Text, commandProperties.Icon, commandProperties.AccelKey, commandProperties.Description);
+	       	CommandManager.RegisterCommand(command);
 	       	
 	   	}
 	   	
@@ -129,9 +113,9 @@ namespace Sofia.Views.MainView
    			
    			//Enregistrement des commandes d'ouverture
   			IEnumerator enumerator = views.GetEnumerator(); 
-  			//while (enumerator.MoveNext()) {
-    			//RegisterNewViewCommand(enumerator.Current.ToString());
-    		//}
+  			while (enumerator.MoveNext()) {
+    			RegisterNewViewCommand(enumerator.Current.ToString());
+    		}
     		
 	  	}
 	  	
@@ -140,27 +124,27 @@ namespace Sofia.Views.MainView
 	   	///</smmary>
 	   	public void CreateToolButtons()
 	   	{	
-	   		ICommand cmd;
+	   		ICommand command;
 	   		ToolbarButton button;
 	   		
 	   		//Ajout des boutons de création des vues
 	   		foreach (string ident in views) {
 	   			string cmdId = string.Format("New_{0}",  ident);	
-	   			cmd = this.CommandManager.GetCommand(cmdId);	   			
-	   			if (cmd != null) {	   			   			
-		       		button = new ToolbarButton(cmd);		       				
-		       		cmdRcv.AddToolItem(button);
+	   			command = CommandManager.GetCommand(cmdId);	   			
+	   			if (command != null) {	   			   			
+		       		button = new ToolbarButton(command);		       				
+		       		commandReceiver.AddToolItem(button);
 		       	}		   	
 		     }
 
 			//Séparateur
-			cmdRcv.AddToolItem(new SeparatorToolItem());
+			commandReceiver.AddToolItem(new SeparatorToolItem());
 		     
 		     //Ajout du bouton de sauvegarde de la vue
-	        cmd = this.CommandManager.GetCommand("SaveCurrentView");
-       		button = new ToolbarButton(cmd);
+	        command = CommandManager.GetCommand("SaveCurrentView");
+       		button = new ToolbarButton(command);
        		button.Clicked += new EventHandler(OnSaveCurrentViewClicked);
-       		cmdRcv.AddToolItem(button);
+       		commandReceiver.AddToolItem(button);
 	     
 		 }
 

@@ -11,18 +11,18 @@ namespace Sofia.Views.ClientView
 	public class NewCommand : BaseCommand
 	{
 	
-		CommandReceiver cmdRcv;
+		CommandReceiver commandReceiver;
 		IController controller;
 		
-		public  NewCommand(CommandReceiver cmdRcv, IController controller, string id, string text, string icon, string accelKey, string description) : base (id, text, icon, accelKey, description) 
+		public  NewCommand(CommandReceiver commandReceiver, IController controller, string id, string text, string icon, string accelKey, string description) : base (id, text, icon, accelKey, description) 
 		{
-			this.cmdRcv  = cmdRcv;
+			this.commandReceiver  = commandReceiver;
 			this.controller = controller;
 		}
 		
 		public override void Execute(string parameters)
 		{
-			cmdRcv.CreateGui(controller);
+			commandReceiver.CreateGui(controller);
 		}
 		
 	}

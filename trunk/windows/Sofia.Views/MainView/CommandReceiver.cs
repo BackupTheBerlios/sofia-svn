@@ -40,10 +40,10 @@ namespace Sofia.Views.MainView
 		///Récupération de controleur de la vue viewName
 		///</summary>
 		public IController GetController(string viewName) {
-		   	IController newController = viewGui.Controller.LoadController(viewName);
-       		if (newController == null) 
+		   	IController controller = viewGui.Controller.LoadController(viewName);
+       		if (controller == null) 
 	   			throw new InvalidOperationException("L'assembly n'a pas défini de controleur.");
-	   		return newController;
+	   		return controller;
 	   	}
 
 		///<summary>
@@ -54,42 +54,42 @@ namespace Sofia.Views.MainView
 			string key = "none";
 		
     		//Récupération du controleur de la vue
-	    	IController newController = GetController(viewName);
+	    	IController controller = GetController(viewName);
 	   			
 	       	//Commande d'initialisation de l'interface graphique.
 	       	//Permet d'instancier l'interface graphique de la vue à partir du controleur
-	       	newController.ExecuteCommand("New", "");
+	       	controller.ExecuteCommand("New", "");
 	       			
          	//Récupération de l'interface graphique de la vue
-       		IView newView = newController.CommandReceiver.View;
-       		if (newView == null)
+       		IView view = controller.View;
+       		if (view == null)
        			throw new InvalidOperationException("L'interface graphique de la vue n'a pas pu être créée.");
 	       			
 	       	//Debug
-			Console.WriteLine("Appel commande NewView : " + newView.Caption + " dans " + newView.Destination);
+			Console.WriteLine("Appel commande NewView : " + view.Caption + " dans " + view.Destination);
 			
 			//Récupération du control de la vue
-			Gtk.HBox hbox = newView.VisualComponent;			
+			Gtk.HBox hbox = view.VisualComponent;			
 			if (hbox == null)
 				throw new InvalidOperationException("La vue n'expose pas son interface graphique.");
 			
 			//positionnement dans le Notebook principal
-	       	if (newView.Destination.Equals("default")) {	       		
-	       		viewGui.NotebookViews.AppendPage(hbox, new Gtk.Label(newView.Caption));
+	       	if (view.Destination.Equals("default")) {	       		
+	       		viewGui.NotebookViews.AppendPage(hbox, new Gtk.Label(view.Caption));
 	       		key = (viewGui.NotebookViews.NPages - 1).ToString();
-	       		newView.Initialize();
+	       		view.Initialize();
 	       		hbox.ShowAll();
 	       	}
 	       		
 	       	//positionnement latéral gauche
-	       	if (newView.Destination.Equals("left")) {
+	       	if (view.Destination.Equals("left")) {
 	       		key = "left";
 	       		viewGui.HpanedMain.Pack1(hbox, true, false);
 	       		hbox.ShowAll();
 	       	}
 	       	
 	       	//Ajout dans la liste des controleurs
-	        viewGui.Controller.RegisterController(key, newController);
+	        viewGui.Controller.RegisterController(key, controller);
 	    }
 		
 	    ///<summary>
@@ -99,12 +99,12 @@ namespace Sofia.Views.MainView
 		{
     		//Récupération du controleur de la vue active
     		string key = viewGui.NotebookViews.CurrentPage.ToString();
-    		IController ctrl = (IController) viewGui.Controller.RegisteredControllers[key];
+    		IController controller = (IController) viewGui.Controller.RegisteredControllers[key];
     		
-    		if (ctrl == null)
+    		if (controller == null)
     			throw new InvalidOperationException(string.Format("Pas de controleur associé à la clé {0}", key));
     		
-	    	string idDoc = ctrl.CommandReceiver.View.DocumentID;
+	    	string idDoc = controller.View.DocumentID;
 	    	
 	    	//Si l'identifiant de document est nul alors c'est un nouveau document, donc un nouveau dossier
 	    	//dans le cas d'un document maitre
@@ -119,7 +119,7 @@ namespace Sofia.Views.MainView
    			xmlDoc.AddAttributeNode(eRequest, "object", "Dossier");
  			XmlElement eFields = xmlDoc.AddNode(eRequest, "Fields", "");
  			eField = xmlDoc.AddNode(eFields, "Field", Guid.NewGuid().ToString());
- 			xmlDoc.AddAttributeNode(eField, "name", "documentid");
+ 			xmlDoc.AddAttributeNode(eField, "name", "folderid");
  			eField = xmlDoc.AddNode(eFields, "Field", DateTime.Now.ToString());
  			xmlDoc.AddAttributeNode(eField, "name", "creation");
  			eField = xmlDoc.AddNode(eFields, "Field", "DUPONT Pierre");
@@ -127,11 +127,11 @@ namespace Sofia.Views.MainView
 	
 			Console.WriteLine(xmlDoc.ToString());
 		
-   			new ModelFactory("Model").SendRequest(xmlDoc.ToString());
+   			 viewGui.Controller.RequestModel(xmlDoc.ToString());
   		}
   		
   	    ///<summary>
-		///Sauvegarde du document de la vue
+		///Ouverture d'une vue
 		///</summary>
 		public void OpenView(string name, string documentid)
 		{

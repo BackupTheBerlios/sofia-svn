@@ -72,6 +72,7 @@ namespace Sofia.Core
 			glade.Autoconnect (this);
 			
 			Window win = (Window) glade [widgetName];
+			win.Visible = false;
 			Widget child = win.Child;
 			
 			child.Reparent (this);

@@ -2,19 +2,17 @@
 using System;
 using Sofia.Core;
 
-namespace Sofia.Views.ClientView
+namespace Sofia.Views.WelcomeView
 {
 	
 	/// <summary>
 	/// Classe receiver 
 	/// </summary>
-	public class CommandReceiver : BaseCommandReceiver
+	public class GuiActions : BaseGuiActions
 	{
 		ViewGui viewGui;
 		
-		public override IView View { 
-			get {	return (IView) viewGui; }
-		}
+		public override IView View { get { return (IView)viewGui; } }
 		
 		/// <summary>
 		/// Création de l'interface graphique 
@@ -22,7 +20,7 @@ namespace Sofia.Views.ClientView
 		public void CreateGui(IController controller)
 		{			
 			viewGui = new ViewGui();
-		  	viewGui.Controller = controller;
+			viewGui.Controller = controller;
 		  	viewGui.Initialize();
 		}
 

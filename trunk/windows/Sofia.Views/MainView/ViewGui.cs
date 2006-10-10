@@ -21,13 +21,15 @@ namespace Sofia.Views.MainView
 		
 		#endregion
 		
-		
 		Glade.XML glade;
 
 		public ViewGui () : base ("")
 		{
 			glade = new XML (Assembly.GetCallingAssembly (), "gui.glade", "ViewGui", null);
 			glade.Autoconnect (this);
+			
+			Window win = (Window) glade ["ViewGui"];
+			win.Maximize();
 			
 			//Initialisation du menu principal
 			MainUIManager uim = new MainUIManager (this);
@@ -66,7 +68,7 @@ namespace Sofia.Views.MainView
 		public void Initialize () 
 		{
 			//Vues affichées par défaut à l'ouverture de l'application
-			//controller.ExecuteCommand("New_StartBarView", "");
+			controller.ExecuteCommand("New_StartBarView", "");
 		}
                                      	
     	#region Accesseurs pour les controles

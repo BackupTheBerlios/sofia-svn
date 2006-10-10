@@ -10,7 +10,6 @@ namespace Sofia.Views.ClientView
 	public class ViewGui : BaseView
 	{
 	
-		
 		public ViewGui () : base ("gui.glade", "ViewGui")
 		{
 		}
