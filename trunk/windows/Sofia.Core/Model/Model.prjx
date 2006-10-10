@@ -1,0 +1,30 @@
+<Project name="Model" standardNamespace="Model" description="" newfilesearch="None" enableviewstate="True" version="1.1" projecttype="C#">
+  <Contents>
+    <File name=".\AssemblyInfo.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Model.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Dossier.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\IModel.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+  </Contents>
+  <References>
+    <Reference type="Assembly" refto="..\..\..\..\..\..\..\db4o-5.2\dll\db4o.dll" localcopy="True" />
+    <Reference type="Project" refto="XmlTools" localcopy="True" />
+  </References>
+  <DeploymentInformation target="C:\Documents and Settings\AZemour\Mes documents\SharpDevelop Projects\Sofia\bin" script="" strategy="File" />
+  <Configuration runwithwarnings="True" name="Debug">
+    <CodeGeneration runtime="Mono" compiler="Csc" compilerversion="Standard" warninglevel="4" nowarn="" includedebuginformation="False" optimize="False" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" target="Library" definesymbols="" generatexmldocumentation="False" win32Icon="" noconfig="False" nostdlib="False" />
+    <Execution commandlineparameters="" consolepause="False" />
+    <Output directory="..\..\bin\Debug" assembly="Model" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+  </Configuration>
+  <Configurations active="Debug">
+    <Configuration runwithwarnings="True" name="Debug">
+      <CodeGeneration runtime="Mono" compiler="Csc" compilerversion="Standard" warninglevel="4" nowarn="" includedebuginformation="False" optimize="False" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" target="Library" definesymbols="" generatexmldocumentation="False" win32Icon="" noconfig="False" nostdlib="False" />
+      <Execution commandlineparameters="" consolepause="False" />
+      <Output directory="..\..\bin\Debug" assembly="Model" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+    </Configuration>
+    <Configuration runwithwarnings="True" name="Release">
+      <CodeGeneration runtime="MsNet" compiler="Csc" compilerversion="" warninglevel="4" nowarn="" includedebuginformation="False" optimize="True" unsafecodeallowed="False" generateoverflowchecks="False" mainclass="" target="Library" definesymbols="" generatexmldocumentation="False" win32Icon="" noconfig="False" nostdlib="False" />
+      <Execution commandlineparameters="" consolepause="False" />
+      <Output directory=".\bin\Release" assembly="Model" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+    </Configuration>
+  </Configurations>
+</Project>

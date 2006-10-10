@@ -1,0 +1,16 @@
+<Combine fileversion="1.0" name="StartBarView" description="">
+  <StartMode startupentry="StartBarView" single="True">
+    <Execute entry="StartBarView" type="None" />
+  </StartMode>
+  <Entries>
+    <Entry filename=".\StartBarView.prjx" />
+  </Entries>
+  <Configurations active="Debug">
+    <Configuration name="Release">
+      <Entry name="StartBarView" configurationname="Debug" build="False" />
+    </Configuration>
+    <Configuration name="Debug">
+      <Entry name="StartBarView" configurationname="Debug" build="False" />
+    </Configuration>
+  </Configurations>
+</Combine>

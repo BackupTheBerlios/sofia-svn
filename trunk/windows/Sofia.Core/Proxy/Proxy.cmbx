@@ -1,0 +1,16 @@
+<Combine fileversion="1.0" name="Proxy" description="">
+  <StartMode startupentry="Proxy" single="True">
+    <Execute entry="Proxy" type="None" />
+  </StartMode>
+  <Entries>
+    <Entry filename=".\Proxy.prjx" />
+  </Entries>
+  <Configurations active="Debug">
+    <Configuration name="Release">
+      <Entry name="Proxy" configurationname="Debug" build="False" />
+    </Configuration>
+    <Configuration name="Debug">
+      <Entry name="Proxy" configurationname="Debug" build="False" />
+    </Configuration>
+  </Configurations>
+</Combine>
