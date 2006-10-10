@@ -2,12 +2,16 @@
   <Contents>
     <File name=".\AssemblyInfo.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
     <File name="F:\downloads\Sofia\Sofia.Views\StartBarView\gui.glade" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\ViewGui.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Command.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\CommandReceiver.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Controller.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
   </Contents>
   <References>
-    <Reference type="Assembly" refto="..\..\..\..\..\..\..\mono\lib\mono\gtk-sharp-2.0\gtk-sharp.dll" localcopy="True" />
-    <Reference type="Assembly" refto="..\..\..\..\..\..\..\mono\lib\mono\gtk-sharp-2.0\atk-sharp.dll" localcopy="True" />
-    <Reference type="Assembly" refto="..\..\..\..\..\..\..\mono\lib\mono\gtk-sharp-2.0\glade-sharp.dll" localcopy="True" />
-    <Reference type="Assembly" refto="..\..\..\..\..\..\..\mono\lib\mono\gtk-sharp-2.0\glib-sharp.dll" localcopy="True" />
+    <Reference type="Assembly" refto="..\..\gtk-sharp-2.0\gtk-sharp.dll" localcopy="True" />
+    <Reference type="Assembly" refto="..\..\gtk-sharp-2.0\atk-sharp.dll" localcopy="True" />
+    <Reference type="Assembly" refto="..\..\gtk-sharp-2.0\glade-sharp.dll" localcopy="True" />
+    <Reference type="Assembly" refto="..\..\gtk-sharp-2.0\glib-sharp.dll" localcopy="True" />
     <Reference type="Project" refto="Command" localcopy="True" />
     <Reference type="Project" refto="ViewController" localcopy="True" />
   </References>

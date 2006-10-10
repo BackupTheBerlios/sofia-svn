@@ -4,7 +4,7 @@
     <File name=".\Main.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
   </Contents>
   <References>
-    <Reference type="Assembly" refto="..\..\..\..\..\..\..\mono\lib\mono\gtk-sharp-2.0\gtk-sharp.dll" localcopy="True" />
+    <Reference type="Assembly" refto="..\..\gtk-sharp-2.0\gtk-sharp.dll" localcopy="True" />
   </References>
   <DeploymentInformation target="C:\Documents and Settings\AZemour\Mes documents\SharpDevelop Projects\Sofia\bin" script="" strategy="File" />
   <Configuration runwithwarnings="True" name="Debug">

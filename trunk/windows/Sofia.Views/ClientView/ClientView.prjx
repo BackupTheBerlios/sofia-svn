@@ -8,10 +8,10 @@
     <File name="F:\downloads\Sofia\Sofia.Views\MainView\gui.glade" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
   </Contents>
   <References>
-    <Reference type="Assembly" refto="..\..\..\..\..\..\..\mono\lib\mono\gtk-sharp-2.0\gtk-sharp.dll" localcopy="True" />
-    <Reference type="Assembly" refto="..\..\..\..\..\..\..\mono\lib\mono\gtk-sharp-2.0\atk-sharp.dll" localcopy="True" />
-    <Reference type="Assembly" refto="..\..\..\..\..\..\..\mono\lib\mono\gtk-sharp-2.0\glade-sharp.dll" localcopy="True" />
-    <Reference type="Assembly" refto="..\..\..\..\..\..\..\mono\lib\mono\gtk-sharp-2.0\glib-sharp.dll" localcopy="True" />
+    <Reference type="Assembly" refto="..\..\gtk-sharp-2.0\gtk-sharp.dll" localcopy="True" />
+    <Reference type="Assembly" refto="..\..\gtk-sharp-2.0\atk-sharp.dll" localcopy="True" />
+    <Reference type="Assembly" refto="..\..\gtk-sharp-2.0\glade-sharp.dll" localcopy="True" />
+    <Reference type="Assembly" refto="..\..\gtk-sharp-2.0\glib-sharp.dll" localcopy="True" />
     <Reference type="Project" refto="ViewController" localcopy="True" />
     <Reference type="Project" refto="Command" localcopy="True" />
   </References>

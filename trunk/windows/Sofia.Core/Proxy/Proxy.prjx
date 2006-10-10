@@ -5,7 +5,7 @@
     <File name=".\ModelFactory.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
   </Contents>
   <References>
-    <Reference type="Assembly" refto="..\..\..\..\..\..\..\db4o-5.2\dll\db4o.dll" localcopy="True" />
+    <Reference type="Assembly" refto="..\..\db4o-5.2\db4o.dll" localcopy="True" />
     <Reference type="Project" refto="Model" localcopy="True" />
   </References>
   <DeploymentInformation target="C:\Documents and Settings\AZemour\Mes documents\SharpDevelop Projects\Sofia\bin" script="" strategy="File" />

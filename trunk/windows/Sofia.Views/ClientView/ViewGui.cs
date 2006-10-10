@@ -20,6 +20,10 @@ namespace Sofia.Views.ClientView
     		return "";
     	}
     	
+    	public override string Destination {
+			get { return "default"; } 
+		}
+    	
     	public override XmlDocument SaveToXML() {
     	
     		XmlElement fields;

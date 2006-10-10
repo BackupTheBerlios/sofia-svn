@@ -18,7 +18,7 @@ namespace Sofia.Views.MainView
 			actions = new ActionGroup ("Actions");
 
 			ActionEntry actionEntryQuit;
-			actionEntryQuit = new ActionEntry("Quitter", Gtk.Stock.Quit,  null, "<control>Q", "Quitter l'environnement Sofia",   Quit);			
+			actionEntryQuit = new ActionEntry("Quitter", Gtk.Stock.Quit,  null, "<control>Q", "Quitter l'environnement Sofia", new EventHandler (Quit));
 
 			ActionEntry[] entries = new ActionEntry [] {
 				new ActionEntry ("Fichier", null,	"_Fichier", null, null, null),
@@ -26,9 +26,9 @@ namespace Sofia.Views.MainView
 				new ActionEntry ("Rechercher", null,	"Recher_cher", null, null, null),
 				new ActionEntry ("Aide", null, "_Aide",  null, null, null),
 				actionEntryQuit,
-				new ActionEntry ("Préférences", Gtk.Stock.Preferences, null, null, "Préférences",  Preferences),
-				new ActionEntry ("RubriquesAide", Gtk.Stock.Help,  "Rubriques d'_aide",	 "F1", "Aide - Rubriques d'aide", Help),
-				new ActionEntry ("APropos", Gtk.Stock.About, null, null, "A propos de l'environnement Sofia", About)
+				new ActionEntry ("Préférences", Gtk.Stock.Preferences, null, null, "Préférences", new EventHandler (Preferences)),
+				new ActionEntry ("RubriquesAide", Gtk.Stock.Help,  "Rubriques d'_aide",	 "F1", "Aide - Rubriques d'aide", new EventHandler (Help)),
+				new ActionEntry ("APropos", Gtk.Stock.About, null, null, "A propos de l'environnement Sofia", new EventHandler (About))
 			};
 			actions.Add (entries);
 
