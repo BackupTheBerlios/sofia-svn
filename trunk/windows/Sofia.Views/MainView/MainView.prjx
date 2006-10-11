@@ -6,7 +6,7 @@
     <File name=".\CommandReceiver.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
     <File name=".\Controller.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
     <File name=".\MainUIManager.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
-    <File name="F:\downloads\Sofia\Sofia.Views\MainView\gui.glade" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\gui.glade" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
   </Contents>
   <References>
     <Reference type="Assembly" refto="..\..\gtk-sharp-2.0\glib-sharp.dll" localcopy="True" />

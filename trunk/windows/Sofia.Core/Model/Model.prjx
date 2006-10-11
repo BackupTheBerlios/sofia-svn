@@ -4,6 +4,7 @@
     <File name=".\Model.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
     <File name=".\Dossier.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
     <File name=".\IModel.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Document.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
   </Contents>
   <References>
     <Reference type="Assembly" refto="..\..\db4o-5.2\db4o.dll" localcopy="True" />
