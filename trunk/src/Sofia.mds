@@ -1,0 +1,24 @@
+<Combine name="Sofia" fileversion="2.0" outputpath="./build/bin/">
+  <Configurations active="Debug">
+    <Configuration name="Debug" ctype="CombineConfiguration">
+      <Entry build="True" name="Sofia.Core" configuration="" />
+      <Entry build="True" name="Sofia.Views" configuration="" />
+      <Entry build="True" name="Sofia.Components" configuration="" />
+    </Configuration>
+    <Configuration name="Release" ctype="CombineConfiguration">
+      <Entry build="True" name="Sofia.Core" configuration="" />
+      <Entry build="True" name="Sofia.Views" configuration="" />
+      <Entry build="True" name="Sofia.Components" configuration="" />
+    </Configuration>
+  </Configurations>
+  <StartMode startupentry="Sofia.Core" single="True">
+    <Execute type="None" entry="Sofia.Core" />
+    <Execute type="None" entry="Sofia.Views" />
+    <Execute type="None" entry="Sofia.Components" />
+  </StartMode>
+  <Entries>
+    <Entry filename="./Sofia.Core/Sofia.Core.mds" />
+    <Entry filename="./Sofia.Views/Sofia.Views.mds" />
+    <Entry filename="./Sofia.Components/Sofia.Components.mds" />
+  </Entries>
+</Combine>
