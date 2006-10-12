@@ -1,36 +1,36 @@
 <Project name="StartBarView" standardNamespace="StartBarView" description="" newfilesearch="None" enableviewstate="True" version="1.1" projecttype="C#">
   <Contents>
-    <File name="..\..\src\Sofia.Views\StartBarView\AssemblyInfo.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
-    <File name="..\..\src\Sofia.Views\StartBarView\ViewGui.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
-    <File name="..\..\src\Sofia.Views\StartBarView\Command.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
-    <File name="..\..\src\Sofia.Views\StartBarView\CommandReceiver.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
-    <File name="..\..\src\Sofia.Views\StartBarView\Controller.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
-    <File name="..\..\src\Sofia.Views\StartBarView\gui.glade" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\AssemblyInfo.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\ViewGui.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Command.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\CommandReceiver.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Controller.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\gui.glade" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
   </Contents>
   <References>
-    <Reference type="Assembly" refto="..\gtk-sharp-2.0\gtk-sharp.dll" localcopy="True" />
-    <Reference type="Assembly" refto="..\gtk-sharp-2.0\atk-sharp.dll" localcopy="True" />
-    <Reference type="Assembly" refto="..\gtk-sharp-2.0\glade-sharp.dll" localcopy="True" />
-    <Reference type="Assembly" refto="..\gtk-sharp-2.0\glib-sharp.dll" localcopy="True" />
+    <Reference type="Assembly" refto="..\..\..\windows\gtk-sharp-2.0\gtk-sharp.dll" localcopy="True" />
+    <Reference type="Assembly" refto="..\..\..\windows\gtk-sharp-2.0\atk-sharp.dll" localcopy="True" />
+    <Reference type="Assembly" refto="..\..\..\windows\gtk-sharp-2.0\glade-sharp.dll" localcopy="True" />
+    <Reference type="Assembly" refto="..\..\..\windows\gtk-sharp-2.0\glib-sharp.dll" localcopy="True" />
     <Reference type="Project" refto="Command" localcopy="True" />
     <Reference type="Project" refto="ViewController" localcopy="True" />
   </References>
-  <DeploymentInformation target="..\bin" script="" strategy="File" />
+  <DeploymentInformation target="..\..\..\windows\bin" script="" strategy="File" />
   <Configuration runwithwarnings="True" name="Debug">
     <CodeGeneration runtime="Mono" compiler="Csc" compilerversion="Standard" warninglevel="4" nowarn="" includedebuginformation="False" optimize="False" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" target="Library" definesymbols="" generatexmldocumentation="False" win32Icon="" noconfig="False" nostdlib="False" />
     <Execution commandlineparameters="" consolepause="False" />
-    <Output directory="..\bin\Debug" assembly="StartBarView" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+    <Output directory="..\..\..\windows\bin\Debug" assembly="StartBarView" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
   </Configuration>
   <Configurations active="Debug">
     <Configuration runwithwarnings="True" name="Debug">
       <CodeGeneration runtime="Mono" compiler="Csc" compilerversion="Standard" warninglevel="4" nowarn="" includedebuginformation="False" optimize="False" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" target="Library" definesymbols="" generatexmldocumentation="False" win32Icon="" noconfig="False" nostdlib="False" />
       <Execution commandlineparameters="" consolepause="False" />
-      <Output directory="..\bin\Debug" assembly="StartBarView" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+      <Output directory="..\..\..\windows\bin\Debug" assembly="StartBarView" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
     </Configuration>
     <Configuration runwithwarnings="True" name="Release">
       <CodeGeneration runtime="MsNet" compiler="Csc" compilerversion="" warninglevel="4" nowarn="" includedebuginformation="False" optimize="True" unsafecodeallowed="False" generateoverflowchecks="False" mainclass="" target="Library" definesymbols="" generatexmldocumentation="False" win32Icon="" noconfig="False" nostdlib="False" />
       <Execution commandlineparameters="" consolepause="False" />
-      <Output directory=".\bin\Release" assembly="StartBarView" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+      <Output directory="..\..\..\windows\bin\Release" assembly="StartBarView" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
     </Configuration>
   </Configurations>
 </Project>

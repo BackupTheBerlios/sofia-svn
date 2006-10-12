@@ -4,8 +4,8 @@
     <Execute entry="Sofia.Views" type="None" />
   </StartMode>
   <Entries>
-    <Entry filename=".\Sofia.Core.cmbx" />
-    <Entry filename=".\Sofia.Views.cmbx" />
+    <Entry filename=".\Sofia.Core\Sofia.Core.cmbx" />
+    <Entry filename=".\Sofia.Views\Sofia.Views.cmbx" />
   </Entries>
   <Configurations active="Debug">
     <Configuration name="Release">
