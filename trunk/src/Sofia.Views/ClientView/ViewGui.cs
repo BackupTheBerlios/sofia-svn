@@ -2,7 +2,10 @@ using System;
 using System.Text;
 using System.Xml;
 
+using Glade;
+
 using Sofia.Core;
+using Sofia.Core.XmlTools;
 
 namespace Sofia.Views.ClientView
 {
@@ -10,11 +13,22 @@ namespace Sofia.Views.ClientView
 	public class ViewGui : BaseView
 	{
 	
+		[WidgetAttribute] Gtk.Entry field_Nom;
+		[WidgetAttribute] Gtk.Entry field_Prenom;
+	
 		public ViewGui () : base ("gui.glade", "ViewGui")
 		{
 		}
 		
-    	public override string Caption { get { return "Client"; } }
+    	public override string Caption { 
+    		get 
+    		{    		
+    			if ( (field_Nom.Text.Length == 0) || (field_Prenom.Text.Length == 0) )
+    				return "Nouveau client";
+    			else
+    				return field_Nom + " " + field_Prenom; 
+    		}
+    	}
     	
     	public override string ToString() {
     		return "";
@@ -24,55 +38,57 @@ namespace Sofia.Views.ClientView
 			get { return "default"; } 
 		}
     	
-    	public override XmlDocument SaveToXML() {
+    	public override string SaveToXML() {
     	
     		XmlElement fields;
-    		string widgetPrefix = "field_";
+    		string fieldName;
+    		string fieldValue;
+    		string fieldPrefix = "field_";
     	
     		//récupération de tous les widgets à sauvegarder
-   			Gtk.Widget[] widgets = XMLGlade.GetWidgetPrefix(widgetPrefix);
+   			Gtk.Widget[] widgets = XMLGlade.GetWidgetPrefix(fieldPrefix);
    			
    			//si plusieurs alors créer un noeud racine
    			if (widgets.Length > 0) {
-   				fields = XmlDoc.CreateElement("Fields");
+   				fields = XmlDoc.AddNode(null, "Fields", "");
    			} else {
-   				return base.XmlDoc;
+   				return base.XmlDoc.ToString();
    			}
    			
    			//parcours des widgets et constitution du flux
    			foreach (Gtk.Widget w in widgets) {
    			
-   				//mise en place du noeud
-   				XmlElement field = XmlDoc.CreateElement("Field");
-   				XmlAttribute attr = XmlDoc.CreateAttribute("name");
+   				//nom du champ
    				StringBuilder name = new StringBuilder(w.Name);
-   				name.Remove(1, widgetPrefix.Length);
-   				attr.Value = name.ToString();
-   				field.SetAttributeNode(attr);
+   				name.Remove(0, fieldPrefix.Length);
+   				fieldName = name.ToString();
    				
    				//récupération de la valeur en fonction du type de widget
    				Type entryType = typeof(Gtk.Entry);  				
    				Type  textViewType = typeof(Gtk.TextView);
+   				fieldValue = "";
    				
    				//Entry
    				if (entryType.IsInstanceOfType(w)) {
-   					field.InnerText = w.GetType().GetProperty("Text").GetValue(w, null).ToString();
+   					fieldValue = w.GetType().GetProperty("Text").GetValue(w, null).ToString();
+   					Console.WriteLine("lecture entry = " + fieldValue);
    				}
    				
    				//TextView
    				if (textViewType.IsInstanceOfType(w)) {
    					Gtk.TextBuffer buffer = ((Gtk.TextBuffer)w.GetType().GetProperty("Buffer").GetValue(w, null));
-   					field.InnerText = buffer.GetType().GetProperty("Text").GetValue(buffer, null).ToString();
+   					fieldValue = buffer.GetType().GetProperty("Text").GetValue(buffer, null).ToString();
+   					Console.WriteLine("lecture textview = " + fieldValue);
    				}
    				
-   				//ajout du noeud
-   				fields.AppendChild(field);   				
+   				XmlElement field = XmlDoc.AddNode(fields, "Field", fieldValue);
+   				XmlDoc.AddAttributeNode(field, "name", fieldName);
+				
    			}
    			
-   			//ajout des champs au document xml
-   			XmlDoc.DocumentElement.FirstChild.AppendChild(fields); 	
+   			Console.WriteLine("content = " + XmlDoc.ToString());
    			
-   			return XmlDoc;
+   			return XmlDoc.ToString();
    		}
 
 	}

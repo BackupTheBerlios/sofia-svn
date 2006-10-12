@@ -123,10 +123,12 @@ namespace Sofia.Views.MainView
  			eField = xmlDoc.AddNode(eFields, "Field", DateTime.Now.ToString());
  			xmlDoc.AddAttributeNode(eField, "name", "creation");
  			
- 			eField = xmlDoc.AddNode(eFields, "Field", "DUPONT Pierre");
+ 			eField = xmlDoc.AddNode(eFields, "Field", controller.View.Caption);
  			xmlDoc.AddAttributeNode(eField, "name", "caption");
  			
- 			eField = xmlDoc.AddNode(eFields, "Field", controller.View.SaveToXML.InnerXml);
+ 			string docContent = controller.View.SaveToXML();
+ 			Console.WriteLine("Contenu du document à sauvegarder : " + docContent);
+ 			eField = xmlDoc.AddNode(eFields, "Field", docContent);
  			xmlDoc.AddAttributeNode(eField, "name", "content");
 
 			Console.WriteLine(xmlDoc.ToString());

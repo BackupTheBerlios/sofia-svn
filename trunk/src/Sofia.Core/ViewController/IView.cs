@@ -24,8 +24,8 @@ namespace Sofia.Core
         string DocumentID {get; }
         
         //Représentation XML de la vue
-        void LoadFromXML(XmlDocument xmlDoc);
-        XmlDocument SaveToXML();
+        void LoadFromXML(string xml);
+        string SaveToXML();
         
         void Initialize();
 

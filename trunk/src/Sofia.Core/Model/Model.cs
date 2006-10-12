@@ -63,18 +63,18 @@ namespace Sofia.Core.Model
        	void AddMasterDocument()
     	{
     		string objectName = "MasterDocument";
-     		string creation = GetValue(relationName, "creation");
-     		string caption = GetValue(relationName, "caption");
+     		string creation = GetValue(objectName, "creation");
+     		string caption = GetValue(objectName, "caption");
      		string content = GetValue(objectName, "content");
     	
     		System.IFormatProvider frmt = new System.Globalization.CultureInfo("fr-FR", true);
 			DateTime dt = DateTime.ParseExact(creation, "dd/MM/yyyy HH:mm:ss", frmt);
     		Dossier dossier = new Dossier(dt, caption);
     		Document document = new Document(dt, caption, content);
-			//TODO dossier.AddDocument(document);		
+			dossier.AddDocument(document);		
  		
     		db.Set(dossier);    		
-    		Console.WriteLine("Dossier " + id.ToString() + " ajouté : " + dossier.ToString());
+    		Console.WriteLine("Dossier ajoutÃ© : " + dossier.ToString());
  		
     	}
    	

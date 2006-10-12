@@ -9,11 +9,13 @@ namespace Sofia.Core.Model
 	{
 		string caption;
         DateTime creation;
+        string content;
         
-        public Document(DateTime creation, string caption)
+        public Document(DateTime creation, string caption, string content)
         {
         	this.creation = creation;
-            this.caption = caption;            
+            this.caption = caption;
+            this.content = content;
         }
       	
         public string Caption { 
@@ -23,6 +25,10 @@ namespace Sofia.Core.Model
         public DateTime Creation { 
         	get { return creation; } 
         }
+        
+        public string Content { 
+        	get { return content; } 
+        }
         
         public override string ToString()
         {

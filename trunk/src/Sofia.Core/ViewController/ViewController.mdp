@@ -37,5 +37,6 @@
     <ProjectReference type="Project" localcopy="True" refto="Model" />
     <ProjectReference type="Project" localcopy="True" refto="Proxy" />
     <ProjectReference type="Assembly" localcopy="True" refto="../../../linux/db4o-5.2/db4o.dll" />
+    <ProjectReference type="Project" localcopy="True" refto="XmlTools" />
   </References>
 </Project>

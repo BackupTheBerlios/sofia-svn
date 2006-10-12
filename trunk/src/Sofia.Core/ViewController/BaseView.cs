@@ -15,7 +15,7 @@ namespace Sofia.Core
 		
 		Glade.XML glade;
 		string widgetName;
-		XmlDocument xmlDoc;
+		XmlTools.XmlDocumentFacade xmlDoc;
 		
 		#region implémentation de l'interface
 		
@@ -45,11 +45,11 @@ namespace Sofia.Core
 			get { return ""; } 
 		}
 		
-		public virtual  void LoadFromXML(XmlDocument xmlDoc) {
+		public virtual  void LoadFromXML(string xml) {
 		}
 		
-        public virtual XmlDocument SaveToXML() {
-        	return xmlDoc;
+        public virtual string SaveToXML() {
+        	return xmlDoc.ToString();
         }
 		
     	#endregion
@@ -57,8 +57,7 @@ namespace Sofia.Core
 		private BaseView (string widgetName) : base (false, 0)
 		{
 			this.widgetName = widgetName;
-			xmlDoc = new XmlDocument();			
-			xmlDoc.LoadXml("<Document revision='0'/>");			
+			xmlDoc = new XmlTools.XmlDocumentFacade("<Document revision='0'/>");			
 		}
 		
 		protected BaseView (string resourceName, string widgetName) : this (widgetName)
@@ -79,7 +78,7 @@ namespace Sofia.Core
 			win.Destroy ();
 		}
 		
-		protected XmlDocument XmlDoc 
+		protected XmlTools.XmlDocumentFacade XmlDoc 
 		{
 			get { return xmlDoc; }
 		}
