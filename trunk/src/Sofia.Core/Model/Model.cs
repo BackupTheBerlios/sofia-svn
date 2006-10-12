@@ -37,9 +37,9 @@ namespace Sofia.Core.Model
      		    
      		    	if (ope == "Insert") {
      		    		
-     		    		if (obj == "Dossier") 
-     		    			AddDossier();
-							
+     		    		if (obj == "MasterDocument") 
+     		    			AddMasterDocument();
+				
     				}      				
     			}
     			
@@ -59,21 +59,25 @@ namespace Sofia.Core.Model
     	 	string xValue = "//Request[@object='{0}']/Fields//Field[@name='{1}']";
     	 	return xpn.GetValue(string.Format(xValue, objectName, attributeName));
     	}
-    	
-       	void AddDossier()
+    	     	
+       	void AddMasterDocument()
     	{
-    		string objectName = "Dossier";
-    		string folderId = GetValue(objectName, "folderid");
-     		string creation = GetValue(objectName, "creation");
-     		string caption = GetValue(objectName, "caption");
+    		string objectName = "MasterDocument";
+     		string creation = GetValue(relationName, "creation");
+     		string caption = GetValue(relationName, "caption");
+     		string content = GetValue(objectName, "content");
     	
     		System.IFormatProvider frmt = new System.Globalization.CultureInfo("fr-FR", true);
 			DateTime dt = DateTime.ParseExact(creation, "dd/MM/yyyy HH:mm:ss", frmt);
     		Dossier dossier = new Dossier(dt, caption);
-    		db.Set(dossier);
-    		Console.WriteLine("Dossier ajoutÃ© : " + dossier.ToString());
+    		Document document = new Document(dt, caption, content);
+			//TODO dossier.AddDocument(document);		
+ 		
+    		db.Set(dossier);    		
+    		Console.WriteLine("Dossier " + id.ToString() + " ajouté : " + dossier.ToString());
+ 		
     	}
-    	
+   	
     }
    
 }

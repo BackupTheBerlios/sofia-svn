@@ -1,6 +1,6 @@
 using System;
 
-namespace Model
+namespace Sofia.Core.Model
 {
 	/// <summary>
 	/// Description of Document.

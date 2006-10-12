@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections;
 
 namespace Sofia.Core.Model
 {
@@ -8,11 +9,18 @@ namespace Sofia.Core.Model
     {
         string caption;
         DateTime creation;
+        IList dossiers;
         
         public Dossier(DateTime creation, string caption)
         {
         	this.creation = creation;
-            this.caption = caption;            
+            this.caption = caption;
+            dossiers = new ArrayList();
+        }
+        
+        public void AddDocument(Document document)
+        {
+        	dossiers.Add(document);
         }
       	
         public string Caption { 

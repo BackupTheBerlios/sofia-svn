@@ -116,15 +116,19 @@ namespace Sofia.Views.MainView
 			XmlDocumentFacade xmlDoc = new XmlDocumentFacade("<Requests/>");
 			XmlElement eRequest = xmlDoc.AddNode(null, "Request", "");
    			xmlDoc.AddAttributeNode(eRequest, "operation", "Insert");
-   			xmlDoc.AddAttributeNode(eRequest, "object", "Dossier");
+   			xmlDoc.AddAttributeNode(eRequest, "object", "MasterDocument");
+   			
  			XmlElement eFields = xmlDoc.AddNode(eRequest, "Fields", "");
- 			eField = xmlDoc.AddNode(eFields, "Field", Guid.NewGuid().ToString());
- 			xmlDoc.AddAttributeNode(eField, "name", "folderid");
+ 			
  			eField = xmlDoc.AddNode(eFields, "Field", DateTime.Now.ToString());
  			xmlDoc.AddAttributeNode(eField, "name", "creation");
+ 			
  			eField = xmlDoc.AddNode(eFields, "Field", "DUPONT Pierre");
  			xmlDoc.AddAttributeNode(eField, "name", "caption");
-	
+ 			
+ 			eField = xmlDoc.AddNode(eFields, "Field", controller.View.SaveToXML.InnerXml);
+ 			xmlDoc.AddAttributeNode(eField, "name", "content");
+
 			Console.WriteLine(xmlDoc.ToString());
 		
    			 viewGui.Controller.RequestModel(xmlDoc.ToString());
