@@ -7,7 +7,7 @@ namespace Sofia.Core
 	
 	public  class BaseCommand : ICommand
 	{
-		
+				
 		string id;
 		CommandProperties properties;
 		Hashtable paramList;

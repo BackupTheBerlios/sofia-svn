@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.IO;
 using Gtk;
@@ -25,7 +25,7 @@ namespace Sofia.Views.MainView
 
 		public ViewGui () : base ("")
 		{
-			glade = new XML (Assembly.GetCallingAssembly (), "MainView.gui.glade", "ViewGui", null);
+			glade = new XML (Assembly.GetCallingAssembly (), "gui.glade", "ViewGui", null);
 			glade.Autoconnect (this);
 			
 			Window win = (Window) glade ["ViewGui"];

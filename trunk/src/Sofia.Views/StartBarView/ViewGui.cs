@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using Gtk;
 using Glade;
@@ -11,9 +11,10 @@ namespace Sofia.Views.StartBarView
 	{
 		//[Glade.WidgetAttribute] Gtk.Expander expanderShortcuts;
 		[Glade.WidgetAttribute] Gtk.Expander expanderRecentFolders;
+		[Glade.WidgetAttribute] Gtk.TreeView treeviewRecentFolders;
 		[Glade.WidgetAttribute] Gtk.VBox vboxMain;
 		
-		public ViewGui () : base("StartBarView.gui.glade", "ViewGui")
+		public ViewGui () : base("gui.glade", "ViewGui")
 		{
 		
 			#region Création dynamique de controles
@@ -46,7 +47,12 @@ namespace Sofia.Views.StartBarView
 		
 		public Expander ExpanderRecentFolders {
 			get { return expanderRecentFolders; }
+		}
+		
+		public Gtk.TreeView TreeViewRecentFolders {
+			get { return treeviewRecentFolders; }
 		}		
+
 		
 		#endregion
 				

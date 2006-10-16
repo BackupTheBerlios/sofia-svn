@@ -30,5 +30,6 @@
     <ProjectReference type="Gac" localcopy="True" refto="gtk-sharp, Version=2.8.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Project" localcopy="True" refto="Command" />
     <ProjectReference type="Project" localcopy="True" refto="ViewController" />
+    <ProjectReference type="Project" localcopy="True" refto="XmlTools" />
   </References>
 </Project>

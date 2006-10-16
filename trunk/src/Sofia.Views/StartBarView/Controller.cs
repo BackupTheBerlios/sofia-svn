@@ -30,6 +30,19 @@ namespace Sofia.Views.StartBarView
 		public override void NotifyRequest(string request)
 		{
 			Console.WriteLine("StartBarView est notifié d'une requête au modèle : " + request);
+			xpn = new XPathNavigatorFacade();
+			xpn.LoadXML(request);
+    		ArrayList objects = xpn.GetAttributes("//Request", "object");
+    		
+    		for (int i = 0; i < objects.Count; i++) {
+  			
+     				string obj = objects[i].ToString();
+     		    
+     		    		if (obj == "MasterDocument") || (obj == "Document")
+     		    		
+     		    		//Test d'ajout de noeud dans le treeview
+     		    		
+     		    			
 		} 
 		
 	}
