@@ -9,18 +9,18 @@ namespace Sofia.Core.Model
     {
         string caption;
         DateTime creation;
-        IList dossiers;
+        IList documents;
         
         public Dossier(DateTime creation, string caption)
         {
         	this.creation = creation;
             this.caption = caption;
-            dossiers = new ArrayList();
+            documents = new ArrayList();
         }
         
         public void AddDocument(Document document)
         {
-        	dossiers.Add(document);
+        	documents.Add(document);
         }
       	
         public string Caption { 
@@ -29,6 +29,13 @@ namespace Sofia.Core.Model
         
         public DateTime Creation { 
         	get { return creation; } 
+        }
+        
+        public IList Documents {
+        	get
+        	{
+        		return documents;
+        	}
         }
         
         public override string ToString()
