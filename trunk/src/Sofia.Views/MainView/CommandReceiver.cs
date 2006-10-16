@@ -1,4 +1,4 @@
-
+﻿
 using System;
 using System.Xml;
 
@@ -19,7 +19,7 @@ namespace Sofia.Views.MainView
 		/// Création de l'interface graphique 
 		/// </summary>
 		public void CreateGui(IController controller)
-		{						
+		{				
 			viewGui = new ViewGui();
 			viewGui.Controller = controller;
 			viewGui.Initialize();

@@ -1,4 +1,4 @@
-// project created on 19/07/2006 at 23:03
+﻿// project created on 19/07/2006 at 23:03
 using System;
 using System.Reflection;
 using System.IO;
@@ -9,7 +9,7 @@ namespace Sofia.Core
 	class MainClass
 	{
 		public static void Main(string[] args)
-		{	
+		{				
 			LoadMainView();	
 		}
 		
@@ -26,8 +26,10 @@ namespace Sofia.Core
 
 			Console.WriteLine("Chargement de " + assemblyName.CodeBase + "/" + assemblyName.FullName + ".dll...");
       		Assembly a = Assembly.Load(assemblyName);
-      		
-      		a.CreateInstance("Sofia.Views." + assemblyName.Name  + ".Controller");  		}
+      		      	
+      		Console.WriteLine("iciiciciciccccccccccccccccccccccccccc");
+      		a.CreateInstance("Sofia.Views." + assemblyName.Name  + ".Controller"); 
+ 		}
  		
  		/*
  		static void ShowAssemblies(string Tag)

@@ -59,13 +59,21 @@ namespace Sofia.Core
 			this.widgetName = widgetName;
 			xmlDoc = new XmlTools.XmlDocumentFacade("<Document revision='0'/>");			
 		}
-		
-		protected BaseView (string resourceName, string widgetName) : this (widgetName)
+
+		protected BaseView (string resourceName, string widgetName, string nameSpace) : this (widgetName)
 		{					
+			/*
+			string fullName = nameSpace + '.' + resourceName;
+			
+			Assembly a = Assembly.GetCallingAssembly();
+			
+			if (!System.IO.File.Exists(a.CodeBase + "/" + fullName))
+				fullName = resourceName;
+			*/			
 			glade = new XML (Assembly.GetCallingAssembly (), resourceName, widgetName, null);
 			Init ();
 		}
-		
+
 		void Init ()
 		{
 			glade.Autoconnect (this);
