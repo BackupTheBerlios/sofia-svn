@@ -22,7 +22,6 @@
     <File name="./Dossier.cs" subtype="Code" buildaction="Compile" />
     <File name="./IModel.cs" subtype="Code" buildaction="Compile" />
     <File name="./Document.cs" subtype="Code" buildaction="Compile" />
-    <File name="./TreeViewBuilder.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Project" localcopy="True" refto="XmlTools" />

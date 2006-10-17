@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections;
 
@@ -46,6 +46,8 @@ namespace Sofia.Views.StartBarView
      		    		
      					
      		    		//Test d'ajout de noeud dans le treeview
+     		    		TreeViewBuilder treeViewBuilder = new TreeViewBuilder()
+     		    		
      				}
     		}
      		    		

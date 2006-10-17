@@ -22,6 +22,22 @@ namespace Sofia.Views.StartBarView
 		}
 		
 	}
+	
+	public class ShowDocumentsCommand : BaseCommand
+	{
+		CommandReceiver commandReceiver;
+				
+		public  ShowDocumentsCommand(CommandReceiver commandReceiver, string id, string text, string icon, string accelKey, string description) : base (id, text, icon, accelKey, description) 
+		{			
+			this.commandReceiver  = commandReceiver;
+		}
+		
+		public override void Execute(string parameters)
+		{
+			commandReceiver.ShowDocuments();
+		}
+		
+	}
 		
 	
 }
