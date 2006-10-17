@@ -26,8 +26,7 @@ namespace Sofia.Core
 
 			Console.WriteLine("Chargement de " + assemblyName.CodeBase + "/" + assemblyName.FullName + ".dll...");
       		Assembly a = Assembly.Load(assemblyName);
-      		      	
-      		Console.WriteLine("iciiciciciccccccccccccccccccccccccccc");
+      		            		
       		a.CreateInstance("Sofia.Views." + assemblyName.Name  + ".Controller"); 
  		}
  		

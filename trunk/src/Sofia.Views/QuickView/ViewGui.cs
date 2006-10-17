@@ -4,7 +4,7 @@ using Gtk;
 using Glade;
 using Sofia.Core;
 
-namespace Sofia.Views.StartBarView
+namespace Sofia.Views.QuickView
 {
 	
 	public class ViewGui : BaseView
@@ -14,7 +14,7 @@ namespace Sofia.Views.StartBarView
 		[Glade.WidgetAttribute] Gtk.TreeView treeviewRecentFolders;
 		[Glade.WidgetAttribute] Gtk.VBox vboxMain;
 		
-		public ViewGui () : base("StartBarView.gui.glade", "ViewGui", "StartBarView")
+		public ViewGui () : base("QuickView.gui.glade", "ViewGui", "QuickView")
 		{
 		
 			#region Création dynamique de controles

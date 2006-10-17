@@ -2,7 +2,7 @@
 using System;
 using Sofia.Core;
 
-namespace Sofia.Views.StartBarView
+namespace Sofia.Views.QuickView
 {
 	
 	public class NewCommand : BaseCommand

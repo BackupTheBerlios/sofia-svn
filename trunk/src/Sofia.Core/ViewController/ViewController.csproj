@@ -60,6 +60,10 @@
       <HintPath>..\..\..\..\..\..\..\..\mono\lib\mono\gac\glade-sharp\2.8.0.0__35e10195dab3c99f\glade-sharp.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="gdk-sharp">
+      <HintPath>..\..\..\windows\gtk-sharp-2.0\gdk-sharp.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -69,6 +73,7 @@
     <Compile Include="BaseView.cs" />
     <Compile Include="ICommandReceiver.cs" />
     <Compile Include="IController.cs" />
+    <Compile Include="TreeViewBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Command\Command.csproj">
@@ -82,6 +87,10 @@
     <ProjectReference Include="..\XmlTools\XmlTools.csproj">
       <Project>{92B98D96-8192-4509-B8BD-48A9F265639D}</Project>
       <Name>XmlTools</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Model\Model.csproj">
+      <Project>{37BD11A6-A4F2-4C63-9506-75142EC03310}</Project>
+      <Name>Model</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(SharpDevelopBinPath)\SharpDevelop.Build.CSharp.targets" />

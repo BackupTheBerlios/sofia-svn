@@ -4,8 +4,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{DCBE0233-9032-4156-B2DD-45A5915F0F0A}</ProjectGuid>
-    <RootNamespace>StartBarView</RootNamespace>
-    <AssemblyName>StartBarView</AssemblyName>
+    <RootNamespace>QuickView</RootNamespace>
+    <AssemblyName>QuickView</AssemblyName>
     <OutputType>Library</OutputType>
     <WarningLevel>4</WarningLevel>
     <NoStdLib>False</NoStdLib>

@@ -78,7 +78,7 @@ namespace Sofia.Views.MainView
 		public void Initialize () 
 		{
 			//Vues affichées par défaut à l'ouverture de l'application
-			controller.ExecuteCommand("New_StartBarView", "");
+			controller.ExecuteCommand("New_QuickView", "");
 		}
                                      	
     	#region Accesseurs pour les controles
