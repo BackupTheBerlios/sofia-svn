@@ -10,9 +10,7 @@ namespace Sofia.Views.QuickView
 	public class ViewGui : BaseView
 	{
 		//[Glade.WidgetAttribute] Gtk.Expander expanderShortcuts;
-		[Glade.WidgetAttribute] Gtk.Expander expanderRecentFolders;
-		[Glade.WidgetAttribute] Gtk.TreeView treeviewRecentFolders;
-		[Glade.WidgetAttribute] Gtk.VBox vboxMain;
+		[Glade.WidgetAttribute] Gtk.TreeView treeviewRecent;
 		
 		public ViewGui () : base("QuickView.gui.glade", "ViewGui", "QuickView")
 		{
@@ -45,12 +43,8 @@ namespace Sofia.Views.QuickView
 		
 		#region Accesseurs controles
 		
-		public Expander ExpanderRecentFolders {
-			get { return expanderRecentFolders; }
-		}
-		
-		public Gtk.TreeView TreeViewRecentFolders {
-			get { return treeviewRecentFolders; }
+		public Gtk.TreeView TreeViewRecent {
+			get { return treeviewRecent; }
 		}		
 
 		

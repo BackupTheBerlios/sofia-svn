@@ -6,7 +6,7 @@
     <ProjectGuid>{F97F1AE1-D074-42AF-B30E-ED057AAB4B68}</ProjectGuid>
     <RootNamespace>Launcher</RootNamespace>
     <AssemblyName>Launcher</AssemblyName>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <WarningLevel>4</WarningLevel>
     <NoStdLib>False</NoStdLib>
     <NoConfig>False</NoConfig>
