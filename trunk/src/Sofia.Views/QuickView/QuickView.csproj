@@ -56,6 +56,10 @@
       <HintPath>..\..\..\..\..\..\..\..\mono\lib\mono\gac\gtk-sharp\2.8.0.0__35e10195dab3c99f\gtk-sharp.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="gdk-sharp">
+      <HintPath>..\..\..\windows\gtk-sharp-2.0\gdk-sharp.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -78,6 +82,26 @@
       <Project>{92B98D96-8192-4509-B8BD-48A9F265639D}</Project>
       <Name>XmlTools</Name>
     </ProjectReference>
+    <Content Include="..\..\..\stock\stock-find-and-replace.png">
+      <Link>stock-find-and-replace.png</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\stock\stock-bookmark.png">
+      <Link>stock-bookmark.png</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\stock\stock-loading-icon.png">
+      <Link>stock-loading-icon.png</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\stock\stock-trash-empty.png">
+      <Link>stock-trash-empty.png</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\stock\stock-apply.png">
+      <Link>stock-apply.png</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(SharpDevelopBinPath)\SharpDevelop.Build.CSharp.targets" />
 </Project>

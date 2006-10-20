@@ -8,27 +8,34 @@ namespace Sofia.Views.QuickView
 {
 	
 	public class ViewGui : BaseView
-	{
-		//[Glade.WidgetAttribute] Gtk.Expander expanderShortcuts;
+	{		
 		[Glade.WidgetAttribute] Gtk.TreeView treeviewRecent;
+		[Glade.WidgetAttribute] Gtk.Image imageSearch;
+		[Glade.WidgetAttribute] Gtk.Image imageHistory;
+		[Glade.WidgetAttribute] Gtk.Image imageFavorites;
+		[Glade.WidgetAttribute] Gtk.Image imageTrash;
+		[Glade.WidgetAttribute] Gtk.ToolButton toolbuttonApplySearch;
 		
 		public ViewGui () : base("QuickView.gui.glade", "ViewGui", "QuickView")
 		{
 		
 			#region Création dynamique de controles
 			
-			//Création du conteneur des dossiers récents
-			//expanderRecentFolders = new Expander("Dossiers récents");
-			//vboxMain.PackStart(expanderRecentFolders, false, true, 0);
-			//expanderRecentFolders.Show();
-			//((Box.BoxChild)(vboxMain[expanderRecentFolders])).Position = 2;
+			if (imageSearch != null)
+				imageSearch.FromFile = "stock-find-and-replace.png";
 			
+			if (imageHistory != null)
+				imageHistory.FromFile = "stock-loading-icon.png";		
 			
-			//Création du conteneur des raccourcis de vues
-			//expanderShortcuts = new Expander("Actions courantes");
-			//vboxMain.PackEnd(expanderShortcuts, false, true, 0);
-			//expanderShortcuts.Show();
-			//((Box.BoxChild)(vboxMain[expanderShortcuts])).Position = 3;
+			if (imageFavorites != null)
+				imageFavorites.FromFile = "stock-bookmark.png";	
+			
+			if (imageTrash != null)
+				imageTrash.FromFile = "stock-trash-empty.png";	
+			
+			Gtk.Widget applySearch = toolbuttonApplySearch.IconWidget;
+			if (applySearch != null)
+				((Gtk.Image) applySearch).FromFile = "stock-apply.png";
 			
 			#endregion
 		}
