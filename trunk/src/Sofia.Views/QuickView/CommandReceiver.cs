@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using Sofia.Core;
 using Sofia.Core.Model;

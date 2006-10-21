@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using System.Xml;
 
@@ -16,7 +16,7 @@ namespace Sofia.Views.ClientView
 		[WidgetAttribute] Gtk.Entry field_Nom;
 		[WidgetAttribute] Gtk.Entry field_Prenom;
 	
-		public ViewGui () : base ("ClientView.gui.glade", "ViewGui", "ClientView")
+		public ViewGui () : base ("gui.glade", "ViewGui", "ClientView")
 		{
 		}
 		

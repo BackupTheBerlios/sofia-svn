@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using Gtk;
 using Glade;
@@ -16,7 +16,7 @@ namespace Sofia.Views.QuickView
 		[Glade.WidgetAttribute] Gtk.Image imageTrash;
 		[Glade.WidgetAttribute] Gtk.ToolButton toolbuttonApplySearch;
 		
-		public ViewGui () : base("QuickView.gui.glade", "ViewGui", "QuickView")
+		public ViewGui () : base("gui.glade", "ViewGui", "QuickView")
 		{
 		
 			#region Création dynamique de controles

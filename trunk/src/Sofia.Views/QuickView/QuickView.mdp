@@ -31,5 +31,6 @@
     <ProjectReference type="Project" localcopy="True" refto="Command" />
     <ProjectReference type="Project" localcopy="True" refto="ViewController" />
     <ProjectReference type="Project" localcopy="True" refto="XmlTools" />
+    <ProjectReference type="Project" localcopy="True" refto="Model" />
   </References>
 </Project>

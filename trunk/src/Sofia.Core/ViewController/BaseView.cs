@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using Gtk;
 
@@ -62,14 +62,13 @@ namespace Sofia.Core
 
 		protected BaseView (string resourceName, string widgetName, string nameSpace) : this (widgetName)
 		{					
-			/*
 			string fullName = nameSpace + '.' + resourceName;
 			
 			Assembly a = Assembly.GetCallingAssembly();
 			
 			if (!System.IO.File.Exists(a.CodeBase + "/" + fullName))
 				fullName = resourceName;
-			*/			
+						
 			glade = new XML (Assembly.GetCallingAssembly (), resourceName, widgetName, null);
 			Init ();
 		}
