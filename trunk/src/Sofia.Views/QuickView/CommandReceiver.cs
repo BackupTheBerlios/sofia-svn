@@ -27,7 +27,7 @@ namespace Sofia.Views.QuickView
 		
 		public void ShowDocuments()
 		{			
-			TreeViewBuilder treeViewBuilder = new TreeViewBuilder(viewGui.TreeViewRecent);
+			TreeViewBuilder treeViewBuilder = new TreeViewBuilder(viewGui.TreeViewDoc);
 			
 		}
 
