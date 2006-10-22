@@ -4,7 +4,7 @@ using System;
 namespace Sofia.Views.QuickView
 {
 	
-	public interface IGtkGui
+	public interface IViewGui
 	{
 		Gtk.TreeView TreeViewDoc { get; }
 		Gtk.ToggleToolButton BtnRecent { get; }

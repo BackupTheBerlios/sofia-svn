@@ -1,4 +1,4 @@
-﻿
+
 
 using System;
 using Gtk;
@@ -57,13 +57,18 @@ namespace Sofia.Views.MainView
     	{   	
       		AssemblyName assemblyName = new AssemblyName();
 
-      		assemblyName.Name = ident;
+      		assemblyName.Name = ident + "Controller";
       		assemblyName.CodeBase = String.Concat("file:///", Directory.GetCurrentDirectory());
 
 			Console.WriteLine("Chargement de " + assemblyName.CodeBase + "/" + assemblyName.FullName + ".dll...");
       		Assembly assembly = Assembly.Load(assemblyName);
       		
-     		return (IController) assembly.CreateInstance("Sofia.Views." + ident + ".Controller");      		
+      		IController controller = (IController) assembly.CreateInstance("Sofia.Views." + ident + ".Controller");
+      		
+      		if (controller == null) 
+	   			throw new InvalidOperationException(string.Format("L'assembly {0} n'a pas défini de controleur.",  assemblyName.FullName));
+	   		else
+     			return controller;      		
     	}
     	
 		/// <summary>

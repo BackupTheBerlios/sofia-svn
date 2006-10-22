@@ -6,7 +6,7 @@ using Sofia.Core;
 namespace Sofia.Views.QuickView
 {
 	
-	public class ViewGui : BaseView, IGtkGui
+	public class ViewGui : BaseView, IViewGui
 	{		
 		[Glade.WidgetAttribute] Gtk.TreeView treeviewDoc;
 		[Glade.WidgetAttribute] Gtk.ToolButton btnApply;

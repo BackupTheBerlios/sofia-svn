@@ -19,7 +19,7 @@ namespace Sofia.Views.QuickView
 		/// Création de l'interface graphique 
 		/// </summary>
 		public void CreateGui(IController controller)
-		{					
+		{	
 			viewGui = new ViewGui();
 			viewGui.Controller = controller;			
 		  	viewGui.Initialize();
