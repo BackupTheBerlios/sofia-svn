@@ -143,7 +143,7 @@ namespace Sofia.Views.MainView
 		     }
 
 			//Séparateur
-			commandReceiver.AddToolItem(new SeparatorToolItem());
+			commandReceiver.AddToolItem(new ToolbarSeparator());
 		     
 		     //Ajout du bouton de sauvegarde de la vue
 	        command = CommandManager.GetCommand("SaveCurrentView");

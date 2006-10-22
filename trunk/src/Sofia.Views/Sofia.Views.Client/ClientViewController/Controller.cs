@@ -2,23 +2,22 @@
 using System;
 using Sofia.Core;
 
-namespace Sofia.Views.MyView
+namespace Sofia.Views.ClientView
 {
-	
 	///<summary>
-	///Controleur de la vue
+	///Controleur de la vue "Client"
 	///</summary>
 	public class Controller : BaseController
 	{
 		CommandReceiver commandReceiver;
-			
+	
 		public Controller()
 		{	
 		  	//Création du receiver des commandes
 		  	commandReceiver = new CommandReceiver();
 		  	
 		  	//Création des commandes
-		  	CommandManager.RegisterCommand(new NewCommand(commandReceiver, this, "New", "Nouveau", Gtk.Stock.New, "", "Description de la commande"));
+		  	CommandManager.RegisterCommand(new NewCommand(commandReceiver, this, "New", "Nouveau client", Stock.NewIcon, "", "Créer un nouveau client dans un nouveau dossier"));
 		}
 		
 		/// <summary>
@@ -27,14 +26,8 @@ namespace Sofia.Views.MyView
 		public override IView View {
 			get { return commandReceiver.View; }
 		}
+
 		
-		public override void NotifyRequest(string request)
-		{
-			Console.WriteLine("La vue est notifié d'une requête au modèle : " + request);
-		} 
-
-
-			
 	}
 	
 }

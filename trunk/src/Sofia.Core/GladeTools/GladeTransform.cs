@@ -1,58 +1,39 @@
+
 using System;
-using System.Text;
 using System.Xml;
+using System.Text;
 
-using Glade;
-
-using Sofia.Core;
-using Sofia.Core.XmlTools;
-
-namespace Sofia.Views.ClientView
+namespace Sofia.Core.GladeTools
 {
 	
-	public class ViewGui : BaseView
+	public class GladeTransform
 	{
-	
-		[WidgetAttribute] Gtk.Entry field_Nom;
-		[WidgetAttribute] Gtk.Entry field_Prenom;
-	
-		public ViewGui () : base ("gui.glade", "ViewGui", "ClientView")
+		
+		private Glade.XML glade;
+		XmlTools.XmlDocumentFacade xmlDoc;
+		
+		public GladeTransform(Glade.XML glade)
 		{
+			this.glade = glade;
+			xmlDoc = new XmlTools.XmlDocumentFacade("<Document revision='0'/>");
 		}
 		
-    	public override string Caption { 
-    		get 
-    		{    		
-    			if ( (field_Nom.Text.Length == 0) || (field_Prenom.Text.Length == 0) )
-    				return "Nouveau client";
-    			else
-    				return field_Nom + " " + field_Prenom; 
-    		}
-    	}
-    	
-    	public override string ToString() {
-    		return "";
-    	}
-    	
-    	public override string Destination {
-			get { return "default"; } 
-		}
-    	
-    	public override string SaveToXML() {
-    	
+	    public override string ToString() 
+	    {
+	        	
     		XmlElement fields;
     		string fieldName;
     		string fieldValue;
     		string fieldPrefix = "field_";
     	
     		//récupération de tous les widgets à sauvegarder
-   			Gtk.Widget[] widgets = XMLGlade.GetWidgetPrefix(fieldPrefix);
+   			Gtk.Widget[] widgets = glade.GetWidgetPrefix(fieldPrefix);
    			
    			//si plusieurs alors créer un noeud racine
    			if (widgets.Length > 0) {
-   				fields = XmlDoc.AddNode(null, "Fields", "");
+   				fields = xmlDoc.AddNode(null, "Fields", "");
    			} else {
-   				return base.XmlDoc.ToString();
+   				return xmlDoc.ToString();
    			}
    			
    			//parcours des widgets et constitution du flux
@@ -81,14 +62,14 @@ namespace Sofia.Views.ClientView
    					Console.WriteLine("lecture textview = " + fieldValue);
    				}
    				
-   				XmlElement field = XmlDoc.AddNode(fields, "Field", fieldValue);
-   				XmlDoc.AddAttributeNode(field, "name", fieldName);
+   				XmlElement field = xmlDoc.AddNode(fields, "Field", fieldValue);
+   				xmlDoc.AddAttributeNode(field, "name", fieldName);
 				
    			}
    			
-   			Console.WriteLine("content = " + XmlDoc.ToString());
+   			Console.WriteLine("content = " + xmlDoc.ToString());
    			
-   			return XmlDoc.ToString();
+   			return xmlDoc.ToString();
    		}
 
 	}

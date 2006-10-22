@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Xml;
 
@@ -28,7 +28,7 @@ namespace Sofia.Views.MainView
 		///<summary>
 		///Ajout d'un bouton dans la barre d'outils principale
 		///</summary>
-		public void AddToolItem(Gtk.ToolItem item)
+		public void AddToolItem(ToolbarItem item)
 		{
        		if (item == null) 
 	   			throw new InvalidOperationException("Impossible d'ajouter un élément nul dans la barre d'outils principale");

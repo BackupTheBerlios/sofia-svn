@@ -19,6 +19,19 @@ namespace Sofia.Core
 		}
 	}
 	
+	public class ToolbarSeparator : ToolbarItem
+	{
+		private SeparatorToolItem separator;
+		
+		public ToolbarSeparator() : base (null)
+		{
+			separator = new SeparatorToolItem();
+			this.Add(separator);
+			separator.Show();
+			this.ShowAll();
+		}
+	}
+	
 	public class ToolbarButton : ToolbarItem
 	{
 		
