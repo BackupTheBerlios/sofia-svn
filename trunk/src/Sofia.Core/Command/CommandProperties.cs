@@ -10,7 +10,8 @@ namespace Sofia.Core
 		string icon;
 		string accelKey;
 		string description;
-		
+		string type;
+				
 		public CommandProperties ()
 		{
 		}
@@ -20,7 +21,7 @@ namespace Sofia.Core
 			this.text = text;
 		}
 		
-		public CommandProperties (string text, string icon, string accelKey, string description)
+		public CommandProperties (string text, string icon, string accelKey, string description, string type)
 		{
 			this.text = text;
 			this.icon = icon;
@@ -46,6 +47,11 @@ namespace Sofia.Core
 		public string Description {
 			get { return description; }
 			set { description = value; }
+		}
+		
+		public string Type {
+			get { return type; }
+			set { type = value; }
 		}
 		
 	}

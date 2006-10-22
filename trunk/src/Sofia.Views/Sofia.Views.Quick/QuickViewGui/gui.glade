@@ -32,7 +32,7 @@
 	  <property name="spacing">0</property>
 
 	  <child>
-	    <widget class="GtkToolbar" id="toolbar1">
+	    <widget class="GtkToolbar" id="toolbarFilters">
 	      <property name="visible">True</property>
 	      <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
 	      <property name="toolbar_style">GTK_TOOLBAR_ICONS</property>
@@ -101,7 +101,6 @@
 		  <property name="visible_vertical">True</property>
 		  <property name="is_important">False</property>
 		  <property name="active">False</property>
-		  <signal name="toggled" handler="OnToggled" last_modification_time="Sun, 22 Oct 2006 12:13:07 GMT"/>
 		</widget>
 		<packing>
 		  <property name="expand">False</property>
@@ -119,7 +118,6 @@
 		  <property name="visible_vertical">True</property>
 		  <property name="is_important">False</property>
 		  <property name="active">False</property>
-		  <signal name="toggled" handler="OnToggled" last_modification_time="Sun, 22 Oct 2006 12:11:47 GMT"/>
 		</widget>
 		<packing>
 		  <property name="expand">False</property>
@@ -137,7 +135,6 @@
 		  <property name="visible_vertical">True</property>
 		  <property name="is_important">False</property>
 		  <property name="active">False</property>
-		  <signal name="toggled" handler="OnToggled" last_modification_time="Sun, 22 Oct 2006 12:12:06 GMT"/>
 		</widget>
 		<packing>
 		  <property name="expand">False</property>

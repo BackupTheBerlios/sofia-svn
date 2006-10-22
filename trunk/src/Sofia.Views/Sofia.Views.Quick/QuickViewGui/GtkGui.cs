@@ -9,13 +9,9 @@ namespace Sofia.Views.QuickView
 	public class ViewGui : BaseView, IViewGui
 	{		
 		[Glade.WidgetAttribute] Gtk.TreeView treeviewDoc;
-		[Glade.WidgetAttribute] Gtk.ToolButton btnApply;
-		[Glade.WidgetAttribute] Gtk.ToggleToolButton btnRecent;
-		[Glade.WidgetAttribute] Gtk.ToggleToolButton btnFavorites;
-		[Glade.WidgetAttribute] Gtk.ToggleToolButton btnTrash;
+		[Glade.WidgetAttribute] Gtk.Toolbar toolbarFilters;
 		
-		ArrayList toggled;
-		
+	
 		public ViewGui () : base("gui.glade", "ViewGui", "QuickView")
 		{
 		
@@ -24,10 +20,6 @@ namespace Sofia.Views.QuickView
 			
 			#endregion
 			
-			toggled = new ArrayList();
-			toggled.Add(btnRecent);
-			toggled.Add(btnFavorites);
-			toggled.Add(btnTrash);
 		}
 		
 		#region Surcharge de BaseView
@@ -42,29 +34,33 @@ namespace Sofia.Views.QuickView
 			get { return "left"; } 
 		}
 		
+		public override void AddToolbarCommand(ICommand command, bool toggled)
+		{
+			button = new ToolbarButton(command);		       				
+		       		commandReceiver.AddToolItem(button);
+			toolbarFilters.Insert(item, 0);
+		}
+		
 		#endregion
 		
-		#region Implémentation de l'interface IViewGui
+		#region Implémentation de l'interface
 		
 		public Gtk.TreeView TreeViewDoc 
 		{
 			get { return treeviewDoc; }
 		}
 		
-		public Gtk.ToggleToolButton BtnRecent
+		///<summary>
+		///Ajout d'un bouton dans la barre d'outils principale
+		///</summary>
+		public void AddFilterButton(ToolbarItem item)
 		{
-			get { return btnRecent; }
-		}		
-
-		public Gtk.ToggleToolButton BtnFavorites
-		{
-			get { return btnFavorites; }
+       		if (item == null) 
+	   			throw new InvalidOperationException("Impossible d'ajouter un élément nul dans la barre d'outils des filtres");
+ 
+			toolbarFilters.Insert(item, 0);
 		}
 		
-		public Gtk.ToggleToolButton BtnTrash
-		{
-			get { return btnTrash; }
-		}		
 
 		#endregion
 						

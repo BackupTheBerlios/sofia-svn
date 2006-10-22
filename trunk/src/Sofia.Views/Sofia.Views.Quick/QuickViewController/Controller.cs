@@ -20,6 +20,11 @@ namespace Sofia.Views.QuickView
 		  	//Création des commandes
 		  	commandReceiver = new CommandReceiver();
 		  	CommandManager.RegisterCommand(new NewCommand(commandReceiver, this, "New", "", "", "", ""));
+		  	CommandManager.RegisterCommand(new ToggleRecentFilterCommand(commandReceiver, "ToggleRecent", "Documents récents", Stock.RecentIcon, "", "Affiche les documents récemment consultés ou créés."));
+		  	CommandManager.RegisterCommand(new ToggleFavoritesFilterCommand(commandReceiver, "ToggleFavorites", "Documents favoris", Stock.FavoritesIcon, "", "Affiche les documents favoris."));
+		  	CommandManager.RegisterCommand(new ToggleTrashFilterCommand(commandReceiver, "ToggleTrash", "Documents récents", Stock.TrashIcon, "", "Affiche les documents placés dans la corbeille."));
+		  	
+		  	commandReceiver.View
 		}
 		
 		/// <summary>

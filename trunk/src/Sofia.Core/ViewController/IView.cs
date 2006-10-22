@@ -28,6 +28,8 @@ namespace Sofia.Core
         string SaveToXML();
         
         void Initialize();
+        
+        void AddToolbarCommand(ICommand command, bool toggled);
 
     }
       

@@ -51,6 +51,11 @@ namespace Sofia.Core
         public virtual string SaveToXML() {
         	return xmlDoc.ToString();
         }
+        
+        public void AddToolbarCommand(ICommand command, bool toggled)
+        {
+        	
+        }
 		
     	#endregion
     	

@@ -24,11 +24,28 @@ namespace Sofia.Views.QuickView
 			viewGui.Controller = controller;			
 		  	viewGui.Initialize();
 		}
-		
+
+		/// <summary>
+		/// Affichage de documents 
+		/// </summary>
 		public void ShowDocuments()
 		{			
-			TreeViewBuilder treeViewBuilder = new TreeViewBuilder(viewGui.TreeViewDoc);
-			
+			TreeViewBuilder treeViewBuilder = new TreeViewBuilder(viewGui.TreeViewDoc);			
+		}
+		
+		public void ToggleRecentFilter(bool active)
+		{
+			viewGui.BtnRecent.Active = active;
+		}
+		
+		public void ToggleFavoritesFilter(bool active)
+		{
+			viewGui.BtnFavorites.Active = active;
+		}
+		
+		public void ToggleTrashFilter(bool active)
+		{
+			viewGui.BtnTrash.Active = active;
 		}
 
 	}
