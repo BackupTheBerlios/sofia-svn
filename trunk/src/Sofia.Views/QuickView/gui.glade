@@ -67,7 +67,7 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkToolButton" id="toolbuttonApplySearch">
+		<widget class="GtkToolButton" id="btnApply">
 		  <property name="visible">True</property>
 		  <property name="stock_id">gtk-find</property>
 		  <property name="visible_horizontal">True</property>
@@ -96,13 +96,12 @@
 	      <child>
 		<widget class="GtkToggleToolButton" id="btnRecent">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Derniers documents</property>
-		  <property name="use_underline">True</property>
-		  <property name="stock_id">gtk-goto-last</property>
+		  <property name="stock_id">gtk-new</property>
 		  <property name="visible_horizontal">True</property>
 		  <property name="visible_vertical">True</property>
 		  <property name="is_important">False</property>
 		  <property name="active">False</property>
+		  <signal name="toggled" handler="OnToggled" last_modification_time="Sun, 22 Oct 2006 12:13:07 GMT"/>
 		</widget>
 		<packing>
 		  <property name="expand">False</property>
@@ -111,7 +110,7 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkToggleToolButton" id="toggletoolbutton4">
+		<widget class="GtkToggleToolButton" id="btnFavorites">
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">Favoris</property>
 		  <property name="use_underline">True</property>
@@ -120,6 +119,7 @@
 		  <property name="visible_vertical">True</property>
 		  <property name="is_important">False</property>
 		  <property name="active">False</property>
+		  <signal name="toggled" handler="OnToggled" last_modification_time="Sun, 22 Oct 2006 12:11:47 GMT"/>
 		</widget>
 		<packing>
 		  <property name="expand">False</property>
@@ -128,7 +128,7 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkToggleToolButton" id="toggletoolbutton3">
+		<widget class="GtkToggleToolButton" id="btnTrash">
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">Corbeille</property>
 		  <property name="use_underline">True</property>
@@ -137,6 +137,7 @@
 		  <property name="visible_vertical">True</property>
 		  <property name="is_important">False</property>
 		  <property name="active">False</property>
+		  <signal name="toggled" handler="OnToggled" last_modification_time="Sun, 22 Oct 2006 12:12:06 GMT"/>
 		</widget>
 		<packing>
 		  <property name="expand">False</property>
