@@ -1,0 +1,24 @@
+<Combine name="Sofia.Views.Quick" fileversion="2.0" outputpath="../../../linux/bin">
+  <Configurations>
+    <Configuration name="Debug" ctype="CombineConfiguration">
+      <Entry build="True" name="QuickView" configuration="Debug" />
+      <Entry build="True" name="QuickViewController" configuration="Debug" />
+      <Entry build="True" name="QuickViewGui" configuration="Debug" />
+    </Configuration>
+    <Configuration name="Release" ctype="CombineConfiguration">
+      <Entry build="True" name="QuickView" configuration="Debug" />
+      <Entry build="True" name="QuickViewController" configuration="Debug" />
+      <Entry build="True" name="QuickViewGui" configuration="Debug" />
+    </Configuration>
+  </Configurations>
+  <StartMode startupentry="QuickView" single="True">
+    <Execute type="None" entry="QuickView" />
+    <Execute type="None" entry="QuickViewController" />
+    <Execute type="None" entry="QuickViewGui" />
+  </StartMode>
+  <Entries>
+    <Entry filename="./QuickView/QuickView.mdp" />
+    <Entry filename="./QuickViewController/QuickViewController.mdp" />
+    <Entry filename="./QuickViewGui/QuickViewGui.mdp" />
+  </Entries>
+</Combine>
