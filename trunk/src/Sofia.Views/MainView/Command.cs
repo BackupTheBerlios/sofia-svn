@@ -12,7 +12,7 @@ namespace Sofia.Views.MainView
 		CommandReceiver commandReceiver;
 		IController controller;
 		
-		public  NewCommand(CommandReceiver commandReceiver, IController controller, string id, string text, string icon, string accelKey, string description) : base (id, text, icon, accelKey, description) 
+		public  NewCommand(CommandReceiver commandReceiver, IController controller, string id, string text, string icon, string accelKey, string description) : base (id, text, icon, accelKey, description, "") 
 		{
 			this.commandReceiver  = commandReceiver;
 			this.controller = controller;

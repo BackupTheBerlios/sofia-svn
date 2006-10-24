@@ -12,11 +12,11 @@ namespace Sofia.Core
 		CommandProperties properties;
 		Hashtable paramList;
 		
-		public BaseCommand(string id, string text, string icon, string accelKey, string description)
+		public BaseCommand(string id, string text, string icon, string accelKey, string description, string type)
 		{
 		 	this.id = id;
 		 	
-		 	properties = new CommandProperties(text, icon, accelKey, description);
+		 	properties = new CommandProperties(text, icon, accelKey, description, type);
 		 	paramList = new Hashtable();
 		}
 		
