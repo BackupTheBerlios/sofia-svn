@@ -1,4 +1,4 @@
-
+﻿
 using System;
 using System.Xml;
 
@@ -29,7 +29,7 @@ namespace Sofia.Core
         
         void Initialize();
         
-        void AddToolbarCommand(ICommand command, bool toggled);
+        void AddToolbarItem(ToolbarItem item);
 
     }
       

@@ -55,7 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="ToolCommand.cs" />
+    <Compile Include="ToolbarFactories.cs" />
     <Compile Include="BaseCommand.cs" />
     <Compile Include="CommandManager.cs" />
     <Compile Include="CommandProperties.cs" />

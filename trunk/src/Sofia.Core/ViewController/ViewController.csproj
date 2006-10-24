@@ -70,7 +70,7 @@
     <Compile Include="IView.cs" />
     <Compile Include="BaseCommandReceiver.cs" />
     <Compile Include="BaseController.cs" />
-    <Compile Include="BaseView.cs" />
+    <Compile Include="BaseGtkView.cs" />
     <Compile Include="ICommandReceiver.cs" />
     <Compile Include="IController.cs" />
     <Compile Include="TreeViewBuilder.cs" />

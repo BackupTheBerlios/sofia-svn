@@ -1,4 +1,4 @@
-
+﻿
 using System;
 using System.Collections;
 
@@ -51,7 +51,7 @@ namespace Sofia.Core
 		public virtual void ExecuteCommand(string ident, string parameters)	
 		{
 			if (CommandManager  == null)
-				throw new InvalidOperationException ("Pas de gestionnaire de commande affecté à la commande : " + ident);
+				throw new ArgumentNullException ("Pas de gestionnaire de commande affecté à la commande : " + ident);
 			CommandManager.GetCommand(ident).Execute(parameters);
 		}
 		
@@ -81,7 +81,7 @@ namespace Sofia.Core
   				IController controller = enumerator.Value as IController;
   				string key = enumerator.Key.ToString();
 				if (controller == null)
-					throw new InvalidOperationException ("Impossible de notifier une requête : controlleur nul pour l'instance de la vue " + key);
+					throw new ArgumentNullException ("Impossible de notifier une requête : controleur nul pour l'instance de la vue " + key);
 				else
 					controller.NotifyRequest(request);
     		}
