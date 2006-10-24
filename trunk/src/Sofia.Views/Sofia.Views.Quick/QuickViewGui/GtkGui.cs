@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections;
 using Sofia.Core;
@@ -10,6 +10,7 @@ namespace Sofia.Views.QuickView
 	{		
 		[Glade.WidgetAttribute] Gtk.TreeView treeviewDoc;
 		[Glade.WidgetAttribute] Gtk.Toolbar toolbarFilters;
+		[Glade.WidgetAttribute] Gtk.Entry entrySearch;
 		
 	
 		public ViewGui () : base("gui.glade", "ViewGui", "QuickView")
@@ -42,7 +43,7 @@ namespace Sofia.Views.QuickView
        		if (item == null) 
 	   			throw new ArgumentNullException("Impossible d'ajouter un élément nul dans la barre d'outils des filtres");
  
-			toolbarFilters.Insert(item, 0);
+			toolbarFilters.Insert(item, -1);
 		}
 		
 		#endregion
@@ -52,6 +53,11 @@ namespace Sofia.Views.QuickView
 		public Gtk.TreeView TreeViewDoc 
 		{
 			get { return treeviewDoc; }
+		}
+		
+		public Gtk.Entry EntrySearch 
+		{
+			get { return entrySearch; }
 		}
 		
 

@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using Gtk;
 
@@ -31,7 +31,7 @@ namespace Sofia.Core
     	}
     	
     	public virtual string Caption { 
-    		get { return "AbstractView"; } 
+    		get { throw new NotSupportedException(); } 
     	}
     	
     	public virtual void Initialize () {
@@ -42,7 +42,7 @@ namespace Sofia.Core
 		}
 		
 		public virtual string DocumentID { 
-			get { return ""; } 
+			get { throw new NotSupportedException(); } 
 		}
 		
 		public virtual  void LoadFromXML(string xml) {
@@ -54,7 +54,7 @@ namespace Sofia.Core
         
         public virtual void AddToolbarItem(ToolbarItem item)
         {
-        	
+        	throw new NotSupportedException();	
         }
 		
     	#endregion

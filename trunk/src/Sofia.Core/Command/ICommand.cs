@@ -19,6 +19,15 @@ namespace Sofia.Core
 		CommandProperties Properties {
 			get;
 		}
+		
+		CommandManager Manager {
+			get;
+			set;
+		}
+		
+		ToolbarItem ToolbarItem {
+			get;
+		}
 	}
 	
 }

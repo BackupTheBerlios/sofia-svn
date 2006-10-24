@@ -23,7 +23,7 @@ namespace Sofia.Core
 	}
 	
 	/// <summary>
-	/// Séparateur
+	/// Sparateur
 	/// </summary>
 	public class ToolbarSeparator : ToolbarItem
 	{
@@ -97,20 +97,20 @@ namespace Sofia.Core
 	}
 	
 	/// <summary>
-	/// Bouton 2 états
+	/// Bouton 2 tats
 	/// </summary>
 	public class ToolbarToggle : ToolbarItem
 	{
 		
-		private ToggleToolButton button;
+		private ToggleToolButton _Button;
 		
 		public ToolbarToggle(ICommand cmd) : base (cmd)
 		{
-			button = new ToggleToolButton(cmd.Properties.Icon);
-			button.Toggled += new EventHandler (OnToggled);
-			button.Label = cmd.Properties.Text;
-			this.Add(button);
-			button.Show();
+			_Button = new ToggleToolButton(cmd.Properties.Icon);
+			_Button.Toggled += new EventHandler (OnToggled);
+			_Button.Label = cmd.Properties.Text;
+			this.Add(_Button);
+			_Button.Show();
 			this.ShowAll();
 		}
 		
@@ -119,10 +119,20 @@ namespace Sofia.Core
 			if (Toggled != null)
 				Toggled (this, EventArgs.Empty);
 			else
-				Command.Execute("");
+			{
+				if (_Button.Active)
+					Command.Execute("");
+				else
+					Command.UnExecute();
+			}
 		}
 		
 		public event EventHandler Toggled;
+		
+		public ToggleToolButton Button
+		{
+			get { return _Button; }
+		}
 		
 	}
 	

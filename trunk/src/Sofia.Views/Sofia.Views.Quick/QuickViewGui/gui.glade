@@ -47,7 +47,7 @@
 		  <property name="is_important">False</property>
 
 		  <child>
-		    <widget class="GtkEntry" id="entry2">
+		    <widget class="GtkEntry" id="entrySearch">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="editable">True</property>
@@ -63,82 +63,6 @@
 		<packing>
 		  <property name="expand">False</property>
 		  <property name="homogeneous">False</property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkToolButton" id="btnApply">
-		  <property name="visible">True</property>
-		  <property name="stock_id">gtk-find</property>
-		  <property name="visible_horizontal">True</property>
-		  <property name="visible_vertical">True</property>
-		  <property name="is_important">False</property>
-		</widget>
-		<packing>
-		  <property name="expand">False</property>
-		  <property name="homogeneous">True</property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkSeparatorToolItem" id="separatortoolitem1">
-		  <property name="visible">True</property>
-		  <property name="draw">True</property>
-		  <property name="visible_horizontal">True</property>
-		  <property name="visible_vertical">True</property>
-		</widget>
-		<packing>
-		  <property name="expand">False</property>
-		  <property name="homogeneous">False</property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkToggleToolButton" id="btnRecent">
-		  <property name="visible">True</property>
-		  <property name="stock_id">gtk-new</property>
-		  <property name="visible_horizontal">True</property>
-		  <property name="visible_vertical">True</property>
-		  <property name="is_important">False</property>
-		  <property name="active">False</property>
-		</widget>
-		<packing>
-		  <property name="expand">False</property>
-		  <property name="homogeneous">True</property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkToggleToolButton" id="btnFavorites">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Favoris</property>
-		  <property name="use_underline">True</property>
-		  <property name="stock_id">gtk-about</property>
-		  <property name="visible_horizontal">True</property>
-		  <property name="visible_vertical">True</property>
-		  <property name="is_important">False</property>
-		  <property name="active">False</property>
-		</widget>
-		<packing>
-		  <property name="expand">False</property>
-		  <property name="homogeneous">True</property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkToggleToolButton" id="btnTrash">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Corbeille</property>
-		  <property name="use_underline">True</property>
-		  <property name="stock_id">gtk-delete</property>
-		  <property name="visible_horizontal">True</property>
-		  <property name="visible_vertical">True</property>
-		  <property name="is_important">False</property>
-		  <property name="active">False</property>
-		</widget>
-		<packing>
-		  <property name="expand">False</property>
-		  <property name="homogeneous">True</property>
 		</packing>
 	      </child>
 	    </widget>

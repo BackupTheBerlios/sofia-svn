@@ -16,7 +16,8 @@ namespace Sofia.Core
 		
 		public void RegisterCommand (ICommand cmd)
 		{
-			cmds [cmd.Id] = cmd;			
+			cmds [cmd.Id] = cmd;
+			cmd.Manager = this;
 		} 
 		
 		public ICommand GetCommand (string cmdId)

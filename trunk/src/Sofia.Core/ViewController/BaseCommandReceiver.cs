@@ -17,7 +17,7 @@ namespace Sofia.Core
 		
 		public virtual IView View 
 		{ 
-			get { return null; } 
+			get { throw new NotSupportedException(); } 
 		}
 		
 		#endregion 

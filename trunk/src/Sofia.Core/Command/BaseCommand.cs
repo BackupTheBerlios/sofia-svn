@@ -8,20 +8,21 @@ namespace Sofia.Core
 	public  class BaseCommand : ICommand
 	{
 				
-		string id;
-		CommandProperties properties;
-		Hashtable paramList;
+		string _Id;
+		CommandProperties _Properties;
+		Hashtable _ParamList;
+		CommandManager _Manager;
 		
 		public BaseCommand(string id, string text, string icon, string accelKey, string description)
-		{
-		 	this.id = id;
+		{		 	
+		 	_Id = id;
 		 	
-		 	properties = new CommandProperties(text, icon, accelKey, description);
-		 	paramList = new Hashtable();
+		 	_Properties = new CommandProperties(text, icon, accelKey, description);
+		 	_ParamList = new Hashtable();
 		}
 		
 		public virtual void Execute(string parameters) 
-		{
+		{			
 			XmlTools.XPathNavigatorFacade xpn= new XmlTools.XPathNavigatorFacade();
 			xpn.LoadXML(parameters);
      		
@@ -29,25 +30,36 @@ namespace Sofia.Core
      		ArrayList values = xpn.GetAttributes("/Params", "value");
      		
      		for (int i = 0; i < names.Count; i++) {
-     			paramList[names[i].ToString()] = values[i].ToString();
+     			_ParamList[names[i].ToString()] = values[i].ToString();
      		}
 
 		}
 		
 		public virtual void UnExecute() 
 		{
+			throw new NotSupportedException();
 		}
 		
 		public string Id { 
-			get { return id; } 
+			get { return _Id; } 
 		}
 		
 		public CommandProperties Properties { 
-			get { return properties; } 
+			get { return _Properties; } 
+		}
+		
+		public CommandManager Manager { 
+			get { return _Manager; } 
+			set { _Manager = value; }
+		}
+		
+		public virtual ToolbarItem ToolbarItem
+		{
+			get { throw new NotSupportedException(); }
 		}
 		
 		public Hashtable ParamList {
-			get { return paramList; }
+			get { return _ParamList; }
 		}
 		
 	}

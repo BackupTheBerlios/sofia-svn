@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections;
 
@@ -41,7 +41,7 @@ namespace Sofia.Core
 		}
 		
 		public virtual IView View {
-			get { return null; }
+			get { throw new NotSupportedException(); }
 		}
 		
 		public virtual Hashtable RegisteredControllers {
@@ -50,8 +50,8 @@ namespace Sofia.Core
 		
 		public virtual void ExecuteCommand(string ident, string parameters)	
 		{
-			if (CommandManager  == null)
-				throw new ArgumentNullException ("Pas de gestionnaire de commande affecté à la commande : " + ident);
+			if (CommandManager  == null)			
+				throw new InvalidOperationException ("Pas de gestionnaire de commande affecté à la commande : " + ident);
 			CommandManager.GetCommand(ident).Execute(parameters);
 		}
 		
@@ -60,7 +60,7 @@ namespace Sofia.Core
 		///</summary>
 		public virtual IController LoadController(string ident) 
 		{
-			return null;
+			throw new NotSupportedException();
 		}
 		
 		///<summary>
