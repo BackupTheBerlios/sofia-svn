@@ -1,4 +1,4 @@
-
+﻿
 using System;
 using Sofia.Core;
 
@@ -10,7 +10,7 @@ namespace Sofia.Views.QuickView
 		CommandReceiver commandReceiver;
 		IController controller;
 		
-		public  NewCommand(CommandReceiver commandReceiver, IController controller, string id, string text, string icon, string accelKey, string description) : base (id, text, icon, accelKey, description) 
+		public  NewCommand(CommandReceiver commandReceiver, IController controller) : base ("New", "", "", "", "") 
 		{			
 			this.commandReceiver  = commandReceiver;
 			this.controller = controller;
@@ -47,9 +47,10 @@ namespace Sofia.Views.QuickView
 	{
 		CommandReceiver commandReceiver;
 		
-		public ToggleRecentFilterCommand(CommandReceiver commandReceiver, string id, string text, string icon, string accelKey, string description) : base (id, text, icon, accelKey, description) 
+		public ToggleRecentFilterCommand(CommandReceiver commandReceiver) : base ("ToggleRecent", "Documents récents", Stock.RecentIcon, "", "Affiche les documents récemment consultés ou créés.") 
 		{			
 			this.commandReceiver  = commandReceiver;
+			ViewGui.AddToolItem(new ToolbarToggle(this));
 		}
 		
 		public override void Execute(string parameters)
@@ -74,6 +75,7 @@ namespace Sofia.Views.QuickView
 		public ToggleFavoritesFilterCommand(CommandReceiver commandReceiver, string id, string text, string icon, string accelKey, string description) : base (id, text, icon, accelKey, description) 
 		{			
 			this.commandReceiver  = commandReceiver;
+			ViewGui.AddToolItem(new ToolbarToggle(this));
 		}
 		
 		public override void Execute(string parameters)
@@ -95,9 +97,10 @@ namespace Sofia.Views.QuickView
 	{
 		CommandReceiver commandReceiver;
 		
-		public ToggleTrashFilterCommand(CommandReceiver commandReceiver, string id, string text, string icon, string accelKey, string description) : base (id, text, icon, accelKey, description) 
+		public ToggleTrashFilterCommand(CommandReceiver commandReceiver) : base ("ToggleTrash", "Documents récents", Stock.TrashIcon, "", "Affiche les documents placés dans la corbeille.") 
 		{			
 			this.commandReceiver  = commandReceiver;
+			ViewGui.AddToolItem(new ToolbarToggle(this));
 		}
 		
 		public override void Execute(string parameters)

@@ -1,4 +1,4 @@
-
+﻿
 using System;
 using Sofia.Core;
 
@@ -17,7 +17,7 @@ namespace Sofia.Views.ClientView
 		  	commandReceiver = new CommandReceiver();
 		  	
 		  	//Création des commandes
-		  	CommandManager.RegisterCommand(new NewCommand(commandReceiver, this, "New", "Nouveau client", Stock.NewIcon, "", "Créer un nouveau client dans un nouveau dossier"));
+		  	CommandManager.RegisterCommand(new NewCommand(commandReceiver, this));
 		}
 		
 		/// <summary>

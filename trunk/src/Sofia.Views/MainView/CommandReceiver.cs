@@ -1,4 +1,4 @@
-
+﻿
 using System;
 using System.Xml;
 
@@ -31,7 +31,7 @@ namespace Sofia.Views.MainView
 		public void AddToolItem(ToolbarItem item)
 		{
        		if (item == null) 
-	   			throw new InvalidOperationException("Impossible d'ajouter un élément nul dans la barre d'outils principale");
+	   			throw new ArgumentNullException("Impossible d'ajouter un élément nul dans la barre d'outils principale");
  
 			viewGui.ToolbarMain.Insert(item, 0);
 		}
@@ -42,7 +42,7 @@ namespace Sofia.Views.MainView
 		public IController GetController(string viewName) {
 		   	IController controller = viewGui.Controller.LoadController(viewName);
        		if (controller == null) 
-	   			throw new InvalidOperationException("L'assembly n'a pas défini de controleur.");
+	   			throw new ArgumentNullException("L'assembly n'a pas défini de controleur.");
 	   		return controller;
 	   	}
 
@@ -63,7 +63,7 @@ namespace Sofia.Views.MainView
          	//Récupération de l'interface graphique de la vue
        		IView view = controller.View;
        		if (view == null)
-       			throw new InvalidOperationException("L'interface graphique de la vue n'a pas pu être créée.");
+       			throw new ArgumentNullException("L'interface graphique de la vue n'a pas pu être créée.");
 	       			
 	       	//Debug
 			Console.WriteLine("Appel commande NewView : " + view.Caption + " dans " + view.Destination);
@@ -71,7 +71,7 @@ namespace Sofia.Views.MainView
 			//Récupération du control de la vue
 			Gtk.HBox hbox = view.VisualComponent;			
 			if (hbox == null)
-				throw new InvalidOperationException("La vue n'expose pas son interface graphique.");
+				throw new ArgumentNullException("La vue n'expose pas son interface graphique.");
 			
 			//positionnement dans le Notebook principal
 	       	if (view.Destination.Equals("default")) {	       		
@@ -102,7 +102,7 @@ namespace Sofia.Views.MainView
     		IController controller = (IController) viewGui.Controller.RegisteredControllers[key];
     		
     		if (controller == null)
-    			throw new InvalidOperationException(string.Format("Pas de controleur associé à la clé {0}", key));
+    			throw new ArgumentNullException(string.Format("Pas de controleur associé à la clé {0}", key));
     		
 	    	string idDoc = controller.View.DocumentID;
 	    	

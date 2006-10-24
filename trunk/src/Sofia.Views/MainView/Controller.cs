@@ -1,4 +1,4 @@
-
+﻿
 
 using System;
 using Gtk;
@@ -66,7 +66,7 @@ namespace Sofia.Views.MainView
       		IController controller = (IController) assembly.CreateInstance("Sofia.Views." + ident + ".Controller");
       		
       		if (controller == null) 
-	   			throw new InvalidOperationException(string.Format("L'assembly {0} n'a pas défini de controleur.",  assemblyName.FullName));
+	   			throw new ArgumentNullException(string.Format("L'assembly {0} n'a pas défini de controleur.",  assemblyName.FullName));
 	   		else
      			return controller;      		
     	}
@@ -79,16 +79,16 @@ namespace Sofia.Views.MainView
     		//Récupération du controleur de la vue
 	    	IController controller = LoadController(viewName);
        		if (controller == null) 
-	   			throw new InvalidOperationException("L'assembly n'a pas défini de controleur.");
+	   			throw new ArgumentNullException("L'assembly n'a pas défini de controleur.");
 	   			
          	//Récupère les propriété de la commande New dans la vue	
 	       	string cmdId = string.Format("New_{0}", viewName);
 	       	CommandProperties commandProperties = controller.CommandManager.GetProperties("New");
        		if (commandProperties == null) 
-	   			throw new InvalidOperationException(string.Format("La commande {0} n'existe pas dans la vue {1}",  cmdId, viewName));
+	   			throw new ArgumentNullException(string.Format("La commande {0} n'existe pas dans la vue {1}",  cmdId, viewName));
 
 			//Enregistre la commande d'insertion de l'interface graphique dans la vue principale
-	       	ICommand command = new NewViewCommand(commandReceiver, viewName, cmdId, commandProperties.Text, commandProperties.Icon, commandProperties.AccelKey, commandProperties.Description);
+	       	ICommand command = new NewViewCommand(commandReceiver, viewName, cmdId, commandProperties.Text, commandProperties.Icon, commandProperties.AccelKey, commandProperties.Description);	       	
 	       	CommandManager.RegisterCommand(command);
 	       	
 	   	}

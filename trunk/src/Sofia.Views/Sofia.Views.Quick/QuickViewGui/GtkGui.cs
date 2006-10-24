@@ -1,4 +1,4 @@
-
+﻿
 using System;
 using System.Collections;
 using Sofia.Core;
@@ -34,10 +34,14 @@ namespace Sofia.Views.QuickView
 			get { return "left"; } 
 		}
 		
-		public override void AddToolbarCommand(ICommand command, bool toggled)
+		///<summary>
+		///Ajout d'un bouton dans la barre d'outils principale
+		///</summary>
+		public override void AddToolbarItem(ToolbarItem item)
 		{
-			button = new ToolbarButton(command);		       				
-		       		commandReceiver.AddToolItem(button);
+       		if (item == null) 
+	   			throw new ArgumentNullException("Impossible d'ajouter un élément nul dans la barre d'outils des filtres");
+ 
 			toolbarFilters.Insert(item, 0);
 		}
 		
@@ -48,17 +52,6 @@ namespace Sofia.Views.QuickView
 		public Gtk.TreeView TreeViewDoc 
 		{
 			get { return treeviewDoc; }
-		}
-		
-		///<summary>
-		///Ajout d'un bouton dans la barre d'outils principale
-		///</summary>
-		public void AddFilterButton(ToolbarItem item)
-		{
-       		if (item == null) 
-	   			throw new InvalidOperationException("Impossible d'ajouter un élément nul dans la barre d'outils des filtres");
- 
-			toolbarFilters.Insert(item, 0);
 		}
 		
 

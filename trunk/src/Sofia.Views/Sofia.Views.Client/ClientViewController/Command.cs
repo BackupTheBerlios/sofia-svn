@@ -14,7 +14,7 @@ namespace Sofia.Views.ClientView
 		CommandReceiver commandReceiver;
 		IController controller;
 		
-		public  NewCommand(CommandReceiver commandReceiver, IController controller, string id, string text, string icon, string accelKey, string description) : base (id, text, icon, accelKey, description) 
+		public  NewCommand(CommandReceiver commandReceiver, IController controller) : base ("New", "Nouveau client", Stock.NewIcon, "", "Créer un nouveau client dans un nouveau dossier") 
 		{
 			this.commandReceiver  = commandReceiver;
 			this.controller = controller;
