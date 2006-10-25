@@ -1,6 +1,6 @@
 
 using System;
-using com.db4o;
+using System.Collections;
 
 namespace Sofia.Core
 {
@@ -14,7 +14,7 @@ namespace Sofia.Core
 			this.modelName = modelName;
 		}
 		
-		public ObjectSet SendRequest(string request)
+		public IList SendRequest(string request)
    		{
  			AppDomain domain = AppDomain.CreateDomain("ModelDomain");
  			try

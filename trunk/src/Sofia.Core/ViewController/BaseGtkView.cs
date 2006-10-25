@@ -13,21 +13,22 @@ namespace Sofia.Core
 	public class BaseView : HBox, IView
 	{
 		
-		Glade.XML glade;
-		string widgetName;
-		XmlTools.XmlDocumentFacade xmlDoc;
+		Glade.XML _Glade;
+		string _WidgetName;
+		XmlTools.XmlDocumentFacade _XmlDoc;
 		
 		#region implémentation de l'interface
 		
-		IController controller;
+		IController _Controller;
+		string _DocumentID;
 		
     	public HBox VisualComponent { 
     		get { return this; } 
     	}
     	
     	public IController Controller 	{ 
-    		get { return controller; }
-    		set { controller = value; }
+    		get { return _Controller; }
+    		set { _Controller = value; }
     	}
     	
     	public virtual string Caption { 
@@ -42,14 +43,28 @@ namespace Sofia.Core
 		}
 		
 		public virtual string DocumentID { 
-			get { throw new NotSupportedException(); } 
+			get 
+			{ 
+				Console.WriteLine("ici");
+				if (_DocumentID.Length == 0)
+				{
+				Console.WriteLine("ici1");
+					_DocumentID = Guid.NewGuid().ToString("N");
+					Console.WriteLine("ici2");
+				}
+				return _DocumentID;
+			}
+			
+			set 
+			{ _DocumentID = value; }
 		}
+			
 		
-		public virtual  void LoadFromXML(string xml) {
+		public virtual void LoadFromXML(string xml) {
 		}
 		
         public virtual string SaveToXML() {
-        	return xmlDoc.ToString();
+        	return _XmlDoc.ToString();
         }
         
         public virtual void AddToolbarItem(ToolbarItem item)
@@ -59,13 +74,14 @@ namespace Sofia.Core
 		
     	#endregion
     	
-		private BaseView (string widgetName) : base (false, 0)
+		private BaseView (string _WidgetName) : base (false, 0)
 		{
-			this.widgetName = widgetName;
-			xmlDoc = new XmlTools.XmlDocumentFacade("<Document revision='0'/>");			
+			this._WidgetName = _WidgetName;
+			_XmlDoc = new XmlTools.XmlDocumentFacade("<Document revision='0'/>");
+			_DocumentID = "";
 		}
 
-		protected BaseView (string resourceName, string widgetName, string nameSpace) : this (widgetName)
+		protected BaseView (string resourceName, string _WidgetName, string nameSpace) : this (_WidgetName)
 		{					
 			string fullName = nameSpace + '.' + resourceName;
 			
@@ -74,15 +90,15 @@ namespace Sofia.Core
 			if (!System.IO.File.Exists(a.CodeBase + "/" + fullName))
 				fullName = resourceName;
 						
-			glade = new XML (Assembly.GetCallingAssembly (), resourceName, widgetName, null);
+			_Glade = new XML (Assembly.GetCallingAssembly (), resourceName, _WidgetName, null);
 			Init ();
 		}
 
 		void Init ()
 		{
-			glade.Autoconnect (this);
+			_Glade.Autoconnect (this);
 			
-			Window win = (Window) glade [widgetName];
+			Window win = (Window) _Glade [_WidgetName];
 			win.Visible = false;
 			Widget child = win.Child;
 			
@@ -92,12 +108,12 @@ namespace Sofia.Core
 		
 		protected XmlTools.XmlDocumentFacade XmlDoc 
 		{
-			get { return xmlDoc; }
+			get { return _XmlDoc; }
 		}
 		
 		protected Glade.XML XMLGlade
 		{
-			get { return glade; }
+			get { return _Glade; }
 		}
 
 	}    

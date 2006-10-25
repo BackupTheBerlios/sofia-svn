@@ -4,7 +4,8 @@ using System.Collections;
 
 namespace Sofia.Core.Model
 {
-	
+
+	[Serializable()]
 	public class Dossier
     {
         string caption;

@@ -1,7 +1,6 @@
 
 using System;
-
-using com.db4o;
+using System.Collections;
 
 using Sofia.Core.Model;
 
@@ -47,18 +46,20 @@ namespace Sofia.Core
 			objectColumn.SetCellDataFunc (objectRenderer, new Gtk.TreeCellDataFunc (RenderObject));
 		}
 		
-		public void Fill(ObjectSet dossiers)
+		public void Fill(IList dossiers)
 		{
-			Gdk.Pixbuf folderPixbuf = new Gdk.Pixbuf (Gtk.Stock.Directory);			
+			//Gtk.Image folderImage = new Gtk.Image(Gtk.Stock.Directory, Gtk.IconSize.Menu);
+			Gdk.Pixbuf folderImage = Gdk.Pixbuf.LoadFromResource("stock-folder.png");
+			Gdk.Pixbuf documentImage = Gdk.Pixbuf.LoadFromResource("stock-generic.png");
+			
 			foreach (Dossier dossier in dossiers) 
 			{				
-				Gtk.TreeIter iter = treeStore.AppendValues(folderPixbuf, dossier);
+				Gtk.TreeIter iter = treeStore.AppendValues(folderImage, dossier);
 				
 				foreach (Document document in dossier.Documents) 
 				{
-					//TODO : Déterminer l'icone en fonction du document
-					Gdk.Pixbuf documentPixbuf = new Gdk.Pixbuf (Gtk.Stock.File);
-					treeStore.AppendValues(iter, documentPixbuf, document);
+					//TODO : Déterminer l'icone en fonction du document					
+					treeStore.AppendValues(iter, documentImage, document);
 				}
 			}
 		}

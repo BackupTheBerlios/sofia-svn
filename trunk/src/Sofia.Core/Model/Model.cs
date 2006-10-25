@@ -1,8 +1,13 @@
 
 using System;
 using System.Collections;
+using System.Xml;
+using System.Xml.Serialization;
+using System.IO;
+using System.Text;
 
 using com.db4o;
+using com.db4o.query;
 
 using Sofia.Core.XmlTools;
 
@@ -21,8 +26,9 @@ namespace Sofia.Core.Model
 		
     	#region implémentation de l'interface
     	
-    	public ObjectSet SendRequest(string request)
+    	public IList SendRequest(string request)
     	{
+    		ArrayList objectSets = new ArrayList();    		
     		db = Db4o.OpenFile("sofia.data");
     		try
     		{    	  		    			
@@ -31,19 +37,24 @@ namespace Sofia.Core.Model
      			ArrayList objects = xpn.GetAttributes("//Request", "object");
      			
      			for (int i = 0; i < operations.Count; i++) {
-     			
-     				string ope = operations[i].ToString();
+    				string ope = operations[i].ToString();
      				string obj = objects[i].ToString();
-     		    
-     		    	if (ope == "Insert") {
-     		    		
-     		    		if (obj == "MasterDocument") 
-     		    			AddMasterDocument();
-				
-    				}      				
+     				ObjectSet objectSet = ProcessRequest(ope, obj);
+     		        if (objectSet != null) 
+     		        	objectSets.Add(objectSet);
     			}
     			
-    	  		return null;
+	   			if (objectSets.Count > 0) 
+    			{	    	
+	   				IList list = new ArrayList();
+    				foreach(Dossier dossier in (ObjectSet) objectSets[0])
+    				{
+    					list.Add(dossier);
+    				}
+    	  			return list;
+    	  		}
+    	  		else
+    	  		 	return null;
     	  		
     	  	}
     	  	finally
@@ -54,13 +65,64 @@ namespace Sofia.Core.Model
     	
     	#endregion
     	
+    	private ObjectSet ProcessRequest(string  ope, string obj)
+    	{
+    		////////////////////////////////////////////Insertion
+    		if (ope == "Insert") 
+    		{
+     		 		
+     			if (obj == "MasterDocument") 
+     			{
+     		    	AddMasterDocument();
+     		    	return null;
+     		    }
+				
+    		}
+    		
+    		/////////////////////////////////////////////Sélection
+    		if (ope == "Select") 
+    		{
+    			
+    			if (obj == "Document")
+    			{	
+    				return GetDocument();
+    			}
+    			
+    		}
+    		
+    		/////////////////////////////////////////////Else
+    		return null;
+    	}
+
+		#region Prédicats
+		
+   		public class FolderPredicate : Predicate 
+    	{
+    		private string _Caption;
+    		
+    		public FolderPredicate(string caption)
+    		{
+    			_Caption = caption;
+    		}
+    		
+    		public bool Match(Dossier dossier) 
+    		{
+    			Console.WriteLine(dossier.Caption);
+        		return dossier.Caption.StartsWith(_Caption);
+    		}
+    	}
+
+		#endregion
+		
+    	#region Méthodes d'accès aux données
+    	
     	private string GetValue(string objectName, string attributeName)
     	{
     	 	string xValue = "//Request[@object='{0}']/Fields//Field[@name='{1}']";
     	 	return xpn.GetValue(string.Format(xValue, objectName, attributeName));
     	}
     	     	
-       	void AddMasterDocument()
+       	private void AddMasterDocument()
     	{
     		string objectName = "MasterDocument";
      		string creation = GetValue(objectName, "creation");
@@ -74,9 +136,19 @@ namespace Sofia.Core.Model
 			dossier.AddDocument(document);		
  		
     		db.Set(dossier);    		
-    		Console.WriteLine("Dossier ajouté : " + dossier.ToString());
- 		
+    		Console.WriteLine("Dossier ajouté : " + dossier.ToString());
     	}
+    	
+    	private ObjectSet GetDocument()
+    	{
+    		string objectName = "Document";
+     		string caption = GetValue(objectName, "caption");
+     		//Dossier dossier = new Dossier(DateTime.Now, caption);
+    		//return db.Get(dossier);
+    		return db.Query(new FolderPredicate(caption));
+		}
+    	
+    	#endregion
    	
     }
    

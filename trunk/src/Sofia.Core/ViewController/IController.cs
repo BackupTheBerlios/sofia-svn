@@ -2,8 +2,6 @@
 using System;
 using System.Collections;
 
-using com.db4o;
-
 namespace Sofia.Core
 {
 	
@@ -22,7 +20,7 @@ namespace Sofia.Core
       	void ExecuteCommand(string ident, string parameters);
       	
       	//Envoie une requête au modèle
-      	ObjectSet RequestModel(string request);
+      	IList RequestModel(string request);
       	
       	//Charge le controleur depuis l'assembly ident.dll
       	IController LoadController(string ident);

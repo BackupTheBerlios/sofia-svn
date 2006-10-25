@@ -22,7 +22,7 @@ namespace Sofia.Views.ClientView
     			if ( (field_Nom.Text.Length == 0) || (field_Prenom.Text.Length == 0) )
     				return "Nouveau client";
     			else
-    				return field_Nom + " " + field_Prenom; 
+    				return "Fiche d'identité de " + field_Nom.Text + " " + field_Prenom.Text; 
     		}
     	}
     	

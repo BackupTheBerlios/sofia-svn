@@ -5,6 +5,7 @@ namespace Sofia.Core.Model
 	/// <summary>
 	/// Description of Document.
 	/// </summary>
+	[Serializable()]
 	public class Document
 	{
 		string caption;

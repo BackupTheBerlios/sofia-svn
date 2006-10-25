@@ -1,6 +1,11 @@
 
 using System;
+using System.Collections;
+using System.Xml;
+
 using Sofia.Core;
+
+using Sofia.Core.XmlTools;
 
 namespace Sofia.Views.QuickView
 {
@@ -38,7 +43,21 @@ namespace Sofia.Views.QuickView
 			TreeViewBuilder treeViewBuilder = new TreeViewBuilder(viewGui.TreeViewDoc);
 			
 			//Requête
-			viewGui.Controller.RequestModel(xmlDoc.ToString());
+			XmlElement eField;
+			XmlDocumentFacade xmlDoc = new XmlDocumentFacade("<Requests/>");
+			XmlElement eRequest = xmlDoc.AddNode(null, "Request", "");
+   			xmlDoc.AddAttributeNode(eRequest, "operation", "Select");
+   			xmlDoc.AddAttributeNode(eRequest, "object", "Document");
+   			
+ 			XmlElement eFields = xmlDoc.AddNode(eRequest, "Fields", "");
+ 			
+ 			eField = xmlDoc.AddNode(eFields, "Field", "test test");
+ 			xmlDoc.AddAttributeNode(eField, "name", "caption");
+ 			
+			Console.WriteLine(xmlDoc.ToString());
+		
+			IList dossiers = viewGui.Controller.RequestModel(xmlDoc.ToString());
+			treeViewBuilder.Fill(dossiers);
 		}
 		
 		public void ToggleRecentFilter(bool active)

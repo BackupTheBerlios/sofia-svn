@@ -1,13 +1,14 @@
 
 using System;
-
 using com.db4o;
+using System.Collections;
+
 
 namespace Sofia.Core
 {
 	public interface IModel
 	{
-		ObjectSet SendRequest (string request);	
+		IList SendRequest (string request);	
 	}
 	
 }

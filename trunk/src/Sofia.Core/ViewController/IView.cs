@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Xml;
 
@@ -21,7 +21,7 @@ namespace Sofia.Core
         string Destination { get; }
         
         //Identifiant de document chargé dans la vue
-        string DocumentID {get; }
+        string DocumentID {get; set; }
         
         //Représentation XML de la vue
         void LoadFromXML(string xml);

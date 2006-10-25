@@ -1,7 +1,7 @@
 
 using System;
+using System.Collections;
 using System.Reflection;
-using com.db4o;
 
 namespace Sofia.Core
 {
@@ -33,14 +33,14 @@ namespace Sofia.Core
 	[Serializable()]
 	public class ModelRequest
 	{	
-		private ObjectSet result;
+		private IList _Result;
 
 		public ModelRequest(IModel model, string request)
 		{
-			result = model.SendRequest(request);
+			_Result = model.SendRequest(request);
 		}
 		
-		public ObjectSet Result { get {	return result; } }
+		public IList Result { get {	return _Result; } }
 		
 	}
 

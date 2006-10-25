@@ -4,8 +4,6 @@ using System.Collections;
 
 using Sofia.Core;
 
-using com.db4o;
-
 namespace Sofia.Core
 {
 	
@@ -32,9 +30,9 @@ namespace Sofia.Core
 			get { return commandManager; } 
 		}
 		
-		public ObjectSet RequestModel(string request)
+		public IList RequestModel(string request)
 		{
-			ObjectSet objectSet = modelFactory.SendRequest(request);
+			IList objectSet = modelFactory.SendRequest(request);
 			NotifyRequest(request);
 			
 			return objectSet;			
