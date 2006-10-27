@@ -11,34 +11,61 @@ namespace Sofia.Core
 	public class TreeViewBuilder
 	{
 		
-		private Gtk.TreeView treeView;
-		private Gtk.TreeStore treeStore; 
-				
-		Gtk.TreeViewColumn objectColumn;
+		internal const int TextColumn = 0;
+		internal const int OpenIconColumn = 1;
+		internal const int ClosedIconColumn = 2;
+		internal const int DataItemColumn = 3;
+		internal const int FilledColumn = 4;
 		
-		Gtk.CellRendererText objectRenderer;
+		private Gtk.TreeView _TreeView;
+		private Gtk.TreeStore _TreeStore;
+		
+		internal Gtk.TreeViewColumn _CompleteColumn;
+		internal Gtk.CellRendererText _TextRender;
+		
+		Hashtable _Icons;
+				
 		
 		public TreeViewBuilder (Gtk.TreeView treeView)
 		{
-			this.treeView = treeView;	
-			treeStore = new Gtk.TreeStore (typeof (Gdk.Pixbuf),	typeof (Dossier));
+			_Icons = new Hashtable ();
+			_TreeView = treeView;	
+			_TreeStore = new Gtk.TreeStore (typeof (string), typeof (Gdk.Pixbuf), typeof (Gdk.Pixbuf), typeof (object), typeof(bool));
 			
-			SetRenderers();
-			SetColumns();
+			_TreeView.HeadersVisible = false;
+			_TreeView.SearchColumn = 0;
+			_TreeView.EnableSearch = true;
+			
+			_CompleteColumn = new Gtk.TreeViewColumn ();
+			_CompleteColumn.Title = "column";
+
+			Gtk.CellRendererPixbuf pixRender = new Gtk.CellRendererPixbuf ();
+			_CompleteColumn.PackStart (pix_render, false);
+			_CompleteColumn.AddAttribute (pix_render, "pixbuf", OpenIconColumn);
+			_CompleteColumn.AddAttribute (pix_render, "pixbuf-expander-open", OpenIconColumn);
+			_CompleteColumn.AddAttribute (pix_render, "pixbuf-expander-closed", ClosedIconColumn);
+
+			_TextRender = new Gtk.CellRendererText ();
+				
+			_CompleteColumn.PackStart (_TextRender, true);
+			_CompleteColumn.AddAttribute (_TextRender, "markup", TextColumn);
+	
+			_TreeView.AppendColumn (_CompleteColumn);
+					
 			SetDataFunctions();
 			
 			treeView.Model = treeStore;
  		}
 		
-		private void SetRenderers()
+
+		public Gdk.Pixbuf GetIcon (string id)
 		{
-			objectRenderer = new Gtk.CellRendererText ();
-		}
-		
-		private void SetColumns()
-		{
-			treeView.AppendColumn ("Icon", new Gtk.CellRendererPixbuf (), "pixbuf", 0);  
-			objectColumn =  treeView.AppendColumn ("Document", objectRenderer, "text", 1);			
+			Gdk.Pixbuf icon = _Icons [id] as Gdk.Pixbuf;
+			if (icon == null) {
+				icon = _TreeView.RenderIcon (id, Gtk.IconSize.Menu, "");
+				_Icons [id] = icon;
+			}
+			return icon;
 		}
 		
 		private void SetDataFunctions()
@@ -47,8 +74,7 @@ namespace Sofia.Core
 		}
 		
 		public void Fill(IList dossiers)
-		{
-			//Gtk.Image folderImage = new Gtk.Image(Gtk.Stock.Directory, Gtk.IconSize.Menu);
+		{			
 			Gdk.Pixbuf folderImage = Gdk.Pixbuf.LoadFromResource("stock-folder.png");
 			Gdk.Pixbuf documentImage = Gdk.Pixbuf.LoadFromResource("stock-generic.png");
 			
@@ -60,6 +86,7 @@ namespace Sofia.Core
 				{
 					//TODO : Déterminer l'icone en fonction du document					
 					treeStore.AppendValues(iter, documentImage, document);
+					Console.WriteLine("////////////////////////////////////// caption du doc : " + document.Caption);
 				}
 			}
 		}
