@@ -9,6 +9,7 @@
       <Entry build="True" name="QuickViewGui" configuration="Debug" />
     </Configuration>
   </Configurations>
+  <DeployTargets />
   <StartMode startupentry="QuickView" single="True">
     <Execute type="None" entry="QuickViewController" />
     <Execute type="None" entry="QuickViewGui" />

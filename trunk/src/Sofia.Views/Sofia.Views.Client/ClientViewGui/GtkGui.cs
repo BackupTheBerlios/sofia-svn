@@ -16,7 +16,8 @@ namespace Sofia.Views.ClientView
 		{
 		}
 		
-    	public override string Caption { 
+    	public override string Caption 
+    	{
     		get 
     		{    		
     			if ( (field_Nom.Text.Length == 0) || (field_Prenom.Text.Length == 0) )
@@ -26,17 +27,26 @@ namespace Sofia.Views.ClientView
     		}
     	}
     	
-    	public override string ToString() {
+    	public override string MasterCaption 
+    	{
+    		get 
+    		{ 
+    			return field_Nom.Text + " " + field_Prenom.Text; 
+    		}
+    	}
+    	
+    	public override string ToString() 
+    	{
     		return "";
     	}
     	
-    	public override string Destination {
+    	public override string Destination 
+    	{
 			get { return "default"; } 
 		}
     	
     	public override string SaveToXML() 
-    	{
-    		
+    	{    		
  		   	GladeTransform gladeTransform = new GladeTransform(XMLGlade);
    			return gladeTransform.ToString();
    		}

@@ -19,6 +19,7 @@
       <Entry build="True" name="GladeTools" configuration="Debug" />
     </Configuration>
   </Configurations>
+  <DeployTargets />
   <StartMode startupentry="Launcher" single="True">
     <Execute type="None" entry="Launcher" />
     <Execute type="None" entry="Command" />

@@ -51,7 +51,7 @@ namespace Sofia.Views.QuickView
    			
  			XmlElement eFields = xmlDoc.AddNode(eRequest, "Fields", "");
  			
- 			eField = xmlDoc.AddNode(eFields, "Field", "test test");
+ 			eField = xmlDoc.AddNode(eFields, "Field", "");
  			xmlDoc.AddAttributeNode(eField, "name", "caption");
  			
 			Console.WriteLine(xmlDoc.ToString());

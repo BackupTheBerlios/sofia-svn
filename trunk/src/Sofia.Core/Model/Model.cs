@@ -29,7 +29,7 @@ namespace Sofia.Core.Model
     	public IList SendRequest(string request)
     	{
     		ArrayList objectSets = new ArrayList();    		
-    		db = Db4o.OpenFile("sofia.data");
+    		db = Db4o.OpenFile("sofia.yap");
     		try
     		{    	  		    			
     			xpn.LoadXML(request);
@@ -127,11 +127,12 @@ namespace Sofia.Core.Model
     		string objectName = "MasterDocument";
      		string creation = GetValue(objectName, "creation");
      		string caption = GetValue(objectName, "caption");
+     		string masterCaption = GetValue(objectName, "masterCaption");
      		string content = GetValue(objectName, "content");
     	
     		System.IFormatProvider frmt = new System.Globalization.CultureInfo("fr-FR", true);
 			DateTime dt = DateTime.ParseExact(creation, "dd/MM/yyyy HH:mm:ss", frmt);
-    		Dossier dossier = new Dossier(dt, caption);
+    		Dossier dossier = new Dossier(dt, masterCaption);
     		Document document = new Document(dt, caption, content);
 			dossier.AddDocument(document);		
  		

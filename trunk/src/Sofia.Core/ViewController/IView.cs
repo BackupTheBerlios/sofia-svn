@@ -16,6 +16,9 @@ namespace Sofia.Core
         //Texte associé à la vue destiné à l'affichage
         string Caption { get; }
         
+        //Texte fourni au dossier dans le cas d'un document maître
+        string MasterCaption { get; }
+        
         //Zone de la vue principale où peut s'insérer la vue
         // ex : default, left, etc.
         string Destination { get; }

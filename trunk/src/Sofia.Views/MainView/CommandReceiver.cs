@@ -123,6 +123,9 @@ namespace Sofia.Views.MainView
  			eField = xmlDoc.AddNode(eFields, "Field", DateTime.Now.ToString());
  			xmlDoc.AddAttributeNode(eField, "name", "creation");
  			
+ 	 		eField = xmlDoc.AddNode(eFields, "Field", controller.View.MasterCaption);
+ 			xmlDoc.AddAttributeNode(eField, "name", "masterCaption");
+ 			
  			eField = xmlDoc.AddNode(eFields, "Field", controller.View.Caption);
  			xmlDoc.AddAttributeNode(eField, "name", "caption");
  			

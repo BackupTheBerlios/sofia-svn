@@ -35,6 +35,11 @@ namespace Sofia.Core
     		get { throw new NotSupportedException(); } 
     	}
     	
+    	public virtual string MasterCaption { 
+    		get { return Caption; } 
+    	}
+
+    	
     	public virtual void Initialize () {
     	}
 
