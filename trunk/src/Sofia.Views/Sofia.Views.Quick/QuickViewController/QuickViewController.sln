@@ -1,6 +1,0 @@
-﻿Microsoft Visual Studio Solution File, Format Version 9.00
-# SharpDevelop 2.0.0.1710
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickViewController", "QuickViewController.csproj", "{FDB6D959-F0FE-4F03-B9D6-09F704724464}"
-EndProject
-Global
-EndGlobal
