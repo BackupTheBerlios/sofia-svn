@@ -1,0 +1,25 @@
+<Combine name="Sofia.Views" fileversion="2.0" outputpath="../build/bin/">
+  <Configurations>
+    <Configuration name="Debug" ctype="CombineConfiguration">
+      <Entry build="True" name="MainView" configuration="Debug" />
+      <Entry build="True" name="Sofia.Views.Quick" configuration="" />
+      <Entry build="True" name="Sofia.Views.Client" configuration="" />
+    </Configuration>
+    <Configuration name="Release" ctype="CombineConfiguration">
+      <Entry build="True" name="MainView" configuration="Debug" />
+      <Entry build="True" name="Sofia.Views.Quick" configuration="" />
+      <Entry build="True" name="Sofia.Views.Client" configuration="" />
+    </Configuration>
+  </Configurations>
+  <DeployTargets />
+  <StartMode startupentry="MyView" single="True">
+    <Execute type="None" entry="MainView" />
+    <Execute type="None" entry="Sofia.Views.Quick" />
+    <Execute type="None" entry="Sofia.Views.Client" />
+  </StartMode>
+  <Entries>
+    <Entry filename="./MainView/MainView.mdp" />
+    <Entry filename="./Sofia.Views.Quick/Sofia.Views.Quick.mds" />
+    <Entry filename="./Sofia.Views.Client/Sofia.Views.Client.mds" />
+  </Entries>
+</Combine>

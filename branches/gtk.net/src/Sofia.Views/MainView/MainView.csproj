@@ -1,0 +1,92 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{38AED41E-CDD3-4ABE-90AB-208EFB0FD10E}</ProjectGuid>
+    <RootNamespace>MainView</RootNamespace>
+    <AssemblyName>MainView</AssemblyName>
+    <OutputType>Library</OutputType>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>False</NoStdLib>
+    <NoConfig>False</NoConfig>
+    <RunPostBuildEvent>OnSuccessfulBuild</RunPostBuildEvent>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <BaseAddress>4194304</BaseAddress>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <FileAlignment>4096</FileAlignment>
+    <TargetFrameworkVersion>Mono v2.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <Optimize>False</Optimize>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\windows\bin\Debug\</OutputPath>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugType>None</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>False</DebugSymbols>
+    <Optimize>True</Optimize>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\windows\bin\Release\</OutputPath>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="db4o">
+      <HintPath>..\..\..\windows\db4o-5.2\db4o.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="atk-sharp">
+      <HintPath>..\..\..\..\..\..\..\..\mono\lib\mono\gac\atk-sharp\2.8.0.0__35e10195dab3c99f\atk-sharp.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="glade-sharp">
+      <HintPath>..\..\..\..\..\..\..\..\mono\lib\mono\gac\glade-sharp\2.8.0.0__35e10195dab3c99f\glade-sharp.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="glib-sharp">
+      <HintPath>..\..\..\..\..\..\..\..\mono\lib\mono\gac\glib-sharp\2.8.0.0__35e10195dab3c99f\glib-sharp.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="gtk-sharp">
+      <HintPath>..\..\..\..\..\..\..\..\mono\lib\mono\gac\gtk-sharp\2.8.0.0__35e10195dab3c99f\gtk-sharp.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="ViewGui.cs" />
+    <Compile Include="Command.cs" />
+    <Compile Include="CommandReceiver.cs" />
+    <Compile Include="Controller.cs" />
+    <Compile Include="MainUIManager.cs" />
+    <EmbeddedResource Include="gui.glade" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Sofia.Core\XmlTools\XmlTools.csproj">
+      <Project>{92B98D96-8192-4509-B8BD-48A9F265639D}</Project>
+      <Name>XmlTools</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Sofia.Core\ViewController\ViewController.csproj">
+      <Project>{784AA129-D4FD-44D0-8D21-7EF565CA0E24}</Project>
+      <Name>ViewController</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Sofia.Core\Command\Command.csproj">
+      <Project>{050B675F-E692-4969-A115-103CBBC48CFE}</Project>
+      <Name>Command</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Sofia.Core\Proxy\Proxy.csproj">
+      <Project>{09B21776-C319-4BB6-A2DA-CA90ED089D0E}</Project>
+      <Name>Proxy</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(SharpDevelopBinPath)\SharpDevelop.Build.CSharp.targets" />
+</Project>

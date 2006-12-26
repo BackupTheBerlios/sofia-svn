@@ -1,0 +1,9 @@
+<Combine name="Sofia.Components" fileversion="2.0" outputpath="../build/bin/">
+  <Configurations>
+    <Configuration name="Debug" ctype="CombineConfiguration" />
+    <Configuration name="Release" ctype="CombineConfiguration" />
+  </Configurations>
+  <DeployTargets />
+  <StartMode startupentry="HtmlControl" single="True" />
+  <Entries />
+</Combine>
