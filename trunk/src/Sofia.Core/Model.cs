@@ -7,8 +7,7 @@ using Sofia.Core.Observable;
 namespace Sofia.Core.Plugins
 {
     public class Model: IObservable
-    {
-        List<IObserver> _Observers;
+    {        
 
         /// <summary>
         /// Constructeur
@@ -20,6 +19,7 @@ namespace Sofia.Core.Plugins
 
         #region Implémentation de l'interface
 
+        List<IObserver> _Observers;
 
         public void Register(IObserver o)
         {
@@ -41,5 +41,12 @@ namespace Sofia.Core.Plugins
         }
 
         #endregion
+
+        #region Méthodes métier
+
+
+
+        #endregion
+
     }
 }

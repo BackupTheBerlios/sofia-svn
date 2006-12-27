@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Sofia.Core.Plugins
 {
-    interface IPlugin
+    public interface IPlugin
     {
         IView View { get; set; }
 
