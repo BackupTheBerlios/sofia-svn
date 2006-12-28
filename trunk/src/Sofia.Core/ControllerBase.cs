@@ -7,12 +7,12 @@ using Sofia.Core.Commands;
 namespace Sofia.Core.Plugins
 {
 	
-	public class BaseController : IController
+	public class ControllerBase : IController
 	{
 		//Gestionnaire de commandes	
 		CommandManager _CommandManager;
 		
-		public BaseController() {
+		public ControllerBase() {
             _CommandManager = new CommandManager();  	
 		}
 
@@ -22,14 +22,9 @@ namespace Sofia.Core.Plugins
 			get { return _CommandManager; } 
 		}	
 		
-		public virtual IView View {
-			get { throw new NotSupportedException(); }
-		}
 		
 		public virtual void ExecuteCommand(string ident, string parameters)	
 		{
-			if (_CommandManager  == null)			
-				throw new InvalidOperationException ("Pas de gestionnaire de commande affecté à la commande : " + ident);
 			_CommandManager.CommandByName(ident).Execute(parameters);
 		}
 		

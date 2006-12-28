@@ -12,5 +12,6 @@ namespace Sofia.Core.Plugins
         /// <param name="plugin">Un objet plugin</param>
         /// <param name="destination">L'identifiant de la zone d'insertion</param>
         void Insert(IPlugin plugin, string destination);
+
     }
 }

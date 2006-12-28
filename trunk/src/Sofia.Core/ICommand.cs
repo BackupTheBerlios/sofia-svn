@@ -34,7 +34,7 @@ namespace Sofia.Core.Commands
         /// <summary>
         /// Gestionnaire de commande
         /// </summary>
-		CommandManager Manager {
+		CommandManager CommandManager {
 			get;
 			set;
 		}

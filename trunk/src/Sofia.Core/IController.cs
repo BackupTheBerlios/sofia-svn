@@ -15,11 +15,6 @@ namespace Sofia.Core.Plugins
       	CommandManager CommandManager { get; }
       	
       	/// <summary>
-      	/// Vue
-      	/// </summary>
-      	IView View { get; }
-      	
-      	/// <summary>
       	/// Execute une commande
       	/// </summary>
       	/// <param name="ident">Identifiant de la commande</param>

@@ -24,7 +24,7 @@ namespace Sofia.Core.Commands
 		public void RegisterCommand (ICommand cmd)
 		{
 			cmds [cmd.Id] = cmd;
-			cmd.Manager = this;
+			cmd.CommandManager = this;
 		} 
 		
         /// <summary>

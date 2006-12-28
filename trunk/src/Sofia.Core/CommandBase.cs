@@ -11,12 +11,13 @@ namespace Sofia.Core.Commands
 		string _Id;
 		CommandProperties _Properties;
 		Hashtable _ParamList;
-		CommandManager _Manager;
+		CommandManager _CommandManager;
+        ICommandReceiver _CommandReceiver;
 		
-		public CommandBase(string id, string text, string icon, string accelKey, string description)
+		public CommandBase(string id, ICommandReceiver commandReceiver, string text, string icon, string accelKey, string description)
 		{		 	
 		 	_Id = id;
-		 	
+            _CommandReceiver = commandReceiver;
 		 	_Properties = new CommandProperties(text, icon, accelKey, description);
 		 	_ParamList = new Hashtable();
 		}
@@ -33,6 +34,8 @@ namespace Sofia.Core.Commands
      			_ParamList[names[i].ToString()] = values[i].ToString();
      		}
 
+            _CommandReceiver.Action(this);
+
 		}
 		
 		public virtual void UnExecute() 
@@ -48,9 +51,9 @@ namespace Sofia.Core.Commands
 			get { return _Properties; } 
 		}
 		
-		public CommandManager Manager { 
-			get { return _Manager; } 
-			set { _Manager = value; }
+		public CommandManager CommandManager { 
+			get { return _CommandManager; } 
+			set { _CommandManager = value; }
 		}
 		
 		

@@ -8,19 +8,19 @@ namespace Sofia.Core.Plugins
 	public interface IView
     {
 
-        IModel Model { get; }
-           
+        IController Controller { get; }
+
         /// <summary>
         /// Désérialisation de la vue
         /// </summary>
         /// <param name="rawXml"></param>
-        void Load(string rawXml);
+        void LoadFromXml(string rawXml);
 
         /// <summary>
         /// Sérialisation de la vue
         /// </summary>
         /// <returns></returns>
-        string Save();        
+        string SaveToXml();        
 
     }
       
