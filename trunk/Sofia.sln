@@ -1,0 +1,43 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual C# Express 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.Core", "src\Sofia.Core\Sofia.Core.csproj", "{51B6B859-A247-40CD-AB52-F77042DDCE4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.Gui.WindowsForm", "src\Sofia.Gui\Sofia.Gui.WindowsForm\Sofia.Gui.WindowsForm.csproj", "{164568BC-E2FD-494B-B315-886761461F39}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.Plugin.General.Contact", "src\Sofia.Plugins\Sofia.Plugin.General.Contact\Sofia.Plugin.General.Contact.csproj", "{061042A5-5994-44BD-827F-251BF83AB140}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.Plugin.General.Contact.WindowsForm", "src\Sofia.Plugins\Sofia.Plugin.General.Contact\Sofia.Plugin.General.Contact.WindowsForm\Sofia.Plugin.General.Contact.WindowsForm.csproj", "{22909231-7D82-4678-9CD2-C9CB9C031BD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.Core.WindowsForm", "src\Sofia.Core\Sofia.Core.WindowsForm\Sofia.Core.WindowsForm.csproj", "{73D80817-ECE0-4CD9-A0E6-CE43138BA819}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{51B6B859-A247-40CD-AB52-F77042DDCE4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51B6B859-A247-40CD-AB52-F77042DDCE4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51B6B859-A247-40CD-AB52-F77042DDCE4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51B6B859-A247-40CD-AB52-F77042DDCE4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{164568BC-E2FD-494B-B315-886761461F39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{164568BC-E2FD-494B-B315-886761461F39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{164568BC-E2FD-494B-B315-886761461F39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{164568BC-E2FD-494B-B315-886761461F39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{061042A5-5994-44BD-827F-251BF83AB140}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{061042A5-5994-44BD-827F-251BF83AB140}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{061042A5-5994-44BD-827F-251BF83AB140}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{061042A5-5994-44BD-827F-251BF83AB140}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22909231-7D82-4678-9CD2-C9CB9C031BD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22909231-7D82-4678-9CD2-C9CB9C031BD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22909231-7D82-4678-9CD2-C9CB9C031BD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22909231-7D82-4678-9CD2-C9CB9C031BD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73D80817-ECE0-4CD9-A0E6-CE43138BA819}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73D80817-ECE0-4CD9-A0E6-CE43138BA819}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73D80817-ECE0-4CD9-A0E6-CE43138BA819}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73D80817-ECE0-4CD9-A0E6-CE43138BA819}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
