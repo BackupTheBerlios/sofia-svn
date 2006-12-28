@@ -1,4 +1,4 @@
-namespace Sofia.Gui
+namespace Sofia.Gui.WindowsForm
 {
     partial class MainForm
     {
@@ -29,10 +29,10 @@ namespace Sofia.Gui
         private void InitializeComponent()
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.pages = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1.SuspendLayout();
-            this.tabControl1.SuspendLayout();
+            this.pages.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -41,7 +41,7 @@ namespace Sofia.Gui
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 11.52416F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 88.47584F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 98F));
-            this.tableLayoutPanel1.Controls.Add(this.tabControl1, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.pages, 1, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -55,15 +55,15 @@ namespace Sofia.Gui
             this.tableLayoutPanel1.Size = new System.Drawing.Size(637, 375);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
-            // tabControl1
+            // pages
             // 
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(65, 88);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(470, 200);
-            this.tabControl1.TabIndex = 0;
+            this.pages.Controls.Add(this.tabPage1);
+            this.pages.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pages.Location = new System.Drawing.Point(65, 88);
+            this.pages.Name = "pages";
+            this.pages.SelectedIndex = 0;
+            this.pages.Size = new System.Drawing.Size(470, 200);
+            this.pages.TabIndex = 0;
             // 
             // tabPage1
             // 
@@ -84,7 +84,7 @@ namespace Sofia.Gui
             this.Name = "MainForm";
             this.Text = "Form1";
             this.tableLayoutPanel1.ResumeLayout(false);
-            this.tabControl1.ResumeLayout(false);
+            this.pages.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -92,7 +92,7 @@ namespace Sofia.Gui
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabControl pages;
         private System.Windows.Forms.TabPage tabPage1;
 
 
