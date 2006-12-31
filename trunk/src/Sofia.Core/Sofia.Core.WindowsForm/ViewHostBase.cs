@@ -4,14 +4,22 @@ using System.Text;
 using System.Windows.Forms;
 
 using Sofia.Core.Plugins;
-using Sofia.Core.Plugins.WindowsForm;
 
 namespace Sofia.Core.Plugins.WindowsForm
 {
     public class ViewHostBase: Form, IViewHost
     {
-        #region Contructeur
+        #region Contructeurs
 
+        /// <summary>
+        /// Constructeur par défaut pour Form
+        /// </summary>
+        public ViewHostBase() { }
+
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        /// <param name="pluginsPath">Emplacement des plugins</param>
         public ViewHostBase(string pluginsPath)
             : base()
         {
@@ -37,7 +45,7 @@ namespace Sofia.Core.Plugins.WindowsForm
 
         public virtual void Insert(IPlugin plugin, string destination)
         {
-            throw new NotSupportedException();
+            
         }
 
 

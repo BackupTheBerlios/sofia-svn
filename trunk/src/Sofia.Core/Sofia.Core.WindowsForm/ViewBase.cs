@@ -42,6 +42,14 @@ namespace Sofia.Core.Plugins.WindowsForm
             throw new NotSupportedException();
         }
 
+        public object Control
+        {
+            get
+            {
+                return this;
+            }
+        }
+
         #endregion
 
 

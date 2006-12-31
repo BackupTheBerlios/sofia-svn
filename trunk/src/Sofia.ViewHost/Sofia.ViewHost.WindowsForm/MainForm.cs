@@ -26,6 +26,15 @@ namespace Sofia.ViewHost.WindowsForm
         {
             InitializeComponent();          
             PluginManager.AutoRegister();
+            Insert(PluginManager["Sofia.Plugins.General.Contact.Plugin"], "");
+        }
+
+        public override void Insert(IPlugin plugin, string destination)
+        {
+            base.Insert(plugin, destination);
+            TabPage tabPage = new TabPage("Contact");
+            tabPage.Controls.Add(plugin.View.Control as Control);
+            _Pages.Controls.Add(tabPage);
         }
     }
 }

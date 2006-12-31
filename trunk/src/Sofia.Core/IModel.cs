@@ -11,6 +11,6 @@ namespace Sofia.Core.Plugins
         /// </summary>
         /// <param name="id">Identifiant du document</param>
         /// <param name="rawXml">Vue sérialisée</param>
-        void Update(string id, string rawXml);
+        void UpdateDocument(string id, string rawXml);
     }
 }

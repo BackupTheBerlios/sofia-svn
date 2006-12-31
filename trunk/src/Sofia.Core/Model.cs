@@ -6,8 +6,8 @@ using Sofia.Core.Observable;
 
 namespace Sofia.Core.Plugins
 {
-    public class Model: IObservable
-    {        
+    public class Model : IObservable, IModel
+    {
 
         /// <summary>
         /// Constructeur
@@ -17,7 +17,7 @@ namespace Sofia.Core.Plugins
             _Observers = new List<IObserver>();
         }
 
-        #region Implémentation de l'interface
+        #region Implémentation de l'interface IObservable
 
         List<IObserver> _Observers;
 
@@ -38,6 +38,15 @@ namespace Sofia.Core.Plugins
             {
                 o.Update();
             }
+        }
+
+        #endregion
+
+        #region Implémentation de l'interface IModel
+
+        public void UpdateDocument(string id, string rawXml)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

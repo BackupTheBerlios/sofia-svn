@@ -18,7 +18,9 @@ namespace Sofia.Core.Plugins
         /// Sérialisation de la vue
         /// </summary>
         /// <returns></returns>
-        string SaveToXml();        
+        string SaveToXml();
+
+        object Control { get; }
 
     }
       
