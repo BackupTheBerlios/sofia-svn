@@ -8,8 +8,6 @@ namespace Sofia.Core.Plugins
 	public interface IView
     {
 
-        IController Controller { get; }
-
         /// <summary>
         /// Désérialisation de la vue
         /// </summary>

@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 using Sofia.Core.Plugins;
 
-namespace Sofia.Core.Plugins.WindowsForms
+namespace Sofia.Core.Plugins.WindowsForm
 {
     public class ViewBase: UserControl, IView
     {

@@ -3,18 +3,25 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 
+using Sofia.Core.Reflection;
+
 namespace Sofia.Core.Plugins
 {
-    public class PluginBase
+    public class PluginBase : IPlugin
     {
+        public PluginBase()
+        {
+            //Instanciation de la vue            
+            string assemblyName = Assembly.GetCallingAssembly().Location;
+            assemblyName = assemblyName.Insert(assemblyName.Length - 4, ".WindowsForm");
+            _View = (IView)InstanceFactory.CreateInstanceFrom(assemblyName, typeof(IView));
+        }
+
+        #region Implémentation de l'interface
+
         IController _Controller;
         IView _View;
         IModel _Model;
-
-        public PluginBase()
-        {
-           _View = CreateView(Assembly.GetCallingAssembly());
-        }
 
         public IView View
         {
@@ -55,23 +62,16 @@ namespace Sofia.Core.Plugins
             }
         }
 
-        private IView CreateView(Assembly assembly)
+        public string Description
         {
-            Type type = typeof(IView);
-
-            string viewAssemblyName = assembly.FullName + "WindowsForm";
-            assembly.Location
-            Assembly viewAssembly = Assembly.LoadFrom(viewAssemblyName + ".dll");
-
-            foreach (Type exported in assembly.GetExportedTypes())
-                if (type.IsAssignableFrom(exported))
-                {
-                    ConstructorInfo Constructor = exported.GetConstructor(Type.EmptyTypes);
-                    if (Constructor != null)
-                        return (IView)Constructor.Invoke(null);
-                }
-            return null;
-
+            get
+            {
+                throw new NotSupportedException();
+            }
         }
+
+        #endregion
+
     }
+
 }

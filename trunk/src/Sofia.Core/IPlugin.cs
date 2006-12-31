@@ -17,10 +17,5 @@ namespace Sofia.Core.Plugins
         /// </summary>
         string Description { get; }
 
-        /// <summary>
-        /// Identifiant
-        /// </summary>
-        string Id { get; }
-
     }
 }

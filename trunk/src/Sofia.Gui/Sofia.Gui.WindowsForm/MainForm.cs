@@ -7,34 +7,25 @@ using System.Text;
 using System.Windows.Forms;
 using System.Reflection;
 
+using Sofia.Gui.WindowsForm.Properties;
+
 using Sofia.Core.Plugins;
 
 #if GTK
 using Sofia.Core.Plugins.Gtk;
 #else
-using Sofia.Core.Plugins.WindowsForms;
+using Sofia.Core.Plugins.WindowsForm;
 #endif
 
 namespace Sofia.Gui.WindowsForm
 {
-    public partial class MainForm : Form, IViewHost
+    public partial class MainForm : ViewHostBase
     {
-        public MainForm()
+
+        public MainForm() : base(Settings.Default.PluginsPath)
         {
             InitializeComponent();
-
-
+            PluginManager.AutoRegister();
         }
-
-        #region Implémentation de l'interface
-
-        public void Insert(IPlugin plugin, string destination)
-        {
-            throw new NotImplementedException();
-        }       
-
-
-        #endregion
-
     }
 }

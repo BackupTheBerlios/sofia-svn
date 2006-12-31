@@ -6,11 +6,21 @@ using Sofia.Core.Plugins;
 
 namespace Sofia.Plugin.General.Contact
 {
-    class Plugin : PluginBase
+    public class Plugin : PluginBase
     {
         public Plugin() : base() 
         {            
-            Controller = new Controller();            
+            Controller = new Controller();
         }
+
+        public string Description
+        {
+            get
+            {
+                return "Gestion des contacts";
+            }
+        }
+
+
     }
 }

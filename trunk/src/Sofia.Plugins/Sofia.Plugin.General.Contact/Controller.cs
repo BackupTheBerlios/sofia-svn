@@ -6,7 +6,7 @@ using Sofia.Core.Plugins;
 
 namespace Sofia.Plugin.General.Contact
 {
-    public class Controller: ControllerBase
+    internal class Controller: ControllerBase
     {
         public Controller() : base() { }
     }

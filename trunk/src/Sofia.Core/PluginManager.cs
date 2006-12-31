@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
+using Sofia.Core.Reflection;
+
 namespace Sofia.Core.Plugins
 {
-    class PluginManager
+    public class PluginManager
     {
         #region Constructeur
 
@@ -39,15 +41,15 @@ namespace Sofia.Core.Plugins
         /// </summary>
         /// <param name="id">Identifiant du plugin</param>
         /// <returns>Un objet plugin</returns>
-        public IPlugin this[string id]
+        public IPlugin this[string fullName]
         {
             get
             {
-                return _Plugins.Find(delegate(IPlugin plugin) { return plugin.Id == id; });
+                return _Plugins.Find(delegate(IPlugin plugin) { return plugin.GetType().FullName == fullName; });
             }
         }
 
-        public void AutoRegister()
+        public void AutoRegister(IModel model)
         {
             DirectoryInfo dir = new DirectoryInfo(_PluginPath);
             FileInfo[]      files;
@@ -55,11 +57,12 @@ namespace Sofia.Core.Plugins
 
             foreach (FileInfo file in files)
             {
-                IPlugin plugin = (IPlugin)CreateObjectInstance(file.Name, typeof(IPlugin));
-                IController controller = (IController)CreateObjectInstance("Sofia.Plugin.General.Contact.dll", typeof(IController));
-                IView view = (IView)CreateObjectInstance("Sofia.Plugin.General.Contact.WindowsForm.dll", typeof(IView));
-                
-
+                IPlugin plugin = (IPlugin)InstanceFactory.CreateInstanceFrom(file.FullName, typeof(IPlugin));
+                if (plugin != null)
+                {
+                    plugin.Model = model;
+                    Add(plugin);
+                }
             }
 
         }

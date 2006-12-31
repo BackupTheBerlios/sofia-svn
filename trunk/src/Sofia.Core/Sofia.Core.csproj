@@ -41,6 +41,7 @@
     <Compile Include="ICommandReceiver.cs" />
     <Compile Include="IController.cs" />
     <Compile Include="IModel.cs" />
+    <Compile Include="InstanceFactory.cs" />
     <Compile Include="IObservable.cs" />
     <Compile Include="IObserver.cs" />
     <Compile Include="IPlugin.cs" />

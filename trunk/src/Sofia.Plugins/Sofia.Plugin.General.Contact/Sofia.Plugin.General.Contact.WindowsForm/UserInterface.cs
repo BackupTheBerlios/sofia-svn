@@ -6,11 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-#if GTK
-using Sofia.Core.Plugins.Gtk;
-#else
-using Sofia.Core.Plugins.WindowsForms;
-#endif
+using Sofia.Core.Plugins.WindowsForm;
 
 namespace Sofia.Plugin.General.Contact.WindowsForm
 {
@@ -20,5 +16,6 @@ namespace Sofia.Plugin.General.Contact.WindowsForm
         {
             InitializeComponent();
         }
+
     }
 }
