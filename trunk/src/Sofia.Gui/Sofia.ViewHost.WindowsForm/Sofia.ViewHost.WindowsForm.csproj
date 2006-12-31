@@ -7,7 +7,7 @@
     <ProjectGuid>{164568BC-E2FD-494B-B315-886761461F39}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sofia.Gui.WindowsForm</RootNamespace>
+    <RootNamespace>Sofia.ViewHost.WindowsForm</RootNamespace>
     <AssemblyName>Sofia</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

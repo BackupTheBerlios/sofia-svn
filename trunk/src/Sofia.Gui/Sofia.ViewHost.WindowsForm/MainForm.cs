@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Reflection;
 
-using Sofia.Gui.WindowsForm.Properties;
+using Sofia.ViewHost.WindowsForm.Properties;
 
 using Sofia.Core.Plugins;
 
@@ -17,14 +17,14 @@ using Sofia.Core.Plugins.Gtk;
 using Sofia.Core.Plugins.WindowsForm;
 #endif
 
-namespace Sofia.Gui.WindowsForm
+namespace Sofia.ViewHost.WindowsForm
 {
     public partial class MainForm : ViewHostBase
     {
 
         public MainForm() : base(Settings.Default.PluginsPath)
         {
-            InitializeComponent();
+            InitializeComponent();          
             PluginManager.AutoRegister();
         }
     }

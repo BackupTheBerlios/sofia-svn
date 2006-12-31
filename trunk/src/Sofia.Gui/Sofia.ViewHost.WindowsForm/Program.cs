@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace Sofia.Gui.WindowsForm
+namespace Sofia.ViewHost.WindowsForm
 {
     static class Program
     {

@@ -1,4 +1,4 @@
-namespace Sofia.Gui.WindowsForm
+namespace Sofia.ViewHost.WindowsForm
 {
     partial class MainForm
     {

@@ -1,4 +1,4 @@
-namespace Sofia.Gui.WindowsForm.Properties {
+namespace Sofia.ViewHost.WindowsForm.Properties {
     
     
     // This class allows you to handle specific events on the settings class:
