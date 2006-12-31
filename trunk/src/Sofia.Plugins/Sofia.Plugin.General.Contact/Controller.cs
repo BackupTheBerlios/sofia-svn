@@ -4,7 +4,7 @@ using System.Text;
 
 using Sofia.Core.Plugins;
 
-namespace Sofia.Plugin.General.Contact
+namespace Sofia.Plugins.General.Contact
 {
     internal class Controller: ControllerBase
     {

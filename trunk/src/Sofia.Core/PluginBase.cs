@@ -62,7 +62,7 @@ namespace Sofia.Core.Plugins
             }
         }
 
-        public string Description
+        public virtual string Description
         {
             get
             {

@@ -4,7 +4,7 @@ using System.Text;
 
 using Sofia.Core.Plugins;
 
-namespace Sofia.Plugin.General.Contact
+namespace Sofia.Plugins.General.Contact
 {
     public class Plugin : PluginBase
     {
@@ -13,7 +13,7 @@ namespace Sofia.Plugin.General.Contact
             Controller = new Controller();
         }
 
-        public string Description
+        public override string Description
         {
             get
             {

@@ -1,4 +1,4 @@
-namespace Sofia.Plugin.General.Contact.WindowsForm
+namespace Sofia.Plugins.General.Contact.WindowsForm
 {
     partial class UserInterface
     {

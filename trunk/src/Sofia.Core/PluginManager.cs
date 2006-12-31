@@ -17,14 +17,15 @@ namespace Sofia.Core.Plugins
         public PluginManager(string pluginsPath)
         {
             _Plugins = new List<IPlugin>();
-
             _PluginPath = pluginsPath;
+            _Model = new Model();
         }
 
         #endregion
 
         List<IPlugin> _Plugins;
         string _PluginPath;
+        Model _Model;
 
         /// <summary>
         /// Ajoute un plugin dans la liste des plugins
@@ -49,7 +50,7 @@ namespace Sofia.Core.Plugins
             }
         }
 
-        public void AutoRegister(IModel model)
+        public void AutoRegister()
         {
             DirectoryInfo dir = new DirectoryInfo(_PluginPath);
             FileInfo[]      files;
@@ -60,7 +61,7 @@ namespace Sofia.Core.Plugins
                 IPlugin plugin = (IPlugin)InstanceFactory.CreateInstanceFrom(file.FullName, typeof(IPlugin));
                 if (plugin != null)
                 {
-                    plugin.Model = model;
+                    plugin.Model = (IModel)_Model;
                     Add(plugin);
                 }
             }

@@ -35,9 +35,9 @@ namespace Sofia.Core.Plugins.WindowsForm
 
         #region Implémentation de l'interface
 
-        public void Insert(IPlugin plugin, string destination)
+        public virtual void Insert(IPlugin plugin, string destination)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
 
