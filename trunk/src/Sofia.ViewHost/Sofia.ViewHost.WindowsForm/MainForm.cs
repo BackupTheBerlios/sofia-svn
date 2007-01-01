@@ -32,8 +32,15 @@ namespace Sofia.ViewHost.WindowsForm
         public override void Insert(IPlugin plugin, string destination)
         {
             base.Insert(plugin, destination);
+
+            if (plugin == null)
+                return;
+
+            //Test
             TabPage tabPage = new TabPage("Contact");
-            tabPage.Controls.Add(plugin.View.Control as Control);
+            Control control = plugin.View.Control as Control;
+            control.Dock = DockStyle.Fill;
+            tabPage.Controls.Add(control);
             _Pages.Controls.Add(tabPage);
         }
     }

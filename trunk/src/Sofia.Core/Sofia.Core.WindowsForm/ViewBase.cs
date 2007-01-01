@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 using Sofia.Core.Plugins;
 
@@ -32,12 +34,12 @@ namespace Sofia.Core.Plugins.WindowsForm
             }
         }
 
-        public void LoadFromXml(string rawXml)
+        public virtual void LoadFromXml(string rawXml)
         {
             throw new NotSupportedException();
         }
 
-        public string SaveToXml()
+        public virtual string SaveToXml()
         {
             throw new NotSupportedException();
         }
@@ -51,6 +53,15 @@ namespace Sofia.Core.Plugins.WindowsForm
         }
 
         #endregion
+
+        public string Serialize(object document)
+        {
+            XmlSerializer xmlSerializer = new XmlSerializer(document.GetType());
+            StringBuilder sb = new StringBuilder();
+            TextWriter writer = new StringWriter(sb);
+            xmlSerializer.Serialize(writer, document);
+            return sb.ToString();
+        }
 
 
     }

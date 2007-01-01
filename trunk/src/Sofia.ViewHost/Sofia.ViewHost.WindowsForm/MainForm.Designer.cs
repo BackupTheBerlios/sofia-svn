@@ -82,20 +82,17 @@ namespace Sofia.ViewHost.WindowsForm
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 3;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 11F));
+            this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 12F));
-            this.tableLayoutPanel1.Controls.Add(this._Pages, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.statusStrip1, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.toolStrip1, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this._Pages, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.statusStrip1, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.toolStrip1, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 4;
+            this.tableLayoutPanel1.RowCount = 3;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(454, 276);
             this.tableLayoutPanel1.TabIndex = 0;
@@ -103,17 +100,17 @@ namespace Sofia.ViewHost.WindowsForm
             // _Pages
             // 
             this._Pages.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._Pages.Location = new System.Drawing.Point(14, 28);
+            this._Pages.Location = new System.Drawing.Point(3, 28);
             this._Pages.Name = "_Pages";
             this._Pages.SelectedIndex = 0;
-            this._Pages.Size = new System.Drawing.Size(425, 205);
+            this._Pages.Size = new System.Drawing.Size(448, 225);
             this._Pages.TabIndex = 0;
             // 
             // statusStrip1
             // 
-            this.statusStrip1.Location = new System.Drawing.Point(11, 256);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 256);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(431, 20);
+            this.statusStrip1.Size = new System.Drawing.Size(454, 20);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -122,10 +119,10 @@ namespace Sofia.ViewHost.WindowsForm
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton1});
-            this.toolStrip1.Location = new System.Drawing.Point(11, 0);
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStrip1.Size = new System.Drawing.Size(431, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(454, 25);
             this.toolStrip1.TabIndex = 3;
             this.toolStrip1.Text = "toolStrip1";
             // 
