@@ -2,7 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using System.Data;
+
+using Sofia.Data.Common;
+using Sofia.Data.Common.Properties;
 using Sofia.Core.Observable;
+using Sofia.Core.Properties;
 
 namespace Sofia.Core.Plugins
 {
@@ -15,6 +20,11 @@ namespace Sofia.Core.Plugins
         public Model()
         {
             _Observers = new List<IObserver>();
+
+            //Tests
+            Server server = new Server("FirebirdSql.Data.FirebirdClient", Settings.Default.DatabaseName);
+            server.CreateConnection();
+            Documents docs = new Documents(server);
         }
 
         #region Implémentation de l'interface IObservable
@@ -51,9 +61,21 @@ namespace Sofia.Core.Plugins
 
         #endregion
 
-        #region Méthodes métier
+        #region Classes métier
 
+        public class Documents : EntityBase
+        {
+            public Documents(Server server) : base(server) { }
 
+            [PrimaryKey, FieldType(DbType.Guid)]
+            public DbField DocId;
+
+            [FieldType(DbType.Guid)]
+            public DbField FldId;
+
+            [FieldType(DbType.String)]
+            public DbField DocCaption;
+        }
 
         #endregion
 

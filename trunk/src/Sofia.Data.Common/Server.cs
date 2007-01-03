@@ -41,8 +41,8 @@ namespace Sofia.Data.Common
                 _DbConnection = _DbProviderFactory.CreateConnection();
                 _DbConnection.ConnectionString = connectionString;
             }
-            catch (Exception)
-            {
+            catch (Exception e)
+            {                
                 return false;
             }
 
@@ -103,6 +103,8 @@ namespace Sofia.Data.Common
             _DatabaseName = databaseName;
             _Port = port;
         }
+
+        public Server(string providerName, string databaseName) : this(providerName, databaseName, 3050) { }
 
         #endregion
     }

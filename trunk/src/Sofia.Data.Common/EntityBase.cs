@@ -20,15 +20,15 @@ namespace Sofia.Data.Common
     {
         public FieldTypeAttribute(DbType dbType)
         {
-            _DbType = dbType;
+            _DbFieldType = dbType;
         }
 
-        private DbType _DbType;
-        public DbType DbType
+        private DbType _DbFieldType;
+        public DbType DbFieldType
         {
             get
             {
-                return _DbType;
+                return _DbFieldType;
             }
         }
 
@@ -157,9 +157,64 @@ namespace Sofia.Data.Common
                 fieldInfo.SetValue(this, fieldInstance);
 
                 //Initialisation de l'objet
-                fieldInstance.Filtered = false;                
+                fieldInstance.Filtered = false;
                 fieldInstance.Value = null;
             }
+
+            CheckEntity();
+
+        }
+
+        /// <summary>
+        /// Vérifie si la table liée à l'entité existe dans la base de données, la crée sinon
+        /// </summary>
+        private void CheckEntity()
+        {
+            string[] restrictions = new string[4];
+            restrictions[0] = _DbServer.DbConnection.Database;
+            restrictions[1] = "sysdba";
+            restrictions[2] = GetTableName();
+            restrictions[3] = "BASE TABLE";
+            
+            DataTable table = _DbServer.DbConnection.GetSchema("Tables", restrictions);
+
+            //Si la table n'est pas trouvée
+            if (table.Rows.Count == 0)
+            {
+                _DbServer.DbConnection.create
+            }
+        }
+
+        private void CreateTable()
+        {
+            /*
+            CREATE TABLE "Person" (
+            "id" INTEGER
+            NOT NULL
+            )
+            
+            alter table "Person"
+            add constraint "PK_Person"
+            primary key ("id")
+            
+            */
+
+            FieldInfo fields = GetFields();
+            
+            //Build strings for each command. I could probably have just done one big command, but
+            //doing them individually helps me to debug easier.
+            StringBuilder loSQL = new StringBuilder("CREATE TABLE \"Person\" (");
+
+            loSQL.Append("\"id\" INTEGER NOT NULL,");
+            loSQL.Append("\"namefirst\" VARCHAR(255),");
+            loSQL.Append("\"namemiddle\" VARCHAR(255),");
+            loSQL.Append("\"namelast\" VARCHAR(255))");
+
+            string lsSQLPrimaryKeyCreate = "ALTER TABLE \"Person\" ADD CONSTRAINT \"PK_Person\" PRIMARY KEY (\"id\")";
+
+            Query query = new Query(_DbServer);
+            query.CommandText
+
 
         }
 
@@ -223,7 +278,7 @@ namespace Sofia.Data.Common
         /// </summary>
         /// <param name="field"></param>
         private bool ReaderHasRow(DbField field)
-        {            
+        {
             try
             {
                 _DbDataReader.GetOrdinal(field.Name);
@@ -253,12 +308,12 @@ namespace Sofia.Data.Common
                     if (ReaderHasRow(field))
                     {
                         field.Value = _DbDataReader[field.Name];
-                    }                    
+                    }
                 }
             }
 
             return hasRecords;
-        }        
+        }
 
         #endregion
 
@@ -723,7 +778,7 @@ namespace Sofia.Data.Common
             if (attributes.Length != 0)
             {
                 FieldTypeAttribute attribute = attributes[0] as FieldTypeAttribute;
-                return attribute.DbType;
+                return attribute.DbFieldType;
             }
             else
             {
