@@ -7,6 +7,8 @@ using System.Data.Common;
 
 namespace Sofia.Data.Common
 {
+    #region Attributs DDL
+
     [AttributeUsage(AttributeTargets.Field)]
     public class PrimaryKeyAttribute : Attribute
     {
@@ -33,6 +35,14 @@ namespace Sofia.Data.Common
         }
 
     }
+
+    #endregion
+
+    #region Attributs de mise à jour
+
+
+
+    #endregion
 
 
     /// <summary>
@@ -136,9 +146,32 @@ namespace Sofia.Data.Common
 
         #region Champs privés
 
-        private Server _DbServer;
+        private Server _Server;        
         private DbDataReader _DbDataReader;
         private List<SqlJoin> _Joins;
+
+        #endregion
+
+        #region Propriétés
+
+        /// <summary>
+        /// Obtient le nom du type
+        /// </summary>
+        public string Name
+        {
+            get
+            {
+                return this.GetType().Name;
+            }
+        }
+
+        /// <summary>
+        /// Obtient l'objet de connexion
+        /// </summary>
+        public Server Server
+        {
+            get { return _Server; }
+        }
 
         #endregion
 
@@ -146,7 +179,7 @@ namespace Sofia.Data.Common
 
         public EntityBase(Server dbServer)
         {
-            _DbServer = dbServer;
+            _Server = dbServer;
             _Joins = new List<SqlJoin>();
 
             foreach (FieldInfo fieldInfo in GetFields())
@@ -160,62 +193,6 @@ namespace Sofia.Data.Common
                 fieldInstance.Filtered = false;
                 fieldInstance.Value = null;
             }
-
-            CheckEntity();
-
-        }
-
-        /// <summary>
-        /// Vérifie si la table liée à l'entité existe dans la base de données, la crée sinon
-        /// </summary>
-        private void CheckEntity()
-        {
-            string[] restrictions = new string[4];
-            restrictions[0] = _DbServer.DbConnection.Database;
-            restrictions[1] = "sysdba";
-            restrictions[2] = GetTableName();
-            restrictions[3] = "BASE TABLE";
-            
-            DataTable table = _DbServer.DbConnection.GetSchema("Tables", restrictions);
-
-            //Si la table n'est pas trouvée
-            if (table.Rows.Count == 0)
-            {
-                _DbServer.DbConnection.create
-            }
-        }
-
-        private void CreateTable()
-        {
-            /*
-            CREATE TABLE "Person" (
-            "id" INTEGER
-            NOT NULL
-            )
-            
-            alter table "Person"
-            add constraint "PK_Person"
-            primary key ("id")
-            
-            */
-
-            FieldInfo fields = GetFields();
-            
-            //Build strings for each command. I could probably have just done one big command, but
-            //doing them individually helps me to debug easier.
-            StringBuilder loSQL = new StringBuilder("CREATE TABLE \"Person\" (");
-
-            loSQL.Append("\"id\" INTEGER NOT NULL,");
-            loSQL.Append("\"namefirst\" VARCHAR(255),");
-            loSQL.Append("\"namemiddle\" VARCHAR(255),");
-            loSQL.Append("\"namelast\" VARCHAR(255))");
-
-            string lsSQLPrimaryKeyCreate = "ALTER TABLE \"Person\" ADD CONSTRAINT \"PK_Person\" PRIMARY KEY (\"id\")";
-
-            Query query = new Query(_DbServer);
-            query.CommandText
-
-
         }
 
         #endregion
@@ -317,18 +294,6 @@ namespace Sofia.Data.Common
 
         #endregion
 
-        #region Méthodes protégées
-
-        /// <summary>
-        /// Retourne le nom de la table en accord avec le nom de la classe
-        /// </summary>
-        protected string GetTableName()
-        {
-            return this.GetType().Name;
-        }
-
-        #endregion
-
         #region Methodes bas niveau pour exécution des requêtes
 
         /// <summary>
@@ -370,7 +335,7 @@ namespace Sofia.Data.Common
 
         #endregion
 
-        #region Recherche de propriétés
+        #region Recherche de champs
 
         /// <summary>
         /// Delegate de prédicat portant sur les propriétés de type Field
@@ -506,7 +471,6 @@ namespace Sofia.Data.Common
         /// <returns>La chaine tranformée</returns>
         private delegate string FieldTransformation(DbField field);
 
-
         /// <summary>
         /// Transforme un champ en un champ paramétré
         /// <example>FIELD => @FIELD</example>
@@ -539,6 +503,21 @@ namespace Sofia.Data.Common
         {
             return field.Name + " = @" + field.Name;
         }
+
+        /// <summary>
+        /// Transforme un champ en un champ suivi de son type
+        /// <example>FIELD => FIELD VARCHAR(32)</example>
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private string TransformToTypedField(DbField field)
+        {
+            //Détermination du type de champ
+
+
+            return field.Name + "";
+        }
+
 
         /// <summary>
         /// Sélection d'une liste de propriétés pour construire une liste de champs SQL en fonction d'une transformation
@@ -626,7 +605,7 @@ namespace Sofia.Data.Common
                 sortedList = "ORDDER BY " + sortedList;
 
             //Construction de la chaine SQL
-            return string.Format("SELECT {0} FROM {1} WHERE {2} {3}", fieldList, GetTableName(), whereClause, sortedList);
+            return string.Format("SELECT {0} FROM {1} WHERE {2} {3}", fieldList, Name, whereClause, sortedList);
 
         }
 
@@ -643,7 +622,7 @@ namespace Sofia.Data.Common
             string whereClause = GetFieldList(IsPrimaryKeyField, TransformToParametizedAffectationField, "AND");
 
             //Construction de la chaine SQL
-            return string.Format("SELECT {0} FROM {1} WHERE {2}", fieldList, GetTableName(), whereClause);
+            return string.Format("SELECT {0} FROM {1} WHERE {2}", fieldList, Name, whereClause);
 
         }
 
@@ -667,7 +646,7 @@ namespace Sofia.Data.Common
                 sortedList = "ORDER BY " + sortedList;
 
             //Construction de la chaine SQL
-            return string.Format("SELECT {0} FROM {1} {2} {3}", fieldList, GetTableName(), whereClause, sortedList);
+            return string.Format("SELECT {0} FROM {1} {2} {3}", fieldList, Name, whereClause, sortedList);
 
         }
 
@@ -683,7 +662,7 @@ namespace Sofia.Data.Common
             string parameterList = GetFieldList(IsAffectedField, TransformToParametizedField);
 
             //Construction de la chaine SQL
-            return string.Format("INSERT INTO {0} ({1}) VALUES ({2})", GetTableName(), fieldList, parameterList);
+            return string.Format("INSERT INTO {0} ({1}) VALUES ({2})", Name, fieldList, parameterList);
         }
 
         /// <summary>
@@ -699,7 +678,7 @@ namespace Sofia.Data.Common
             string whereClause = GetFieldList(IsPrimaryKeyField, TransformToParametizedAffectationField, "AND");
 
             //Construction de la chaine SQL
-            return string.Format("UPDATE {0} SET {1} WHERE {2}", GetTableName(), fieldList, whereClause);
+            return string.Format("UPDATE {0} SET {1} WHERE {2}", Name, fieldList, whereClause);
         }
 
         /// <summary>
@@ -712,7 +691,21 @@ namespace Sofia.Data.Common
             string parameterList = GetFieldList(IsPrimaryKeyField, TransformToParametizedAffectationField, "AND");
 
             //Construction de la chaine SQL
-            return string.Format("DELETE FROM {0} WHERE {1}", GetTableName(), parameterList);
+            return string.Format("DELETE FROM {0} WHERE {1}", Name, parameterList);
+        }
+
+        /// <summary>
+        /// Génération de la requête CREATE TABLE
+        /// </summary>
+        /// <returns></returns>
+        private string GetDefaultCreate()
+        {
+            //Liste des champs
+            string fieldList = GetFieldList(null, TransformToTypedField);
+
+            //Construction de la chaine SQL
+            //return string.Format("SELECT {0} FROM {1} WHERE {2} {3}", fieldList, Name, whereClause, sortedList);
+            return "";
         }
 
         /// <summary>
@@ -726,7 +719,7 @@ namespace Sofia.Data.Common
             Predicate<FieldInfo> parametersFillingPredicate, bool nonQuery)
         {
             //Instanciation de la requête
-            Query fbQuery = new Query(_DbServer);
+            Query fbQuery = new Query(_Server);
             fbQuery.CommandText = buildSqlClauseDelegate();
 
             //Affectation des paramètres

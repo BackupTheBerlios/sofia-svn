@@ -5,7 +5,6 @@ using System.Text;
 using System.Data;
 
 using Sofia.Data.Common;
-using Sofia.Data.Common.Properties;
 using Sofia.Core.Observable;
 using Sofia.Core.Properties;
 
