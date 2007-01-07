@@ -15,18 +15,19 @@ namespace Sofia.Mvc
     public class Model : IObservable, IModel
     {
 
+        #region Champs privés
+
+        Server _Server;
+
+        #endregion
+
         /// <summary>
         /// Constructeur
         /// </summary>
         public Model()
         {
             _Observers = new List<IObserver>();
-
-            //Tests
-            ISgbdConsts sgbdConsts = new FirebirdConsts();
-            Server server = new Server("FirebirdSql.Data.FirebirdClient", Settings.Default.DatabaseName, sgbdConsts);
-            server.CreateConnection();               
-            Documents documents = new Documents(server);
+            _Server = new Server("FirebirdSql.Data.FirebirdClient", Settings.Default.DatabaseName, new FirebirdConsts());
         }
 
         #region Implémentation de l'interface IObservable
@@ -56,9 +57,22 @@ namespace Sofia.Mvc
 
         #region Implémentation de l'interface IModel
 
-        public void UpdateDocument(string id, string rawXml)
+        public void UpdateDocument(string contentId, string contentXml, bool isMasterDocument)
         {
-            throw new NotImplementedException();
+            _Server.OpenConnection();
+            try
+            {
+                Documents documents = new Documents(_Server);
+                documents.DocId.Value = contentId;
+                documents.DocCaption.Value = "test";
+                documents.DocContent.Value = contentXml;
+                documents.Update();
+            }
+            finally
+            {
+                _Server.CloseConnexion();
+            }
+            
         }
 
         #endregion
@@ -69,16 +83,16 @@ namespace Sofia.Mvc
         {
             public Documents(Server server) : base(server) { }
 
-            [PrimaryKey, FieldType(DbType.Guid)]
+            [PrimaryKey, FieldType(DbType.String, 32)]
             public DbField DocId;
 
-            [FieldType(DbType.Guid)]
+            [FieldType(DbType.String, 32)]
             public DbField FldId;
 
             [FieldType(DbType.String, 128)]
             public DbField DocCaption;
 
-            [FieldType(DbType.Xml)]
+            [FieldType(DbType.String, -1)]
             public DbField DocContent;
         }
 

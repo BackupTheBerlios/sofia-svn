@@ -11,6 +11,6 @@ namespace Sofia.Mvc
         /// </summary>
         /// <param name="id">Identifiant du document</param>
         /// <param name="rawXml">Vue sérialisée</param>
-        void UpdateDocument(string id, string rawXml);
+        void UpdateDocument(string contentId, string contentXml, bool isMasterDocument);
     }
 }

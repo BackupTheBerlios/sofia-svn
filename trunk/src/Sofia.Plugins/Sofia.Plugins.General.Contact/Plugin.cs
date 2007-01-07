@@ -13,6 +13,13 @@ namespace Sofia.Plugins.General.Contact
         {            
             Controller = new Controller();
             Model = new Model();
+
+            //Liaison Controleur/Modèle
+            Controller.Model = Model;
+
+            //Liaison Vue/Controleur
+            View.Controller = Controller;
+            Controller.View = View;
         }
 
         public override string Description

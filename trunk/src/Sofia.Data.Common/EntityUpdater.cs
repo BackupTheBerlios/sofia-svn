@@ -31,7 +31,7 @@ namespace Sofia.Data.Common
             string[] restrictions = new string[4];
             restrictions[0] = _Entity.Server.DbConnection.Database;
             restrictions[1] = "SYSDBA";
-            restrictions[2] = _Entity.Name;
+            restrictions[2] = _Entity.Name.ToUpper();
             restrictions[3] = "BASE TABLE";
 
             DataTable table = _Entity.Server.DbConnection.GetSchema("Tables", restrictions);

@@ -15,6 +15,8 @@ namespace Sofia.Plugins.General.Contact.WindowsForm
         public UserInterface()
         {
             InitializeComponent();
+
+            IsMasterView = true;
         }
 
         public override void LoadFromXml(string rawXml)

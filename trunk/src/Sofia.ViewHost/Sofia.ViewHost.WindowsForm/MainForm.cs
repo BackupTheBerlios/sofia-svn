@@ -26,7 +26,14 @@ namespace Sofia.ViewHost.WindowsForm
         {
             InitializeComponent();          
             PluginManager.AutoRegister();
-            Insert(PluginManager["Sofia.Plugins.General.Contact.Plugin"], "");
+
+            NewPlugin(PluginManager["Sofia.Plugins.General.Contact.Plugin"], "");
+        }
+
+        public void NewPlugin(IPlugin plugin, string destination)
+        {
+            plugin.View.ContentId = Guid.NewGuid();
+            Insert(plugin, destination);
         }
 
         public override void Insert(IPlugin plugin, string destination)
@@ -38,10 +45,17 @@ namespace Sofia.ViewHost.WindowsForm
 
             //Test
             TabPage tabPage = new TabPage("Contact");
+            tabPage.Name = plugin.GetType().FullName;
             Control control = plugin.View.Control as Control;
             control.Dock = DockStyle.Fill;
             tabPage.Controls.Add(control);
             _Pages.Controls.Add(tabPage);
+        }        
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {            
+            IPlugin plugin = PluginManager[_Pages.SelectedTab.Name];
+            plugin.Controller.Save();
         }
     }
 }

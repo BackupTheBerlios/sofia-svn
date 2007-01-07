@@ -10,6 +10,9 @@ namespace Sofia.Plugins
 {
     public class PluginBase : IPlugin
     {
+        IController _Controller;
+        IView _View;
+        IModel _Model;
 
 #if GTK
         private static string UILibraryName = ".Gtk";
@@ -22,14 +25,10 @@ namespace Sofia.Plugins
             //Instanciation de la vue            
             string assemblyName = Assembly.GetCallingAssembly().Location;
             assemblyName = assemblyName.Insert(assemblyName.Length - 4, "." + UILibraryName);
-            _View = (IView)InstanceFactory.CreateInstanceFrom(assemblyName, typeof(IView));
+            _View = (IView)InstanceFactory.CreateInstanceFrom(assemblyName, typeof(IView), null);
         }
 
         #region Implémentation de l'interface
-
-        IController _Controller;
-        IView _View;
-        IModel _Model;
 
         public IView View
         {

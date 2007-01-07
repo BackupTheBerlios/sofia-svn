@@ -47,7 +47,7 @@ namespace Sofia.Data.Common
         /// de l'application dont le fichier ini contient le chemin de la base de donnée
         /// </param>
         ///<seealso cref="Format du fichier ini des logiciels Axilog"/>
-        public bool CreateConnection()
+        public bool OpenConnection()
         {
             string connectionString = String.Format("initial catalog={0};user id=sysdba;password=masterkey;character set=NONE;data source=localhost;port={1};", _DatabaseName, _Port);
 

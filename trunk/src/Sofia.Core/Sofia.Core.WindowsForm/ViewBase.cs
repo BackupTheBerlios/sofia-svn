@@ -15,24 +15,13 @@ namespace Sofia.Plugins.WindowsForm
 
         public ViewBase() : base() { }
 
-        public ViewBase(IController controller): base()
-        {
-            _Controller = controller;
-        }
-
         #endregion
 
         #region Implémentation de l'interface IView
 
         IController _Controller;
-
-        public IController Controller
-        {
-            get
-            {
-                return _Controller;
-            }
-        }
+        Guid _ContentId;
+        bool _IsMasterView;
 
         public virtual void LoadFromXml(string rawXml)
         {
@@ -49,6 +38,44 @@ namespace Sofia.Plugins.WindowsForm
             get
             {
                 return this;
+            }
+        }
+
+        public IController Controller
+        {
+            get
+            {
+                return _Controller;
+            }
+            set
+            {
+                _Controller = value;
+            }
+        }
+
+        public Guid ContentId
+        {
+            get
+            {
+                return _ContentId;
+            }
+            set
+            {
+                _ContentId = value;
+            }
+
+        }
+
+        public bool IsMasterView
+        {
+            get
+            {
+                return _IsMasterView;
+            }
+
+            set
+            {
+                _IsMasterView = value;
             }
         }
 

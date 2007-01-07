@@ -14,10 +14,9 @@ namespace Sofia.Commands
 		CommandManager _CommandManager;
         ICommandReceiver _CommandReceiver;
 		
-		public CommandBase(string id, ICommandReceiver commandReceiver, string text, string icon, string accelKey, string description)
+		public CommandBase(string id, string text, string icon, string accelKey, string description)
 		{		 	
 		 	_Id = id;
-            _CommandReceiver = commandReceiver;
 		 	_Properties = new CommandProperties(text, icon, accelKey, description);
 		 	_ParamList = new Hashtable();
 		}
@@ -55,8 +54,13 @@ namespace Sofia.Commands
 			get { return _CommandManager; } 
 			set { _CommandManager = value; }
 		}
-		
-		
+
+        public ICommandReceiver CommandReceiver
+        {
+            get { return _CommandReceiver; }
+            set { _CommandReceiver = value; }
+        }
+				
 		public Hashtable ParamList {
 			get { return _ParamList; }
 		}

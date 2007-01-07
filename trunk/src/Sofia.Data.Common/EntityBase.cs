@@ -560,6 +560,7 @@ namespace Sofia.Data.Common
                 int size = GetDbTypeSize(fieldInfo);
 
                 if (size != 0) type += String.Format("({0})", size.ToString());
+                if (GetDbType(fieldInfo) == DbType.String && size == -1) type = _Server.SgbdConsts.GetTextBlobString();
                 if (IsPrimaryKeyField(fieldInfo)) type += " NOT NULL";
 
                 return String.Format("{0} {1}", field.Name, type);

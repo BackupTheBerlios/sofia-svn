@@ -14,5 +14,7 @@ namespace Sofia.Data.Common
         /// <param name="dbType">Le type de donnée abstrait</param>
         /// <returns></returns>
         string GetDDLString(DbType dbType);
+
+        string GetTextBlobString();
     }
 }
