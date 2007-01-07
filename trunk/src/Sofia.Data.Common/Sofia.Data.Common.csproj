@@ -50,4 +50,8 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PostBuildEvent>mkdir $(SolutionDir)windows\plugins
+copy $(TargetPath) $(SolutionDir)windows\plugins</PostBuildEvent>
+  </PropertyGroup>
 </Project>

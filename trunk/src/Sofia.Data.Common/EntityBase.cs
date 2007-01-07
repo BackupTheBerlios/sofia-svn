@@ -490,7 +490,12 @@ namespace Sofia.Data.Common
         /// </summary>
         public bool Create()
         {
-            return BuildQuery(GetDefaultCreate, null, true);
+            bool executionResult;
+
+            executionResult = BuildQuery(GetDefaultCreate, null, true);
+            executionResult = executionResult && BuildQuery(GetDefaultAddPrimaryConstraint, null, true);
+
+            return executionResult;
         }
 
 
@@ -749,8 +754,22 @@ namespace Sofia.Data.Common
             string pkFields = GetFieldList(IsPrimaryKeyField);
 
             //Construction de la chaine SQL
-            return string.Format("CREATE TABLE {0} ({1}); ALTER TABLE {0} ADD CONSTRAINT PK_{0} PRIMARY KEY ({2});", Name, fieldList, pkFields);
+            return string.Format("CREATE TABLE {0} ({1})", Name, fieldList);
         }
+
+        /// <summary>
+        /// Génération de la requête ALTER TABLE
+        /// </summary>
+        /// <returns></returns>
+        private string GetDefaultAddPrimaryConstraint()
+        {
+            //Liste des champs
+            string fieldList = GetFieldList(IsPrimaryKeyField);
+
+            //Construction de la chaine SQL
+            return string.Format("ALTER TABLE {0} ADD CONSTRAINT PK_{0} PRIMARY KEY ({1});", Name, fieldList);
+        }
+
 
         /// <summary>
         /// Construction de la chaîne de requête
@@ -793,7 +812,7 @@ namespace Sofia.Data.Common
             if (match != null)
                 fields = GetFields().FindAll(match);
             else
-                fields = GetFields();
+                return;
 
             foreach (FieldInfo fieldInfo in fields)
             {

@@ -14,7 +14,7 @@ namespace Sofia.Plugins
 #if GTK
         private static string UILibraryName = ".Gtk";
 #else
-        private static string UILibraryName = ".WindowsForm";
+        private static string UILibraryName = "WindowsForm";
 #endif
 
         public PluginBase()
