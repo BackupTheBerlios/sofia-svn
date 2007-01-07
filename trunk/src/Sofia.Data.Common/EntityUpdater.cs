@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace Sofia.Data.Common
 {
-    class EntityUpdater
+    public class EntityUpdater
     {
         EntityBase _Entity;
 
@@ -46,47 +46,11 @@ namespace Sofia.Data.Common
         /// <summary>
         /// 
         /// </summary>
-        private void Check()
+        public void Check()
         {
-            if (FindEntitySchema() == null) CreateEntity();
+            if (FindEntitySchema() == null) _Entity.Create();
         }
-
-        /// <summary>
-        /// Création de l'entité physique dans la base de données
-        /// </summary>
-        private void CreateEntity()
-        {
-            /*
-            CREATE TABLE "Person" (
-            "id" INTEGER
-            NOT NULL
-            )
-            
-            alter table "Person"
-            add constraint "PK_Person"
-            primary key ("id")
-            
-            */
-
-            
-
-            //Build strings for each command. I could probably have just done one big command, but
-            //doing them individually helps me to debug easier.
-            /*
-            StringBuilder loSQL = new StringBuilder("CREATE TABLE \"Person\" (");
-
-            loSQL.Append("\"id\" INTEGER NOT NULL,");
-            loSQL.Append("\"namefirst\" VARCHAR(255),");
-            loSQL.Append("\"namemiddle\" VARCHAR(255),");
-            loSQL.Append("\"namelast\" VARCHAR(255))");
-
-            string lsSQLPrimaryKeyCreate = "ALTER TABLE \"Person\" ADD CONSTRAINT \"PK_Person\" PRIMARY KEY (\"id\")";
-
-            Query query = new Query(_DbServer);
-            //query.CommandText
-            */
-
-        }
+       
 
     }
 }

@@ -26,6 +26,11 @@ namespace Sofia.Data.Common
             _Size = size;
         }
 
+         public FieldTypeAttribute(DbType dbType)
+            : this(dbType, 0)
+        {
+        }
+
         private DbType _DbFieldType;
         public DbType DbFieldType
         {
@@ -50,7 +55,7 @@ namespace Sofia.Data.Common
 
 
     #endregion
-    
+
     /// <summary>
     /// Classe représentant un champ lié à la base de données
     /// </summary>
@@ -152,7 +157,7 @@ namespace Sofia.Data.Common
 
         #region Champs privés
 
-        private Server _Server;        
+        private Server _Server;
         private DbDataReader _DbDataReader;
         private List<SqlJoin> _Joins;
 
@@ -185,7 +190,7 @@ namespace Sofia.Data.Common
 
         public EntityBase(Server dbServer)
         {
-            _Server = dbServer;            
+            _Server = dbServer;
             _Joins = new List<SqlJoin>();
 
             foreach (FieldInfo fieldInfo in GetFields())
@@ -199,6 +204,10 @@ namespace Sofia.Data.Common
                 fieldInstance.Filtered = false;
                 fieldInstance.Value = null;
             }
+
+            //Mise à jour dans la base de données
+            EntityUpdater entityUpdater = new EntityUpdater(this);
+            entityUpdater.Check();
         }
 
         #endregion
@@ -432,7 +441,7 @@ namespace Sofia.Data.Common
         /// Initialise les champs de l'entité avec les valeurs chargées depuis la base de données.
         /// La clause WHERE se base sur la valeur de la clé primaire définie et initialisée pour l'entité 
         /// </summary>
-        public virtual bool Fill()
+        public bool Fill()
         {
             return BuildQuery(GetDefaultSelect, IsPrimaryKeyField, false);
         }
@@ -442,7 +451,7 @@ namespace Sofia.Data.Common
         /// La clause WHERE se base sur la valeur des champs passés en paramètre
         /// </summary>
         /// <param name="filteredFields">Liste des champs initialisés avec une valeur</param>
-        public virtual bool Filter()
+        public bool Filter()
         {
             return BuildQuery(GetFilteredSelect, IsFilteredField, false);
         }
@@ -450,7 +459,7 @@ namespace Sofia.Data.Common
         /// <summary>
         /// 
         /// </summary>
-        public virtual bool Update()
+        public bool Update()
         {
             //Déterminer si l'enregistrement est à ajouter ou à insérer en fonction de la valeur de la clé primaire
             if (Exists())
@@ -471,10 +480,19 @@ namespace Sofia.Data.Common
         /// <summary>
         /// Suppression de l'enregistrement dont la clé primaire est spécifiée
         /// </summary>
-        public virtual bool Delete()
+        public bool Delete()
         {
             return BuildQuery(GetDefaultDelete, IsPrimaryKeyField, true);
         }
+
+        /// <summary>
+        /// Création de la tabme
+        /// </summary>
+        public bool Create()
+        {
+            return BuildQuery(GetDefaultCreate, null, true);
+        }
+
 
         #endregion
 
@@ -535,7 +553,11 @@ namespace Sofia.Data.Common
             {
                 string type = _Server.SgbdConsts.GetDDLString(GetDbType(fieldInfo));
                 int size = GetDbTypeSize(fieldInfo);
-                return String.Format("{0} {1} {2}", field.Name, type, size);
+
+                if (size != 0) type += String.Format("({0})", size.ToString());
+                if (IsPrimaryKeyField(fieldInfo)) type += " NOT NULL";
+
+                return String.Format("{0} {1}", field.Name, type);
             }
             else return "";
         }
@@ -724,10 +746,10 @@ namespace Sofia.Data.Common
         {
             //Liste des champs
             string fieldList = GetFieldList(null, TransformToTypedField);
+            string pkFields = GetFieldList(IsPrimaryKeyField);
 
             //Construction de la chaine SQL
-            //return string.Format("SELECT {0} FROM {1} WHERE {2} {3}", fieldList, Name, whereClause, sortedList);
-            return "";
+            return string.Format("CREATE TABLE {0} ({1}); ALTER TABLE {0} ADD CONSTRAINT PK_{0} PRIMARY KEY ({2});", Name, fieldList, pkFields);
         }
 
         /// <summary>

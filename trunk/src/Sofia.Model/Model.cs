@@ -25,8 +25,8 @@ namespace Sofia.Mvc
             //Tests
             ISgbdConsts sgbdConsts = new FirebirdConsts();
             Server server = new Server("FirebirdSql.Data.FirebirdClient", Settings.Default.DatabaseName, sgbdConsts);
-            server.CreateConnection();            
-            Documents docs = new Documents(server);
+            server.CreateConnection();               
+            Documents documents = new Documents(server);
         }
 
         #region Implémentation de l'interface IObservable
@@ -69,14 +69,17 @@ namespace Sofia.Mvc
         {
             public Documents(Server server) : base(server) { }
 
-            [PrimaryKey, FieldType(DbType.Guid, 32)]
+            [PrimaryKey, FieldType(DbType.Guid)]
             public DbField DocId;
 
-            [FieldType(DbType.Guid, 32)]
+            [FieldType(DbType.Guid)]
             public DbField FldId;
 
             [FieldType(DbType.String, 128)]
             public DbField DocCaption;
+
+            [FieldType(DbType.Xml)]
+            public DbField DocContent;
         }
 
         #endregion
