@@ -5,10 +5,13 @@ using System.Text;
 using System.Data;
 
 using Sofia.Data.Common;
-using Sofia.Core.Observable;
-using Sofia.Core.Properties;
+using Sofia.Data.Firebird;
+using Sofia.Core.DesignPatterns;
+using Sofia.Core;
 
-namespace Sofia.Core.Plugins
+using Sofia.Model.Properties;
+
+namespace Sofia.Model
 {
     public class Model : IObservable, IModel
     {
@@ -23,7 +26,8 @@ namespace Sofia.Core.Plugins
             //Tests
             Server server = new Server("FirebirdSql.Data.FirebirdClient", Settings.Default.DatabaseName);
             server.CreateConnection();
-            Documents docs = new Documents(server);
+            ISgbdConsts sgbdConsts = new FirebirdConsts();
+            Documents docs = new Documents(server, sgbdConsts);
         }
 
         #region Implémentation de l'interface IObservable
@@ -64,7 +68,7 @@ namespace Sofia.Core.Plugins
 
         public class Documents : EntityBase
         {
-            public Documents(Server server) : base(server) { }
+            public Documents(Server server, ISgbdConsts sgbdConsts) : base(server, sgbdConsts) { }
 
             [PrimaryKey, FieldType(DbType.Guid)]
             public DbField DocId;

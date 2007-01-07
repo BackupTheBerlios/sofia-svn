@@ -7,9 +7,9 @@ using Sofia.Data.Common;
 
 namespace Sofia.Data.Firebird
 {
-    public static class SQLTypes: ISQLTypes
+    public class FirebirdConsts: ISgbdConsts
     {
-        public static string GetTypeString(DbType dbType)
+        public string GetType(DbType dbType)
         {
             return "";
         }

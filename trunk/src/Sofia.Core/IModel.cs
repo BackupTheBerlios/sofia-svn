@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Sofia.Core.Plugins
+namespace Sofia.Core
 {
     public interface IModel
     {

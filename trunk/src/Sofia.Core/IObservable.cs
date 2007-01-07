@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Sofia.Core.Observable
+namespace Sofia.Core.DesignPatterns
 {
-    interface IObservable
+    public interface IObservable
     {
         /// <summary>
         /// Enregistre un observateur

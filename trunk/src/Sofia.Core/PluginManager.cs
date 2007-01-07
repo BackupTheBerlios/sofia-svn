@@ -18,14 +18,12 @@ namespace Sofia.Core.Plugins
         {
             _Plugins = new List<IPlugin>();
             _PluginPath = pluginsPath;
-            _Model = new Model();
         }
 
         #endregion
 
         List<IPlugin> _Plugins;
         string _PluginPath;
-        Model _Model;
 
         /// <summary>
         /// Ajoute un plugin dans la liste des plugins
@@ -60,10 +58,7 @@ namespace Sofia.Core.Plugins
             {
                 IPlugin plugin = (IPlugin)InstanceFactory.CreateInstanceFrom(file.FullName, typeof(IPlugin));
                 if (plugin != null)
-                {
-                    plugin.Model = (IModel)_Model;
                     Add(plugin);
-                }
             }
 
         }

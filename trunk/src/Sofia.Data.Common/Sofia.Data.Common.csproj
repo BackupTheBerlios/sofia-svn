@@ -36,7 +36,7 @@
     <Compile Include="CommandFactory.cs" />
     <Compile Include="EntityBase.cs" />
     <Compile Include="ICommandFactory.cs" />
-    <Compile Include="ISQLTypes.cs" />
+    <Compile Include="ISgbdConsts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query.cs" />
     <Compile Include="Server.cs" />

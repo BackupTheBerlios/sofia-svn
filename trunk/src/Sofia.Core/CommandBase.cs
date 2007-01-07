@@ -24,7 +24,7 @@ namespace Sofia.Core.Commands
 		
 		public virtual void Execute(string parameters) 
 		{			
-			XmlTools.XPath xpn= new XmlTools.XPath();
+			Xml.XPath xpn= new Xml.XPath();
 			xpn.LoadXML(parameters);
      		
      		ArrayList names = xpn.GetAttributes("/Params", "name");

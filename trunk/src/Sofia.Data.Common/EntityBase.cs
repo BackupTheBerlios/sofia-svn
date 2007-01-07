@@ -179,7 +179,7 @@ namespace Sofia.Data.Common
 
         public EntityBase(Server dbServer)
         {
-            _Server = dbServer;
+            _Server = dbServer;            
             _Joins = new List<SqlJoin>();
 
             foreach (FieldInfo fieldInfo in GetFields())

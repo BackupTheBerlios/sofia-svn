@@ -13,6 +13,7 @@ namespace Sofia.Data.Common
 
         private DbConnection _DbConnection;
         private DbProviderFactory _DbProviderFactory;
+        private ISgbdConsts _SgbdConsts;
 
         #endregion
 
@@ -41,8 +42,8 @@ namespace Sofia.Data.Common
                 _DbConnection = _DbProviderFactory.CreateConnection();
                 _DbConnection.ConnectionString = connectionString;
             }
-            catch (Exception e)
-            {                
+            catch (Exception)
+            {
                 return false;
             }
 
@@ -97,14 +98,19 @@ namespace Sofia.Data.Common
         /// <summary>
         /// Constructeur
         /// </summary>
-        public Server(string providerName, string databaseName, int port)
+        public Server(string providerName, string databaseName, ISgbdConsts sgbdConsts, int port)
         {
             _ProviderName = providerName;
             _DatabaseName = databaseName;
             _Port = port;
+            _SgbdConsts = sgbdConsts;
+
         }
 
-        public Server(string providerName, string databaseName) : this(providerName, databaseName, 3050) { }
+        public Server(string providerName, string databaseName, ISgbdConsts sgbdConsts)
+            : this(providerName, databaseName, sgbdConsts, 3050)
+        {
+        }
 
         #endregion
     }
