@@ -7,7 +7,7 @@
     <ProjectGuid>{51B6B859-A247-40CD-AB52-F77042DDCE4C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sofia.Core</RootNamespace>
+    <RootNamespace>Sofia</RootNamespace>
     <AssemblyName>Sofia.Core</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

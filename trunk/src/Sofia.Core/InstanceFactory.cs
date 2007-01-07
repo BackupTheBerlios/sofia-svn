@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 
-namespace Sofia.Core.Reflection
+namespace Sofia.Reflection
 {
     class InstanceFactory
     {

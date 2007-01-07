@@ -2,7 +2,7 @@
 using System;
 using System.Collections;
 
-namespace Sofia.Core.Commands
+namespace Sofia.Commands
 {
 	
 	public class CommandManager

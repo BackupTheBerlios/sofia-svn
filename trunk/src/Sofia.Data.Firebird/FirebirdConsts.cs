@@ -9,7 +9,7 @@ namespace Sofia.Data.Firebird
 {
     public class FirebirdConsts: ISgbdConsts
     {
-        public string GetType(DbType dbType)
+        public string GetDDLString(DbType dbType)
         {
             return "";
         }

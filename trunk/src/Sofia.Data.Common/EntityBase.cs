@@ -20,9 +20,10 @@ namespace Sofia.Data.Common
     [AttributeUsage(AttributeTargets.Field)]
     public class FieldTypeAttribute : Attribute
     {
-        public FieldTypeAttribute(DbType dbType)
+        public FieldTypeAttribute(DbType dbType, int size)
         {
             _DbFieldType = dbType;
+            _Size = size;
         }
 
         private DbType _DbFieldType;
@@ -34,6 +35,12 @@ namespace Sofia.Data.Common
             }
         }
 
+        private int _Size;
+        public int Size
+        {
+            get { return _Size; }
+        }
+
     }
 
     #endregion
@@ -43,8 +50,7 @@ namespace Sofia.Data.Common
 
 
     #endregion
-
-
+    
     /// <summary>
     /// Classe représentant un champ lié à la base de données
     /// </summary>
@@ -402,11 +408,21 @@ namespace Sofia.Data.Common
         /// Obtient de la liste des propriétés publiques
         /// </summary>
         /// <returns>Une liste générique des propriétés publiques</returns>
-        protected List<FieldInfo> GetFields()
+        private List<FieldInfo> GetFields()
         {
             return new List<FieldInfo>(this.GetType().GetFields());
         }
 
+        /// <summary>
+        /// Retourne le champ qui a la propriété Name
+        /// </summary>
+        /// <param name="name">Nom du champ</param>
+        /// <returns>Un champ ou nul si le champ n'est pas trouvé</returns>
+        private FieldInfo GetField(string name)
+        {
+            List<FieldInfo> fields = new List<FieldInfo>(this.GetType().GetFields());
+            return fields.Find(delegate(FieldInfo field) { return field.Name == name; });
+        }
 
         #endregion
 
@@ -512,10 +528,16 @@ namespace Sofia.Data.Common
         /// <returns></returns>
         private string TransformToTypedField(DbField field)
         {
-            //Détermination du type de champ
+            //Détermination de la chaine représentant le type du champ
+            FieldInfo fieldInfo = GetField(field.Name);
 
-
-            return field.Name + "";
+            if (fieldInfo != null)
+            {
+                string type = _Server.SgbdConsts.GetDDLString(GetDbType(fieldInfo));
+                int size = GetDbTypeSize(fieldInfo);
+                return String.Format("{0} {1} {2}", field.Name, type, size);
+            }
+            else return "";
         }
 
 
@@ -778,6 +800,26 @@ namespace Sofia.Data.Common
                 return DbType.String;
             }
         }
+
+        /// <summary>
+        /// Permet d'obtenir la taille du type de données associé au champ
+        /// </summary>
+        /// <param name="fieldInfo">Le champ</param>
+        /// <returns>Un entier représentant la taille du type de donnée</returns>
+        private int GetDbTypeSize(FieldInfo fieldInfo)
+        {
+            object[] attributes = fieldInfo.GetCustomAttributes(typeof(FieldTypeAttribute), true);
+            if (attributes.Length != 0)
+            {
+                FieldTypeAttribute attribute = attributes[0] as FieldTypeAttribute;
+                return attribute.Size;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
 
         #endregion
 

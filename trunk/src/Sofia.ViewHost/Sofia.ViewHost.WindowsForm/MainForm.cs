@@ -9,12 +9,12 @@ using System.Reflection;
 
 using Sofia.ViewHost.WindowsForm.Properties;
 
-using Sofia.Core.Plugins;
+using Sofia.Plugins;
 
 #if GTK
-using Sofia.Core.Plugins.Gtk;
+using Sofia.Plugins.Gtk;
 #else
-using Sofia.Core.Plugins.WindowsForm;
+using Sofia.Plugins.WindowsForm;
 #endif
 
 namespace Sofia.ViewHost.WindowsForm

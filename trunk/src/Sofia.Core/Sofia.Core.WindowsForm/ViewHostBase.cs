@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 
-using Sofia.Core.Plugins;
+using Sofia.Plugins;
 
-namespace Sofia.Core.Plugins.WindowsForm
+namespace Sofia.Plugins.WindowsForm
 {
     public class ViewHostBase: Form, IViewHost
     {

@@ -6,12 +6,11 @@ using System.Data;
 
 using Sofia.Data.Common;
 using Sofia.Data.Firebird;
-using Sofia.Core.DesignPatterns;
-using Sofia.Core;
+using Sofia.DesignPatterns;
 
-using Sofia.Model.Properties;
+using Sofia.Mvc.Properties;
 
-namespace Sofia.Model
+namespace Sofia.Mvc
 {
     public class Model : IObservable, IModel
     {
@@ -24,10 +23,10 @@ namespace Sofia.Model
             _Observers = new List<IObserver>();
 
             //Tests
-            Server server = new Server("FirebirdSql.Data.FirebirdClient", Settings.Default.DatabaseName);
-            server.CreateConnection();
             ISgbdConsts sgbdConsts = new FirebirdConsts();
-            Documents docs = new Documents(server, sgbdConsts);
+            Server server = new Server("FirebirdSql.Data.FirebirdClient", Settings.Default.DatabaseName, sgbdConsts);
+            server.CreateConnection();            
+            Documents docs = new Documents(server);
         }
 
         #region Implémentation de l'interface IObservable
@@ -68,15 +67,15 @@ namespace Sofia.Model
 
         public class Documents : EntityBase
         {
-            public Documents(Server server, ISgbdConsts sgbdConsts) : base(server, sgbdConsts) { }
+            public Documents(Server server) : base(server) { }
 
-            [PrimaryKey, FieldType(DbType.Guid)]
+            [PrimaryKey, FieldType(DbType.Guid, 32)]
             public DbField DocId;
 
-            [FieldType(DbType.Guid)]
+            [FieldType(DbType.Guid, 32)]
             public DbField FldId;
 
-            [FieldType(DbType.String)]
+            [FieldType(DbType.String, 128)]
             public DbField DocCaption;
         }
 

@@ -13,6 +13,6 @@ namespace Sofia.Data.Common
         /// </summary>
         /// <param name="dbType">Le type de donnée abstrait</param>
         /// <returns></returns>
-        string GetType(DbType dbType);
+        string GetDDLString(DbType dbType);
     }
 }

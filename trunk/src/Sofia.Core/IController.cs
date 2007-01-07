@@ -2,9 +2,9 @@
 using System;
 using System.Collections;
 
-using Sofia.Core.Commands;
+using Sofia.Commands;
 
-namespace Sofia.Core.Plugins
+namespace Sofia.Mvc
 {
 	
 	public interface IController

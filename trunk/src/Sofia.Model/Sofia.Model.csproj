@@ -7,7 +7,7 @@
     <ProjectGuid>{DCF4978A-AB2C-4462-9279-3A347A41B7DA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sofia.Model</RootNamespace>
+    <RootNamespace>Sofia.Mvc</RootNamespace>
     <AssemblyName>Sofia.Model</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -40,6 +40,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sofia.Core\Sofia.Core.csproj">

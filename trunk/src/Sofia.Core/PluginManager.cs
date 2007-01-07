@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-using Sofia.Core.Reflection;
+using Sofia.Reflection;
 
-namespace Sofia.Core.Plugins
+namespace Sofia.Plugins
 {
     public class PluginManager
     {

@@ -6,7 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-using Sofia.Core.Plugins.WindowsForm;
+using Sofia.Plugins.WindowsForm;
 
 namespace Sofia.Plugins.General.Contact.WindowsForm
 {

@@ -3,17 +3,25 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 
-using Sofia.Core.Reflection;
+using Sofia.Reflection;
+using Sofia.Mvc;
 
-namespace Sofia.Core.Plugins
+namespace Sofia.Plugins
 {
     public class PluginBase : IPlugin
     {
+
+#if GTK
+        private static string UILibraryName = ".Gtk";
+#else
+        private static string UILibraryName = ".WindowsForm";
+#endif
+
         public PluginBase()
         {
             //Instanciation de la vue            
             string assemblyName = Assembly.GetCallingAssembly().Location;
-            assemblyName = assemblyName.Insert(assemblyName.Length - 4, ".WindowsForm");
+            assemblyName = assemblyName.Insert(assemblyName.Length - 4, "." + UILibraryName);
             _View = (IView)InstanceFactory.CreateInstanceFrom(assemblyName, typeof(IView));
         }
 

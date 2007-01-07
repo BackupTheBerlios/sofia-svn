@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Sofia.Core
+namespace Sofia.Mvc
 {
     public interface IModel
     {

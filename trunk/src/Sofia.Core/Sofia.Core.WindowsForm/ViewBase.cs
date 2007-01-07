@@ -5,9 +5,9 @@ using System.IO;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
-using Sofia.Core.Plugins;
+using Sofia.Mvc;
 
-namespace Sofia.Core.Plugins.WindowsForm
+namespace Sofia.Plugins.WindowsForm
 {
     public class ViewBase: UserControl, IView
     {

@@ -5,7 +5,7 @@ using System.Xml.XPath;
 using System.Collections;
 using System.IO;
 
-namespace Sofia.Core.Xml
+namespace Sofia.Xml
 {
 
     /// <summary>

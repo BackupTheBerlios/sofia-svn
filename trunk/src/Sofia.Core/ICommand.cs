@@ -1,7 +1,7 @@
 
 using System;
 
-namespace Sofia.Core.Commands
+namespace Sofia.Commands
 {
 	
 	public interface ICommand

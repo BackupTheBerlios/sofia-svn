@@ -2,7 +2,7 @@
 using System;
 using System.Xml;
 
-namespace Sofia.Core.Plugins
+namespace Sofia.Mvc
 {
 	
 	public interface IView

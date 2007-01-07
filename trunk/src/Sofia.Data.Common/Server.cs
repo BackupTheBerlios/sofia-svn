@@ -17,6 +17,22 @@ namespace Sofia.Data.Common
 
         #endregion
 
+        #region Propriétés
+
+        /// <summary>
+        /// Constantes spécifique à un SGBD. Permet la contruction de chaînes SQL en conformité
+        /// avec le SGBD.
+        /// </summary>
+        public ISgbdConsts SgbdConsts
+        {
+            get
+            {
+                return _SgbdConsts;
+            }
+        }
+
+        #endregion
+
         #region Connexion/Déconnexion
 
         private string _ProviderName;
