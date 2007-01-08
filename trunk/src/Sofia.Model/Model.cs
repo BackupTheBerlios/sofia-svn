@@ -59,20 +59,11 @@ namespace Sofia.Mvc
 
         public void UpdateDocument(string contentId, string contentXml, bool isMasterDocument)
         {
-            _Server.OpenConnection();
-            try
-            {
-                Documents documents = new Documents(_Server);
-                documents.DocId.Value = contentId;
-                documents.DocCaption.Value = "test";
-                documents.DocContent.Value = contentXml;
-                documents.Update();
-            }
-            finally
-            {
-                _Server.CloseConnexion();
-            }
-            
+            Documents documents = new Documents(_Server);
+            documents.DocId.Value = contentId;
+            documents.DocCaption.Value = "test";
+            documents.DocContent.Value = contentXml;
+            documents.Update();
         }
 
         #endregion

@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="DatabaseName" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">E:\developpement\sofia\database\sofia.fdb</Value>
+      <Value Profile="(Default)">.\sofia.fdb</Value>
     </Setting>
   </Settings>
 </SettingsFile>

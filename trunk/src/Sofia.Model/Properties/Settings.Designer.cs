@@ -25,7 +25,7 @@ namespace Sofia.Mvc.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("E:\\developpement\\sofia\\database\\sofia.fdb")]
+        [global::System.Configuration.DefaultSettingValueAttribute(".\\sofia.fdb")]
         public string DatabaseName {
             get {
                 return ((string)(this["DatabaseName"]));

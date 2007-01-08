@@ -74,7 +74,7 @@ namespace Sofia.Data.Common
                 _DbConnection = _DbProviderFactory.CreateConnection();
                 _DbConnection.ConnectionString = _ConnectionString;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return false;
             }

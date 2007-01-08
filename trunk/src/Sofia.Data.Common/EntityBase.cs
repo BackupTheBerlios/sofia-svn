@@ -26,7 +26,7 @@ namespace Sofia.Data.Common
             _Size = size;
         }
 
-         public FieldTypeAttribute(DbType dbType)
+        public FieldTypeAttribute(DbType dbType)
             : this(dbType, 0)
         {
         }
@@ -783,11 +783,20 @@ namespace Sofia.Data.Common
             //Affectation des paramètres
             FillParameters(fbQuery, parametersFillingPredicate);
 
+
             //Execution de la requête
-            if (nonQuery)
-                return ExecuteNonQuery(fbQuery);
-            else
-                return ExecuteReader(fbQuery);
+            _Server.OpenConnection();
+            try
+            {
+                if (nonQuery)
+                    return ExecuteNonQuery(fbQuery);
+                else
+                    return ExecuteReader(fbQuery);
+            }
+            finally
+            {
+                _Server.CloseConnexion();
+            }
         }
 
         #endregion
