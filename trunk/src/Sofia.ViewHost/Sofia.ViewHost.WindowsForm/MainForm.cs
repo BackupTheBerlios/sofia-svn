@@ -22,7 +22,7 @@ namespace Sofia.ViewHost.WindowsForm
     public partial class MainForm : ViewHostBase
     {
 
-        public MainForm() : base(Settings.Default.PluginsPath)
+        public MainForm() : base()
         {
             InitializeComponent();          
             PluginManager.AutoRegister();

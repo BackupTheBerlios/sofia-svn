@@ -14,16 +14,14 @@ namespace Sofia.Plugins
         /// <summary>
         /// Constructeur
         /// </summary>
-        public PluginManager(string pluginsPath)
+        public PluginManager()
         {
             _Plugins = new List<IPlugin>();
-            _PluginPath = pluginsPath;
         }
 
         #endregion
 
         List<IPlugin> _Plugins;
-        string _PluginPath;
 
         /// <summary>
         /// Ajoute un plugin dans la liste des plugins
@@ -50,9 +48,9 @@ namespace Sofia.Plugins
 
         public void AutoRegister()
         {
-            DirectoryInfo dir = new DirectoryInfo(_PluginPath);
+            DirectoryInfo dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
             FileInfo[]      files;
-            files = dir.GetFiles("*.dll");
+            files = dir.GetFiles("Sofia.Plugins.*.dll");
 
             foreach (FileInfo file in files)
             {

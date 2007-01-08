@@ -12,18 +12,12 @@ namespace Sofia.Plugins.WindowsForm
         #region Contructeurs
 
         /// <summary>
-        /// Constructeur par défaut pour Form
-        /// </summary>
-        public ViewHostBase() { }
-
-        /// <summary>
         /// Constructeur
         /// </summary>
-        /// <param name="pluginsPath">Emplacement des plugins</param>
-        public ViewHostBase(string pluginsPath)
+        public ViewHostBase()
             : base()
         {
-            _PluginManager = new PluginManager(pluginsPath);
+            _PluginManager = new PluginManager();
         }
 
         #endregion

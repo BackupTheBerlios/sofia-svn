@@ -6,15 +6,19 @@ using System.Data;
 
 namespace Sofia.Data.Common
 {
-    public interface ISgbdConsts
+    public interface ISgbdDDL
     {
         /// <summary>
         /// Obtient la chaine de caractère représentant le type de donnée spécifique à un SGBD
         /// </summary>
         /// <param name="dbType">Le type de donnée abstrait</param>
         /// <returns></returns>
-        string GetDDLString(DbType dbType);
+        string GetDDLType(DbType dbType, int size, bool isNullable);
 
-        string GetTextBlobString();
+        /// <summary>
+        /// Méthode de création de la base de données
+        /// </summary>
+        /// <param name="databaseName"></param>
+        void CreateDatabase(Server server);
     }
 }

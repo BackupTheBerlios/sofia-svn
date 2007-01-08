@@ -89,8 +89,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetDir)*.dll $(SolutionDir)windows
-copy $(TargetPath) $(SolutionDir)windows
+    <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)windows"
 </PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -188,9 +188,9 @@ namespace Sofia.Data.Common
 
         #region Contructeur
 
-        public EntityBase(Server dbServer)
+        public EntityBase(Server server)
         {
-            _Server = dbServer;
+            _Server = server;
             _Joins = new List<SqlJoin>();
 
             foreach (FieldInfo fieldInfo in GetFields())
@@ -556,13 +556,7 @@ namespace Sofia.Data.Common
 
             if (fieldInfo != null)
             {
-                string type = _Server.SgbdConsts.GetDDLString(GetDbType(fieldInfo));
-                int size = GetDbTypeSize(fieldInfo);
-
-                if (size != 0) type += String.Format("({0})", size.ToString());
-                if (GetDbType(fieldInfo) == DbType.String && size == -1) type = _Server.SgbdConsts.GetTextBlobString();
-                if (IsPrimaryKeyField(fieldInfo)) type += " NOT NULL";
-
+                string type = _Server.SgbdDDL.GetDDLType(GetDbType(fieldInfo), GetDbTypeSize(fieldInfo), IsPrimaryKeyField(fieldInfo));
                 return String.Format("{0} {1}", field.Name, type);
             }
             else return "";

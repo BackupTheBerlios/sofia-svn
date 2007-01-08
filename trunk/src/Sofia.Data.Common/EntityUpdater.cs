@@ -27,7 +27,7 @@ namespace Sofia.Data.Common
         /// </summary>
         /// <returns>Vrai si la table existe, faux sinon</returns>
         private DataTable FindEntitySchema()
-        {
+        {            
             string[] restrictions = new string[4];
             restrictions[0] = _Entity.Server.DbConnection.Database;
             restrictions[1] = "SYSDBA";
@@ -48,9 +48,10 @@ namespace Sofia.Data.Common
         /// </summary>
         public void Check()
         {
+            _Entity.Server.SgbdDDL.CreateDatabase(_Entity.Server);
             if (FindEntitySchema() == null) _Entity.Create();
         }
-       
+
 
     }
 }

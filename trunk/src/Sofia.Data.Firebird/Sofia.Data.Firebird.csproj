@@ -28,12 +28,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FirebirdSql.Data.FirebirdClient, Version=2.0.0.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FirebirdConsts.cs" />
+    <Compile Include="FirebirdDDL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -51,7 +52,6 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>mkdir $(SolutionDir)windows\plugins
-copy $(TargetPath) $(SolutionDir)windows\plugins</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)src\Sofia.ViewHost\Sofia.ViewHost.WindowsForm\bin\$(ConfigurationName)"</PostBuildEvent>
   </PropertyGroup>
 </Project>

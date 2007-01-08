@@ -72,7 +72,6 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>mkdir $(SolutionDir)windows\plugins
-copy $(TargetPath) $(SolutionDir)windows\plugins</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)src\Sofia.ViewHost\Sofia.ViewHost.WindowsForm\bin\$(ConfigurationName)"</PostBuildEvent>
   </PropertyGroup>
 </Project>

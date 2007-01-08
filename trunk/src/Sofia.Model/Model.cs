@@ -27,7 +27,7 @@ namespace Sofia.Mvc
         public Model()
         {
             _Observers = new List<IObserver>();
-            _Server = new Server("FirebirdSql.Data.FirebirdClient", Settings.Default.DatabaseName, new FirebirdConsts());
+            _Server = new Server("FirebirdSql.Data.FirebirdClient", Settings.Default.DatabaseName, new FirebirdDDL(), 3055);
         }
 
         #region Implémentation de l'interface IObservable
