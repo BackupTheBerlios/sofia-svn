@@ -28,12 +28,6 @@ namespace Sofia.ViewHost.WindowsForm
             PluginManager.AutoRegister();            
         }
 
-        public void NewPlugin(IPlugin plugin, string destination)
-        {
-            plugin.View.ContentId = Guid.NewGuid();
-            Insert(plugin, destination);
-        }
-
         #region Méthodes héritées
 
         public override void Insert(IPlugin plugin, string destination)
@@ -60,10 +54,12 @@ namespace Sofia.ViewHost.WindowsForm
 
         public override void New()
         {
-            NewPlugin(PluginManager["Sofia.Plugins.General.Contact.Plugin"], "");
+            IPlugin plugin = PluginManager["Sofia.Plugins.General.Contact.Plugin"];
+            plugin.View.ContentId = Guid.NewGuid();
+            Insert(plugin, "TabControl");
         }
 
-        #region
+        #endregion
 
         private void enregistrerToolStripButton_Click(object sender, EventArgs e)
         {
@@ -76,6 +72,11 @@ namespace Sofia.ViewHost.WindowsForm
         }
 
         private void nouveauToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            New();
+        }
+
+        private void nouveauToolStripButton_Click(object sender, EventArgs e)
         {
             New();
         }

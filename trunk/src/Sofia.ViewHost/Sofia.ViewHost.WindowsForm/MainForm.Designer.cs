@@ -423,6 +423,7 @@ namespace Sofia.ViewHost.WindowsForm
             this.nouveauToolStripButton.Name = "nouveauToolStripButton";
             this.nouveauToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.nouveauToolStripButton.Text = "&Nouveau";
+            this.nouveauToolStripButton.Click += new System.EventHandler(this.nouveauToolStripButton_Click);
             // 
             // ouvrirToolStripButton
             // 
