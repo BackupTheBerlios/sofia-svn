@@ -61,8 +61,7 @@ namespace Sofia.Mvc
         public void UpdateDocument(string contentId, string contentXml, bool isMasterDocument)
         {
             Documents documents = new Documents(_Server);
-            documents.DocId.Value = contentId;
-            documents.FldId.Value = Guid.NewGuid().ToString("N");
+            documents.DocId.Value = contentId;            
             documents.DocCaption.Value = "test";
             documents.DocContent.Value = contentXml;
             documents.Update();
@@ -79,6 +78,7 @@ namespace Sofia.Mvc
             [PrimaryKey, FieldType(DbType.String, 32)]
             public DbField DocId;
 
+            [Obsolete("Utilisation des tags", true)]
             [FieldType(DbType.String, 32)]
             public DbField FldId;
 
@@ -87,9 +87,6 @@ namespace Sofia.Mvc
 
             [FieldType(DbType.String, -1)]
             public DbField DocContent;
-
-            [FieldType(DbType.String, 128)]
-            public DbField DocType;
         }
 
         #endregion
