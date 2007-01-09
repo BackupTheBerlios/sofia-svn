@@ -54,6 +54,9 @@
     <None Include="Sofia.Plugins.General.Contact.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Sofia.Plugins.General.Contact.xsx">
+      <DependentUpon>Sofia.Plugins.General.Contact.xsd</DependentUpon>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -21,17 +21,21 @@ namespace Sofia.Plugins.General.Contact.WindowsForm
 
         public override void LoadFromXml(string rawXml)
         {
-            throw new NotImplementedException();
+            Document document = (Document)Deserialize(rawXml, typeof(Document));
+
+            textBox1.Text = document.Nom;
+            textBox2.Text = document.Prenom;
         }
 
         public override string SaveToXml()
         {
             Document document = new Document();
             document.Nom = textBox1.Text;
-            document.Prenom = "test";
+            document.Prenom = textBox2.Text;
 
             return Serialize(document);
         }
+
 
 
     }

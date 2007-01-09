@@ -90,6 +90,13 @@ namespace Sofia.Plugins.WindowsForm
             return sb.ToString();
         }
 
+        public object Deserialize(string rawXml, Type documentType)
+        {
+            XmlSerializer xmlSerializer = new XmlSerializer(documentType);
+            TextReader reader = new StringReader(rawXml);
+            return xmlSerializer.Deserialize(reader);
+        }
+
 
     }
 }

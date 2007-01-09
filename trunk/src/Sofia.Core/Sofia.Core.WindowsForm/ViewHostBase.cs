@@ -42,6 +42,15 @@ namespace Sofia.Plugins.WindowsForm
             
         }
 
+        public virtual void Save()
+        {
+            
+        }
+
+        public virtual void New()
+        {
+        }
+
 
         #endregion
 

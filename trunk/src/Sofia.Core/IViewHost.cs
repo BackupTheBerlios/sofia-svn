@@ -13,5 +13,15 @@ namespace Sofia.Plugins
         /// <param name="destination">L'identifiant de la zone d'insertion</param>
         void Insert(IPlugin plugin, string destination);
 
+        /// <summary>
+        /// Sauve dans le modèle la vue active
+        /// </summary>
+        void Save();
+
+        /// <summary>
+        /// Crée un nouveau document maître
+        /// </summary>
+        void New();
+
     }
 }

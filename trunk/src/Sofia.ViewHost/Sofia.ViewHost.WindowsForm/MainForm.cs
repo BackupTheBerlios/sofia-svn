@@ -25,9 +25,7 @@ namespace Sofia.ViewHost.WindowsForm
         public MainForm() : base()
         {
             InitializeComponent();          
-            PluginManager.AutoRegister();
-
-            NewPlugin(PluginManager["Sofia.Plugins.General.Contact.Plugin"], "");
+            PluginManager.AutoRegister();            
         }
 
         public void NewPlugin(IPlugin plugin, string destination)
@@ -35,6 +33,8 @@ namespace Sofia.ViewHost.WindowsForm
             plugin.View.ContentId = Guid.NewGuid();
             Insert(plugin, destination);
         }
+
+        #region Méthodes héritées
 
         public override void Insert(IPlugin plugin, string destination)
         {
@@ -50,12 +50,34 @@ namespace Sofia.ViewHost.WindowsForm
             control.Dock = DockStyle.Fill;
             tabPage.Controls.Add(control);
             _Pages.Controls.Add(tabPage);
-        }        
+        }
 
-        private void toolStripButton1_Click(object sender, EventArgs e)
-        {            
+        public override void Save()
+        {
             IPlugin plugin = PluginManager[_Pages.SelectedTab.Name];
             plugin.Controller.Save();
+        }
+
+        public override void New()
+        {
+            NewPlugin(PluginManager["Sofia.Plugins.General.Contact.Plugin"], "");
+        }
+
+        #region
+
+        private void enregistrerToolStripButton_Click(object sender, EventArgs e)
+        {
+            Save();
+        }
+
+        private void enregistrerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Save();
+        }
+
+        private void nouveauToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            New();
         }
     }
 }

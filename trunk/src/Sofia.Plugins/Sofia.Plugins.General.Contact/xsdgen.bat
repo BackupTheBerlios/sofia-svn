@@ -1,2 +1,2 @@
-"C:\Program Files\XSDObjectGenerator\XSDObjectGen.exe" document.xsd /f:Document.cs /n:Sofia.Plugins.General.Contact
+"C:\Program Files\XSDObjectGenerator\XSDObjectGen.exe" Sofia.Plugins.General.Contact.xsd /n:Sofia.Plugins.General.Contact
 pause
