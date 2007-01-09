@@ -12,6 +12,9 @@ using Sofia.Mvc.Properties;
 
 namespace Sofia.Mvc
 {
+    /// <summary>
+    /// Classe représentant le modèle
+    /// </summary>
     public class Model : IObservable, IModel
     {
 
@@ -35,18 +38,27 @@ namespace Sofia.Mvc
 
         List<IObserver> _Observers;
 
+        /// <summary>
+        /// <see cref="IObserver"/>
+        /// </summary>
         public void Register(IObserver o)
         {
             if (!_Observers.Contains(o))
                 _Observers.Add(o);
         }
 
-        public void Unregister(IObserver o)
+        /// <summary>
+        /// <see cref="IObserver"/>
+        /// </summary>
+         public void Unregister(IObserver o)
         {
             _Observers.Remove(o);
         }
 
-        public void Notify()
+        /// <summary>
+        /// <see cref="IObserver"/>
+        /// </summary>
+         public void Notify()
         {
             foreach (IObserver o in _Observers)
             {
@@ -58,7 +70,10 @@ namespace Sofia.Mvc
 
         #region Implémentation de l'interface IModel
 
-        public void UpdateDocument(string contentId, string contentXml, bool isMasterDocument)
+        /// <summary>
+        /// <see cref="IModel"/>
+        /// </summary>
+         public void UpdateDocument(string contentId, string contentXml, bool isMasterDocument)
         {
             Documents documents = new Documents(_Server);
             documents.DocId.Value = contentId;            
@@ -71,23 +86,88 @@ namespace Sofia.Mvc
 
         #region Classes métier
 
-        public class Documents : EntityBase
+        public partial class Documents : EntityBase
         {
             public Documents(Server server) : base(server) { }
 
             [PrimaryKey, FieldType(DbType.String, 32)]
             public DbField DocId;
 
-            [Obsolete("Utilisation des tags", true)]
-            [FieldType(DbType.String, 32)]
-            public DbField FldId;
-
             [FieldType(DbType.String, 128)]
             public DbField DocCaption;
 
+            [FieldType(DbType.String)]
+            public DbField DocContent;
+
+        }
+
+        public partial class Tags : EntityBase
+        {
+            public Tags(Server server) : base(server) { }
+
+            [PrimaryKey, FieldType(DbType.String, 15)]
+            public DbField TagId;
+
+            [FieldType(DbType.String, 32)]
+            public DbField TagCaption;
+
+            [FieldType(DbType.Binary)]
+            public DbField TagThumb;
+
+            [FieldType(DbType.String, 128)]
+            public DbField TagDescription;
+
+        }
+
+        public partial class TaggedDocs : EntityBase
+        {
+            public TaggedDocs(Server server) : base(server) { }
+
+            [PrimaryKey, FieldType(DbType.String, 15)]
+            public DbField TagId;
+
+            [PrimaryKey, FieldType(DbType.String, 32)]
+            public DbField DocId;
+        }
+
+        /* 
+           Exemples de mises à jour de la base
+           -----------------------------------
+         
+        [Obsolete("Commentaire par exemple : Suprimée", true/false)] 
+        [Updated(new string[] { "ClasseA, ClasseB" }, Renamed/Removed)]
+        public partial ClassC Documents : EntityBase
+        {
+            public ClassC(Server server) : base(server) { }
+
+            [PrimaryKey, FieldType(DbType.String, 32)]
+            public DbField Id;
+            
+            [Obsolete("Commentaire", true/false)]
+            [Updated(new string[] { "ChampA", "ChampB", ... }, Renamed/Deleted)]
+            [Updated(new DbType[] {DbType.Integer, DbType.Binary, ...}]
+            [FieldType(DbType.String, 128)]
+            public DbField ChampC;
+
             [FieldType(DbType.String, -1)]
             public DbField DocContent;
+
         }
+ 
+        Exemples de champs calculés
+        ---------------------------
+      
+        public partial class ClasseA
+        {
+            public DbField ChampCalcule
+            {
+                get
+                {
+                    return ChampA.Value + ChampB.Value;
+                }
+            }
+        }
+        */
 
         #endregion
 

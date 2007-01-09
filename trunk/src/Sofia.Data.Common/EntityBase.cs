@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
@@ -7,6 +8,33 @@ using System.Data.Common;
 
 namespace Sofia.Data.Common
 {
+    public class DbTypeInfo
+    {
+        private DbType _DbType;
+        public DbType DbType
+        {
+            get { return _DbType; }
+        }
+
+        private int _Size;
+        public int Size
+        {
+            get { return _Size; }
+            set { _Size = value; }
+        }
+
+        public DbTypeInfo(DbType dbType, int size)
+        {
+            _DbType = dbType;
+            _Size = size;
+        }
+
+        public DbTypeInfo(DbType dbType)
+            : this(dbType, -1)
+        {
+        }
+    }
+
     #region Attributs DDL
 
     [AttributeUsage(AttributeTargets.Field)]
@@ -22,28 +50,21 @@ namespace Sofia.Data.Common
     {
         public FieldTypeAttribute(DbType dbType, int size)
         {
-            _DbFieldType = dbType;
-            _Size = size;
+            _DbTypeInfo = new DbTypeInfo(dbType, size);
         }
 
         public FieldTypeAttribute(DbType dbType)
-            : this(dbType, 0)
+            : this(dbType, -1)
         {
         }
 
-        private DbType _DbFieldType;
-        public DbType DbFieldType
+        private DbTypeInfo _DbTypeInfo;
+        public DbTypeInfo DbTypeInfo
         {
             get
             {
-                return _DbFieldType;
+                return _DbTypeInfo;
             }
-        }
-
-        private int _Size;
-        public int Size
-        {
-            get { return _Size; }
         }
 
     }
@@ -52,7 +73,57 @@ namespace Sofia.Data.Common
 
     #region Attributs de mise à jour
 
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Class)]
+    public class UpdatedAttribute : Attribute
+    {
+        public enum UpdateOperation
+        {
+            Renamed,
+            Removed
+        }
 
+        public UpdatedAttribute(string[] oldNames, UpdateOperation operation)
+        {
+            _Operation = operation;
+            _OldNames = oldNames;
+        }
+
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        /// <param name="oldTypes">Hashtable composé du type et de sa taille</param>
+        public UpdatedAttribute(DbTypeInfo[] oldTypes)
+        {
+            _OldTypes = oldTypes;
+        }
+
+        private DbTypeInfo[] _OldTypes;
+        private string[] _OldNames;
+
+        public DbTypeInfo[] OldTypes
+        {
+            get
+            {
+                return _OldTypes;
+            }
+        }
+
+        public string[] OldNames
+        {
+            get
+            {
+                return _OldNames;
+            }
+        }
+
+        private UpdateOperation _Operation;
+        public UpdateOperation Operation
+        {
+            get { return _Operation; }
+            set { _Operation = value; }
+        }
+
+    }
 
     #endregion
 
@@ -838,7 +909,7 @@ namespace Sofia.Data.Common
             if (attributes.Length != 0)
             {
                 FieldTypeAttribute attribute = attributes[0] as FieldTypeAttribute;
-                return attribute.DbFieldType;
+                return attribute.DbTypeInfo.DbType;
             }
             else
             {
@@ -857,7 +928,7 @@ namespace Sofia.Data.Common
             if (attributes.Length != 0)
             {
                 FieldTypeAttribute attribute = attributes[0] as FieldTypeAttribute;
-                return attribute.Size;
+                return attribute.DbTypeInfo.Size;
             }
             else
             {

@@ -21,6 +21,7 @@ namespace Sofia.Data.Firebird
             _Types[DbType.String] = "VARCHAR";
             _Types[DbType.Int32] = "INTEGER";
             _Types[DbType.Binary] = "BLOB SUB_TYPE 0";
+
         }
 
         #region Implémentation de l'interface
@@ -42,8 +43,8 @@ namespace Sofia.Data.Firebird
             if (File.Exists(fileName))
                 return;
             FbConnection.CreateDatabase(server.ConnectionString, 8192, true, false);
-
         }
+
 
         #endregion
 
