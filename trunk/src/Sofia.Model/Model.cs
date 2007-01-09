@@ -27,7 +27,8 @@ namespace Sofia.Mvc
         public Model()
         {
             _Observers = new List<IObserver>();
-            _Server = new Server("FirebirdSql.Data.FirebirdClient", Settings.Default.DatabaseName, new FirebirdDDL(), 3055);
+            string databasePath = AppDomain.CurrentDomain.BaseDirectory;
+            _Server = new Server("FirebirdSql.Data.FirebirdClient", databasePath + "sofia.fdb", new FirebirdDDL(), 3050);
         }
 
         #region Implémentation de l'interface IObservable
@@ -61,6 +62,7 @@ namespace Sofia.Mvc
         {
             Documents documents = new Documents(_Server);
             documents.DocId.Value = contentId;
+            documents.FldId.Value = Guid.NewGuid().ToString("N");
             documents.DocCaption.Value = "test";
             documents.DocContent.Value = contentXml;
             documents.Update();

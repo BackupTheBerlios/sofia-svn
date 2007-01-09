@@ -27,18 +27,27 @@ namespace Sofia.Data.Common
         /// </summary>
         /// <returns>Vrai si la table existe, faux sinon</returns>
         private DataTable FindEntitySchema()
-        {            
-            string[] restrictions = new string[4];
-            restrictions[0] = _Entity.Server.DbConnection.Database;
-            restrictions[1] = "SYSDBA";
-            restrictions[2] = _Entity.Name.ToUpper();
-            restrictions[3] = "BASE TABLE";
+        {
+            _Entity.Server.OpenConnection();
+            try
+            {
+                string[] restrictions = new string[4];
+                restrictions[0] = _Entity.Server.DbConnection.Database;
+                restrictions[1] = "SYSDBA";
+                restrictions[2] = _Entity.Name.ToUpper();
+                restrictions[3] = "BASE TABLE";
 
-            DataTable table = _Entity.Server.DbConnection.GetSchema("Tables", restrictions);
+                DataTable table = _Entity.Server.DbConnection.GetSchema("Tables", restrictions);
 
-            if (table.Rows.Count == 0)
-                return null;
-            else return table;
+                if (table.Rows.Count == 0)
+                    return null;
+                else return table;
+
+            }
+            finally
+            {
+                _Entity.Server.CloseConnexion();
+            }
         }
 
         #endregion
