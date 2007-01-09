@@ -13,7 +13,7 @@ namespace Sofia.Data.Common
         /// </summary>
         /// <param name="dbType">Le type de donnée abstrait</param>
         /// <returns></returns>
-        string GetDDLType(DbType dbType, int size, bool isNullable);
+        string GetDDLType(DbType dbType, int size, bool isNotNullable);
 
         /// <summary>
         /// Méthode de création de la base de données

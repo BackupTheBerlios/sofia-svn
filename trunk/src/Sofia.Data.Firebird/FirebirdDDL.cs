@@ -25,13 +25,13 @@ namespace Sofia.Data.Firebird
 
         #region Implémentation de l'interface
 
-        public string GetDDLType(DbType dbType, int size, bool isNullable)
+        public string GetDDLType(DbType dbType, int size, bool isNotNullable)
         {
             string type = _Types[dbType].ToString();
 
             if (size != 0) type += String.Format("({0})", size.ToString());
             if (dbType == DbType.String && size == -1) type = "BLOB SUB_TYPE 1";
-            if (!isNullable) type += " NOT NULL";
+            if (isNotNullable) type += " NOT NULL";
 
             return type;
         }
