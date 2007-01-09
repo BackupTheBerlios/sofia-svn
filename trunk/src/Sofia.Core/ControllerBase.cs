@@ -53,7 +53,7 @@ namespace Sofia.Mvc
 
         public void Save()
         {
-            _Model.UpdateDocument(_View.ContentId.ToString("N"), _View.SaveToXml(), _View.IsMasterView);
+            _Model.UpdateDocument(_View.ContentId.ToString("N"), _View.ContentSummary, _View.SaveToXml(), _View.IsMasterView, _View.Tags);
         }
 
         #endregion

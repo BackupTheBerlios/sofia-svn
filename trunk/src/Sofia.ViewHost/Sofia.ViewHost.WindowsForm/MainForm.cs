@@ -54,12 +54,15 @@ namespace Sofia.ViewHost.WindowsForm
 
         public override void New()
         {
-            IPlugin plugin = PluginManager["Sofia.Plugins.General.Contact.Plugin"];
+            IPlugin plugin = PluginManager["Sofia.Plugins.General.Contact"];
+            plugin.CreateView("Sofia.Plugins.General.Contact");
             plugin.View.ContentId = Guid.NewGuid();
             Insert(plugin, "TabControl");
         }
 
         #endregion
+
+        #region UI
 
         private void enregistrerToolStripButton_Click(object sender, EventArgs e)
         {
@@ -80,5 +83,7 @@ namespace Sofia.ViewHost.WindowsForm
         {
             New();
         }
+
+        #endregion
     }
 }

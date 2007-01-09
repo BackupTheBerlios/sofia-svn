@@ -38,11 +38,12 @@ namespace Sofia.Plugins
         /// </summary>
         /// <param name="id">Identifiant du plugin</param>
         /// <returns>Un objet plugin</returns>
+        /// <example>fullname : Sofia.Plugins.General.Contact</example>
         public IPlugin this[string fullName]
         {
             get
             {
-                return _Plugins.Find(delegate(IPlugin plugin) { return plugin.GetType().FullName == fullName; });
+                return _Plugins.Find(delegate(IPlugin plugin) { return plugin.GetType().FullName == fullName + ".Plugin"; });
             }
         }
 

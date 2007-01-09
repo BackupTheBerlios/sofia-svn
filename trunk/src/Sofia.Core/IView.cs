@@ -1,6 +1,7 @@
 
 using System;
 using System.Xml;
+using System.Collections;
 
 namespace Sofia.Mvc
 {
@@ -23,7 +24,11 @@ namespace Sofia.Mvc
 
         Guid ContentId { get; set; }
 
+        string ContentSummary { get; }
+
         bool IsMasterView { get; set; }
+
+        string[] Tags { get; }
 
         IController Controller { get; set; }
 

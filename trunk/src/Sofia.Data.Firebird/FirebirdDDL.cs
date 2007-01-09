@@ -30,7 +30,7 @@ namespace Sofia.Data.Firebird
         {
             string type = _Types[dbType].ToString();
 
-            if (size != 0) type += String.Format("({0})", size.ToString());
+            if (size > 0) type += String.Format("({0})", size.ToString());
             if (dbType == DbType.String && size == -1) type = "BLOB SUB_TYPE 1";
             if (isNotNullable) type += " NOT NULL";
 

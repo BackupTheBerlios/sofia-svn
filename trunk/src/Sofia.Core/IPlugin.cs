@@ -14,6 +14,8 @@ namespace Sofia.Plugins
 
         IModel Model { get; set; }
 
+        void CreateView(string pluginName);
+
         /// <summary>
         /// Description
         /// </summary>

@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Text;
 using System.IO;
 using System.Windows.Forms;
@@ -66,6 +66,14 @@ namespace Sofia.Plugins.WindowsForm
 
         }
 
+        public virtual string ContentSummary
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public bool IsMasterView
         {
             get
@@ -76,6 +84,14 @@ namespace Sofia.Plugins.WindowsForm
             set
             {
                 _IsMasterView = value;
+            }
+        }
+
+        public virtual string[] Tags
+        {
+            get
+            {
+                throw new NotImplementedException();
             }
         }
 

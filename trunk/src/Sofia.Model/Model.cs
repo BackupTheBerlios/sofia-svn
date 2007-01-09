@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Text;
 
 using System.Data;
@@ -50,7 +51,7 @@ namespace Sofia.Mvc
         /// <summary>
         /// <see cref="IObserver"/>
         /// </summary>
-         public void Unregister(IObserver o)
+        public void Unregister(IObserver o)
         {
             _Observers.Remove(o);
         }
@@ -58,7 +59,7 @@ namespace Sofia.Mvc
         /// <summary>
         /// <see cref="IObserver"/>
         /// </summary>
-         public void Notify()
+        public void Notify()
         {
             foreach (IObserver o in _Observers)
             {
@@ -73,39 +74,87 @@ namespace Sofia.Mvc
         /// <summary>
         /// <see cref="IModel"/>
         /// </summary>
-         public void UpdateDocument(string contentId, string contentXml, bool isMasterDocument)
+        public void UpdateDocument(string contentId, string contentSummary, string contentXml, bool isMasterDocument, string[] tags)
         {
-            Documents documents = new Documents(_Server);
-            documents.DocId.Value = contentId;            
-            documents.DocCaption.Value = "test";
-            documents.DocContent.Value = contentXml;
-            documents.Update();
+            Content content = new Content(_Server);
+            content.ContentId.Value = contentId;
+            content.ContentSummary.Value = contentSummary;
+            content.ContentXml.Value = contentXml;
+
+            //Si c'est un nouveau document et que c'est un document maître alors on crée le dossier
+            //et on rattache le document à ce dossier
+            if (!content.Exists() && isMasterDocument)
+            {
+                Folder folder = new Folder(_Server);
+                folder.FldId.Value = Guid.NewGuid().ToString("N");
+                folder.FldCaption.Value = content.ContentSummary.Value;
+                content.FldId.Value = folder.FldId.Value;
+                folder.Update();
+            }
+
+            //Mise à jour des tags auto du document
+            foreach (string s in tags)
+            {
+                TaggedContent taggedContent = new TaggedContent(_Server);
+                taggedContent.ContentId.Value = content.ContentId.Value;
+                taggedContent.TagId.Value = s.GetHashCode();
+
+                if (!taggedContent.Exists())
+                {
+                    Tag tag = new Tag(_Server);
+                    tag.TagId.Value = taggedContent.TagId.Value;
+                    tag.TagCaption.Value = s;
+                    tag.Update();
+                }
+
+                taggedContent.Update();
+
+            }
+
+            content.Update();
         }
 
         #endregion
 
         #region Classes métier
 
-        public partial class Documents : EntityBase
+        public partial class Content : EntityBase
         {
-            public Documents(Server server) : base(server) { }
+            public Content(Server server) : base(server) { }
 
             [PrimaryKey, FieldType(DbType.String, 32)]
-            public DbField DocId;
+            public DbField ContentId;
+
+            [FieldType(DbType.String, 32)]
+            public DbField FldId;
 
             [FieldType(DbType.String, 128)]
-            public DbField DocCaption;
+            public DbField ContentSummary;
 
             [FieldType(DbType.String)]
-            public DbField DocContent;
+            public DbField ContentXml;
 
         }
 
-        public partial class Tags : EntityBase
+        public partial class Folder : EntityBase
         {
-            public Tags(Server server) : base(server) { }
+            public Folder(Server server) : base(server) { }
 
-            [PrimaryKey, FieldType(DbType.String, 15)]
+            [PrimaryKey, FieldType(DbType.String, 32)]
+            public DbField FldId;
+
+            [FieldType(DbType.String, 32)]
+            public DbField FldCaption;
+
+            [FieldType(DbType.Binary)]
+            public DbField FldThumb;
+        }
+
+        public partial class Tag : EntityBase
+        {
+            public Tag(Server server) : base(server) { }
+
+            [PrimaryKey, FieldType(DbType.Int32)]
             public DbField TagId;
 
             [FieldType(DbType.String, 32)]
@@ -113,22 +162,20 @@ namespace Sofia.Mvc
 
             [FieldType(DbType.Binary)]
             public DbField TagThumb;
-
-            [FieldType(DbType.String, 128)]
-            public DbField TagDescription;
-
         }
 
-        public partial class TaggedDocs : EntityBase
+        public partial class TaggedContent : EntityBase
         {
-            public TaggedDocs(Server server) : base(server) { }
+            public TaggedContent(Server server) : base(server) { }
 
-            [PrimaryKey, FieldType(DbType.String, 15)]
+            [PrimaryKey, FieldType(DbType.Int32)]
             public DbField TagId;
 
             [PrimaryKey, FieldType(DbType.String, 32)]
-            public DbField DocId;
+            public DbField ContentId;
+
         }
+
 
         /* 
            Exemples de mises à jour de la base

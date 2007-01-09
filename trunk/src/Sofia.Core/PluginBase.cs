@@ -22,10 +22,6 @@ namespace Sofia.Plugins
 
         public PluginBase()
         {
-            //Instanciation de la vue            
-            string assemblyName = Assembly.GetCallingAssembly().Location;
-            assemblyName = assemblyName.Insert(assemblyName.Length - 4, "." + UILibraryName);
-            _View = (IView)InstanceFactory.CreateInstanceFrom(assemblyName, typeof(IView), null);
         }
 
         #region Implémentation de l'interface
@@ -69,11 +65,21 @@ namespace Sofia.Plugins
             }
         }
 
+        public void CreateView(string pluginName)
+        {
+            //Instanciation de la vue           
+            string path = AppDomain.CurrentDomain.BaseDirectory;
+            string assemblyName = path + pluginName + ".dll";
+            assemblyName = assemblyName.Insert(assemblyName.Length - 4, "." + UILibraryName);
+            _View = (IView)InstanceFactory.CreateInstanceFrom(assemblyName, typeof(IView), null);
+        }
+
+
         public virtual string Description
         {
             get
             {
-                throw new NotSupportedException();
+                throw new NotImplementedException();
             }
         }
 

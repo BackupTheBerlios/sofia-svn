@@ -712,7 +712,7 @@ namespace Sofia.Data.Common
             string fieldList = GetFieldList();
 
             //Liste des clé primaires
-            string whereClause = GetFieldList(IsPrimaryKeyField, TransformToParametizedAffectationField, "AND");
+            string whereClause = GetFieldList(IsPrimaryKeyField, TransformToParametizedAffectationField, " AND ");
 
             //Liste de tri
             string sortedList = GetFieldList(IsSortedField, TransformToOrderedField);
@@ -734,7 +734,7 @@ namespace Sofia.Data.Common
             string fieldList = GetFieldList(IsPrimaryKeyField);
 
             //Liste des clé primaires
-            string whereClause = GetFieldList(IsPrimaryKeyField, TransformToParametizedAffectationField, "AND");
+            string whereClause = GetFieldList(IsPrimaryKeyField, TransformToParametizedAffectationField, " AND ");
 
             //Construction de la chaine SQL
             return string.Format("SELECT {0} FROM {1} WHERE {2}", fieldList, Name, whereClause);
@@ -751,7 +751,7 @@ namespace Sofia.Data.Common
             string fieldList = GetFieldList();
 
             //Liste des champs filtrés
-            string whereClause = GetFieldList(IsFilteredField, TransformToParametizedAffectationField, "AND");
+            string whereClause = GetFieldList(IsFilteredField, TransformToParametizedAffectationField, " AND ");
             if (whereClause.Length > 0)
                 whereClause = "WHERE " + whereClause;
 
@@ -789,8 +789,11 @@ namespace Sofia.Data.Common
             //Liste des champs
             string fieldList = GetFieldList(IsAffectedNonPrimaryField, TransformToParametizedAffectationField);
 
+            if (fieldList.Length == 0)
+                return "";
+
             //Liste des clé primaires
-            string whereClause = GetFieldList(IsPrimaryKeyField, TransformToParametizedAffectationField, "AND");
+            string whereClause = GetFieldList(IsPrimaryKeyField, TransformToParametizedAffectationField, " AND ");
 
             //Construction de la chaine SQL
             return string.Format("UPDATE {0} SET {1} WHERE {2}", Name, fieldList, whereClause);
@@ -803,7 +806,7 @@ namespace Sofia.Data.Common
         private string GetDefaultDelete()
         {
             //Liste des parametres
-            string parameterList = GetFieldList(IsPrimaryKeyField, TransformToParametizedAffectationField, "AND");
+            string parameterList = GetFieldList(IsPrimaryKeyField, TransformToParametizedAffectationField, " AND ");
 
             //Construction de la chaine SQL
             return string.Format("DELETE FROM {0} WHERE {1}", Name, parameterList);
@@ -850,6 +853,9 @@ namespace Sofia.Data.Common
             //Instanciation de la requête
             Query fbQuery = new Query(_Server);
             fbQuery.CommandText = buildSqlClauseDelegate();
+
+            if (fbQuery.CommandText.Length == 0)
+                return true;
 
             //Affectation des paramètres
             FillParameters(fbQuery, parametersFillingPredicate);

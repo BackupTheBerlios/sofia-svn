@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
@@ -34,6 +34,22 @@ namespace Sofia.Plugins.General.Contact.WindowsForm
             document.Prenom = textBox2.Text;
 
             return Serialize(document);
+        }
+
+        public override string ContentSummary
+        {
+            get
+            {
+                return string.Format("{0} {1}", textBox1.Text, textBox2.Text);
+            }
+        }
+
+        public override string[] Tags
+        {
+            get
+            {
+                return new string[] { "Contact", textBox1.Text };
+            }
         }
 
 

@@ -18,6 +18,7 @@ namespace Sofia.Plugins.General.Contact
             Controller.Model = Model;
 
             //Liaison Vue/Controleur
+            CreateView("Sofia.Plugins.General.Contact");
             View.Controller = Controller;
             Controller.View = View;
         }
