@@ -36,7 +36,6 @@
   <ItemGroup>
     <Compile Include="FirebirdDDL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sofia.Data.Common\Sofia.Data.Common.csproj">
