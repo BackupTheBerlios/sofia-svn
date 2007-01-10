@@ -15,11 +15,9 @@ namespace Sofia.Plugins.General.Contact.WindowsForm
         public UserInterface()
         {
             InitializeComponent();
-
-            IsMasterView = true;
         }
 
-        public override void LoadFromXml(string rawXml)
+        public override void  Load(string raw, Sofia.Mvc.ViewFormat viewFormat)
         {
             Document document = (Document)Deserialize(rawXml, typeof(Document));
 
@@ -27,13 +25,24 @@ namespace Sofia.Plugins.General.Contact.WindowsForm
             textBox2.Text = document.Prenom;
         }
 
-        public override string SaveToXml()
+        public virtual string ContentXml
         {
-            Document document = new Document();
-            document.Nom = textBox1.Text;
-            document.Prenom = textBox2.Text;
+            get
+            {
+                Document document = new Document();
+                document.Nom = textBox1.Text;
+                document.Prenom = textBox2.Text;
+                return Serialize(document);
+            }
+        }
 
-            return Serialize(document);
+
+        public override bool IsMasterView
+        {
+            get
+            {
+                return true;
+            }
         }
 
         public override string ContentSummary

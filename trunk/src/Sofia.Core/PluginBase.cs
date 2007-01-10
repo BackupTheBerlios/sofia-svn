@@ -67,15 +67,22 @@ namespace Sofia.Plugins
             }
         }
 
-        public virtual void CreateView(string pluginName)
+        public virtual void AddView()
         {
-            //Instanciation de la vue           
+            //Instanciation de la vue 
+            string pluginName = this.GetType().FullName;
             string path = AppDomain.CurrentDomain.BaseDirectory;
             string assemblyName = path + pluginName + ".dll";
             assemblyName = assemblyName.Insert(assemblyName.Length - 4, "." + UILibraryName);
-            View = (IView)InstanceFactory.CreateInstanceFrom(assemblyName, typeof(IView), null);
+            _View = (IView)InstanceFactory.CreateInstanceFrom(assemblyName, typeof(IView), null);
+            _Views.Add(_View);
+            _View.Index = _Views.IndexOf(_View);
         }
 
+        public IView GetView(string contentId)
+        {
+            return _Views.Find(delegate(IView view) { return view.ContentId.ToString("N") == contentId; });
+        }
 
         public virtual string Description
         {

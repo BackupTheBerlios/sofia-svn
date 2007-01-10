@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="FirebirdPort" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">3050</Value>
+      <Value Profile="(Default)">3055</Value>
     </Setting>
   </Settings>
 </SettingsFile>

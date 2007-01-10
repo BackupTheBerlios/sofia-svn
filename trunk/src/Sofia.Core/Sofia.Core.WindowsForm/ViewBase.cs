@@ -20,17 +20,18 @@ namespace Sofia.Plugins.WindowsForm
         #region Implémentation de l'interface IView
 
         IController _Controller;
+        IModel _Model;
         Guid _ContentId;
         bool _IsMasterView;
 
-        public virtual void LoadFromXml(string rawXml)
+        public virtual void Load(string raw, ViewFormat viewFormat)
         {
-            throw new NotSupportedException();
+            throw new NotImplementedException();
         }
 
-        public virtual string SaveToXml()
+        public virtual void Save(ViewFormat viewFormat)
         {
-            throw new NotSupportedException();
+            _Model.UpdateDocument(ContentId.ToString("N"), ContentSummary, ContentXml, IsMasterView, Tags);
         }
 
         public object Control
@@ -50,6 +51,18 @@ namespace Sofia.Plugins.WindowsForm
             set
             {
                 _Controller = value;
+            }
+        }
+
+        public IModel Model
+        {
+            get
+            {
+                return _Model;
+            }
+            set
+            {
+                _Model = value;
             }
         }
 
@@ -74,16 +87,19 @@ namespace Sofia.Plugins.WindowsForm
             }
         }
 
-        public bool IsMasterView
+        public virtual string ContentXml
         {
             get
             {
-                return _IsMasterView;
+                throw new NotImplementedException();
             }
+        }
 
-            set
+        public virtual bool IsMasterView
+        {
+            get
             {
-                _IsMasterView = value;
+                throw new NotImplementedException();
             }
         }
 
@@ -112,7 +128,6 @@ namespace Sofia.Plugins.WindowsForm
             TextReader reader = new StringReader(rawXml);
             return xmlSerializer.Deserialize(reader);
         }
-
 
     }
 }

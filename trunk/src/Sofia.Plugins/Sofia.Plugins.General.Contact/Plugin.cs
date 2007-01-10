@@ -19,11 +19,10 @@ namespace Sofia.Plugins.General.Contact
 
         }
 
-        public override void CreateView(string pluginName)
+        public override void AddView()
         {
-            base.CreateView(pluginName);
+            base.AddView();
             View.Controller = Controller;
-            Controller.View = View;
         }
 
         public override string Description

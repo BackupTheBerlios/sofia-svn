@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -10,6 +11,7 @@ using System.Reflection;
 using Sofia.ViewHost.WindowsForm.Properties;
 
 using Sofia.Plugins;
+using Sofia.Mvc;
 
 #if GTK
 using Sofia.Plugins.Gtk;
@@ -22,9 +24,12 @@ namespace Sofia.ViewHost.WindowsForm
     public partial class MainForm : ViewHostBase
     {
 
+        Hashtable _ViewTabs;
+
         public MainForm() : base()
         {
-            InitializeComponent();          
+            InitializeComponent();
+            _ViewTabs = new Hashtable();
             PluginManager.AutoRegister();            
         }
 
@@ -39,17 +44,19 @@ namespace Sofia.ViewHost.WindowsForm
 
             //Test
             TabPage tabPage = new TabPage("Contact");
-            tabPage.Name = plugin.GetType().FullName;
+            tabPage.Name = plugin.View.ContentId;
             Control control = plugin.View.Control as Control;
             control.Dock = DockStyle.Fill;
             tabPage.Controls.Add(control);
             _Pages.Controls.Add(tabPage);
+
+            _ViewTabs[plugin.View.ContentId] = plugin.View;
         }
 
         public override void Save()
         {
-            IPlugin plugin = PluginManager[_Pages.SelectedTab.Name];
-            plugin.Controller.Save();
+            IView view = _ViewTabs[_Pages.SelectedTab.Name] as IView;
+            view.Save(ViewFormat.Xml);
         }
 
         public override void New()
@@ -57,7 +64,7 @@ namespace Sofia.ViewHost.WindowsForm
             IPlugin plugin = PluginManager["Sofia.Plugins.General.Contact"];
             plugin.CreateView("Sofia.Plugins.General.Contact");
             plugin.View.ContentId = Guid.NewGuid();
-            Insert(plugin, "TabControl");
+            Insert(plugin, "Main");
         }
 
         #endregion
