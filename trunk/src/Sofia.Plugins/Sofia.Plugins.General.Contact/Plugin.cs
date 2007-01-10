@@ -17,8 +17,11 @@ namespace Sofia.Plugins.General.Contact
             //Liaison Controleur/Modèle
             Controller.Model = Model;
 
-            //Liaison Vue/Controleur
-            CreateView("Sofia.Plugins.General.Contact");
+        }
+
+        public override void CreateView(string pluginName)
+        {
+            base.CreateView(pluginName);
             View.Controller = Controller;
             Controller.View = View;
         }

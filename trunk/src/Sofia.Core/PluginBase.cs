@@ -13,6 +13,7 @@ namespace Sofia.Plugins
         IController _Controller;
         IView _View;
         IModel _Model;
+        List<IView> _Views;
 
 #if GTK
         private static string UILibraryName = ".Gtk";
@@ -22,6 +23,7 @@ namespace Sofia.Plugins
 
         public PluginBase()
         {
+            _Views = new List<IView>();
         }
 
         #region Implémentation de l'interface
@@ -30,12 +32,12 @@ namespace Sofia.Plugins
         {
             get
             {
-                return _View;
+                return _Views[_Views.Count - 1];
             }
 
             set
             {
-                _View = value;
+                _Views.Add(value);
             }
         }
 
@@ -65,13 +67,13 @@ namespace Sofia.Plugins
             }
         }
 
-        public void CreateView(string pluginName)
+        public virtual void CreateView(string pluginName)
         {
             //Instanciation de la vue           
             string path = AppDomain.CurrentDomain.BaseDirectory;
             string assemblyName = path + pluginName + ".dll";
             assemblyName = assemblyName.Insert(assemblyName.Length - 4, "." + UILibraryName);
-            _View = (IView)InstanceFactory.CreateInstanceFrom(assemblyName, typeof(IView), null);
+            View = (IView)InstanceFactory.CreateInstanceFrom(assemblyName, typeof(IView), null);
         }
 
 
