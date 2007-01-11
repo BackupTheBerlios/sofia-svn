@@ -22,14 +22,14 @@ namespace Sofia.Plugins.WindowsForm
         IController _Controller;
         IModel _Model;
         Guid _ContentId;
-        bool _IsMasterView;
+        int _Index;
 
-        public virtual void Load(string raw, ViewFormat viewFormat)
+        public virtual void LoadFrom(string raw, ViewFormat viewFormat)
         {
             throw new NotImplementedException();
         }
 
-        public virtual void Save(ViewFormat viewFormat)
+        public virtual void SaveTo(ViewFormat viewFormat)
         {
             _Model.UpdateDocument(ContentId.ToString("N"), ContentSummary, ContentXml, IsMasterView, Tags);
         }
@@ -108,6 +108,19 @@ namespace Sofia.Plugins.WindowsForm
             get
             {
                 throw new NotImplementedException();
+            }
+        }
+
+        public virtual int Index
+        {
+            get
+            {
+                return _Index;
+            }
+
+            set
+            {
+                _Index = value;
             }
         }
 

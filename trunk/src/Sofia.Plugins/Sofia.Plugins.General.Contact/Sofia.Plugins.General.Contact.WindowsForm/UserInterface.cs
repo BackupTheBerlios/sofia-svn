@@ -17,15 +17,15 @@ namespace Sofia.Plugins.General.Contact.WindowsForm
             InitializeComponent();
         }
 
-        public override void  Load(string raw, Sofia.Mvc.ViewFormat viewFormat)
+        public override void LoadFrom(string raw, Sofia.Mvc.ViewFormat viewFormat)
         {
-            Document document = (Document)Deserialize(rawXml, typeof(Document));
+            Document document = (Document)Deserialize(raw, typeof(Document));
 
             textBox1.Text = document.Nom;
             textBox2.Text = document.Prenom;
         }
 
-        public virtual string ContentXml
+        public override string ContentXml
         {
             get
             {

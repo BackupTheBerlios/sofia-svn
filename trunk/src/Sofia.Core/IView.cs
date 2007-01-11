@@ -20,14 +20,14 @@ namespace Sofia.Mvc
         /// </summary>
         /// <param name="viewFormat">Type de transformation</param>
         /// <param name="rawXml"></param>
-        void Load(string raw, ViewFormat viewFormat);
+        void LoadFrom(string raw, ViewFormat viewFormat);
 
         /// <summary>
         /// Sérialisation de la vue
         /// </summary>
         /// <param name="viewFormat">Type de transformation</param>
         /// <returns>Une chaine</returns>
-        void Save(ViewFormat viewFormat);        
+        void SaveTo(ViewFormat viewFormat);        
 
         object Control { get; }
 
