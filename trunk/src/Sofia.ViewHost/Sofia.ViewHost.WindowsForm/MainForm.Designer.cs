@@ -34,9 +34,6 @@ namespace Sofia.ViewHost.WindowsForm
             this.RightToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.LeftToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this._Pages = new System.Windows.Forms.TabControl();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fichierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nouveauToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,6 +64,7 @@ namespace Sofia.ViewHost.WindowsForm
             this.rechercherToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.àproposdeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.nouveauToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.ouvrirToolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -78,9 +76,12 @@ namespace Sofia.ViewHost.WindowsForm
             this.collerToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.ToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.tableLayoutPanel1.SuspendLayout();
+            this._PanelTop = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this._Pages = new System.Windows.Forms.TabControl();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // BottomToolStripPanel
@@ -120,43 +121,6 @@ namespace Sofia.ViewHost.WindowsForm
             this.ContentPanel.AutoScroll = true;
             this.ContentPanel.Size = new System.Drawing.Size(454, 251);
             // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this._Pages, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.statusStrip1, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.menuStrip1, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.toolStrip1, 1, 1);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 4;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(454, 276);
-            this.tableLayoutPanel1.TabIndex = 0;
-            // 
-            // _Pages
-            // 
-            this._Pages.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._Pages.Location = new System.Drawing.Point(3, 52);
-            this._Pages.Name = "_Pages";
-            this._Pages.SelectedIndex = 0;
-            this._Pages.Size = new System.Drawing.Size(448, 201);
-            this._Pages.TabIndex = 0;
-            // 
-            // statusStrip1
-            // 
-            this.statusStrip1.Location = new System.Drawing.Point(0, 256);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(454, 20);
-            this.statusStrip1.TabIndex = 2;
-            this.statusStrip1.Text = "statusStrip1";
-            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -166,8 +130,9 @@ namespace Sofia.ViewHost.WindowsForm
             this.aideToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(454, 24);
-            this.menuStrip1.TabIndex = 4;
+            this.menuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.menuStrip1.Size = new System.Drawing.Size(743, 24);
+            this.menuStrip1.TabIndex = 6;
             this.menuStrip1.Text = "menuStrip1";
             // 
             // fichierToolStripMenuItem
@@ -394,9 +359,16 @@ namespace Sofia.ViewHost.WindowsForm
             this.àproposdeToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.àproposdeToolStripMenuItem.Text = "À &propos de...";
             // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Location = new System.Drawing.Point(0, 531);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(743, 22);
+            this.statusStrip1.TabIndex = 7;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
             // toolStrip1
             // 
-            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.nouveauToolStripButton,
             this.ouvrirToolStripButton,
@@ -410,9 +382,9 @@ namespace Sofia.ViewHost.WindowsForm
             this.ToolStripButton});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolStrip1.Size = new System.Drawing.Size(454, 25);
-            this.toolStrip1.TabIndex = 3;
+            this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.toolStrip1.Size = new System.Drawing.Size(743, 25);
+            this.toolStrip1.TabIndex = 8;
             this.toolStrip1.Text = "toolStrip1";
             // 
             // nouveauToolStripButton
@@ -499,22 +471,53 @@ namespace Sofia.ViewHost.WindowsForm
             this.ToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.ToolStripButton.Text = "&?";
             // 
+            // _PanelTop
+            // 
+            this._PanelTop.AutoSize = true;
+            this._PanelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this._PanelTop.Location = new System.Drawing.Point(0, 49);
+            this._PanelTop.Name = "_PanelTop";
+            this._PanelTop.Size = new System.Drawing.Size(743, 0);
+            this._PanelTop.TabIndex = 9;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this._Pages);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 49);
+            this.panel1.Name = "panel1";
+            this.panel1.Padding = new System.Windows.Forms.Padding(6);
+            this.panel1.Size = new System.Drawing.Size(743, 482);
+            this.panel1.TabIndex = 10;
+            // 
+            // _Pages
+            // 
+            this._Pages.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._Pages.Location = new System.Drawing.Point(6, 6);
+            this._Pages.Name = "_Pages";
+            this._Pages.SelectedIndex = 0;
+            this._Pages.Size = new System.Drawing.Size(731, 470);
+            this._Pages.TabIndex = 6;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(454, 276);
-            this.Controls.Add(this.tableLayoutPanel1);
-            this.MainMenuStrip = this.menuStrip1;
+            this.ClientSize = new System.Drawing.Size(743, 553);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this._PanelTop);
+            this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.menuStrip1);
             this.Name = "MainForm";
             this.Text = "Form1";
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -525,20 +528,6 @@ namespace Sofia.ViewHost.WindowsForm
         private System.Windows.Forms.ToolStripPanel RightToolStripPanel;
         private System.Windows.Forms.ToolStripPanel LeftToolStripPanel;
         private System.Windows.Forms.ToolStripContentPanel ContentPanel;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.TabControl _Pages;
-        private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton nouveauToolStripButton;
-        private System.Windows.Forms.ToolStripButton ouvrirToolStripButton;
-        private System.Windows.Forms.ToolStripButton enregistrerToolStripButton;
-        private System.Windows.Forms.ToolStripButton imprimerToolStripButton;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator;
-        private System.Windows.Forms.ToolStripButton couperToolStripButton;
-        private System.Windows.Forms.ToolStripButton copierToolStripButton;
-        private System.Windows.Forms.ToolStripButton collerToolStripButton;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripButton ToolStripButton;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fichierToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem nouveauToolStripMenuItem;
@@ -569,6 +558,21 @@ namespace Sofia.ViewHost.WindowsForm
         private System.Windows.Forms.ToolStripMenuItem rechercherToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ToolStripMenuItem àproposdeToolStripMenuItem;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton nouveauToolStripButton;
+        private System.Windows.Forms.ToolStripButton ouvrirToolStripButton;
+        private System.Windows.Forms.ToolStripButton enregistrerToolStripButton;
+        private System.Windows.Forms.ToolStripButton imprimerToolStripButton;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator;
+        private System.Windows.Forms.ToolStripButton couperToolStripButton;
+        private System.Windows.Forms.ToolStripButton copierToolStripButton;
+        private System.Windows.Forms.ToolStripButton collerToolStripButton;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton ToolStripButton;
+        private System.Windows.Forms.Panel _PanelTop;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TabControl _Pages;
 
 
 

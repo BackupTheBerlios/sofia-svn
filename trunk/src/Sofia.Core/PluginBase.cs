@@ -70,9 +70,8 @@ namespace Sofia.Plugins
         public virtual void AddView()
         {
             //Instanciation de la vue 
-            string pluginName = this.GetType().FullName;
             string path = AppDomain.CurrentDomain.BaseDirectory;
-            string assemblyName = path + pluginName + ".dll";
+            string assemblyName = this.GetType().Assembly.CodeBase;
             assemblyName = assemblyName.Insert(assemblyName.Length - 4, "." + UILibraryName);
             _View = (IView)InstanceFactory.CreateInstanceFrom(assemblyName, typeof(IView), null);
             _Views.Add(_View);

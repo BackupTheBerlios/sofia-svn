@@ -23,6 +23,7 @@ namespace Sofia.Plugins.General.Contact
         {
             base.AddView();
             View.Controller = Controller;
+            View.Model = Model;
         }
 
         public override string Description

@@ -26,11 +26,17 @@ namespace Sofia.ViewHost.WindowsForm
 
         Hashtable _ViewTabs;
 
-        public MainForm() : base()
+        public MainForm()
+            : base()
         {
             InitializeComponent();
             _ViewTabs = new Hashtable();
-            PluginManager.AutoRegister();            
+            PluginManager.AutoRegister();
+
+            //Insertion du plugin SearchBar
+            IPlugin plugin = PluginManager["Sofia.Plugins.Core.SearchBar"];
+            plugin.AddView();
+            Insert(plugin, "Top");
         }
 
         #region Méthodes héritées
@@ -42,15 +48,23 @@ namespace Sofia.ViewHost.WindowsForm
             if (plugin == null)
                 return;
 
-            //Test
-            TabPage tabPage = new TabPage("Contact");
-            tabPage.Name = plugin.View.ContentId.ToString();
             Control control = plugin.View.Control as Control;
             control.Dock = DockStyle.Fill;
-            tabPage.Controls.Add(control);
-            _Pages.Controls.Add(tabPage);
+                
+            if (destination.Equals("TabControl", StringComparison.OrdinalIgnoreCase))
+            {
+                TabPage tabPage = new TabPage(plugin.View.Tags[0]);                
+                tabPage.Name = plugin.View.ContentId.ToString("N");
+                tabPage.Controls.Add(control);
+                _Pages.Controls.Add(tabPage);
+            }
 
-            _ViewTabs[plugin.View.ContentId] = plugin.View;
+            if (destination.Equals("Top", StringComparison.OrdinalIgnoreCase))
+            {
+                _PanelTop.Controls.Add(control);
+            }
+
+            _ViewTabs[plugin.View.ContentId.ToString("N")] = plugin.View;
         }
 
         public override void Save()
@@ -64,7 +78,7 @@ namespace Sofia.ViewHost.WindowsForm
             IPlugin plugin = PluginManager["Sofia.Plugins.General.Contact"];
             plugin.AddView();
             plugin.View.ContentId = Guid.NewGuid();
-            Insert(plugin, "Main");
+            Insert(plugin, "TabControl");
         }
 
         #endregion
@@ -92,5 +106,6 @@ namespace Sofia.ViewHost.WindowsForm
         }
 
         #endregion
+
     }
 }

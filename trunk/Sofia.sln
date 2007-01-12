@@ -16,6 +16,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.Data.Firebird", "src\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.Model", "src\Sofia.Model\Sofia.Model.csproj", "{DCF4978A-AB2C-4462-9279-3A347A41B7DA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.Plugins.Core.SearchBar", "src\Sofia.Plugins\Sofia.Plugins.Core.SearchBar\Sofia.Plugins.Core.SearchBar.csproj", "{B36AA6D4-4941-4B6D-A2A8-7404C555638B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.Plugins.Core.SearchBar.WindowsForm", "src\Sofia.Plugins\Sofia.Plugins.Core.SearchBar\Sofia.Plugins.Core.SearchBar.WindowsForm\Sofia.Plugins.Core.SearchBar.WindowsForm.csproj", "{719EEE2F-B75D-47E6-A553-92E4318A950C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +58,14 @@ Global
 		{DCF4978A-AB2C-4462-9279-3A347A41B7DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCF4978A-AB2C-4462-9279-3A347A41B7DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DCF4978A-AB2C-4462-9279-3A347A41B7DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B36AA6D4-4941-4B6D-A2A8-7404C555638B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B36AA6D4-4941-4B6D-A2A8-7404C555638B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B36AA6D4-4941-4B6D-A2A8-7404C555638B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B36AA6D4-4941-4B6D-A2A8-7404C555638B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{719EEE2F-B75D-47E6-A553-92E4318A950C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{719EEE2F-B75D-47E6-A553-92E4318A950C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{719EEE2F-B75D-47E6-A553-92E4318A950C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{719EEE2F-B75D-47E6-A553-92E4318A950C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
