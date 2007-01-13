@@ -28,6 +28,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FirebirdSql.Data.FirebirdClient, Version=2.0.1.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -47,9 +48,15 @@
     <Compile Include="IPlugin.cs" />
     <Compile Include="IView.cs" />
     <Compile Include="IViewHost.cs" />
+    <Compile Include="Model.cs" />
     <Compile Include="PluginBase.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="XPathNav.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -57,6 +64,17 @@
       <Project>{D5881349-ED6F-4904-9A22-29B698CB60D1}</Project>
       <Name>Sofia.Data.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Sofia.Data.Firebird\Sofia.Data.Firebird.csproj">
+      <Project>{59F28981-0DDB-4B50-9F9D-F215E7DC04D1}</Project>
+      <Name>Sofia.Data.Firebird</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

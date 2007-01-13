@@ -11,83 +11,48 @@ namespace Sofia.Plugins
     public class PluginBase : IPlugin
     {
         IController _Controller;
-        IView _View;
         IModel _Model;
-        List<IView> _Views;
+
+        string _PluginAssembly;
+        string _ViewAssembly;
 
 #if GTK
         private static string UILibraryName = ".Gtk";
 #else
         private static string UILibraryName = "WindowsForm";
-#endif
+#endif        
 
-        public PluginBase()
-        {
-            _Views = new List<IView>();
+        public PluginBase() {
+
+            _PluginAssembly = this.GetType().Assembly.CodeBase;
+            _ViewAssembly = _PluginAssembly.Insert(_PluginAssembly.Length - 4, "." + UILibraryName);
+
+            CreateModel();
+            CreateController();
         }
 
         #region Implémentation de l'interface
 
-        public IView View
+        public void CreateModel()
         {
-            get
-            {
-                return _Views[_Views.Count - 1];
-            }
-
-            set
-            {
-                _Views.Add(value);
-            }
+            _Model = new Model();
         }
 
-        public IController Controller
+        public void CreateController()
         {
-            get
-            {
-                return _Controller;
-            }
-
-            set
-            {
-                _Controller = value;
-            }
+            _Controller = (IController)InstanceFactory.CreateInstanceFrom(_PluginAssembly, typeof(IController), new object[] { _Model }, new Type[] { typeof(IModel) });
         }
 
-        public IModel Model
+        public IView CreateView()
         {
-            get
-            {
-                return _Model;
-            }
-
-            set
-            {
-                _Model = value;
-            }
-        }
-
-        public virtual void AddView()
-        {
-            //Instanciation de la vue 
-            string path = AppDomain.CurrentDomain.BaseDirectory;
-            string assemblyName = this.GetType().Assembly.CodeBase;
-            assemblyName = assemblyName.Insert(assemblyName.Length - 4, "." + UILibraryName);
-            _View = (IView)InstanceFactory.CreateInstanceFrom(assemblyName, typeof(IView), null);
-            _Views.Add(_View);
-            _View.Index = _Views.IndexOf(_View);
-        }
-
-        public IView GetView(string contentId)
-        {
-            return _Views.Find(delegate(IView view) { return view.ContentId.ToString("N") == contentId; });
+            return (IView)InstanceFactory.CreateInstanceFrom(_ViewAssembly, typeof(IView), new object[] { _Model, _Controller }, new Type[] { typeof(IModel), typeof(IController) });    
         }
 
         public virtual string Description
         {
             get
             {
-                throw new NotImplementedException();
+                throw new NotSupportedException();
             }
         }
 

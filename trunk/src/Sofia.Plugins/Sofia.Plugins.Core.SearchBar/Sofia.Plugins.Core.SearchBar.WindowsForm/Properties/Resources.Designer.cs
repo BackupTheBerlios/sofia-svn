@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Sofia.Plugins.Core.SearchBar.WindowsForm.Properties {
+namespace Sofia.Plugins.Core.Search.WindowsForm.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Sofia.Plugins.Core.SearchBar.WindowsForm.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sofia.Plugins.Core.SearchBar.WindowsForm.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sofia.Plugins.Core.Search.WindowsForm.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

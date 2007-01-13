@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 
 using Sofia.Plugins;
+using Sofia.Mvc;
 
 namespace Sofia.Plugins.WindowsForm
 {
@@ -37,18 +38,19 @@ namespace Sofia.Plugins.WindowsForm
 
         #region Implémentation de l'interface
 
-        public virtual void Insert(IPlugin plugin, string destination)
+        public virtual void Insert(IView view, string destination)
         {
-            
+            throw new NotSupportedException();   
         }
 
         public virtual void Save()
         {
-            
+            throw new NotSupportedException();
         }
 
         public virtual void New()
         {
+            throw new NotSupportedException();
         }
 
 

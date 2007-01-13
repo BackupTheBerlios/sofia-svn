@@ -34,51 +34,40 @@ namespace Sofia.ViewHost.WindowsForm
             PluginManager.AutoRegister();
 
             //Insertion du plugin SearchBar
-            IPlugin plugin = PluginManager["Sofia.Plugins.Core.SearchBar"];
-            plugin.AddView();
-            Insert(plugin, "Top");
+            IPlugin plugin = PluginManager["Sofia.Plugins.Core.Search"];            
+            Insert(plugin.CreateView(), "TabControl");
         }
 
         #region Méthodes héritées
 
-        public override void Insert(IPlugin plugin, string destination)
+        public override void Insert(IView view, string destination)
         {
-            base.Insert(plugin, destination);
-
-            if (plugin == null)
-                return;
-
-            Control control = plugin.View.Control as Control;
+            Control control = view.Control as Control;
             control.Dock = DockStyle.Fill;
                 
             if (destination.Equals("TabControl", StringComparison.OrdinalIgnoreCase))
             {
-                TabPage tabPage = new TabPage(plugin.View.Tags[0]);                
-                tabPage.Name = plugin.View.ContentId.ToString("N");
+                TabPage tabPage = new TabPage(view.Tags[0]);                
+                tabPage.Name = view.ContentId.ToString("N");
                 tabPage.Controls.Add(control);
+                tabPage.Tag = view;
+
                 _Pages.Controls.Add(tabPage);
-            }
-
-            if (destination.Equals("Top", StringComparison.OrdinalIgnoreCase))
-            {
-                _PanelTop.Controls.Add(control);
-            }
-
-            _ViewTabs[plugin.View.ContentId.ToString("N")] = plugin.View;
+            }            
         }
 
         public override void Save()
         {
-            IView view = _ViewTabs[_Pages.SelectedTab.Name] as IView;
+            IView view = _Pages.SelectedTab.Tag as IView;
             view.SaveTo(ViewFormat.Xml);
         }
 
         public override void New()
         {
             IPlugin plugin = PluginManager["Sofia.Plugins.General.Contact"];
-            plugin.AddView();
-            plugin.View.ContentId = Guid.NewGuid();
-            Insert(plugin, "TabControl");
+            IView view = plugin.CreateView();
+            view.ContentId = Guid.NewGuid();
+            Insert(view, "TabControl");
         }
 
         #endregion

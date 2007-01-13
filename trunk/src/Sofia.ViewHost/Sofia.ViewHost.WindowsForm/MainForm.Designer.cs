@@ -34,25 +34,17 @@ namespace Sofia.ViewHost.WindowsForm
             this.RightToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.LeftToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this._MainMenu = new System.Windows.Forms.MenuStrip();
             this.fichierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.nouveauToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ouvrirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.enregistrerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enregistrersousToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.imprimerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aperçuavantimpressionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.quitterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.annulerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rétablirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.couperToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.copierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.collerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.sélectionnertoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.outilsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,23 +57,36 @@ namespace Sofia.ViewHost.WindowsForm
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.àproposdeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this._MainBar = new System.Windows.Forms.ToolStrip();
+            this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this._PanelTop = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this._Pages = new System.Windows.Forms.TabControl();
             this.nouveauToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.ouvrirToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.enregistrerToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.imprimerToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.couperToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.copierToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.collerToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.ToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this._PanelTop = new System.Windows.Forms.Panel();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this._Pages = new System.Windows.Forms.TabControl();
-            this.menuStrip1.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
+            this.nouveauToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ouvrirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enregistrerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.imprimerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aperçuavantimpressionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.couperToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.collerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
+            this._MainMenu.SuspendLayout();
+            this._MainBar.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
+            this.toolStripContainer1.ContentPanel.SuspendLayout();
+            this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
+            this.toolStripContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // BottomToolStripPanel
@@ -121,19 +126,19 @@ namespace Sofia.ViewHost.WindowsForm
             this.ContentPanel.AutoScroll = true;
             this.ContentPanel.Size = new System.Drawing.Size(454, 251);
             // 
-            // menuStrip1
+            // _MainMenu
             // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this._MainMenu.Dock = System.Windows.Forms.DockStyle.None;
+            this._MainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fichierToolStripMenuItem,
             this.editionToolStripMenuItem,
             this.outilsToolStripMenuItem,
             this.aideToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.menuStrip1.Size = new System.Drawing.Size(743, 24);
-            this.menuStrip1.TabIndex = 6;
-            this.menuStrip1.Text = "menuStrip1";
+            this._MainMenu.Location = new System.Drawing.Point(0, 0);
+            this._MainMenu.Name = "_MainMenu";
+            this._MainMenu.Size = new System.Drawing.Size(743, 24);
+            this._MainMenu.TabIndex = 6;
+            this._MainMenu.Text = "menuStrip1";
             // 
             // fichierToolStripMenuItem
             // 
@@ -152,39 +157,10 @@ namespace Sofia.ViewHost.WindowsForm
             this.fichierToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
             this.fichierToolStripMenuItem.Text = "&Fichier";
             // 
-            // nouveauToolStripMenuItem
-            // 
-            this.nouveauToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("nouveauToolStripMenuItem.Image")));
-            this.nouveauToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.nouveauToolStripMenuItem.Name = "nouveauToolStripMenuItem";
-            this.nouveauToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.nouveauToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
-            this.nouveauToolStripMenuItem.Text = "&Nouveau";
-            this.nouveauToolStripMenuItem.Click += new System.EventHandler(this.nouveauToolStripMenuItem_Click);
-            // 
-            // ouvrirToolStripMenuItem
-            // 
-            this.ouvrirToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("ouvrirToolStripMenuItem.Image")));
-            this.ouvrirToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ouvrirToolStripMenuItem.Name = "ouvrirToolStripMenuItem";
-            this.ouvrirToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.ouvrirToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
-            this.ouvrirToolStripMenuItem.Text = "&Ouvrir";
-            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(200, 6);
-            // 
-            // enregistrerToolStripMenuItem
-            // 
-            this.enregistrerToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("enregistrerToolStripMenuItem.Image")));
-            this.enregistrerToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.enregistrerToolStripMenuItem.Name = "enregistrerToolStripMenuItem";
-            this.enregistrerToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.enregistrerToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
-            this.enregistrerToolStripMenuItem.Text = "&Enregistrer";
-            this.enregistrerToolStripMenuItem.Click += new System.EventHandler(this.enregistrerToolStripMenuItem_Click);
             // 
             // enregistrersousToolStripMenuItem
             // 
@@ -196,23 +172,6 @@ namespace Sofia.ViewHost.WindowsForm
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(200, 6);
-            // 
-            // imprimerToolStripMenuItem
-            // 
-            this.imprimerToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("imprimerToolStripMenuItem.Image")));
-            this.imprimerToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.imprimerToolStripMenuItem.Name = "imprimerToolStripMenuItem";
-            this.imprimerToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-            this.imprimerToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
-            this.imprimerToolStripMenuItem.Text = "&Imprimer";
-            // 
-            // aperçuavantimpressionToolStripMenuItem
-            // 
-            this.aperçuavantimpressionToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("aperçuavantimpressionToolStripMenuItem.Image")));
-            this.aperçuavantimpressionToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.aperçuavantimpressionToolStripMenuItem.Name = "aperçuavantimpressionToolStripMenuItem";
-            this.aperçuavantimpressionToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
-            this.aperçuavantimpressionToolStripMenuItem.Text = "Aperçu a&vant impression";
             // 
             // toolStripSeparator4
             // 
@@ -258,33 +217,6 @@ namespace Sofia.ViewHost.WindowsForm
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
             this.toolStripSeparator5.Size = new System.Drawing.Size(164, 6);
-            // 
-            // couperToolStripMenuItem
-            // 
-            this.couperToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("couperToolStripMenuItem.Image")));
-            this.couperToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.couperToolStripMenuItem.Name = "couperToolStripMenuItem";
-            this.couperToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-            this.couperToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
-            this.couperToolStripMenuItem.Text = "&Couper";
-            // 
-            // copierToolStripMenuItem
-            // 
-            this.copierToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("copierToolStripMenuItem.Image")));
-            this.copierToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.copierToolStripMenuItem.Name = "copierToolStripMenuItem";
-            this.copierToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.copierToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
-            this.copierToolStripMenuItem.Text = "Co&pier";
-            // 
-            // collerToolStripMenuItem
-            // 
-            this.collerToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("collerToolStripMenuItem.Image")));
-            this.collerToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.collerToolStripMenuItem.Name = "collerToolStripMenuItem";
-            this.collerToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.collerToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
-            this.collerToolStripMenuItem.Text = "Co&ller";
             // 
             // toolStripSeparator6
             // 
@@ -361,15 +293,17 @@ namespace Sofia.ViewHost.WindowsForm
             // 
             // statusStrip1
             // 
-            this.statusStrip1.Location = new System.Drawing.Point(0, 531);
+            this.statusStrip1.Dock = System.Windows.Forms.DockStyle.None;
+            this.statusStrip1.Location = new System.Drawing.Point(0, 0);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(743, 22);
             this.statusStrip1.TabIndex = 7;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // toolStrip1
+            // _MainBar
             // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this._MainBar.Dock = System.Windows.Forms.DockStyle.None;
+            this._MainBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.nouveauToolStripButton,
             this.ouvrirToolStripButton,
             this.enregistrerToolStripButton,
@@ -380,12 +314,49 @@ namespace Sofia.ViewHost.WindowsForm
             this.collerToolStripButton,
             this.toolStripSeparator1,
             this.ToolStripButton});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 24);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStrip1.Size = new System.Drawing.Size(743, 25);
-            this.toolStrip1.TabIndex = 8;
-            this.toolStrip1.Text = "toolStrip1";
+            this._MainBar.Location = new System.Drawing.Point(3, 24);
+            this._MainBar.Name = "_MainBar";
+            this._MainBar.Size = new System.Drawing.Size(239, 25);
+            this._MainBar.TabIndex = 8;
+            this._MainBar.Text = "toolStrip1";
+            // 
+            // toolStripSeparator
+            // 
+            this.toolStripSeparator.Name = "toolStripSeparator";
+            this.toolStripSeparator.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // _PanelTop
+            // 
+            this._PanelTop.AutoSize = true;
+            this._PanelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this._PanelTop.Location = new System.Drawing.Point(0, 0);
+            this._PanelTop.Name = "_PanelTop";
+            this._PanelTop.Size = new System.Drawing.Size(743, 0);
+            this._PanelTop.TabIndex = 9;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this._Pages);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Padding = new System.Windows.Forms.Padding(6);
+            this.panel1.Size = new System.Drawing.Size(743, 482);
+            this.panel1.TabIndex = 10;
+            // 
+            // _Pages
+            // 
+            this._Pages.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._Pages.Location = new System.Drawing.Point(6, 6);
+            this._Pages.Name = "_Pages";
+            this._Pages.SelectedIndex = 0;
+            this._Pages.Size = new System.Drawing.Size(731, 470);
+            this._Pages.TabIndex = 6;
             // 
             // nouveauToolStripButton
             // 
@@ -425,11 +396,6 @@ namespace Sofia.ViewHost.WindowsForm
             this.imprimerToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.imprimerToolStripButton.Text = "&Imprimer";
             // 
-            // toolStripSeparator
-            // 
-            this.toolStripSeparator.Name = "toolStripSeparator";
-            this.toolStripSeparator.Size = new System.Drawing.Size(6, 25);
-            // 
             // couperToolStripButton
             // 
             this.couperToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -457,11 +423,6 @@ namespace Sofia.ViewHost.WindowsForm
             this.collerToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.collerToolStripButton.Text = "Co&ller";
             // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
             // ToolStripButton
             // 
             this.ToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -471,64 +432,132 @@ namespace Sofia.ViewHost.WindowsForm
             this.ToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.ToolStripButton.Text = "&?";
             // 
-            // _PanelTop
+            // nouveauToolStripMenuItem
             // 
-            this._PanelTop.AutoSize = true;
-            this._PanelTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this._PanelTop.Location = new System.Drawing.Point(0, 49);
-            this._PanelTop.Name = "_PanelTop";
-            this._PanelTop.Size = new System.Drawing.Size(743, 0);
-            this._PanelTop.TabIndex = 9;
+            this.nouveauToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("nouveauToolStripMenuItem.Image")));
+            this.nouveauToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.nouveauToolStripMenuItem.Name = "nouveauToolStripMenuItem";
+            this.nouveauToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.nouveauToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.nouveauToolStripMenuItem.Text = "&Nouveau";
+            this.nouveauToolStripMenuItem.Click += new System.EventHandler(this.nouveauToolStripMenuItem_Click);
             // 
-            // panel1
+            // ouvrirToolStripMenuItem
             // 
-            this.panel1.Controls.Add(this._Pages);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 49);
-            this.panel1.Name = "panel1";
-            this.panel1.Padding = new System.Windows.Forms.Padding(6);
-            this.panel1.Size = new System.Drawing.Size(743, 482);
-            this.panel1.TabIndex = 10;
+            this.ouvrirToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("ouvrirToolStripMenuItem.Image")));
+            this.ouvrirToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ouvrirToolStripMenuItem.Name = "ouvrirToolStripMenuItem";
+            this.ouvrirToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.ouvrirToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.ouvrirToolStripMenuItem.Text = "&Ouvrir";
             // 
-            // _Pages
+            // enregistrerToolStripMenuItem
             // 
-            this._Pages.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._Pages.Location = new System.Drawing.Point(6, 6);
-            this._Pages.Name = "_Pages";
-            this._Pages.SelectedIndex = 0;
-            this._Pages.Size = new System.Drawing.Size(731, 470);
-            this._Pages.TabIndex = 6;
+            this.enregistrerToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("enregistrerToolStripMenuItem.Image")));
+            this.enregistrerToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.enregistrerToolStripMenuItem.Name = "enregistrerToolStripMenuItem";
+            this.enregistrerToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.enregistrerToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.enregistrerToolStripMenuItem.Text = "&Enregistrer";
+            this.enregistrerToolStripMenuItem.Click += new System.EventHandler(this.enregistrerToolStripMenuItem_Click);
+            // 
+            // imprimerToolStripMenuItem
+            // 
+            this.imprimerToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("imprimerToolStripMenuItem.Image")));
+            this.imprimerToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.imprimerToolStripMenuItem.Name = "imprimerToolStripMenuItem";
+            this.imprimerToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
+            this.imprimerToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.imprimerToolStripMenuItem.Text = "&Imprimer";
+            // 
+            // aperçuavantimpressionToolStripMenuItem
+            // 
+            this.aperçuavantimpressionToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("aperçuavantimpressionToolStripMenuItem.Image")));
+            this.aperçuavantimpressionToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.aperçuavantimpressionToolStripMenuItem.Name = "aperçuavantimpressionToolStripMenuItem";
+            this.aperçuavantimpressionToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.aperçuavantimpressionToolStripMenuItem.Text = "Aperçu a&vant impression";
+            // 
+            // couperToolStripMenuItem
+            // 
+            this.couperToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("couperToolStripMenuItem.Image")));
+            this.couperToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.couperToolStripMenuItem.Name = "couperToolStripMenuItem";
+            this.couperToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
+            this.couperToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.couperToolStripMenuItem.Text = "&Couper";
+            // 
+            // copierToolStripMenuItem
+            // 
+            this.copierToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("copierToolStripMenuItem.Image")));
+            this.copierToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.copierToolStripMenuItem.Name = "copierToolStripMenuItem";
+            this.copierToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+            this.copierToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.copierToolStripMenuItem.Text = "Co&pier";
+            // 
+            // collerToolStripMenuItem
+            // 
+            this.collerToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("collerToolStripMenuItem.Image")));
+            this.collerToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.collerToolStripMenuItem.Name = "collerToolStripMenuItem";
+            this.collerToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
+            this.collerToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.collerToolStripMenuItem.Text = "Co&ller";
+            // 
+            // toolStripContainer1
+            // 
+            // 
+            // toolStripContainer1.BottomToolStripPanel
+            // 
+            this.toolStripContainer1.BottomToolStripPanel.Controls.Add(this.statusStrip1);
+            // 
+            // toolStripContainer1.ContentPanel
+            // 
+            this.toolStripContainer1.ContentPanel.AutoScroll = true;
+            this.toolStripContainer1.ContentPanel.Controls.Add(this.panel1);
+            this.toolStripContainer1.ContentPanel.Controls.Add(this._PanelTop);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(743, 482);
+            this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
+            this.toolStripContainer1.Name = "toolStripContainer1";
+            this.toolStripContainer1.Size = new System.Drawing.Size(743, 553);
+            this.toolStripContainer1.TabIndex = 11;
+            this.toolStripContainer1.Text = "toolStripContainer1";
+            // 
+            // toolStripContainer1.TopToolStripPanel
+            // 
+            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this._MainBar);
+            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this._MainMenu);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(743, 553);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this._PanelTop);
-            this.Controls.Add(this.toolStrip1);
-            this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.toolStripContainer1);
             this.Name = "MainForm";
             this.Text = "Form1";
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this._MainMenu.ResumeLayout(false);
+            this._MainMenu.PerformLayout();
+            this._MainBar.ResumeLayout(false);
+            this._MainBar.PerformLayout();
             this.panel1.ResumeLayout(false);
+            this.toolStripContainer1.BottomToolStripPanel.ResumeLayout(false);
+            this.toolStripContainer1.BottomToolStripPanel.PerformLayout();
+            this.toolStripContainer1.ContentPanel.ResumeLayout(false);
+            this.toolStripContainer1.ContentPanel.PerformLayout();
+            this.toolStripContainer1.TopToolStripPanel.ResumeLayout(false);
+            this.toolStripContainer1.TopToolStripPanel.PerformLayout();
+            this.toolStripContainer1.ResumeLayout(false);
+            this.toolStripContainer1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.ToolStripPanel BottomToolStripPanel;
-        private System.Windows.Forms.ToolStripPanel TopToolStripPanel;
-        private System.Windows.Forms.ToolStripPanel RightToolStripPanel;
-        private System.Windows.Forms.ToolStripPanel LeftToolStripPanel;
-        private System.Windows.Forms.ToolStripContentPanel ContentPanel;
-        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.MenuStrip _MainMenu;
         private System.Windows.Forms.ToolStripMenuItem fichierToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem nouveauToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ouvrirToolStripMenuItem;
@@ -559,7 +588,7 @@ namespace Sofia.ViewHost.WindowsForm
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ToolStripMenuItem àproposdeToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip _MainBar;
         private System.Windows.Forms.ToolStripButton nouveauToolStripButton;
         private System.Windows.Forms.ToolStripButton ouvrirToolStripButton;
         private System.Windows.Forms.ToolStripButton enregistrerToolStripButton;
@@ -573,6 +602,12 @@ namespace Sofia.ViewHost.WindowsForm
         private System.Windows.Forms.Panel _PanelTop;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TabControl _Pages;
+        private System.Windows.Forms.ToolStripPanel BottomToolStripPanel;
+        private System.Windows.Forms.ToolStripPanel TopToolStripPanel;
+        private System.Windows.Forms.ToolStripPanel RightToolStripPanel;
+        private System.Windows.Forms.ToolStripPanel LeftToolStripPanel;
+        private System.Windows.Forms.ToolStripContentPanel ContentPanel;
+        private System.Windows.Forms.ToolStripContainer toolStripContainer1;
 
 
 

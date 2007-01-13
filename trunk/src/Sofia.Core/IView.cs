@@ -30,6 +30,7 @@ namespace Sofia.Mvc
         void SaveTo(ViewFormat viewFormat);        
 
         object Control { get; }
+        object Toolbar { get; }
 
         Guid ContentId { get; set; }
 
@@ -45,9 +46,6 @@ namespace Sofia.Mvc
         /// Obtient l'ordre d'instanciation de la vue
         /// </summary>
         int Index { get; set;}
-
-        IController Controller { get; set; }
-        IModel Model { get; set;}
 
     }
       

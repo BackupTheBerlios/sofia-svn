@@ -7,12 +7,15 @@ using System.Text;
 using System.Windows.Forms;
 
 using Sofia.Plugins.WindowsForm;
+using Sofia.Mvc;
 
 namespace Sofia.Plugins.General.Contact.WindowsForm
 {
     public partial class UserInterface : ViewBase
     {
-        public UserInterface()
+       
+        public UserInterface(IModel model, IController controller)
+            : base(model, controller)
         {
             InitializeComponent();
         }

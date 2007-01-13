@@ -8,15 +8,7 @@ namespace Sofia.Plugins
 {
     public interface IPlugin
     {
-        IView View { get; set; }
-
-        IController Controller { get; set; }
-
-        IModel Model { get; set; }
-
-        void AddView();
-
-        IView GetView(string contentId);
+        IView CreateView();
 
         /// <summary>
         /// Description

@@ -45,10 +45,6 @@
       <Project>{51B6B859-A247-40CD-AB52-F77042DDCE4C}</Project>
       <Name>Sofia.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Sofia.Model\Sofia.Model.csproj">
-      <Project>{DCF4978A-AB2C-4462-9279-3A347A41B7DA}</Project>
-      <Name>Sofia.Model</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Sofia.Plugins.General.Contact.xsd">

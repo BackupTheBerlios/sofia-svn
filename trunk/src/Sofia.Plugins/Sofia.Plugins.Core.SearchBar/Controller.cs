@@ -4,10 +4,23 @@ using System.Text;
 
 using Sofia.Mvc;
 
-namespace Sofia.Plugins.Core.SearchBar
+namespace Sofia.Plugins.Core.Search
 {
-    internal class Controller: ControllerBase
+    public class Controller: ControllerBase
     {
-        public Controller() : base() { }
+        public Controller(IModel model) : base(model) { }
+
+        public override object Toolbar
+        {
+            get
+            {
+                IView view = Find(0);
+                if (view != null)
+                    return view;
+                else
+                    return null;
+
+            }
+        }
     }
 }

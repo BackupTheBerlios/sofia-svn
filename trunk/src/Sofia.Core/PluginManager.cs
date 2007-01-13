@@ -55,7 +55,7 @@ namespace Sofia.Plugins
 
             foreach (FileInfo file in files)
             {
-                IPlugin plugin = (IPlugin)InstanceFactory.CreateInstanceFrom(file.FullName, typeof(IPlugin), null);
+                IPlugin plugin = (IPlugin)InstanceFactory.CreateInstanceFrom(file.FullName, typeof(IPlugin), null, Type.EmptyTypes);
                 if (plugin != null)
                     Add(plugin);
             }

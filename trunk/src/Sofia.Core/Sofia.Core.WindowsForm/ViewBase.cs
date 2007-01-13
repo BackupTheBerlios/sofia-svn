@@ -9,20 +9,28 @@ using Sofia.Mvc;
 
 namespace Sofia.Plugins.WindowsForm
 {
-    public class ViewBase: UserControl, IView
+    public class ViewBase : UserControl, IView
     {
-        #region Constructeur
-
-        public ViewBase() : base() { }
-
-        #endregion
-
-        #region Implémentation de l'interface IView
-
         IController _Controller;
         IModel _Model;
         Guid _ContentId;
         int _Index;
+
+        #region Constructeur
+
+        public ViewBase() : base() { }
+
+        public ViewBase(IModel model, IController controller)
+            : base()
+        {
+            _Model = model;
+            _Controller = controller;
+            _Controller.Add(this);
+        }
+
+        #endregion
+
+        #region Implémentation de l'interface IView
 
         public virtual void LoadFrom(string raw, ViewFormat viewFormat)
         {
@@ -42,27 +50,11 @@ namespace Sofia.Plugins.WindowsForm
             }
         }
 
-        public IController Controller
+        public virtual object Toolbar
         {
             get
             {
-                return _Controller;
-            }
-            set
-            {
-                _Controller = value;
-            }
-        }
-
-        public IModel Model
-        {
-            get
-            {
-                return _Model;
-            }
-            set
-            {
-                _Model = value;
+                return null;
             }
         }
 
@@ -107,7 +99,7 @@ namespace Sofia.Plugins.WindowsForm
         {
             get
             {
-                throw new NotImplementedException();
+                return new string[] { "Tags à définir" };
             }
         }
 

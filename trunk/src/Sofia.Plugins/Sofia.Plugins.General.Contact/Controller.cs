@@ -6,8 +6,8 @@ using Sofia.Mvc;
 
 namespace Sofia.Plugins.General.Contact
 {
-    internal class Controller: ControllerBase
+    public class Controller: ControllerBase
     {
-        public Controller() : base() { }
+        public Controller(IModel model) : base(model) { }
     }
 }
