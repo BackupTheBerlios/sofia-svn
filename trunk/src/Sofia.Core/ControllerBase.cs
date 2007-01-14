@@ -30,15 +30,6 @@ namespace Sofia.Mvc
             _CommandManager.CommandByName(ident).Execute(parameters);
         }
 
-        public virtual object Toolbar
-        {
-            get
-            {
-                return null;
-            }
-        }
-
-
         public IView Find(string contentId)
         {
             return _Views.Find(delegate(IView view) { return view.ContentId.ToString("N") == contentId; });

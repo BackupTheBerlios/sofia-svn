@@ -34,7 +34,7 @@ namespace Sofia.ViewHost.WindowsForm
             PluginManager.AutoRegister();
 
             //Insertion du plugin SearchBar
-            IPlugin plugin = PluginManager["Sofia.Plugins.Core.Search"];            
+            IPlugin plugin = PluginManager["Sofia.Plugins.Core.Search"];
             Insert(plugin.CreateView(), "TabControl");
         }
 
@@ -44,16 +44,21 @@ namespace Sofia.ViewHost.WindowsForm
         {
             Control control = view.Control as Control;
             control.Dock = DockStyle.Fill;
-                
+
             if (destination.Equals("TabControl", StringComparison.OrdinalIgnoreCase))
             {
-                TabPage tabPage = new TabPage(view.Tags[0]);                
+                TabPage tabPage = new TabPage(view.Tags[0]);
                 tabPage.Name = view.ContentId.ToString("N");
                 tabPage.Controls.Add(control);
                 tabPage.Tag = view;
-
                 _Pages.Controls.Add(tabPage);
-            }            
+            }
+
+            if (view.Toolbar != null)
+            {
+                Control toolbar = view.Toolbar as Control;
+                TopToolStripPanel.Controls.Add(toolbar);
+            }
         }
 
         public override void Save()

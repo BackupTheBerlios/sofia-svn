@@ -18,7 +18,10 @@ namespace Sofia.Plugins.WindowsForm
 
         #region Constructeur
 
-        public ViewBase() : base() { }
+        public ViewBase()
+            : base() {
+                InitializeComponent();
+        }
 
         public ViewBase(IModel model, IController controller)
             : base()
@@ -132,6 +135,18 @@ namespace Sofia.Plugins.WindowsForm
             XmlSerializer xmlSerializer = new XmlSerializer(documentType);
             TextReader reader = new StringReader(rawXml);
             return xmlSerializer.Deserialize(reader);
+        }
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            // 
+            // ViewBase
+            // 
+            this.Name = "ViewBase";
+            this.Size = new System.Drawing.Size(168, 175);
+            this.ResumeLayout(false);
+
         }
 
     }

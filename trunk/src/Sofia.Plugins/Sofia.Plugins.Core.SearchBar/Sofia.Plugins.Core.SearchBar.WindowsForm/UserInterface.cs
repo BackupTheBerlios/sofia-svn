@@ -13,7 +13,13 @@ namespace Sofia.Plugins.Core.Search.WindowsForm
 {
     public partial class UserInterface : ViewBase
     {
-        public UserInterface(IModel model, IController controller): base(model, controller)
+        public UserInterface()
+        {
+            InitializeComponent();
+        }
+
+        public UserInterface(IModel model, IController controller)
+            : base(model, controller)
         {
             InitializeComponent();
         }
@@ -54,7 +60,13 @@ namespace Sofia.Plugins.Core.Search.WindowsForm
                 return new string[] { "Recherche" };
             }
         }
-        
 
+        public override object Toolbar
+        {
+            get
+            {
+                return _ToolbarSearch;
+            }
+        }
     }
 }

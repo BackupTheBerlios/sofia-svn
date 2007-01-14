@@ -13,7 +13,12 @@ namespace Sofia.Plugins.General.Contact.WindowsForm
 {
     public partial class UserInterface : ViewBase
     {
-       
+
+        public UserInterface()
+        {
+            InitializeComponent();
+        }
+
         public UserInterface(IModel model, IController controller)
             : base(model, controller)
         {

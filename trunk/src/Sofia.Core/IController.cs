@@ -16,9 +16,6 @@ namespace Sofia.Mvc
       	/// <param name="parameters">Paramètres de la commande</param>
       	void ExecuteCommand(string ident, string parameters);
 
-        object Toolbar { get; }
-
-
         IView Find(string contentId);
         IView Find(int index);
         void Add(IView view);
