@@ -45,6 +45,15 @@ namespace Sofia.Mvc
             _Views.Add(view);
             view.Index = _Views.IndexOf(view);
         }
+
+        public int ViewCount
+        {
+            get
+            {
+                return _Views.Count;
+            }
+        }
+
         #endregion
     }
 

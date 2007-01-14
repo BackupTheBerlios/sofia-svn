@@ -56,6 +56,14 @@ namespace Sofia.Plugins
             }
         }
 
+        public IController Controller
+        {
+            get
+            {
+                return _Controller;
+            }
+        }
+
         #endregion
 
     }

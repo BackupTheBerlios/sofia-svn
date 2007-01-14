@@ -9,6 +9,7 @@ namespace Sofia.DesignPatterns
         /// <summary>
         /// Méthode permettant de recevoir la notification d'un sujet
         /// </summary>
-        void Update();
+        void Update(object sender, object notification);
     }
+
 }

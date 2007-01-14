@@ -18,6 +18,7 @@ namespace Sofia.Mvc
 
         IView Find(string contentId);
         IView Find(int index);
+        int ViewCount { get; }
         void Add(IView view);
      	      	
     }

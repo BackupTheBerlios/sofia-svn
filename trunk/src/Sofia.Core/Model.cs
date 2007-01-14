@@ -22,6 +22,7 @@ namespace Sofia.Mvc
         #region Champs privés
 
         Server _Server;
+        List<IObserver> _Observers;
 
         #endregion
 
@@ -34,40 +35,6 @@ namespace Sofia.Mvc
             string databasePath = AppDomain.CurrentDomain.BaseDirectory;
             _Server = new Server("FirebirdSql.Data.FirebirdClient", databasePath + "Sofia.Data.Database.fdb", new FirebirdDDL(), Settings.Default.FirebirdPort);
         }
-
-        #region Implémentation de l'interface IObservable
-
-        List<IObserver> _Observers;
-
-        /// <summary>
-        /// <see cref="IObserver"/>
-        /// </summary>
-        public void Register(IObserver o)
-        {
-            if (!_Observers.Contains(o))
-                _Observers.Add(o);
-        }
-
-        /// <summary>
-        /// <see cref="IObserver"/>
-        /// </summary>
-        public void Unregister(IObserver o)
-        {
-            _Observers.Remove(o);
-        }
-
-        /// <summary>
-        /// <see cref="IObserver"/>
-        /// </summary>
-        public void Notify()
-        {
-            foreach (IObserver o in _Observers)
-            {
-                o.Update();
-            }
-        }
-
-        #endregion
 
         #region Implémentation de l'interface IModel
 
@@ -218,5 +185,34 @@ namespace Sofia.Mvc
 
         #endregion
 
+
+        #region IObservable Members
+
+        /// <summary>
+        /// <see cref="IObserver"/>
+        /// </summary>
+        public void RegisterObserver(IObserver o)
+        {
+            if (!_Observers.Contains(o))
+                _Observers.Add(o);
+        }
+
+        /// <summary>
+        /// <see cref="IObserver"/>
+        /// </summary>
+        public void UnregisterObserver(IObserver o)
+        {
+            _Observers.Remove(o);
+        }
+
+        public void NotifyObservers(object notification)
+        {
+            foreach (IObserver o in _Observers)
+            {
+                o.Update(this, notification);
+            }
+        }
+
+        #endregion
     }
 }

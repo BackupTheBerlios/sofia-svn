@@ -1,19 +1,22 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
 using Sofia.Mvc;
+using Sofia.DesignPatterns;
 
 namespace Sofia.Plugins.WindowsForm
 {
-    public class ViewBase : UserControl, IView
+    public class ViewBase : UserControl, IView, IObservable
     {
         IController _Controller;
         IModel _Model;
         Guid _ContentId;
+        List<IObserver> _Observers;
         int _Index;
 
         #region Constructeur
@@ -26,12 +29,14 @@ namespace Sofia.Plugins.WindowsForm
         public ViewBase(IModel model, IController controller)
             : base()
         {
+            _Observers = new List<IObserver>();
             _Model = model;
             _Controller = controller;
             _Controller.Add(this);
         }
 
         #endregion
+
 
         #region Implémentation de l'interface IView
 
@@ -78,7 +83,7 @@ namespace Sofia.Plugins.WindowsForm
         {
             get
             {
-                throw new NotImplementedException();
+                return "ViewBase.ContentSummary";
             }
         }
 
@@ -86,7 +91,7 @@ namespace Sofia.Plugins.WindowsForm
         {
             get
             {
-                throw new NotImplementedException();
+                return "ViewBase.ContentXml";
             }
         }
 
@@ -94,7 +99,7 @@ namespace Sofia.Plugins.WindowsForm
         {
             get
             {
-                throw new NotImplementedException();
+                return false;
             }
         }
 
@@ -102,11 +107,11 @@ namespace Sofia.Plugins.WindowsForm
         {
             get
             {
-                return new string[] { "Tags à définir" };
+                return new string[] { "ViewBase.Tags" };
             }
         }
 
-        public virtual int Index
+        public int Index
         {
             get
             {
@@ -149,5 +154,29 @@ namespace Sofia.Plugins.WindowsForm
 
         }
 
+
+        #region IObservable Members
+       
+
+        public void RegisterObserver(IObserver o)
+        {
+            if (!_Observers.Contains(o))
+                _Observers.Add(o);
+        }
+
+        public void UnregisterObserver(IObserver o)
+        {
+            _Observers.Remove(o);
+        }
+
+        public void NotifyObservers(object notification)
+        {
+            foreach (IObserver o in _Observers)
+            {
+                o.Update(this, notification);
+            }
+        }
+
+        #endregion
     }
 }

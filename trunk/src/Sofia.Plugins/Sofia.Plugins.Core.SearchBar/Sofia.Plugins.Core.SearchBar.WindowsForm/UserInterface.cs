@@ -24,32 +24,11 @@ namespace Sofia.Plugins.Core.Search.WindowsForm
             InitializeComponent();
         }
 
-        public override void LoadFrom(string raw, Sofia.Mvc.ViewFormat viewFormat)
-        {
-        }
-
-        public override string ContentXml
+        public override object Toolbar
         {
             get
             {
-                return "";
-            }
-        }
-
-
-        public override bool IsMasterView
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        public override string ContentSummary
-        {
-            get
-            {
-                return "";
+                return _ToolbarSearch;
             }
         }
 
@@ -61,12 +40,10 @@ namespace Sofia.Plugins.Core.Search.WindowsForm
             }
         }
 
-        public override object Toolbar
+        private void _BtnRechercher_Click(object sender, EventArgs e)
         {
-            get
-            {
-                return _ToolbarSearch;
-            }
+            NotifyObservers(ViewNotification.Show);
         }
+
     }
 }

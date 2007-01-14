@@ -9,6 +9,7 @@ namespace Sofia.Plugins
     public interface IPlugin
     {
         IView CreateView();
+        IController Controller { get; }
 
         /// <summary>
         /// Description

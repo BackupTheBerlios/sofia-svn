@@ -12,6 +12,7 @@ using Sofia.ViewHost.WindowsForm.Properties;
 
 using Sofia.Plugins;
 using Sofia.Mvc;
+using Sofia.DesignPatterns;
 
 #if GTK
 using Sofia.Plugins.Gtk;
@@ -33,19 +34,21 @@ namespace Sofia.ViewHost.WindowsForm
             _ViewTabs = new Hashtable();
             PluginManager.AutoRegister();
 
-            //Insertion du plugin SearchBar
+            //Recherche
             IPlugin plugin = PluginManager["Sofia.Plugins.Core.Search"];
-            Insert(plugin.CreateView(), "TabControl");
+            IView view = plugin.CreateView();
+            ShowToolBar(view, 1);
+            (view as IObservable).RegisterObserver(this);
         }
 
         #region Méthodes héritées
 
-        public override void Insert(IView view, string destination)
+        public override void ShowView(IView view, ViewDestination destination)
         {
             Control control = view.Control as Control;
             control.Dock = DockStyle.Fill;
 
-            if (destination.Equals("TabControl", StringComparison.OrdinalIgnoreCase))
+            if (destination == ViewDestination.Tabbed)
             {
                 TabPage tabPage = new TabPage(view.Tags[0]);
                 tabPage.Name = view.ContentId.ToString("N");
@@ -54,10 +57,21 @@ namespace Sofia.ViewHost.WindowsForm
                 _Pages.Controls.Add(tabPage);
             }
 
+        }
+
+        public override void ShowToolBar(IView view, int row)
+        {
             if (view.Toolbar != null)
             {
-                Control toolbar = view.Toolbar as Control;
-                TopToolStripPanel.Controls.Add(toolbar);
+                ToolStrip toolbar = view.Toolbar as ToolStrip;
+
+                //Calcul de la position de la barre d'outils
+                int controlCount = _MainbarContainer.TopToolStripPanel.Controls.Count;
+                Control lastControl = _MainbarContainer.TopToolStripPanel.Controls[controlCount - 1];
+                ToolStripPanelRow[] rows = _MainbarContainer.TopToolStripPanel.Rows;
+                Point p = new Point(lastControl.Bounds.Width + 3, rows[row].Bounds.Top);
+
+                _MainbarContainer.TopToolStripPanel.Join(toolbar, p);
             }
         }
 
@@ -66,13 +80,27 @@ namespace Sofia.ViewHost.WindowsForm
             IView view = _Pages.SelectedTab.Tag as IView;
             view.SaveTo(ViewFormat.Xml);
         }
-
+     
         public override void New()
         {
             IPlugin plugin = PluginManager["Sofia.Plugins.General.Contact"];
             IView view = plugin.CreateView();
             view.ContentId = Guid.NewGuid();
-            Insert(view, "TabControl");
+
+            if (plugin.Controller.ViewCount == 1)
+                ShowToolBar(view, 2);
+
+            ShowView(view, ViewDestination.Tabbed);
+        }
+
+        public override void Update(object sender, object notification)
+        {
+            if (sender is IView)
+            {
+                IView view = sender as IView;
+                if ((ViewNotification)notification == ViewNotification.Show)
+                    ShowView(view, ViewDestination.Tabbed);
+            }
         }
 
         #endregion

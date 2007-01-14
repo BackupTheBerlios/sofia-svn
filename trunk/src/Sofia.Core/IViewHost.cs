@@ -13,7 +13,9 @@ namespace Sofia.Plugins
         /// </summary>
         /// <param name="view">Une vue</param>
         /// <param name="destination">L'identifiant de la zone d'insertion</param>
-        void Insert(IView view, string destination);
+        void ShowView(IView view, ViewDestination destination);
+
+        void ShowToolBar(IView view, int row);
 
         /// <summary>
         /// Sauve dans le modèle la vue active

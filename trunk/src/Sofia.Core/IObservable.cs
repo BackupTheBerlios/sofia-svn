@@ -10,17 +10,17 @@ namespace Sofia.DesignPatterns
         /// Enregistre un observateur
         /// </summary>
         /// <param name="o">Un observateur</param>
-        void Register(IObserver o);
+        void RegisterObserver(IObserver o);
 
         /// <summary>
         /// Retire un observateur de la liste des observateurs enregistrés
         /// </summary>
         /// <param name="o">Un observateur</param>
-        void Unregister(IObserver o);
+        void UnregisterObserver(IObserver o);
 
         /// <summary>
         /// Notifie les observateurs
         /// </summary>
-        void Notify();
+        void NotifyObservers(object notification);
     }
 }

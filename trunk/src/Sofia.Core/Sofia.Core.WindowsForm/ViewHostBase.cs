@@ -5,10 +5,11 @@ using System.Windows.Forms;
 
 using Sofia.Plugins;
 using Sofia.Mvc;
+using Sofia.DesignPatterns;
 
 namespace Sofia.Plugins.WindowsForm
 {
-    public class ViewHostBase: Form, IViewHost
+    public class ViewHostBase: Form, IViewHost, IObserver
     {
         #region Contructeurs
 
@@ -36,11 +37,16 @@ namespace Sofia.Plugins.WindowsForm
 
         #endregion
 
-        #region Implémentation de l'interface
+        #region Implémentation de l'interface IViewHost
 
-        public virtual void Insert(IView view, string destination)
+        public virtual void ShowView(IView view, ViewDestination destination)
         {
             throw new NotSupportedException();   
+        }
+
+        public virtual void ShowToolBar(IView view, int row)
+        {
+            throw new NotSupportedException();
         }
 
         public virtual void Save()
@@ -53,8 +59,15 @@ namespace Sofia.Plugins.WindowsForm
             throw new NotSupportedException();
         }
 
-
         #endregion
 
+        #region IObserver Members
+
+        public virtual void Update(object sender, object notification)
+        {
+            throw new NotSupportedException();
+        }
+
+        #endregion
     }
 }

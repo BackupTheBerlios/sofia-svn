@@ -13,6 +13,21 @@ namespace Sofia.Mvc
         Html
     }
 
+    public enum ViewNotification
+    {
+        Show,
+        Hide
+    }
+
+    public enum ViewDestination
+    {
+        Tabbed,
+        Top,
+        Bottom,
+        Left,
+        Right
+    }
+
 	public interface IView
     {
         /// <summary>
