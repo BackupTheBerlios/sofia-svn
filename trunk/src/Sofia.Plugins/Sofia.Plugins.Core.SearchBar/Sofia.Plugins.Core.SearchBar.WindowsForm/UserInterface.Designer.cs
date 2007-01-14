@@ -78,6 +78,7 @@ namespace Sofia.Plugins.Core.Search.WindowsForm
             // 
             // splitContainer1
             // 
+            this.splitContainer1.BackColor = System.Drawing.SystemColors.InactiveCaptionText;
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
             this.splitContainer1.Name = "splitContainer1";
@@ -92,9 +93,11 @@ namespace Sofia.Plugins.Core.Search.WindowsForm
             this.splitContainer1.Size = new System.Drawing.Size(603, 451);
             this.splitContainer1.SplitterDistance = 201;
             this.splitContainer1.TabIndex = 1;
+            this.splitContainer1.TabStop = false;
             // 
             // treeView1
             // 
+            this.treeView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView1.Location = new System.Drawing.Point(0, 0);
             this.treeView1.Name = "treeView1";
@@ -103,6 +106,7 @@ namespace Sofia.Plugins.Core.Search.WindowsForm
             // 
             // splitContainer2
             // 
+            this.splitContainer2.BackColor = System.Drawing.SystemColors.InactiveCaptionText;
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer2.Location = new System.Drawing.Point(0, 0);
             this.splitContainer2.Name = "splitContainer2";
@@ -121,6 +125,7 @@ namespace Sofia.Plugins.Core.Search.WindowsForm
             // 
             // listView1
             // 
+            this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1});
             this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -130,7 +135,7 @@ namespace Sofia.Plugins.Core.Search.WindowsForm
             this.listView1.Size = new System.Drawing.Size(398, 242);
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Tile;
+            this.listView1.View = System.Windows.Forms.View.SmallIcon;
             // 
             // webBrowser1
             // 
@@ -164,7 +169,7 @@ namespace Sofia.Plugins.Core.Search.WindowsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.Window;
+            this.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.Controls.Add(this.toolStripContainer1);
             this.Name = "UserInterface";
             this.Size = new System.Drawing.Size(603, 476);

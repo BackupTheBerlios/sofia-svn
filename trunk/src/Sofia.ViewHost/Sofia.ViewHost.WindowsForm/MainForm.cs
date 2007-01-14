@@ -24,9 +24,6 @@ namespace Sofia.ViewHost.WindowsForm
 {
     public partial class MainForm : ViewHostBase
     {
-
-        Hashtable _ViewTabs;
-
         public MainForm()
             : base()
         {
@@ -52,6 +49,7 @@ namespace Sofia.ViewHost.WindowsForm
             {
                 TabPage tabPage = new TabPage(view.Tags[0]);
                 tabPage.Name = view.ContentId.ToString("N");
+                tabPage.Location = new System.Drawing.Point(6, 6);
                 tabPage.Controls.Add(control);
                 tabPage.Tag = view;
                 _Pages.Controls.Add(tabPage);
@@ -80,7 +78,7 @@ namespace Sofia.ViewHost.WindowsForm
             IView view = _Pages.SelectedTab.Tag as IView;
             view.SaveTo(ViewFormat.Xml);
         }
-     
+
         public override void New()
         {
             IPlugin plugin = PluginManager["Sofia.Plugins.General.Contact"];

@@ -375,7 +375,7 @@ namespace Sofia.ViewHost.WindowsForm
             // 
             // _MainBar
             // 
-            this._MainBar.Dock = System.Windows.Forms.DockStyle.Left;
+            this._MainBar.Dock = System.Windows.Forms.DockStyle.None;
             this._MainBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.nouveauToolStripButton,
             this.ouvrirToolStripButton,
@@ -389,7 +389,7 @@ namespace Sofia.ViewHost.WindowsForm
             this.ToolStripButton});
             this._MainBar.Location = new System.Drawing.Point(3, 24);
             this._MainBar.Name = "_MainBar";
-            this._MainBar.Size = new System.Drawing.Size(239, 25);
+            this._MainBar.Size = new System.Drawing.Size(208, 25);
             this._MainBar.TabIndex = 8;
             this._MainBar.Text = "toolStrip1";
             // 
@@ -493,42 +493,43 @@ namespace Sofia.ViewHost.WindowsForm
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(6);
-            this.panel1.Size = new System.Drawing.Size(743, 457);
+            this.panel1.Size = new System.Drawing.Size(743, 482);
             this.panel1.TabIndex = 10;
             // 
             // _Pages
             // 
             this._Pages.Dock = System.Windows.Forms.DockStyle.Fill;
             this._Pages.Location = new System.Drawing.Point(6, 6);
+            this._Pages.Multiline = true;
             this._Pages.Name = "_Pages";
             this._Pages.SelectedIndex = 0;
-            this._Pages.Size = new System.Drawing.Size(731, 445);
+            this._Pages.Size = new System.Drawing.Size(731, 470);
             this._Pages.TabIndex = 6;
             // 
-            // toolStripContainer1
+            // _MainbarContainer
             // 
             // 
-            // toolStripContainer1.BottomToolStripPanel
+            // _MainbarContainer.BottomToolStripPanel
             // 
             this._MainbarContainer.BottomToolStripPanel.Controls.Add(this.statusStrip1);
             // 
-            // toolStripContainer1.ContentPanel
+            // _MainbarContainer.ContentPanel
             // 
             this._MainbarContainer.ContentPanel.AutoScroll = true;
             this._MainbarContainer.ContentPanel.Controls.Add(this.panel1);
             this._MainbarContainer.ContentPanel.Controls.Add(this._PanelTop);
-            this._MainbarContainer.ContentPanel.Size = new System.Drawing.Size(743, 457);
+            this._MainbarContainer.ContentPanel.Size = new System.Drawing.Size(743, 482);
             this._MainbarContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this._MainbarContainer.Location = new System.Drawing.Point(0, 0);
-            this._MainbarContainer.Name = "toolStripContainer1";
+            this._MainbarContainer.Name = "_MainbarContainer";
             this._MainbarContainer.Size = new System.Drawing.Size(743, 553);
             this._MainbarContainer.TabIndex = 11;
             this._MainbarContainer.Text = "toolStripContainer1";
             // 
-            // toolStripContainer1.TopToolStripPanel
+            // _MainbarContainer.TopToolStripPanel
             // 
-            this._MainbarContainer.TopToolStripPanel.Controls.Add(this._MainBar);
             this._MainbarContainer.TopToolStripPanel.Controls.Add(this._MainMenu);
+            this._MainbarContainer.TopToolStripPanel.Controls.Add(this._MainBar);
             // 
             // MainForm
             // 
