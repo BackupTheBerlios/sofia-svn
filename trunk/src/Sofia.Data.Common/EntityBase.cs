@@ -211,6 +211,23 @@ namespace Sofia.Data.Common
         #endregion
     }
 
+    public class DbFieldInt : DbField
+    {
+        private int _Value;
+        /// <summary>
+        /// Valeur du champ
+        /// </summary>
+        public new int Value
+        {
+            get { return _Value; }
+            set
+            {
+                base.Value = value; 
+                _Value = value;
+            }
+        }
+    }
+    
     /// <summary>
     /// Classe représentant une table de la base de données
     /// </summary>
@@ -266,8 +283,8 @@ namespace Sofia.Data.Common
 
             foreach (FieldInfo fieldInfo in GetFields())
             {
-                //Instanciation de la propriété
-                DbField fieldInstance = (DbField)System.Activator.CreateInstance(typeof(DbField));
+                //Instanciation de la propriété                
+                DbField fieldInstance = (DbField)System.Activator.CreateInstance(fieldInfo.FieldType);
                 fieldInstance.Name = fieldInfo.Name;
                 fieldInfo.SetValue(this, fieldInstance);
 
@@ -275,10 +292,6 @@ namespace Sofia.Data.Common
                 fieldInstance.Filtered = false;
                 fieldInstance.Value = null;
             }
-
-            //Mise à jour dans la base de données
-            EntityUpdater entityUpdater = new EntityUpdater(this);
-            entityUpdater.Check();
         }
 
         #endregion
