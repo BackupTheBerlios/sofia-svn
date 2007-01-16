@@ -28,7 +28,6 @@ namespace Sofia.ViewHost.WindowsForm
             : base()
         {
             InitializeComponent();
-            _ViewTabs = new Hashtable();
             PluginManager.AutoRegister();
 
             //Recherche
