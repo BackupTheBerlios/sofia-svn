@@ -8,33 +8,6 @@ using System.Data.Common;
 
 namespace Sofia.Data.Common
 {
-    public class DbTypeInfo
-    {
-        private DbType _DbType;
-        public DbType DbType
-        {
-            get { return _DbType; }
-        }
-
-        private int _Size;
-        public int Size
-        {
-            get { return _Size; }
-            set { _Size = value; }
-        }
-
-        public DbTypeInfo(DbType dbType, int size)
-        {
-            _DbType = dbType;
-            _Size = size;
-        }
-
-        public DbTypeInfo(DbType dbType)
-            : this(dbType, -1)
-        {
-        }
-    }
-
     #region Attributs DDL
 
     [AttributeUsage(AttributeTargets.Field)]
@@ -46,24 +19,19 @@ namespace Sofia.Data.Common
     }
 
     [AttributeUsage(AttributeTargets.Field)]
-    public class FieldTypeAttribute : Attribute
+    public class FieldSizeAttribute : Attribute
     {
-        public FieldTypeAttribute(DbType dbType, int size)
+        public FieldSizeAttribute(int size)
         {
-            _DbTypeInfo = new DbTypeInfo(dbType, size);
+            _Size = size;
         }
 
-        public FieldTypeAttribute(DbType dbType)
-            : this(dbType, -1)
-        {
-        }
-
-        private DbTypeInfo _DbTypeInfo;
-        public DbTypeInfo DbTypeInfo
+        private int _Size;
+        public int Size
         {
             get
             {
-                return _DbTypeInfo;
+                return _Size;
             }
         }
 
@@ -73,6 +41,7 @@ namespace Sofia.Data.Common
 
     #region Attributs de mise à jour
 
+    /*
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Class)]
     public class UpdatedAttribute : Attribute
     {
@@ -124,8 +93,12 @@ namespace Sofia.Data.Common
         }
 
     }
+    */
 
     #endregion
+
+
+    #region Classes de type de champ
 
     /// <summary>
     /// Classe représentant un champ lié à la base de données
@@ -138,6 +111,7 @@ namespace Sofia.Data.Common
         private object _Value;
         private bool _IsFiltered;
         private SqlSortDirection _SortDirection;
+        private DbType _DbType;
 
         #endregion
 
@@ -150,6 +124,15 @@ namespace Sofia.Data.Common
         {
             get { return _Name; }
             set { _Name = value; }
+        }
+
+        /// <summary>
+        /// Type DB sous-jacent
+        /// </summary>
+        public DbType DbType
+        {
+            get { return _DbType; }
+            set { _DbType = value; }
         }
 
         /// <summary>
@@ -208,12 +191,33 @@ namespace Sofia.Data.Common
             return (int)Value;
         }
 
+        /// <summary>
+        /// Initialise la valeur du champ à null
+        /// </summary>
+        public void Clear()
+        {
+            _Value = null;
+        }
+
+        /// <summary>
+        /// Permet de déterminer si la valeur du champ a été affectée
+        /// </summary>
+        /// <returns>Vrai si la valeur n'est pas affectée, faux sinon</returns>
+        public bool IsEmpty()
+        {
+            return _Value == null;
+        }
+
         #endregion
     }
 
-    public class DbFieldInt : DbField
+    /// <summary>
+    /// Champ de type int32
+    /// </summary>
+    public class DbInt32Field : DbField
     {
         private int _Value;
+
         /// <summary>
         /// Valeur du champ
         /// </summary>
@@ -222,12 +226,148 @@ namespace Sofia.Data.Common
             get { return _Value; }
             set
             {
-                base.Value = value; 
+                base.Value = value;
                 _Value = value;
             }
         }
+
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        public DbInt32Field()
+        {
+            DbType = DbType.Int32;
+        }
+
     }
-    
+
+    /// <summary>
+    /// Champ de type int64
+    /// </summary>
+    public class DbInt64Field : DbField
+    {
+        private long _Value;
+
+        /// <summary>
+        /// Valeur du champ
+        /// </summary>
+        public new long Value
+        {
+            get { return _Value; }
+            set
+            {
+                base.Value = value;
+                _Value = value;
+            }
+        }
+
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        public DbInt64Field()
+        {
+            DbType = DbType.Int64;
+        }
+
+    }
+
+    /// <summary>
+    /// Champ de type DateTime
+    /// </summary>
+    public class DbDateTimeField : DbField
+    {
+        private DateTime _Value;
+
+        /// <summary>
+        /// Valeur du champ
+        /// </summary>
+        public new DateTime Value
+        {
+            get { return _Value; }
+            set
+            {
+                base.Value = value;
+                _Value = value;
+            }
+        }
+
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        public DbDateTimeField()
+        {
+            DbType = DbType.DateTime;
+        }
+
+    }
+
+    /// <summary>
+    /// Champ de type String
+    /// </summary>
+    public class DbStringField : DbField
+    {
+        private int _Size;
+
+        /// <summary>
+        /// Taille du champ
+        /// </summary>
+        public int Size
+        {
+            get { return _Size; }
+            set { _Size = value; }
+        }
+
+        private string _Value;
+
+        /// <summary>
+        /// Valeur du champ
+        /// </summary>
+        public new string Value
+        {
+            get
+            {
+                return _Value;
+            }
+
+            set
+            {
+                // todo : lever l'exception si la valeur est > à size
+                // todo : retourner false si Value.Lengyh > Size
+                _Value = value;
+                if (Size != -1)
+                    if (value.Length > Size)
+                        _Value = value.Remove(Size);
+                base.Value = _Value;
+            }
+        }
+
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        public DbStringField()
+        {
+            DbType = DbType.String;
+        }
+    }
+
+    /// <summary>
+    /// Champ de type blob texte
+    /// </summary>
+    public class DbTextField : DbStringField
+    {
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        public DbTextField()
+        {
+            DbType = DbType.String;
+            Size = -1;
+        }
+    }
+
+    #endregion
+
+
     /// <summary>
     /// Classe représentant une table de la base de données
     /// </summary>
@@ -291,6 +431,9 @@ namespace Sofia.Data.Common
                 //Initialisation de l'objet
                 fieldInstance.Filtered = false;
                 fieldInstance.Value = null;
+
+                if (fieldInfo.FieldType == typeof(DbStringField))
+                    (fieldInstance as DbStringField).Size = GetDbTypeSize(fieldInfo);
             }
         }
 
@@ -386,6 +529,8 @@ namespace Sofia.Data.Common
                         field.Value = _DbDataReader[field.Name];
                     }
                 }
+
+               //TODO : DataHistory.add(this);
             }
 
             return hasRecords;
@@ -551,7 +696,13 @@ namespace Sofia.Data.Common
             else
                 return BuildQuery(GetDefaultInsert, IsAffectedField, true);
         }
-
+        /// <summary>
+        /// Insertion d'un enregistrement
+        /// </summary>
+        public bool Insert()
+        {
+            return BuildQuery(GetDefaultInsert, IsAffectedField, true);
+        }
         /// <summary>
         /// Permet de déterminer si un enregistrement existe en se basant sur sa clé primaire
         /// </summary>
@@ -640,7 +791,7 @@ namespace Sofia.Data.Common
 
             if (fieldInfo != null)
             {
-                string type = _Server.SgbdDDL.GetDDLType(GetDbType(fieldInfo), GetDbTypeSize(fieldInfo), IsPrimaryKeyField(fieldInfo));
+                string type = _Server.SgbdDDL.GetDDLType(field.DbType, GetDbTypeSize(fieldInfo), IsPrimaryKeyField(fieldInfo));
                 return String.Format("{0} {1}", field.Name, type);
             }
             else return "";
@@ -912,27 +1063,8 @@ namespace Sofia.Data.Common
             {
                 object fieldValue = fieldInfo.GetValue(this);
                 DbField field = (DbField)fieldValue;
-                DbType dbType = GetDbType(fieldInfo);
+                DbType dbType = field.DbType;
                 fbQuery.AddParameter(field.Name, dbType, field.Value);
-            }
-        }
-
-        /// <summary>
-        /// Permet d'obtenir le type de données associé au champ
-        /// </summary>
-        /// <param name="fieldInfo">Le champ</param>
-        /// <returns>Un type de donnée</returns>
-        private DbType GetDbType(FieldInfo fieldInfo)
-        {
-            object[] attributes = fieldInfo.GetCustomAttributes(typeof(FieldTypeAttribute), true);
-            if (attributes.Length != 0)
-            {
-                FieldTypeAttribute attribute = attributes[0] as FieldTypeAttribute;
-                return attribute.DbTypeInfo.DbType;
-            }
-            else
-            {
-                return DbType.String;
             }
         }
 
@@ -943,18 +1075,17 @@ namespace Sofia.Data.Common
         /// <returns>Un entier représentant la taille du type de donnée</returns>
         private int GetDbTypeSize(FieldInfo fieldInfo)
         {
-            object[] attributes = fieldInfo.GetCustomAttributes(typeof(FieldTypeAttribute), true);
+            object[] attributes = fieldInfo.GetCustomAttributes(typeof(FieldSizeAttribute), true);
             if (attributes.Length != 0)
             {
-                FieldTypeAttribute attribute = attributes[0] as FieldTypeAttribute;
-                return attribute.DbTypeInfo.Size;
+                FieldSizeAttribute attribute = attributes[0] as FieldSizeAttribute;
+                return attribute.Size;
             }
             else
             {
-                return 0;
+                return -1;
             }
         }
-
 
         #endregion
 
@@ -1053,4 +1184,5 @@ namespace Sofia.Data.Common
         Asc,
         Desc
     }
+}
 }
