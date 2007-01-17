@@ -8,25 +8,45 @@ using System.Data.Common;
 
 namespace Sofia.Data.Common
 {
-    #region Attributs DDL
+    #region DDL attributes
 
+    /// <summary>
+    /// Marks the field as primary key
+    /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
     public class PrimaryKeyAttribute : Attribute
     {
+        /// <summary>
+        /// Initialize a new instance of the class
+        /// </summary>
         public PrimaryKeyAttribute()
         {
         }
     }
 
+    /// <summary>
+    /// Marks the fiels as sized field and sets its size.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
     public class FieldSizeAttribute : Attribute
     {
+        /// <summary>
+        /// Initialize a new instance of the class.
+        /// </summary>
+        /// <param name="size">The field size.</param>
         public FieldSizeAttribute(int size)
         {
             _Size = size;
         }
 
+        /// <summary>
+        /// The field size.
+        /// </summary>
         private int _Size;
+
+        /// <summary>
+        /// Gets the field size.
+        /// </summary>
         public int Size
         {
             get
@@ -39,7 +59,7 @@ namespace Sofia.Data.Common
 
     #endregion
 
-    #region Attributs de mise à jour
+    #region Metadata update attributes
 
     /*
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Class)]
@@ -97,129 +117,121 @@ namespace Sofia.Data.Common
 
     #endregion
 
-
-    #region Classes de type de champ
+    #region Field type classes
 
     /// <summary>
-    /// Classe représentant un champ lié à la base de données
+    /// Represents a database field.
     /// </summary>
     public class DbField
     {
-        #region Champs privés
-
+        #region Private fields
+        /// <summary>
+        /// The field name.
+        /// </summary>
         private string _Name;
+        /// <summary>
+        /// The field value.
+        /// </summary>
         private object _Value;
+        /// <summary>
+        /// Indicates the field is used in WHERE clause.
+        /// </summary>
         private bool _IsFiltered;
+        /// <summary>
+        /// Indicates the field is used in a ORDER BY clause. Holds the sort direction.
+        /// </summary>
         private SqlSortDirection _SortDirection;
+        /// <summary>
+        /// Holds the underlying database type.
+        /// </summary>
         private DbType _DbType;
-
         #endregion
 
-        #region Propriétés
-
+        #region Public properties
         /// <summary>
-        /// Nom du champ
+        /// Gets or sets the field name.
         /// </summary>
         public string Name
         {
             get { return _Name; }
             set { _Name = value; }
         }
-
         /// <summary>
-        /// Type DB sous-jacent
+        /// Gets or sets the underlying database type.
         /// </summary>
         public DbType DbType
         {
             get { return _DbType; }
             set { _DbType = value; }
         }
-
         /// <summary>
-        /// Valeur du champ
+        /// Gets or sets the field value.
         /// </summary>
         public object Value
         {
             get { return _Value; }
             set { _Value = value; }
         }
-
         /// <summary>
-        /// Détermine si le champ entre dans une clause WHERE
+        /// Gets or sets the field's presence in the WHERE clause.
         /// </summary>
         public bool Filtered
         {
             get { return _IsFiltered; }
             set { _IsFiltered = value; }
         }
-
         /// <summary>
-        /// Indique si le champ entre dans le cadre d'un tri
+        /// Gets or sets the field's presence in the ORDER BY clause. Gets or sets its sort direction.
         /// </summary>
         public SqlSortDirection SortDirection
         {
             get { return _SortDirection; }
             set { _SortDirection = value; }
         }
-
         #endregion
 
         #region Méthodes publiques
-
         /// <summary>
-        /// Constructeur
+        /// Initialize a new instance of the class.
         /// </summary>
-        /// <param name="name">Nom du champ</param>
-        /// <param name="isPrimaryKey">Indique si ce champ entre dans la composition de la clé primaire</param>
+        /// <param name="name">The field name</param>
         public DbField(string name)
         {
             _Name = name;
         }
-
         /// <summary>
-        /// Constructeur par défaut
+        /// Default constructor
         /// </summary>
         public DbField() : this("") { }
-
         /// <summary>
-        /// Valeur entière de l'objet Value
-        /// </summary>
-        /// <remarks>Pas de vérification de type</remarks>
-        /// <returns>Un entier</returns>
-        public int ToInt()
-        {
-            return (int)Value;
-        }
-
-        /// <summary>
-        /// Initialise la valeur du champ à null
+        /// Sets null to field value.
         /// </summary>
         public void Clear()
         {
             _Value = null;
         }
-
         /// <summary>
-        /// Permet de déterminer si la valeur du champ a été affectée
+        /// Indicates if th field value is undefined
         /// </summary>
-        /// <returns>Vrai si la valeur n'est pas affectée, faux sinon</returns>
+        /// <returns>True if the value is not assigned, else false.</returns>
         public bool IsEmpty()
         {
             return _Value == null;
         }
-
         #endregion
     }
 
     /// <summary>
-    /// Champ de type int32
+    /// Represents a int32 field.
     /// </summary>
     public class DbInt32Field : DbField
     {
-        private int _Value;
-
         /// <summary>
-        /// Valeur du champ
+        /// Holds the int32 value.
+        /// </summary>
+        private int _Value;
+        /// <summary>
+        /// Gets or sets the int32 field value.
         /// </summary>
         public new int Value
         {
@@ -230,26 +242,26 @@ namespace Sofia.Data.Common
                 _Value = value;
             }
         }
-
         /// <summary>
-        /// Constructeur
+        /// Initialize a new instance of the class. Sets the underlying database type to DbType.Int32.
         /// </summary>
         public DbInt32Field()
         {
             DbType = DbType.Int32;
         }
-
     }
 
     /// <summary>
-    /// Champ de type int64
+    /// Represents a int64 field.
     /// </summary>
     public class DbInt64Field : DbField
     {
-        private long _Value;
-
         /// <summary>
-        /// Valeur du champ
+        /// Holds the int64 value.
+        /// </summary>
+        private long _Value;
+        /// <summary>
+        /// Gets or sets the int64 field value.
         /// </summary>
         public new long Value
         {
@@ -260,26 +272,26 @@ namespace Sofia.Data.Common
                 _Value = value;
             }
         }
-
         /// <summary>
-        /// Constructeur
+        /// Initialize a new instance of the class. Sets the underlying database type to DbType.Int64.
         /// </summary>
         public DbInt64Field()
         {
             DbType = DbType.Int64;
         }
-
     }
 
     /// <summary>
-    /// Champ de type DateTime
+    /// Represents a DateTime field.
     /// </summary>
     public class DbDateTimeField : DbField
     {
-        private DateTime _Value;
-
         /// <summary>
-        /// Valeur du champ
+        /// Holds the DateTime field value.
+        /// </summary>
+        private DateTime _Value;
+        /// <summary>
+        /// Gets or sets the DateTime field value.
         /// </summary>
         public new DateTime Value
         {
@@ -290,37 +302,38 @@ namespace Sofia.Data.Common
                 _Value = value;
             }
         }
-
         /// <summary>
-        /// Constructeur
+        /// Initialize a new instance of the class. Sets the underlying database type to DbType.DateTime.
         /// </summary>
         public DbDateTimeField()
         {
             DbType = DbType.DateTime;
         }
-
     }
 
     /// <summary>
-    /// Champ de type String
+    /// Represents a string field.
     /// </summary>
     public class DbStringField : DbField
     {
-        private int _Size;
-
         /// <summary>
-        /// Taille du champ
+        /// Holds the field size.
+        /// </summary>
+        private int _Size;
+        /// <summary>
+        /// Gets or sets the field size.
         /// </summary>
         public int Size
         {
             get { return _Size; }
             set { _Size = value; }
         }
-
-        private string _Value;
-
         /// <summary>
-        /// Valeur du champ
+        /// Holds the string field value.
+        /// </summary>
+        private string _Value;
+        /// <summary>
+        /// Gets or sets the string field value. Crop value if value size is greater than the field size.
         /// </summary>
         public new string Value
         {
@@ -328,10 +341,9 @@ namespace Sofia.Data.Common
             {
                 return _Value;
             }
-
             set
             {
-                // todo : lever l'exception si la valeur est > à size
+                // todo : lever l'exception si Value.Lengyh > Size
                 // todo : retourner false si Value.Lengyh > Size
                 _Value = value;
                 if (Size != -1)
@@ -340,23 +352,22 @@ namespace Sofia.Data.Common
                 base.Value = _Value;
             }
         }
-
         /// <summary>
-        /// Constructeur
+        /// Initialize a new instance of the class. Sets the underlying database type to DbType.String.
         /// </summary>
         public DbStringField()
         {
             DbType = DbType.String;
         }
     }
-
     /// <summary>
-    /// Champ de type blob texte
+    /// Represents a text blob field.
     /// </summary>
     public class DbTextField : DbStringField
     {
         /// <summary>
-        /// Constructeur
+        /// Initialize a new instance of the class. Sets the underlying database type to DbType.String.
+        /// Sets the size to -1.
         /// </summary>
         public DbTextField()
         {
@@ -364,27 +375,17 @@ namespace Sofia.Data.Common
             Size = -1;
         }
     }
-
     #endregion
 
-
     /// <summary>
-    /// Classe représentant une table de la base de données
+    /// Represents a database table.
     /// </summary>
     public abstract class EntityBase
     {
-        #region Enumerations
-
-        public enum FieldListMode
-        {
-            Select,
-            Insert
-        }
-
-        #endregion
-
-        #region Champs privés
-
+        #region Private fields
+        /// <summary>
+        /// Holds the database connexion object.
+        /// </summary>
         private Server _Server;
         private DbDataReader _DbDataReader;
         private List<SqlJoin> _Joins;
@@ -416,6 +417,10 @@ namespace Sofia.Data.Common
 
         #region Contructeur
 
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        /// <param name="server">Objet de connexion à la base de données</param>
         public EntityBase(Server server)
         {
             _Server = server;
@@ -435,6 +440,10 @@ namespace Sofia.Data.Common
                 if (fieldInfo.FieldType == typeof(DbStringField))
                     (fieldInstance as DbStringField).Size = GetDbTypeSize(fieldInfo);
             }
+
+            //Mise à jour dans la base de données
+            EntityUpdater entityUpdater = new EntityUpdater(this);
+            entityUpdater.Check();
         }
 
         #endregion
@@ -530,7 +539,7 @@ namespace Sofia.Data.Common
                     }
                 }
 
-               //TODO : DataHistory.add(this);
+                //TODO : DataHistory.add(this);
             }
 
             return hasRecords;
@@ -1185,4 +1194,4 @@ namespace Sofia.Data.Common
         Desc
     }
 }
-}
+
