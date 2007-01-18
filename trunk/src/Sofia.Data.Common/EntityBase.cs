@@ -8,117 +8,668 @@ using System.Data.Common;
 
 namespace Sofia.Data.Common
 {
-    #region DDL attributes
-
+    #region EntityBase class
     /// <summary>
-    /// Marks the field as primary key
+    /// Represents a database table.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Field)]
-    public class PrimaryKeyAttribute : Attribute
+    public abstract class EntityBase
     {
+        #region Private fields
         /// <summary>
-        /// Initialize a new instance of the class
+        /// Holds the database connexion object.
         /// </summary>
-        public PrimaryKeyAttribute()
+        private Server _Server;
+        private DbDataReader _DbDataReader;
+        #endregion
+        #region Public properties
+        /// <summary>
+        /// Gets the type name.
+        /// </summary>
+        public string Name
         {
+            get
+            {
+                return this.GetType().Name;
+            }
         }
-    }
-
-    /// <summary>
-    /// Marks the fiels as sized field and sets its size.
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Field)]
-    public class FieldSizeAttribute : Attribute
-    {
+        /// <summary>
+        /// Gets the database connexion object.
+        /// </summary>
+        public Server Server
+        {
+            get
+            {
+                return _Server;
+            }
+        }
+        #endregion
+        #region Public methods
+        #region Initialization
         /// <summary>
         /// Initialize a new instance of the class.
         /// </summary>
-        /// <param name="size">The field size.</param>
-        public FieldSizeAttribute(int size)
+        /// <param name="server">Database connexion object</param>
+        public EntityBase(Server server)
         {
-            _Size = size;
-        }
+            _Server = server;
 
-        /// <summary>
-        /// The field size.
-        /// </summary>
-        private int _Size;
-
-        /// <summary>
-        /// Gets the field size.
-        /// </summary>
-        public int Size
-        {
-            get
+            //Initialize fields instance based upon the public members in the derived class
+            foreach (FieldInfo fieldInfo in GetFields())
             {
-                return _Size;
+                //New field instance 
+                DbField fieldInstance = (DbField)System.Activator.CreateInstance(fieldInfo.FieldType);
+                fieldInstance.Name = fieldInfo.Name;
+                fieldInfo.SetValue(this, fieldInstance);
+
+                //Initialization of the field instance's properties
+                fieldInstance.Filtered = false;
+                fieldInstance.Value = null;
+                if (fieldInfo.FieldType == typeof(DbStringField))
+                    (fieldInstance as DbStringField).Size = GetDbTypeSize(fieldInfo);
+            }
+#if AUTOUPDATE            
+            EntityUpdater entityUpdater = new EntityUpdater(this);
+            entityUpdater.Check();
+#endif
+        }
+        #endregion
+        #region Field's properties reseting
+        /// <summary>
+        /// Resets the sort for each field
+        /// </summary>
+        public void ResetSort()
+        {
+            foreach (FieldInfo fieldInfo in GetFields())
+            {
+                object fieldValue = fieldInfo.GetValue(this);
+                DbField field = (DbField)fieldValue;
+                field.SortDirection = SqlSortDirection.None;
             }
         }
+        /// <summary>
+        /// Resets each field value
+        /// </summary>
+        public void FlushFields()
+        {
+            foreach (FieldInfo fieldInfo in GetFields())
+            {
+                object fieldValue = fieldInfo.GetValue(this);
+                DbField field = (DbField)fieldValue;
+                field.Clear();
+            }
+        }
+        /// <summary>
+        /// Resets the Filtered property of each field
+        /// </summary>
+        public void ResetFilters()
+        {
+            foreach (FieldInfo fieldInfo in GetFields())
+            {
+                object fieldValue = fieldInfo.GetValue(this);
+                DbField field = (DbField)fieldValue;
+                field.Filtered = false;
+            }
+        }
+        #endregion
+        #region Reading
+        /// <summary>
+        /// Invoke the Read method of the internal DbDataReader and sets each field's value property
+        /// with the content of the internal DbDataReader.
+        /// </summary>
+        /// <returns>True if any record can be read, else false.</returns>
+        public bool Read()
+        {
+            bool hasRecords;
+            hasRecords = _DbDataReader.Read();
 
+            if (hasRecords)
+            {
+                foreach (FieldInfo fieldInfo in GetFields())
+                {
+                    object fieldValue = fieldInfo.GetValue(this);
+                    DbField field = (DbField)fieldValue;
+                    if (ReaderHasRow(field))
+                    {
+                        field.Value = _DbDataReader[field.Name];
+                    }
+                }
+                //TODO : DataHistory.add(this);
+            }
+
+            return hasRecords;
+        }
+        #endregion
+        #region Frontend DML methods
+        /// <summary>
+        /// Indicates if a record already exists in the database table, based upon the primary key value.
+        /// </summary>
+        /// <returns>True if the record already exists, else false.</returns>
+        public bool Exists()
+        {
+            return BuildQuery(GetPrimarySelect, IsPrimaryKeyField, false);
+        }
+        /// <summary>
+        /// Fills the properties value with the result of a SELECT query.
+        /// </summary>
+        /// <returns>True if no errors, else false.</returns>
+        public bool Fill()
+        {
+            return BuildQuery(GetDefaultSelect, IsPrimaryKeyField, false);
+        }
+        /// <summary>
+        /// Fills the properties vallue with the result of a SELECT WHERE query. The WHERE clause is builded with the
+        /// filtered fields.
+        /// </summary>
+        // <returns>True if no errors, else false.</returns>
+        public bool Filter()
+        {
+            return BuildQuery(GetFilteredSelect, IsFilteredField, false);
+        }
+        /// <summary>
+        /// Executes an INSERT query if the primary key value does not exists 
+        /// in the database table, or an UPDATE query if the primary key value 
+        /// already exists. The values updated in the database are picked up 
+        /// from the fields assigned value property.
+        /// </summary>
+        /// <returns>True if no errors, else false.</returns>
+        public bool Update()
+        {
+            if (Exists())
+                return BuildQuery(GetDefaultUpdate, IsAffectedField, true);
+            else
+                return BuildQuery(GetDefaultInsert, IsAffectedField, true);
+        }
+        /// <summary>
+        /// Executes an INSERT query. The values updated in the database are 
+        /// picked up from the fields assigned value property.
+        /// </summary>
+        /// <returns>True if no errors, else false.</returns>
+        public bool Insert()
+        {
+            return BuildQuery(GetDefaultInsert, IsAffectedField, true);
+        }
+        /// <summary>
+        /// Deletes the database table record with the specified primary key value.
+        /// </summary>
+        /// <returns>True if no errors, else false.</returns>
+        public bool Delete()
+        {
+            return BuildQuery(GetDefaultDelete, IsPrimaryKeyField, true);
+        }
+        /// <summary>
+        /// Creates the database table with the name of the derived class name.
+        /// </summary>
+        /// <returns>True if no errors, else false.</returns>
+        public bool Create()
+        {
+            bool result;
+            try
+            {
+                result = BuildQuery(GetDefaultCreate, null, true);
+                result = result && BuildQuery(GetDefaultAddPrimaryConstraint, null, true);
+
+                return result;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        #endregion
+        #endregion
+        #region Private methods
+        #region Fields property reflection methods
+        /// <summary>
+        /// Gets the size attributed to the specified field.
+        /// </summary>
+        /// <param name="fieldInfo">A field property info.</param>
+        /// <returns>The integer representing the field's size.</returns>
+        private int GetDbTypeSize(FieldInfo fieldInfo)
+        {
+            object[] attributes = fieldInfo.GetCustomAttributes(typeof(FieldSizeAttribute), true);
+            if (attributes.Length != 0)
+            {
+                FieldSizeAttribute attribute = attributes[0] as FieldSizeAttribute;
+                return attribute.Size;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+        #endregion
+        #region Reading
+        /// <summary>
+        /// Indicates a row exists in the internal DbDataReader, based on the field name.
+        /// </summary>
+        /// <param name="field">A field object.</param>
+        /// <returns>True if the row exists, else false.</returns>
+        private bool ReaderHasRow(DbField field)
+        {
+            try
+            {
+                _DbDataReader.GetOrdinal(field.Name);
+                return true;
+            }
+            catch (IndexOutOfRangeException)
+            {
+                return false;
+            }
+        }
+        #endregion
+        #region Low-level querying methods
+        /// <summary>
+        /// Invokes the ExecuteReader method on the internal Query object. Initialize the internal
+        /// DbDataReader object.
+        /// </summary>
+        /// <param name="query">A Query object.</param>
+        /// <returns>True if no errors, else false.</returns>
+        private bool ExecuteReader(Query query)
+        {
+            if (_DbDataReader != null)
+                _DbDataReader.Close();
+
+            //Query execution
+            _DbDataReader = query.ExecuteReader();
+
+            if (_DbDataReader == null)
+                return false;
+
+            //First DbDataReader Read in order to initialize field's value property
+            return Read();
+        }
+        /// <summary>
+        /// Invokes the ExecuteNonQuery method on the internal Query object.
+        /// </summary>
+        /// <param name="query">A Query object</param>
+        /// <returns>True if no errors, else false.</returns>
+        protected bool ExecuteNonQuery(Query query)
+        {
+            //Query execution
+            return query.ExecuteNonQuery();
+        }
+        #endregion
+        #region Field searching
+        /// <summary>
+        /// Predicate delegate based upon the field's Filtered property.
+        /// </summary>
+        /// <param name="fieldInfo">A Field property info.</param>
+        /// <returns>True if the field is Filtered, else false.</returns>
+        private bool IsFilteredField(FieldInfo fieldInfo)
+        {
+            DbField field = (DbField)fieldInfo.GetValue(this);
+            return field.Filtered;
+        }
+        /// <summary>
+        /// Predicate delegate based upon the field's PrimaryKey attribute.
+        /// </summary>
+        /// <param name="fieldInfo">A Field property info.</param>
+        /// <returns>True if the field is marked as primary key, else false.</returns>
+        private bool IsPrimaryKeyField(FieldInfo fieldInfo)
+        {
+            foreach (object attribute in fieldInfo.GetCustomAttributes(true))
+            {
+                if (attribute is PrimaryKeyAttribute)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        /// <summary>
+        /// Predicate delegate based upon the field's SortDirection property.
+        /// </summary>
+        /// <param name="fieldInfo">A Field property info.</param>
+        /// <returns>True if the field is sorted, else false.</returns>
+        private bool IsSortedField(FieldInfo fieldInfo)
+        {
+            DbField field = (DbField)fieldInfo.GetValue(this);
+            return field.SortDirection != SqlSortDirection.None;
+        }
+        /// <summary>
+        /// Predicate delegate based upon the field's value.
+        /// </summary>
+        /// <param name="fieldInfo">A Field property info.</param>
+        /// <returns>True if the field value is assigned, else false.</returns>
+        private bool IsAffectedField(FieldInfo fieldInfo)
+        {
+            DbField field = (DbField)fieldInfo.GetValue(this);
+            return !field.IsEmpty();
+        }
+        /// <summary>
+        /// Predicate delegate based upon the PrimaryKey attribute and the field's value
+        /// </summary>
+        /// <param name="fieldInfo">A Field property info.</param>
+        /// <returns>True if the fied value is assigned and the field is a primary key, else false.</returns>
+        private bool IsAffectedNonPrimaryField(FieldInfo fieldInfo)
+        {
+            DbField field = (DbField)fieldInfo.GetValue(this);
+            return (field.Value != null && !IsPrimaryKeyField(fieldInfo));
+        }
+        /// <summary>
+        /// Gets the derived class public member list.
+        /// </summary>
+        /// <returns>A generic list of FieldInfo objects.</returns>
+        private List<FieldInfo> GetFields()
+        {
+            return new List<FieldInfo>(this.GetType().GetFields());
+        }
+        /// <summary>
+        /// Gets a field with the specified name.
+        /// </summary>
+        /// <param name="name">Field name.</param>
+        /// <returns>A field property info</returns>
+        private FieldInfo GetField(string name)
+        {
+            List<FieldInfo> fields = new List<FieldInfo>(this.GetType().GetFields());
+            return fields.Find(delegate(FieldInfo field) { return field.Name == name; });
+        }
+        #endregion
+        #region String field list building
+        /// <summary>
+        /// Field name string transformation action delegate.
+        /// </summary>
+        /// <param name="field">A field object.</param>
+        /// <returns>A string containing the field name transformed.</returns>
+        private delegate string FieldTransformation(DbField field);
+        /// <summary>
+        /// Transforms the field to a parameterized field.
+        /// <example>FIELD => @FIELD</example>
+        /// </summary>
+        /// <param name="field">A field object.</param>
+        /// <returns>A string containing the field name transformed.</returns>
+        private string TransformToParametizedField(DbField field)
+        {
+            return "@" + field.Name;
+        }
+        /// <summary>
+        /// Transforms the field to an ordered field.
+        /// <example>FIELD => FIELD Asc</example>
+        /// </summary>
+        /// <param name="field">A field object.</param>
+        /// <returns>A string containing the field name transformed.</returns>
+        private string TransformToOrderedField(DbField field)
+        {
+            return field.Name + " " + Enum.GetName(typeof(SqlSortDirection), field.SortDirection);
+        }
+        /// <summary>
+        /// Transforms the field to a parameterized field with assignation.
+        /// <example>FIELD => FIELD = @FIELD</example>
+        /// </summary>
+        /// <param name="field">A field object.</param>
+        /// <returns>A string containing the field name transformed.</returns>
+        private string TransformToParametizedAffectationField(DbField field)
+        {
+            return field.Name + " = @" + field.Name;
+        }
+        /// <summary>
+        /// Transforms the field to a typed field.
+        /// <example>FIELD => FIELD VARCHAR(32)</example>
+        /// </summary>
+        /// <param name="field">A field object.</param>
+        /// <returns>A string containing the field name transformed.</returns>
+        private string TransformToTypedField(DbField field)
+        {
+            FieldInfo fieldInfo = GetField(field.Name);
+
+            if (fieldInfo != null)
+            {
+                string type = _Server.SgbdDDL.GetDDLType(field.DbType, GetDbTypeSize(fieldInfo), IsPrimaryKeyField(fieldInfo));
+                return String.Format("{0} {1}", field.Name, type);
+            }
+            else return "";
+        }
+        /// <summary>
+        /// Gets a string field list with the specified separator. The fields match the specified match 
+        /// predicate delegate and their names are transformed by the specified 
+        /// string transformation action delegate.
+        /// </summary>
+        /// <param name="match">A match predicate delegate.</param>
+        /// <param name="transformation">A string transformation action delegate.</param>
+        /// <param name="separator">The string that separates fields.</param>
+        /// <returns>A string field list with the transformed fields name separated by the specified separator.</returns>
+        private string GetFieldList(Predicate<FieldInfo> match, FieldTransformation transformation, string separator)
+        {
+            string fieldList = "";
+            int fieldIndex = 0;
+            List<FieldInfo> fields;
+
+            //Public member match
+            if (match != null)
+                fields = GetFields().FindAll(match);
+            else
+                fields = GetFields();
+
+            //Public filtered members iteration
+            foreach (FieldInfo fieldInfo in fields)
+            {
+                string fieldName;
+
+                object fieldValue = fieldInfo.GetValue(this);
+                DbField field = (DbField)fieldValue;
+
+                //Transform the field name
+                if (transformation != null)
+                    fieldName = transformation(field);
+                else
+                    fieldName = fieldInfo.Name;
+
+                //Build the SQL text
+                if (fieldIndex == 0)
+                    fieldList = fieldName;
+                else
+                    fieldList = fieldList + separator + fieldName;
+
+                fieldIndex++;
+            }
+
+            return fieldList;
+
+        }
+        /// <summary>
+        /// Gets a string field list. The fields match the specified match 
+        /// predicate delegate and their names are transformed by the specified 
+        /// string transformation action delegate.
+        /// </summary>
+        /// <param name="match">A match predicate delegate.</param>
+        /// <param name="transformation">A string transformation action delegate.</param>
+        /// <returns>A string field list with the transformed fields name separated by commas.</returns>
+        private string GetFieldList(Predicate<FieldInfo> match, FieldTransformation transformation)
+        {
+            return GetFieldList(match, transformation, ",");
+        }
+        /// <summary>
+        /// Gets a string field list. The fields match the specified match 
+        /// predicate delegate.
+        /// </summary>
+        /// <param name="match">A match predicate delegate.</param>
+        /// <returns>A string field list separated by commas.</returns>
+        private string GetFieldList(Predicate<FieldInfo> match)
+        {
+            return GetFieldList(match, null, ",");
+        }
+        /// <summary>
+        /// Gets the string field list.
+        /// </summary>
+        /// <returns>The string field list separated by commas.</returns>
+        private string GetFieldList()
+        {
+            return GetFieldList(null, null, ",");
+        }
+        #endregion
+        #region SQL command text building
+        /// <summary>
+        /// SQL clause builder delegate.
+        /// </summary>
+        /// <returns>A string SQL clause.</returns>
+        private delegate string BuildSqlClauseDelegate();
+        /// <summary>
+        /// Builds a SELECT * clause with a WHERE clause that filters the primary key value.
+        /// </summary>
+        /// <returns>A SELECT SQL clause.</returns>
+        private string GetDefaultSelect()
+        {
+            string fieldList = GetFieldList();
+            string whereClause = GetFieldList(IsPrimaryKeyField, TransformToParametizedAffectationField, " AND ");
+            string sortedList = GetFieldList(IsSortedField, TransformToOrderedField);
+
+            if (sortedList.Length != 0)
+                sortedList = "ORDDER BY " + sortedList;
+
+            return string.Format("SELECT {0} FROM {1} WHERE {2} {3}", fieldList, Name, whereClause, sortedList);
+        }
+        /// <summary>
+        /// Builds a SELECT primary key fields clause with a WHERE clause that filters the primary key value.
+        /// Génération d'une requête SELECT ne prenant en compte que la clé primaire. Sert pour vérifier l'existance d'un enregistrement.
+        /// </summary>
+        /// <returns>A SELECT SQL clause.</returns>
+        private string GetPrimarySelect()
+        {
+            string fieldList = GetFieldList(IsPrimaryKeyField);
+            string whereClause = GetFieldList(IsPrimaryKeyField, TransformToParametizedAffectationField, " AND ");
+            return string.Format("SELECT {0} FROM {1} WHERE {2}", fieldList, Name, whereClause);
+        }
+        /// <summary>
+        /// Builds a SELECT * clause with a WHERE clause builded with the filtered fields.
+        /// </summary>
+        /// <returns>A SELECT SQL clause.</returns>
+        private string GetFilteredSelect()
+        {
+            string fieldList = GetFieldList();
+
+            string whereClause = GetFieldList(IsFilteredField, TransformToParametizedAffectationField, " AND ");
+            if (whereClause.Length > 0)
+                whereClause = "WHERE " + whereClause;
+
+            string sortedList = GetFieldList(IsSortedField, TransformToOrderedField);
+            if (sortedList.Length != 0)
+                sortedList = "ORDER BY " + sortedList;
+
+            return string.Format("SELECT {0} FROM {1} {2} {3}", fieldList, Name, whereClause, sortedList);
+        }
+        /// <summary>
+        /// Builds an INSERT clause with the assigned fields.
+        /// </summary>
+        /// <returns>An INSERT SQL clause.</returns>
+        private string GetDefaultInsert()
+        {
+            string fieldList = GetFieldList(IsAffectedField);
+            string parameterList = GetFieldList(IsAffectedField, TransformToParametizedField);
+            return string.Format("INSERT INTO {0} ({1}) VALUES ({2})", Name, fieldList, parameterList);
+        }
+        /// <summary>
+        /// Builds an UPDATE clause with th assigned fields.
+        /// </summary>
+        /// <returns>An UPDATE SQL clause.</returns>
+        private string GetDefaultUpdate()
+        {
+            string fieldList = GetFieldList(IsAffectedNonPrimaryField, TransformToParametizedAffectationField);
+            if (fieldList.Length == 0)
+                return "";
+
+            string whereClause = GetFieldList(IsPrimaryKeyField, TransformToParametizedAffectationField, " AND ");
+            return string.Format("UPDATE {0} SET {1} WHERE {2}", Name, fieldList, whereClause);
+        }
+        /// <summary>
+        /// Builds a DELETE clause with a WHERE clause builded with the primary key value.
+        /// </summary>
+        /// <returns>A DELETE SQL clause.</returns>
+        private string GetDefaultDelete()
+        {
+            string parameterList = GetFieldList(IsPrimaryKeyField, TransformToParametizedAffectationField, " AND ");
+            return string.Format("DELETE FROM {0} WHERE {1}", Name, parameterList);
+        }
+        /// <summary>
+        /// Builds a CREATE TABLE clause. Uses the field properties and
+        /// attributes of the derived class.
+        /// </summary>
+        /// <returns>A CREATE TABLE SQL clause.</returns>
+        private string GetDefaultCreate()
+        {
+            string fieldList = GetFieldList(null, TransformToTypedField);
+            return string.Format("CREATE TABLE {0} ({1})", Name, fieldList);
+        }
+        /// <summary>
+        /// Builds an SQL clause to add primary key constaint to a database table.
+        /// </summary>
+        /// <returns>An ALTER TABLE ADD CONTRAINT PRIMARY KEY clause.</returns>
+        private string GetDefaultAddPrimaryConstraint()
+        {
+            string fieldList = GetFieldList(IsPrimaryKeyField);
+            return string.Format("ALTER TABLE {0} ADD CONSTRAINT PK_{0} PRIMARY KEY ({1});", Name, fieldList);
+        }
+        /// <summary>
+        /// Builds the whole SQL commant text.
+        /// </summary>
+        /// <param name="buildSqlClauseDelegate">A SQL clause builder delegate.</param>
+        /// <param name="parametersFillingPredicate">A predicate delagate to indicate the way of initializing query parameters value.</param>
+        /// <param name="nonQuery">Indicates if the query is a DDL query.</param>
+        /// <returns>The query SQL command text.</returns>
+        private bool BuildQuery(BuildSqlClauseDelegate buildSqlClauseDelegate,
+            Predicate<FieldInfo> parametersFillingPredicate, bool nonQuery)
+        {
+            //Instanciate the Query object
+            Query fbQuery = new Query(_Server);
+            fbQuery.CommandText = buildSqlClauseDelegate();
+
+            if (fbQuery.CommandText.Length == 0)
+                return true;
+
+            //Initialize parameters
+            FillParameters(fbQuery, parametersFillingPredicate);
+
+            //Execute the query
+            _Server.OpenConnection();
+            try
+            {
+                if (nonQuery)
+                    return ExecuteNonQuery(fbQuery);
+                else
+                    return ExecuteReader(fbQuery);
+            }
+            finally
+            {
+                _Server.CloseConnexion();
+            }
+        }
+        #endregion
+        #region Parameters initialization
+        /// <summary>
+        /// Initializes parameters value. Gets the value from the fields value property.
+        /// </summary>
+        /// <param name="query">A Query object.</param>
+        /// <param name="match">Predicate delegate to filter parameters that must be initialized.</param>
+        private void FillParameters(Query fbQuery, Predicate<FieldInfo> match)
+        {
+            fbQuery.FlushParameters();
+            List<FieldInfo> fields;
+
+            if (match != null)
+                fields = GetFields().FindAll(match);
+            else
+                return;
+
+            foreach (FieldInfo fieldInfo in fields)
+            {
+                object fieldValue = fieldInfo.GetValue(this);
+                DbField field = (DbField)fieldValue;
+                DbType dbType = field.DbType;
+                fbQuery.AddParameter(field.Name, dbType, field.Value);
+            }
+        }
+        #endregion
+        #endregion
     }
-
     #endregion
-
-    #region Metadata update attributes
-
-    /*
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Class)]
-    public class UpdatedAttribute : Attribute
+    #region Public enums
+    public enum SqlSortDirection
     {
-        public enum UpdateOperation
-        {
-            Renamed,
-            Removed
-        }
-
-        public UpdatedAttribute(string[] oldNames, UpdateOperation operation)
-        {
-            _Operation = operation;
-            _OldNames = oldNames;
-        }
-
-        /// <summary>
-        /// Constructeur
-        /// </summary>
-        /// <param name="oldTypes">Hashtable composé du type et de sa taille</param>
-        public UpdatedAttribute(DbTypeInfo[] oldTypes)
-        {
-            _OldTypes = oldTypes;
-        }
-
-        private DbTypeInfo[] _OldTypes;
-        private string[] _OldNames;
-
-        public DbTypeInfo[] OldTypes
-        {
-            get
-            {
-                return _OldTypes;
-            }
-        }
-
-        public string[] OldNames
-        {
-            get
-            {
-                return _OldNames;
-            }
-        }
-
-        private UpdateOperation _Operation;
-        public UpdateOperation Operation
-        {
-            get { return _Operation; }
-            set { _Operation = value; }
-        }
-
+        None,
+        Asc,
+        Desc
     }
-    */
-
     #endregion
-
     #region Field type classes
-
     /// <summary>
     /// Represents a database field.
     /// </summary>
@@ -146,7 +697,6 @@ namespace Sofia.Data.Common
         /// </summary>
         private DbType _DbType;
         #endregion
-
         #region Public properties
         /// <summary>
         /// Gets or sets the field name.
@@ -189,7 +739,6 @@ namespace Sofia.Data.Common
             set { _SortDirection = value; }
         }
         #endregion
-
         #region Méthodes publiques
         /// <summary>
         /// Initialize a new instance of the class.
@@ -220,7 +769,6 @@ namespace Sofia.Data.Common
         }
         #endregion
     }
-
     /// <summary>
     /// Represents a int32 field.
     /// </summary>
@@ -250,7 +798,6 @@ namespace Sofia.Data.Common
             DbType = DbType.Int32;
         }
     }
-
     /// <summary>
     /// Represents a int64 field.
     /// </summary>
@@ -280,7 +827,6 @@ namespace Sofia.Data.Common
             DbType = DbType.Int64;
         }
     }
-
     /// <summary>
     /// Represents a DateTime field.
     /// </summary>
@@ -310,7 +856,6 @@ namespace Sofia.Data.Common
             DbType = DbType.DateTime;
         }
     }
-
     /// <summary>
     /// Represents a string field.
     /// </summary>
@@ -376,822 +921,112 @@ namespace Sofia.Data.Common
         }
     }
     #endregion
+    #region DDL attributes
 
     /// <summary>
-    /// Represents a database table.
+    /// Marks the field as primary key
     /// </summary>
-    public abstract class EntityBase
+    [AttributeUsage(AttributeTargets.Field)]
+    public class PrimaryKeyAttribute : Attribute
     {
-        #region Private fields
         /// <summary>
-        /// Holds the database connexion object.
+        /// Initialize a new instance of the class
         /// </summary>
-        private Server _Server;
-        private DbDataReader _DbDataReader;
-        private List<SqlJoin> _Joins;
+        public PrimaryKeyAttribute()
+        {
+        }
+    }
 
-        #endregion
-
-        #region Propriétés
+    /// <summary>
+    /// Marks the fiels as sized field and sets its size.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Field)]
+    public class FieldSizeAttribute : Attribute
+    {
+        /// <summary>
+        /// Initialize a new instance of the class.
+        /// </summary>
+        /// <param name="size">The field size.</param>
+        public FieldSizeAttribute(int size)
+        {
+            _Size = size;
+        }
 
         /// <summary>
-        /// Obtient le nom du type
+        /// The field size.
         /// </summary>
-        public string Name
+        private int _Size;
+
+        /// <summary>
+        /// Gets the field size.
+        /// </summary>
+        public int Size
         {
             get
             {
-                return this.GetType().Name;
+                return _Size;
             }
         }
 
-        /// <summary>
-        /// Obtient l'objet de connexion
-        /// </summary>
-        public Server Server
+    }
+
+    #endregion
+    #region Metadata update attributes
+
+    /*
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Class)]
+    public class UpdatedAttribute : Attribute
+    {
+        public enum UpdateOperation
         {
-            get { return _Server; }
+            Renamed,
+            Removed
         }
 
-        #endregion
-
-        #region Contructeur
+        public UpdatedAttribute(string[] oldNames, UpdateOperation operation)
+        {
+            _Operation = operation;
+            _OldNames = oldNames;
+        }
 
         /// <summary>
         /// Constructeur
         /// </summary>
-        /// <param name="server">Objet de connexion à la base de données</param>
-        public EntityBase(Server server)
+        /// <param name="oldTypes">Hashtable composé du type et de sa taille</param>
+        public UpdatedAttribute(DbTypeInfo[] oldTypes)
         {
-            _Server = server;
-            _Joins = new List<SqlJoin>();
-
-            foreach (FieldInfo fieldInfo in GetFields())
-            {
-                //Instanciation de la propriété                
-                DbField fieldInstance = (DbField)System.Activator.CreateInstance(fieldInfo.FieldType);
-                fieldInstance.Name = fieldInfo.Name;
-                fieldInfo.SetValue(this, fieldInstance);
-
-                //Initialisation de l'objet
-                fieldInstance.Filtered = false;
-                fieldInstance.Value = null;
-
-                if (fieldInfo.FieldType == typeof(DbStringField))
-                    (fieldInstance as DbStringField).Size = GetDbTypeSize(fieldInfo);
-            }
-
-            //Mise à jour dans la base de données
-            EntityUpdater entityUpdater = new EntityUpdater(this);
-            entityUpdater.Check();
+            _OldTypes = oldTypes;
         }
 
-        #endregion
+        private DbTypeInfo[] _OldTypes;
+        private string[] _OldNames;
 
-        #region Réinitialisation de propriétés
-
-        /// <summary>
-        /// Réinitialise le tri
-        /// </summary>
-        public void ResetSort()
+        public DbTypeInfo[] OldTypes
         {
-            GetFields().ForEach(ActionResetSort);
-        }
-
-        /// <summary>
-        /// Réinitialise la valeur de tous les champs
-        /// </summary>
-        public void FlushFields()
-        {
-            foreach (FieldInfo fieldInfo in GetFields())
+            get
             {
-                object fieldValue = fieldInfo.GetValue(this);
-                DbField field = (DbField)fieldValue;
-                field.Value = null;
-            }
-
-        }
-
-        /// <summary>
-        /// Réinitialise tous la propriété Filtered de tous les champs
-        /// </summary>
-        public void ResetFilters()
-        {
-            foreach (FieldInfo fieldInfo in GetFields())
-            {
-                object fieldValue = fieldInfo.GetValue(this);
-                DbField field = (DbField)fieldValue;
-                field.Filtered = false;
-            }
-
-        }
-
-        /// <summary>
-        /// Délégué sur une classe générique Action pour le type FieldInfo qui a pour effet d'enlever le tri sur un champ
-        /// </summary>
-        /// <param name="FieldInfo"></param>
-        private void ActionResetSort(FieldInfo fieldInfo)
-        {
-            object fieldValue = fieldInfo.GetValue(this);
-            DbField field = (DbField)fieldValue;
-            field.SortDirection = SqlSortDirection.None;
-        }
-
-        #endregion
-
-        #region Lecture des enregistrements
-
-        /// <summary>
-        /// Détermine si le nom d'une colonne est présente dans le reader
-        /// </summary>
-        /// <param name="field"></param>
-        private bool ReaderHasRow(DbField field)
-        {
-            try
-            {
-                _DbDataReader.GetOrdinal(field.Name);
-                return true;
-            }
-            catch (IndexOutOfRangeException)
-            {
-                return false;
+                return _OldTypes;
             }
         }
 
-        /// <summary>
-        /// Lecture des enregistrements résultant de la dernière requête
-        /// </summary>
-        /// <returns></returns>
-        public bool Read()
+        public string[] OldNames
         {
-            bool hasRecords;
-            hasRecords = _DbDataReader.Read();
-
-            if (hasRecords)
+            get
             {
-                foreach (FieldInfo fieldInfo in GetFields())
-                {
-                    object fieldValue = fieldInfo.GetValue(this);
-                    DbField field = (DbField)fieldValue;
-                    if (ReaderHasRow(field))
-                    {
-                        field.Value = _DbDataReader[field.Name];
-                    }
-                }
-
-                //TODO : DataHistory.add(this);
-            }
-
-            return hasRecords;
-        }
-
-        #endregion
-
-        #region Methodes bas niveau pour exécution des requêtes
-
-        /// <summary>
-        /// ExecuteReader sur un objet FbQuery initialisé
-        /// </summary>
-        /// <param name="fbQuery">objet FbQuery initialisé</param>
-        protected bool ExecuteReader(Query fbQuery)
-        {
-            if (_DbDataReader != null)
-                _DbDataReader.Close();
-
-            //Exécution de la requête
-            _DbDataReader = fbQuery.ExecuteReader();
-
-
-            if (_DbDataReader == null)
-            {
-                return false;
-            }
-
-            //Affectation des propriétés
-            return Read();
-        }
-
-        /// <summary>
-        /// ExecuteNonQuery sur un objet FbQuery initialisé
-        /// </summary>
-        /// <param name="fbQuery">objet FbQuery initialisé</param>
-        protected bool ExecuteNonQuery(Query fbQuery)
-        {
-            //Exécution de la requête
-            if (!fbQuery.ExecuteNonQuery())
-            {
-                return false;
-            }
-            else
-                return true;
-        }
-
-        #endregion
-
-        #region Recherche de champs
-
-        /// <summary>
-        /// Delegate de prédicat portant sur les propriétés de type Field
-        /// </summary>
-        /// <param name="property">Instance de la propriété Field</param>
-        /// <returns>Vrai si la propriété Field.Filtered = true</returns>
-        private bool IsFilteredField(FieldInfo fieldInfo)
-        {
-            DbField field = (DbField)fieldInfo.GetValue(this);
-            return field.Filtered;
-        }
-
-        /// <summary>
-        /// Delegate de prédicat portant sur les propriétés de type Field
-        /// </summary>
-        /// <param name="property">Instance de la propriété Field</param>
-        /// <returns>Vrai si la propriété Field.IsPrimaryKey = true</returns>
-        private bool IsPrimaryKeyField(FieldInfo fieldInfo)
-        {
-            foreach (object attribute in fieldInfo.GetCustomAttributes(true))
-            {
-                if (attribute is PrimaryKeyAttribute)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Delegate de prédicat portant sur les propriétés de type Field
-        /// </summary>
-        /// <param name="property">Instance de la propriété Field</param>
-        /// <returns>Vrai si la propriété Field.SortDirection != None</returns>
-        private bool IsSortedField(FieldInfo fieldInfo)
-        {
-            DbField field = (DbField)fieldInfo.GetValue(this);
-            return field.SortDirection != SqlSortDirection.None;
-        }
-
-        /// <summary>
-        /// Delegate de prédicat portant sur les propriétés de type Field
-        /// </summary>
-        /// <param name="property">Instance de la propriété Field</param>
-        /// <returns>Vrai si la propriété Field.Value != null</returns>
-        private bool IsAffectedField(FieldInfo fieldInfo)
-        {
-            DbField field = (DbField)fieldInfo.GetValue(this);
-            return field.Value != null;
-        }
-
-        /// <summary>
-        /// Delegate de prédicat portant sur les propriétés de type Field
-        /// </summary>
-        /// <param name="property">Instance de la propriété Field</param>
-        /// <returns>Vrai si la propriété Field.Value != null</returns>
-        private bool IsAffectedNonPrimaryField(FieldInfo fieldInfo)
-        {
-            DbField field = (DbField)fieldInfo.GetValue(this);
-            return (field.Value != null && !IsPrimaryKeyField(fieldInfo));
-        }
-
-        /// <summary>
-        /// Obtient de la liste des propriétés publiques
-        /// </summary>
-        /// <returns>Une liste générique des propriétés publiques</returns>
-        private List<FieldInfo> GetFields()
-        {
-            return new List<FieldInfo>(this.GetType().GetFields());
-        }
-
-        /// <summary>
-        /// Retourne le champ qui a la propriété Name
-        /// </summary>
-        /// <param name="name">Nom du champ</param>
-        /// <returns>Un champ ou nul si le champ n'est pas trouvé</returns>
-        private FieldInfo GetField(string name)
-        {
-            List<FieldInfo> fields = new List<FieldInfo>(this.GetType().GetFields());
-            return fields.Find(delegate(FieldInfo field) { return field.Name == name; });
-        }
-
-        #endregion
-
-        #region Méthodes DML frontales
-
-        /// <summary>
-        /// Initialise les champs de l'entité avec les valeurs chargées depuis la base de données.
-        /// La clause WHERE se base sur la valeur de la clé primaire définie et initialisée pour l'entité 
-        /// </summary>
-        public bool Fill()
-        {
-            return BuildQuery(GetDefaultSelect, IsPrimaryKeyField, false);
-        }
-
-        /// <summary>
-        /// Initialise les champs de l'entité avec les valeurs chargées depuis la base de données.
-        /// La clause WHERE se base sur la valeur des champs passés en paramètre
-        /// </summary>
-        /// <param name="filteredFields">Liste des champs initialisés avec une valeur</param>
-        public bool Filter()
-        {
-            return BuildQuery(GetFilteredSelect, IsFilteredField, false);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool Update()
-        {
-            //Déterminer si l'enregistrement est à ajouter ou à insérer en fonction de la valeur de la clé primaire
-            if (Exists())
-                return BuildQuery(GetDefaultUpdate, IsAffectedField, true);
-            else
-                return BuildQuery(GetDefaultInsert, IsAffectedField, true);
-        }
-        /// <summary>
-        /// Insertion d'un enregistrement
-        /// </summary>
-        public bool Insert()
-        {
-            return BuildQuery(GetDefaultInsert, IsAffectedField, true);
-        }
-        /// <summary>
-        /// Permet de déterminer si un enregistrement existe en se basant sur sa clé primaire
-        /// </summary>
-        /// <returns></returns>
-        public bool Exists()
-        {
-            return BuildQuery(GetPrimarySelect, IsPrimaryKeyField, false);
-        }
-
-        /// <summary>
-        /// Suppression de l'enregistrement dont la clé primaire est spécifiée
-        /// </summary>
-        public bool Delete()
-        {
-            return BuildQuery(GetDefaultDelete, IsPrimaryKeyField, true);
-        }
-
-        /// <summary>
-        /// Création de la tabme
-        /// </summary>
-        public bool Create()
-        {
-            bool executionResult;
-
-            executionResult = BuildQuery(GetDefaultCreate, null, true);
-            executionResult = executionResult && BuildQuery(GetDefaultAddPrimaryConstraint, null, true);
-
-            return executionResult;
-        }
-
-
-        #endregion
-
-        #region Construction de liste de champs
-
-        /// <summary>
-        /// Delagate permettant de transformer une chaîne de caractères
-        /// </summary>
-        /// <param name="value">La chaine à transformer</param>
-        /// <returns>La chaine tranformée</returns>
-        private delegate string FieldTransformation(DbField field);
-
-        /// <summary>
-        /// Transforme un champ en un champ paramétré
-        /// <example>FIELD => @FIELD</example>
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        private string TransformToParametizedField(DbField field)
-        {
-            return "@" + field.Name;
-        }
-
-        /// <summary>
-        /// Transforme un champ en un champ présent dans une clause ORDER BY
-        /// <example>FIELD => FIELD Asc</example>
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        private string TransformToOrderedField(DbField field)
-        {
-            return field.Name + " " + Enum.GetName(typeof(SqlSortDirection), field.SortDirection);
-        }
-
-        /// <summary>
-        /// Transforme un champ en un champ paramétré
-        /// <example>FIELD => FIELD = @FIELD</example>
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        private string TransformToParametizedAffectationField(DbField field)
-        {
-            return field.Name + " = @" + field.Name;
-        }
-
-        /// <summary>
-        /// Transforme un champ en un champ suivi de son type
-        /// <example>FIELD => FIELD VARCHAR(32)</example>
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        private string TransformToTypedField(DbField field)
-        {
-            //Détermination de la chaine représentant le type du champ
-            FieldInfo fieldInfo = GetField(field.Name);
-
-            if (fieldInfo != null)
-            {
-                string type = _Server.SgbdDDL.GetDDLType(field.DbType, GetDbTypeSize(fieldInfo), IsPrimaryKeyField(fieldInfo));
-                return String.Format("{0} {1}", field.Name, type);
-            }
-            else return "";
-        }
-
-
-        /// <summary>
-        /// Sélection d'une liste de propriétés pour construire une liste de champs SQL en fonction d'une transformation
-        /// </summary>
-        /// <param name="fieldFilter">Délégué qui définit les propriétés à rechercher</param>
-        /// <param name="stringTransformation">Délégué qui spécifie une transformation à appliquer au nom de chaque propriété</param>
-        /// <param name="separator">Séparateur</param>
-        /// <returns>Une liste de nom de champs séparés par le séparateur</returns>
-        private string GetFieldList(Predicate<FieldInfo> match, FieldTransformation transformation, string separator)
-        {
-            string fieldList = "";
-            int fieldIndex = 0;
-            List<FieldInfo> fields;
-
-            //Filtre sur les propriétés
-            if (match != null)
-                fields = GetFields().FindAll(match);
-            else
-                fields = GetFields();
-
-
-            //Parcours des propriétés filtrées
-            foreach (FieldInfo fieldInfo in fields)
-            {
-                string fieldName;
-
-                object fieldValue = fieldInfo.GetValue(this);
-                DbField field = (DbField)fieldValue;
-
-                //Application d'une transformation sur le nom de la propriété
-                if (transformation != null)
-                    fieldName = transformation(field);
-                else
-                    fieldName = fieldInfo.Name;
-
-                //Construction de la chaine SQL
-                if (fieldIndex == 0)
-                    fieldList = fieldName;
-                else
-                    fieldList = fieldList + separator + fieldName;
-
-                fieldIndex++;
-            }
-
-            return fieldList;
-
-        }
-
-        private string GetFieldList(Predicate<FieldInfo> match, FieldTransformation transformation)
-        {
-            return GetFieldList(match, transformation, ",");
-        }
-
-        private string GetFieldList(Predicate<FieldInfo> match)
-        {
-            return GetFieldList(match, null, ",");
-        }
-
-        private string GetFieldList()
-        {
-            return GetFieldList(null, null, ",");
-        }
-
-        #endregion
-
-        #region Contruction des clauses SQL
-
-        private delegate string BuildSqlClauseDelegate();
-
-        /// <summary>
-        /// Génération de la requête SELECT en se basant sur la clé primaire pour la constitution de la clause WHERE
-        /// </summary>
-        /// <returns></returns>
-        private string GetDefaultSelect()
-        {
-            //Liste des champs
-            string fieldList = GetFieldList();
-
-            //Liste des clé primaires
-            string whereClause = GetFieldList(IsPrimaryKeyField, TransformToParametizedAffectationField, " AND ");
-
-            //Liste de tri
-            string sortedList = GetFieldList(IsSortedField, TransformToOrderedField);
-            if (sortedList.Length != 0)
-                sortedList = "ORDDER BY " + sortedList;
-
-            //Construction de la chaine SQL
-            return string.Format("SELECT {0} FROM {1} WHERE {2} {3}", fieldList, Name, whereClause, sortedList);
-
-        }
-
-        /// <summary>
-        /// Génération d'une requête SELECT ne prenant en compte que la clé primaire. Sert pour vérifier l'existance d'un enregistrement.
-        /// </summary>
-        /// <returns></returns>
-        private string GetPrimarySelect()
-        {
-            //Liste des champs
-            string fieldList = GetFieldList(IsPrimaryKeyField);
-
-            //Liste des clé primaires
-            string whereClause = GetFieldList(IsPrimaryKeyField, TransformToParametizedAffectationField, " AND ");
-
-            //Construction de la chaine SQL
-            return string.Format("SELECT {0} FROM {1} WHERE {2}", fieldList, Name, whereClause);
-
-        }
-
-        /// <summary>
-        /// Génération de la requête SELECT en se basant sur les champs filtrés pour la constitution de la clause WHERE
-        /// </summary>
-        /// <returns></returns>
-        private string GetFilteredSelect()
-        {
-            //Liste des champs
-            string fieldList = GetFieldList();
-
-            //Liste des champs filtrés
-            string whereClause = GetFieldList(IsFilteredField, TransformToParametizedAffectationField, " AND ");
-            if (whereClause.Length > 0)
-                whereClause = "WHERE " + whereClause;
-
-            //Liste de tri
-            string sortedList = GetFieldList(IsSortedField, TransformToOrderedField);
-            if (sortedList.Length != 0)
-                sortedList = "ORDER BY " + sortedList;
-
-            //Construction de la chaine SQL
-            return string.Format("SELECT {0} FROM {1} {2} {3}", fieldList, Name, whereClause, sortedList);
-
-        }
-
-        /// <summary>
-        /// Génération de la requête INSERT
-        /// <param name="ignorePrimaryKey">L'initialisation de la chaine se fait sans la clé primaire si ce paramètre est true</param>
-        /// </summary>
-        /// <returns></returns>
-        private string GetDefaultInsert()
-        {
-            //Liste des champs
-            string fieldList = GetFieldList(IsAffectedField);
-            string parameterList = GetFieldList(IsAffectedField, TransformToParametizedField);
-
-            //Construction de la chaine SQL
-            return string.Format("INSERT INTO {0} ({1}) VALUES ({2})", Name, fieldList, parameterList);
-        }
-
-        /// <summary>
-        /// Génération de la requête UPDATE        
-        /// </summary>
-        /// <returns></returns>
-        private string GetDefaultUpdate()
-        {
-            //Liste des champs
-            string fieldList = GetFieldList(IsAffectedNonPrimaryField, TransformToParametizedAffectationField);
-
-            if (fieldList.Length == 0)
-                return "";
-
-            //Liste des clé primaires
-            string whereClause = GetFieldList(IsPrimaryKeyField, TransformToParametizedAffectationField, " AND ");
-
-            //Construction de la chaine SQL
-            return string.Format("UPDATE {0} SET {1} WHERE {2}", Name, fieldList, whereClause);
-        }
-
-        /// <summary>
-        /// Génération de la requête DELETE
-        /// </summary>
-        /// <returns></returns>
-        private string GetDefaultDelete()
-        {
-            //Liste des parametres
-            string parameterList = GetFieldList(IsPrimaryKeyField, TransformToParametizedAffectationField, " AND ");
-
-            //Construction de la chaine SQL
-            return string.Format("DELETE FROM {0} WHERE {1}", Name, parameterList);
-        }
-
-        /// <summary>
-        /// Génération de la requête CREATE TABLE
-        /// </summary>
-        /// <returns></returns>
-        private string GetDefaultCreate()
-        {
-            //Liste des champs
-            string fieldList = GetFieldList(null, TransformToTypedField);
-            string pkFields = GetFieldList(IsPrimaryKeyField);
-
-            //Construction de la chaine SQL
-            return string.Format("CREATE TABLE {0} ({1})", Name, fieldList);
-        }
-
-        /// <summary>
-        /// Génération de la requête ALTER TABLE
-        /// </summary>
-        /// <returns></returns>
-        private string GetDefaultAddPrimaryConstraint()
-        {
-            //Liste des champs
-            string fieldList = GetFieldList(IsPrimaryKeyField);
-
-            //Construction de la chaine SQL
-            return string.Format("ALTER TABLE {0} ADD CONSTRAINT PK_{0} PRIMARY KEY ({1});", Name, fieldList);
-        }
-
-
-        /// <summary>
-        /// Construction de la chaîne de requête
-        /// </summary>
-        /// <param name="buildSqlClauseDelegate"></param>
-        /// <param name="parametersFillingPredicate"></param>
-        /// <param name="nonQuery"></param>
-        /// <returns></returns>
-        private bool BuildQuery(BuildSqlClauseDelegate buildSqlClauseDelegate,
-            Predicate<FieldInfo> parametersFillingPredicate, bool nonQuery)
-        {
-            //Instanciation de la requête
-            Query fbQuery = new Query(_Server);
-            fbQuery.CommandText = buildSqlClauseDelegate();
-
-            if (fbQuery.CommandText.Length == 0)
-                return true;
-
-            //Affectation des paramètres
-            FillParameters(fbQuery, parametersFillingPredicate);
-
-
-            //Execution de la requête
-            _Server.OpenConnection();
-            try
-            {
-                if (nonQuery)
-                    return ExecuteNonQuery(fbQuery);
-                else
-                    return ExecuteReader(fbQuery);
-            }
-            finally
-            {
-                _Server.CloseConnexion();
+                return _OldNames;
             }
         }
 
-        #endregion
-
-        #region Initialisation des paramètres
-
-        /// <summary>
-        /// Initialisation des paramètres de la requête en fonction des champs
-        /// </summary>
-        /// <param name="fbQuery">La requête</param>
-        /// <param name="match">Ne traite que les propriétés qui répondent à ce prédicat</param>
-        private void FillParameters(Query fbQuery, Predicate<FieldInfo> match)
+        private UpdateOperation _Operation;
+        public UpdateOperation Operation
         {
-            fbQuery.FlushParameters();
-            List<FieldInfo> fields;
-
-            if (match != null)
-                fields = GetFields().FindAll(match);
-            else
-                return;
-
-            foreach (FieldInfo fieldInfo in fields)
-            {
-                object fieldValue = fieldInfo.GetValue(this);
-                DbField field = (DbField)fieldValue;
-                DbType dbType = field.DbType;
-                fbQuery.AddParameter(field.Name, dbType, field.Value);
-            }
+            get { return _Operation; }
+            set { _Operation = value; }
         }
-
-        /// <summary>
-        /// Permet d'obtenir la taille du type de données associé au champ
-        /// </summary>
-        /// <param name="fieldInfo">Le champ</param>
-        /// <returns>Un entier représentant la taille du type de donnée</returns>
-        private int GetDbTypeSize(FieldInfo fieldInfo)
-        {
-            object[] attributes = fieldInfo.GetCustomAttributes(typeof(FieldSizeAttribute), true);
-            if (attributes.Length != 0)
-            {
-                FieldSizeAttribute attribute = attributes[0] as FieldSizeAttribute;
-                return attribute.Size;
-            }
-            else
-            {
-                return -1;
-            }
-        }
-
-        #endregion
 
     }
+    */
 
-    /// <summary>
-    /// Classe représentant une jointure
-    /// </summary>
-    public class SqlJoin
-    {
-        #region Champs privés
-
-        private EntityBase _Entity;
-        private DbFieldMapping _FieldMapping;
-
-        #endregion
-
-        #region Propriétés
-
-        /// <summary>
-        /// Entité sur laquelle porte la jointure
-        /// </summary>
-        public EntityBase Entity
-        {
-            get { return _Entity; }
-            set { _Entity = value; }
-        }
-
-        /// <summary>
-        /// Mapping du champ
-        /// </summary>
-        public DbFieldMapping FieldMapping
-        {
-            get { return _FieldMapping; }
-            set { _FieldMapping = value; }
-        }
-
-        #endregion
-
-        #region Méthodes publiques
-
-        /// <summary>
-        /// Constructeur
-        /// </summary>
-        public SqlJoin(EntityBase entity, DbField leftField, DbField rightField)
-        {
-            _Entity = entity;
-            _FieldMapping = new DbFieldMapping(leftField, rightField);
-        }
-
-        #endregion
-    }
-
-    /// <summary>
-    /// Classe représentant une correspondance entre deux champs d'une entité
-    /// </summary>
-    public class DbFieldMapping
-    {
-        #region Champs privés
-
-        private DbField _LeftField;
-        private DbField _RightField;
-
-        #endregion
-
-        #region Propriétés
-
-        public DbField LeftField
-        {
-            get { return _LeftField; }
-            set { _LeftField = value; }
-        }
-
-        public DbField RightField
-        {
-            get { return _RightField; }
-            set { _RightField = value; }
-        }
-
-        #endregion
-
-        #region Méthodes publiques
-
-        public DbFieldMapping(DbField leftField, DbField rightField)
-        {
-            _LeftField = leftField;
-            _RightField = rightField;
-        }
-
-        #endregion
-    }
-
-    public enum SqlSortDirection
-    {
-        None,
-        Asc,
-        Desc
-    }
+    #endregion
 }
 
