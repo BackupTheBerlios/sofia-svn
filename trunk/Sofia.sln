@@ -18,7 +18,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.Plugins.Core.Search",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.Plugins.Core.Search.WindowsForm", "src\Sofia.Plugins\Sofia.Plugins.Core.SearchBar\Sofia.Plugins.Core.SearchBar.WindowsForm\Sofia.Plugins.Core.Search.WindowsForm.csproj", "{719EEE2F-B75D-47E6-A553-92E4318A950C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.ViewHost.Xaml", "src\Sofia.ViewHost\Sofia.ViewHost.Xaml\Sofia.ViewHost.Xaml.csproj", "{8E80E94A-624C-4166-B57A-B1330856FCDA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.ViewHost.Xaml", "src\Sofia.ViewHost\Sofia.ViewHost.Xaml\Sofia.ViewHost.Xaml.csproj", "{5C724868-5D7B-4A63-82C3-DB7BA0326C23}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,10 +62,10 @@ Global
 		{719EEE2F-B75D-47E6-A553-92E4318A950C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{719EEE2F-B75D-47E6-A553-92E4318A950C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{719EEE2F-B75D-47E6-A553-92E4318A950C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8E80E94A-624C-4166-B57A-B1330856FCDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8E80E94A-624C-4166-B57A-B1330856FCDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8E80E94A-624C-4166-B57A-B1330856FCDA}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{8E80E94A-624C-4166-B57A-B1330856FCDA}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{5C724868-5D7B-4A63-82C3-DB7BA0326C23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C724868-5D7B-4A63-82C3-DB7BA0326C23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C724868-5D7B-4A63-82C3-DB7BA0326C23}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C724868-5D7B-4A63-82C3-DB7BA0326C23}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
