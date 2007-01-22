@@ -18,5 +18,10 @@ namespace Sofia
 			
 			// Insert code required on object creation below this point.
 		}
+
+        private void MyClick(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("toto");
+        }
 	}
 }

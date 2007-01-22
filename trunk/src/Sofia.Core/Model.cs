@@ -89,58 +89,50 @@ namespace Sofia.Mvc
         {
             public Content(Server server) : base(server) { }
 
-            [PrimaryKey, FieldType(DbType.String, 32)]
-            public DbField ContentId;
+            [PrimaryKey, FieldSize(32)]
+            public DbStringField ContentId;
 
-            [FieldType(DbType.String, 32)]
-            public DbField FldId;
+            [FieldSize(32)]
+            public DbStringField FldId;
 
-            [FieldType(DbType.String, 128)]
-            public DbField ContentSummary;
+            [FieldSize(128)]
+            public DbStringField ContentSummary;
 
-            [FieldType(DbType.String)]
-            public DbField ContentXml;
-
+            public DbTextField ContentXml;
         }
-
         public partial class Folder : EntityBase
         {
             public Folder(Server server) : base(server) { }
 
-            [PrimaryKey, FieldType(DbType.String, 32)]
-            public DbField FldId;
+            [PrimaryKey, FieldSize(32)]
+            public DbStringField FldId;
 
-            [FieldType(DbType.String, 32)]
-            public DbField FldCaption;
+            [FieldSize(32)]
+            public DbStringField FldCaption;
 
-            [FieldType(DbType.Binary)]
-            public DbField FldThumb;
+            public DbBinaryField FldThumb;
         }
-
         public partial class Tag : EntityBase
         {
             public Tag(Server server) : base(server) { }
 
-            [PrimaryKey, FieldType(DbType.Int32)]
-            public DbField TagId;
+            [PrimaryKey]
+            public DbInt64Field TagId;
 
-            [FieldType(DbType.String, 32)]
-            public DbField TagCaption;
+            [FieldSize(32)]
+            public DbStringField TagCaption;
 
-            [FieldType(DbType.Binary)]
-            public DbField TagThumb;
+            public DbBinaryField TagThumb;
         }
-
         public partial class TaggedContent : EntityBase
         {
             public TaggedContent(Server server) : base(server) { }
 
-            [PrimaryKey, FieldType(DbType.Int32)]
-            public DbField TagId;
+            [PrimaryKey]
+            public DbInt64Field TagId;
 
-            [PrimaryKey, FieldType(DbType.String, 32)]
-            public DbField ContentId;
-
+            [PrimaryKey, FieldSize(32)]
+            public DbStringField ContentId;
         }
 
 
@@ -184,7 +176,6 @@ namespace Sofia.Mvc
         */
 
         #endregion
-
 
         #region IObservable Members
 

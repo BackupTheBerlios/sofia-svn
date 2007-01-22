@@ -11,10 +11,10 @@ namespace Sofia.Plugins.WindowsForm
 {
     public class ViewHostBase: Form, IViewHost, IObserver
     {
-        #region Contructeurs
+        #region Contructor
 
         /// <summary>
-        /// Constructeur
+        /// Constructor
         /// </summary>
         public ViewHostBase()
             : base()
@@ -37,7 +37,7 @@ namespace Sofia.Plugins.WindowsForm
 
         #endregion
 
-        #region Implémentation de l'interface IViewHost
+        #region IViewHost Members
 
         public virtual void ShowView(IView view, ViewDestination destination)
         {

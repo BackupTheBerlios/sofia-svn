@@ -7,7 +7,7 @@
 	Title="Window"
 	Width="640" Height="480">
 
-	<Window.Resources>
+	<Window.Resources>	    
 		<XmlDataProvider x:Key="MainMenuData">
 			<x:XData>
 				<Items xmlns="">
@@ -22,50 +22,32 @@
 				<PropertyGroupDescription PropertyName="GroupName"/>
 			</CollectionViewSource.GroupDescriptions>
 		</CollectionViewSource>
-		<DataTemplate x:Key="DataTemplate">
+		<DataTemplate x:Key="GroupHeaderTemplate">
 			<Grid Background="#d9e4ec">
-                <TextBlock Text="{Binding Name}" Margin="4" />
+                <TextBlock Text="{Binding Mode=Default, Source={StaticResource MainMenuData}, XPath=/Items/Item}" Margin="4"/>
                 <Rectangle Stroke="{x:Static SystemColors.MenuBrush}" VerticalAlignment="Top" Height="1" />
                 <Rectangle Stroke="#bbb" VerticalAlignment="Bottom"  Height="1" />
               </Grid>
-		</DataTemplate>
+		</DataTemplate>		
 	</Window.Resources>
 	<StackPanel>
 		<Menu>
-			<MenuItem Header="Documents" DockPanel.Dock="Top" DataContext="{DynamicResource MainMenuViewSource}" ItemsSource="{Binding Mode=OneWay}" ItemTemplate="{DynamicResource DataTemplate}" >			
+			<MenuItem Header="Documents" DockPanel.Dock="Top" DataContext="{DynamicResource MainMenuViewSource}" ItemsSource="{Binding Mode=OneWay}" >			
 				<MenuItem.ItemContainerStyle>
 					<Style TargetType="{x:Type MenuItem}">
 						<Setter Property="Header" Value="{Binding XPath=@Title}" />
 					</Style>
 				</MenuItem.ItemContainerStyle>				
 				<MenuItem.GroupStyle>
-					<GroupStyle>
+					<GroupStyle HidesIfEmpty="True">
 						<GroupStyle.HeaderTemplate>
 							<DataTemplate>
-								<StackPanel>
-									<StackPanel/>
-									<StackPanel/>
-									<StackPanel/>
-									<StackPanel/>
-									<ItemsControl ItemsSource="{Binding Path=GroupDescriptions, Mode=OneWay}">
-										<ItemsControl.ItemTemplate>
-											<DataTemplate>
-												<StackPanel/>
-											</DataTemplate>
-										</ItemsControl.ItemTemplate>
-									</ItemsControl>
-									<TextBlock Text="{Binding Path=IsSealed, Mode=OneWay}"/>
-									<ItemsControl ItemsSource="{Binding Path=SortDescriptions, Mode=OneWay}">
-										<ItemsControl.ItemTemplate>
-											<DataTemplate>
-												<StackPanel/>
-											</DataTemplate>
-										</ItemsControl.ItemTemplate>
-									</ItemsControl>
-									<TextBlock Text="{Binding Path=Source}"/>
-									<StackPanel/>
-								</StackPanel>
-							</DataTemplate>
+								<Grid Background="#d9e4ec">
+									<TextBlock Text="{Binding Mode=Default, Source={StaticResource MainMenuData}, XPath=/Items/Item}" Margin="4"/>
+									<Rectangle Stroke="{x:Static SystemColors.MenuBrush}" VerticalAlignment="Top" Height="1" />
+									<Rectangle Stroke="#bbb" VerticalAlignment="Bottom"  Height="1" />
+								</Grid>
+							</DataTemplate>		
 						</GroupStyle.HeaderTemplate>
 					</GroupStyle>
 				</MenuItem.GroupStyle>				
@@ -93,12 +75,14 @@
 				<Button>
 					<TextBlock Margin="5">B2</TextBlock>
 				</Button>
-				<Button>
+				<Button>				
 					<TextBlock Margin="5">B3</TextBlock>
 				</Button>
 			</ToolBar>
 		</ToolBarTray>
 		<Grid ShowGridLines="False">
+		<Grid.Resources>        
+    </Grid.Resources>
 			<Grid.RowDefinitions>
 				<RowDefinition />
 				<RowDefinition />
@@ -115,6 +99,9 @@
 			</TabItem>
 		</TabControl>
 
+		<Button HorizontalAlignment="Left" Content="Button" Style="{Binding Path=Style, ElementName=Window, Mode=Default}"/>
+
 	</StackPanel>
+	
 
 </Window>

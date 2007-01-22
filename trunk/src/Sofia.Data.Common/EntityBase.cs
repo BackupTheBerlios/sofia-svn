@@ -739,7 +739,7 @@ namespace Sofia.Data.Common
             set { _SortDirection = value; }
         }
         #endregion
-        #region Méthodes publiques
+        #region Public methods
         /// <summary>
         /// Initialize a new instance of the class.
         /// </summary>
@@ -774,10 +774,13 @@ namespace Sofia.Data.Common
     /// </summary>
     public class DbInt32Field : DbField
     {
+        #region Private fields
         /// <summary>
         /// Holds the int32 value.
         /// </summary>
         private int _Value;
+        #endregion
+        #region Public properties
         /// <summary>
         /// Gets or sets the int32 field value.
         /// </summary>
@@ -790,6 +793,8 @@ namespace Sofia.Data.Common
                 _Value = value;
             }
         }
+        #endregion
+        #region Public methods
         /// <summary>
         /// Initialize a new instance of the class. Sets the underlying database type to DbType.Int32.
         /// </summary>
@@ -797,16 +802,20 @@ namespace Sofia.Data.Common
         {
             DbType = DbType.Int32;
         }
+        #endregion
     }
     /// <summary>
     /// Represents a int64 field.
     /// </summary>
     public class DbInt64Field : DbField
     {
+        #region Private fields
         /// <summary>
         /// Holds the int64 value.
         /// </summary>
         private long _Value;
+        #endregion
+        #region Public properties
         /// <summary>
         /// Gets or sets the int64 field value.
         /// </summary>
@@ -819,6 +828,8 @@ namespace Sofia.Data.Common
                 _Value = value;
             }
         }
+        #endregion
+        #region Public methods
         /// <summary>
         /// Initialize a new instance of the class. Sets the underlying database type to DbType.Int64.
         /// </summary>
@@ -826,16 +837,20 @@ namespace Sofia.Data.Common
         {
             DbType = DbType.Int64;
         }
+        #endregion
     }
     /// <summary>
     /// Represents a DateTime field.
     /// </summary>
     public class DbDateTimeField : DbField
     {
+        #region Private fields
         /// <summary>
         /// Holds the DateTime field value.
         /// </summary>
         private DateTime _Value;
+        #endregion
+        #region Public properties
         /// <summary>
         /// Gets or sets the DateTime field value.
         /// </summary>
@@ -848,6 +863,8 @@ namespace Sofia.Data.Common
                 _Value = value;
             }
         }
+        #endregion
+        #region Public methods
         /// <summary>
         /// Initialize a new instance of the class. Sets the underlying database type to DbType.DateTime.
         /// </summary>
@@ -855,16 +872,24 @@ namespace Sofia.Data.Common
         {
             DbType = DbType.DateTime;
         }
+        #endregion
     }
     /// <summary>
     /// Represents a string field.
     /// </summary>
     public class DbStringField : DbField
     {
+        #region Private fields
         /// <summary>
         /// Holds the field size.
         /// </summary>
         private int _Size;
+        /// <summary>
+        /// Holds the string field value.
+        /// </summary>
+        private string _Value;
+        #endregion
+        #region Public properties
         /// <summary>
         /// Gets or sets the field size.
         /// </summary>
@@ -873,10 +898,6 @@ namespace Sofia.Data.Common
             get { return _Size; }
             set { _Size = value; }
         }
-        /// <summary>
-        /// Holds the string field value.
-        /// </summary>
-        private string _Value;
         /// <summary>
         /// Gets or sets the string field value. Crop value if value size is greater than the field size.
         /// </summary>
@@ -897,6 +918,8 @@ namespace Sofia.Data.Common
                 base.Value = _Value;
             }
         }
+        #endregion
+        #region Public methods
         /// <summary>
         /// Initialize a new instance of the class. Sets the underlying database type to DbType.String.
         /// </summary>
@@ -904,12 +927,14 @@ namespace Sofia.Data.Common
         {
             DbType = DbType.String;
         }
+        #endregion
     }
     /// <summary>
     /// Represents a text blob field.
     /// </summary>
     public class DbTextField : DbStringField
     {
+        #region Public methods
         /// <summary>
         /// Initialize a new instance of the class. Sets the underlying database type to DbType.String.
         /// Sets the size to -1.
@@ -919,7 +944,44 @@ namespace Sofia.Data.Common
             DbType = DbType.String;
             Size = -1;
         }
+        #endregion
     }
+    /// <summary>
+    /// Represents a binary blob field.
+    /// </summary>
+    public class DbBinaryField : DbField
+    {
+        #region Private fields
+        /// <summary>
+        /// Holds the int32 value.
+        /// </summary>
+        private object _Value;
+        #endregion
+        #region Public properties
+        /// <summary>
+        /// Gets or sets the int32 field value.
+        /// </summary>
+        public new object Value
+        {
+            get { return _Value; }
+            set
+            {
+                base.Value = value;
+                _Value = value;
+            }
+        }
+        #endregion
+        #region Public methods
+        /// <summary>
+        /// Initialize a new instance of the class. Sets the underlying database type to DbType.Int32.
+        /// </summary>
+        public DbBinaryField()
+        {
+            DbType = DbType.Binary;
+        }
+        #endregion
+    }
+
     #endregion
     #region DDL attributes
 
