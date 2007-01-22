@@ -28,5 +28,6 @@
       <DependentUpon>Window1.xaml</DependentUpon>
     </Compile>
     <Page Include="Window1.xaml" />
+    <Resource Include="stock-generic.png" />
   </ItemGroup>
 </Project>
