@@ -10,6 +10,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>Sofia</RootNamespace>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ProjectGuid>{5C724868-5D7B-4A63-82C3-DB7BA0326C23}</ProjectGuid>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildBinPath)\Microsoft.WinFX.targets" />
@@ -27,6 +28,7 @@
     <Compile Include="Window1.xaml.cs">
       <DependentUpon>Window1.xaml</DependentUpon>
     </Compile>
+    <Page Include="TabControl.xaml" />
     <Page Include="Window1.xaml" />
     <Resource Include="stock-generic.png" />
   </ItemGroup>

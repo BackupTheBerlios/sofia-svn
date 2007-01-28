@@ -5,78 +5,10 @@
 	x:Class="Sofia.Window1"
 	x:Name="Window"
 	Title="Window"
-	Width="640" Height="480" AllowDrop="True" WindowStartupLocation="CenterScreen" WindowState="Normal" WindowStyle="ToolWindow">
-
-	<Window.Resources>	    
-		<XmlDataProvider x:Key="MainMenuData">
-			<x:XData>
-				<Items xmlns="">
-					<Item Title="Nouveau" GroupName="Dossiers" />
-					<Item Title="Nouveau..." GroupName="Documents" />
-					<Item Title="Sauvegarder" GroupName="Documents" />
-				</Items>
-			</x:XData>
-		</XmlDataProvider>
-		<CollectionViewSource x:Key="MainMenuViewSource" Source="{Binding Mode=Default, Source={StaticResource MainMenuData}, XPath=/Items/Item}">
-			<CollectionViewSource.GroupDescriptions>
-				<PropertyGroupDescription PropertyName="@GroupName"/>
-			</CollectionViewSource.GroupDescriptions>
-		</CollectionViewSource>
-		<DataTemplate x:Key="GroupHeaderTemplate">
-			<Grid Background="#d9e4ec">
-                <TextBlock Text="{Binding Mode=Default, Source={StaticResource MainMenuData}, XPath=/Items/Item}" Margin="4"/>
-                <Rectangle Stroke="{x:Static SystemColors.MenuBrush}" VerticalAlignment="Top" Height="1" />
-                <Rectangle Stroke="#bbb" VerticalAlignment="Bottom"  Height="1" />
-              </Grid>
-		</DataTemplate>		
-	</Window.Resources>
+	Width="640" Height="480" WindowStartupLocation="CenterScreen" WindowState="Normal" Background="#FFFFFFFF"  
+	>
 	
 	<StackPanel>
-		<Grid Height="29">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="0.215*"/>
-				<ColumnDefinition Width="0.785*"/>
-			</Grid.ColumnDefinitions>
-			<Rectangle Width="Auto" Height="10" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Top" Grid.Column="0" Grid.ColumnSpan="2">
-				<Rectangle.Fill>
-					<LinearGradientBrush EndPoint="0.5,-0.5" StartPoint="0.5,1">
-						<GradientStop Color="#FFB9DDFA" Offset="0"/>
-						<GradientStop Color="#FFE0F0FF" Offset="1"/>
-					</LinearGradientBrush>
-				</Rectangle.Fill>
-			</Rectangle>
-			<Rectangle Width="Auto" Height="20" Margin="0,0,0,0" VerticalAlignment="Bottom" Grid.ColumnSpan="2">
-				<Rectangle.Fill>
-					<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,-0.5">
-						<GradientStop Color="#FF89C8FA" Offset="0.014"/>
-						<GradientStop Color="#FFE0F0FF" Offset="1"/>
-					</LinearGradientBrush>
-				</Rectangle.Fill>
-			</Rectangle>
-		</Grid>
-		<StackPanel Height="29"/>		
-		<Menu Background="#FFE0F0FF">
-			<MenuItem Header="Documents" DockPanel.Dock="Top" DataContext="{DynamicResource MainMenuViewSource}" ItemsSource="{Binding Mode=OneWay}" >			
-				<MenuItem.ItemContainerStyle>
-					<Style TargetType="{x:Type MenuItem}">
-						<Setter Property="Header" Value="{Binding XPath=@Title}" />
-					</Style>
-				</MenuItem.ItemContainerStyle>				
-				<MenuItem.GroupStyle>
-					<GroupStyle>
-						<GroupStyle.HeaderTemplate>
-							<DataTemplate>
-								<Grid Background="#d9e4ec">
-									<TextBlock Text="{Binding Name}" Margin="4"/>
-									<Rectangle Stroke="{x:Static SystemColors.MenuBrush}" VerticalAlignment="Top" Height="1" />
-									<Rectangle Stroke="#bbb" VerticalAlignment="Bottom"  Height="1" />
-								</Grid>
-							</DataTemplate>		
-						</GroupStyle.HeaderTemplate>
-					</GroupStyle>
-				</MenuItem.GroupStyle>				
-			</MenuItem>
-		</Menu>
 		<ToolBarTray DockPanel.Dock="Top">
 			<ToolBar Margin="5"  Width="200"  Height="32">
 				<Button>
@@ -104,14 +36,15 @@
 				</Button>
 			</ToolBar>
 		</ToolBarTray>
-		<TabControl Grid.Row="0" Grid.Column="0">
-			<TabItem Header="Page 1">
-			</TabItem>
-			<TabItem Header="Page 2">
-			</TabItem>
-		</TabControl>
+      
+          <TabControl Margin="8" Height="136" Width="298">
+            <TabItem Header="One" />
+            <TabItem Header="Two" />
+            <TabItem Header="Three" />
+            <TabItem Header="Four" />
+          </TabControl>
+
 
 	</StackPanel>
-	
 
 </Window>
