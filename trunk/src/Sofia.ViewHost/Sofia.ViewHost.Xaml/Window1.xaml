@@ -5,8 +5,178 @@
 	x:Class="Sofia.Window1"
 	x:Name="Window"
 	Title="Window"
-	Width="640" Height="480" WindowStartupLocation="CenterScreen" WindowState="Normal" Background="#FFFFFFFF"  
-	>
+	Width="640" Height="480" AllowDrop="True" WindowStartupLocation="CenterScreen" WindowState="Normal" WindowStyle="SingleBorderWindow" Icon="ServiceCleyris.png" xmlns:d="http://schemas.microsoft.com/expression/blend/2006" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" Template="{DynamicResource WindowTemplate}">
+
+	<Window.Resources>	    
+		<XmlDataProvider x:Key="MainMenuData">
+			<x:XData>
+				<Items xmlns="">
+					<Item Title="Nouveau" GroupName="Dossiers" />
+					<Item Title="Nouveau..." GroupName="Documents" />
+					<Item Title="Sauvegarder" GroupName="Documents" />
+				</Items>
+			</x:XData>
+		</XmlDataProvider>
+		<CollectionViewSource x:Key="MainMenuViewSource" Source="{Binding Mode=Default, Source={StaticResource MainMenuData}, XPath=/Items/Item}">
+			<CollectionViewSource.GroupDescriptions>
+				<PropertyGroupDescription PropertyName="@GroupName"/>
+			</CollectionViewSource.GroupDescriptions>
+		</CollectionViewSource>
+		<DataTemplate x:Key="GroupHeaderTemplate">
+			<Grid Background="#d9e4ec">
+                <TextBlock Text="{Binding Mode=Default, Source={StaticResource MainMenuData}, XPath=/Items/Item}" Margin="4"/>
+                <Rectangle Stroke="{x:Static SystemColors.MenuBrush}" VerticalAlignment="Top" Height="1" />
+                <Rectangle Stroke="#bbb" VerticalAlignment="Bottom"  Height="1" />
+              </Grid>
+		</DataTemplate>		
+		<ControlTemplate TargetType="{x:Type ContentControl}" x:Key="WindowTemplate">
+			<ControlTemplate.Resources>
+				<Style TargetType="{x:Type FrameworkElement}" x:Key="emptyStyle"/>
+				<SolidColorBrush Color="#D81A1A1A" x:Key="captionBackgroundBrush"/>
+				<SolidColorBrush Color="#4CC2C2C2" x:Key="captionForegroundBrush"/>
+				<SolidColorBrush Color="#4C666666" x:Key="captionButtonBrush"/>
+			</ControlTemplate.Resources>
+			<Grid>
+				<Grid.Style>
+					<Style TargetType="{x:Type FrameworkElement}"/>
+				</Grid.Style>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="Auto"/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+				<Border x:Name="topResizeFrame" Height="{DynamicResource {x:Static SystemParameters.ResizeFrameHorizontalBorderHeightKey}}" Grid.ColumnSpan="3" Grid.Row="0" Background="#D81A1A1A" CornerRadius="8,8,0,0">
+					<Border.Style>
+						<Style TargetType="{x:Type FrameworkElement}"/>
+					</Border.Style>
+				</Border>
+				<Border x:Name="caption" Height="{DynamicResource {x:Static SystemParameters.WindowCaptionHeightKey}}" Grid.ColumnSpan="3" Grid.Row="1" Background="#D81A1A1A">
+					<Border.Style>
+						<Style TargetType="{x:Type FrameworkElement}"/>
+					</Border.Style>
+					<DockPanel>
+						<DockPanel.Style>
+							<Style TargetType="{x:Type FrameworkElement}"/>
+						</DockPanel.Style>
+						<Image Margin="6,3,0,3" x:Name="icon" VerticalAlignment="Center" Width="16" Height="16" DockPanel.Dock="Left" Source="{Binding Path=Icon, RelativeSource={RelativeSource TemplatedParent, AncestorType={x:Null}}}"/>
+						<Rectangle Fill="#4C666666" RadiusX="2" RadiusY="2" Margin="0,2,6,3" x:Name="closeButton" Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Self, AncestorType={x:Null}}}" DockPanel.Dock="Right">
+							<Rectangle.Style>
+								<Style TargetType="{x:Type FrameworkElement}"/>
+							</Rectangle.Style>
+						</Rectangle>
+						<Rectangle Fill="#4C666666" RadiusX="2" RadiusY="2" Margin="0,2,2,3" x:Name="maximizeButton" Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Self, AncestorType={x:Null}}}" DockPanel.Dock="Right">
+							<Rectangle.Style>
+								<Style TargetType="{x:Type FrameworkElement}"/>
+							</Rectangle.Style>
+						</Rectangle>
+						<Rectangle Fill="#4C666666" RadiusX="2" RadiusY="2" Margin="0,2,2,3" x:Name="minimizeButton" Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Self, AncestorType={x:Null}}}" DockPanel.Dock="Right">
+							<Rectangle.Style>
+								<Style TargetType="{x:Type FrameworkElement}"/>
+							</Rectangle.Style>
+						</Rectangle>
+						<TextBlock Margin="3,3,3,3" x:Name="titleText" VerticalAlignment="Center" Background="#FFBF6E6E" FontFamily="{DynamicResource {x:Static SystemFonts.CaptionFontFamilyKey}}" FontSize="{DynamicResource {x:Static SystemFonts.CaptionFontSizeKey}}" FontStyle="{DynamicResource {x:Static SystemFonts.CaptionFontStyleKey}}" FontWeight="{DynamicResource {x:Static SystemFonts.CaptionFontWeightKey}}" Foreground="#4CC2C2C2" Text="{TemplateBinding Window.Title}" TextDecorations="{DynamicResource {x:Static SystemFonts.CaptionFontTextDecorationsKey}}" TextTrimming="CharacterEllipsis">
+							<TextBlock.Style>
+								<Style TargetType="{x:Type FrameworkElement}"/>
+							</TextBlock.Style>
+						</TextBlock>
+					</DockPanel>
+				</Border>
+				<Rectangle Fill="#D81A1A1A" x:Name="leftResizeFrame" Width="{DynamicResource {x:Static SystemParameters.ResizeFrameVerticalBorderWidthKey}}" Grid.Column="0" Grid.Row="2">
+					<Rectangle.Style>
+						<Style TargetType="{x:Type FrameworkElement}"/>
+					</Rectangle.Style>
+				</Rectangle>
+				<Rectangle Fill="#D81A1A1A" x:Name="rightResizeFrame" Width="{DynamicResource {x:Static SystemParameters.ResizeFrameVerticalBorderWidthKey}}" Grid.Column="2" Grid.Row="2">
+					<Rectangle.Style>
+						<Style TargetType="{x:Type FrameworkElement}"/>
+					</Rectangle.Style>
+				</Rectangle>
+				<Rectangle Fill="#D81A1A1A" x:Name="bottomResizeFrame" Height="{DynamicResource {x:Static SystemParameters.ResizeFrameHorizontalBorderHeightKey}}" Grid.ColumnSpan="3" Grid.Row="3">
+					<Rectangle.Style>
+						<Style TargetType="{x:Type FrameworkElement}"/>
+					</Rectangle.Style>
+				</Rectangle>
+				<Border Grid.Column="1" Grid.Row="2" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+					<Border.Style>
+						<Style TargetType="{x:Type FrameworkElement}"/>
+					</Border.Style>
+					<ContentPresenter Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"/>
+				</Border>
+				<ResizeGrip Visibility="Collapsed" HorizontalAlignment="Right" x:Name="resizeGrip" VerticalAlignment="Bottom" Width="14" Height="23" Foreground="#D81A1A1A" Grid.Column="1" Grid.Row="2">
+					<ResizeGrip.Style>
+						<Style TargetType="{x:Type FrameworkElement}"/>
+					</ResizeGrip.Style>
+				</ResizeGrip>
+			</Grid>
+			<ControlTemplate.Triggers>
+				<Trigger Property="Window.WindowStyle" Value="ToolWindow">
+					<Setter Property="Visibility" TargetName="icon" Value="Collapsed"/>
+					<Setter Property="Height" TargetName="caption" Value="{DynamicResource {x:Static SystemParameters.SmallCaptionHeightKey}}"/>
+					<Setter Property="FontFamily" TargetName="titleText" Value="{DynamicResource {x:Static SystemFonts.SmallCaptionFontFamilyKey}}"/>
+					<Setter Property="FontSize" TargetName="titleText" Value="{DynamicResource {x:Static SystemFonts.SmallCaptionFontSizeKey}}"/>
+					<Setter Property="FontStyle" TargetName="titleText" Value="{DynamicResource {x:Static SystemFonts.SmallCaptionFontStyleKey}}"/>
+					<Setter Property="TextDecorations" TargetName="titleText" Value="{DynamicResource {x:Static SystemFonts.SmallCaptionFontTextDecorationsKey}}"/>
+					<Setter Property="FontWeight" TargetName="titleText" Value="{DynamicResource {x:Static SystemFonts.SmallCaptionFontWeightKey}}"/>
+					<Setter Property="Visibility" TargetName="maximizeButton" Value="Collapsed"/>
+					<Setter Property="Visibility" TargetName="minimizeButton" Value="Collapsed"/>
+					<Setter Property="CornerRadius" TargetName="topResizeFrame" Value="0,0,0,0"/>
+				</Trigger>
+				<Trigger Property="Window.ResizeMode" Value="NoResize">
+					<Setter Property="Visibility" TargetName="maximizeButton" Value="Collapsed"/>
+					<Setter Property="Visibility" TargetName="minimizeButton" Value="Collapsed"/>
+					<Setter Property="Height" TargetName="topResizeFrame" Value="3"/>
+					<Setter Property="Width" TargetName="leftResizeFrame" Value="3"/>
+					<Setter Property="Width" TargetName="rightResizeFrame" Value="3"/>
+					<Setter Property="Height" TargetName="bottomResizeFrame" Value="3"/>
+				</Trigger>
+				<Trigger Property="Window.ResizeMode" Value="CanMinimize">
+					<Setter Property="Height" TargetName="topResizeFrame" Value="3"/>
+					<Setter Property="Width" TargetName="leftResizeFrame" Value="3"/>
+					<Setter Property="Width" TargetName="rightResizeFrame" Value="3"/>
+					<Setter Property="Height" TargetName="bottomResizeFrame" Value="3"/>
+				</Trigger>
+				<Trigger Property="Window.ResizeMode" Value="CanResizeWithGrip">
+					<Setter Property="Visibility" TargetName="resizeGrip" Value="Visible"/>
+				</Trigger>
+				<MultiTrigger>
+					<MultiTrigger.Conditions>
+						<Condition Property="Window.WindowStyle" Value="None"/>
+						<Condition Property="Window.AllowsTransparency" Value="True"/>
+					</MultiTrigger.Conditions>
+					<Setter Property="Visibility" TargetName="topResizeFrame" Value="Collapsed"/>
+					<Setter Property="Visibility" TargetName="leftResizeFrame" Value="Collapsed"/>
+					<Setter Property="Visibility" TargetName="rightResizeFrame" Value="Collapsed"/>
+					<Setter Property="Visibility" TargetName="bottomResizeFrame" Value="Collapsed"/>
+				</MultiTrigger>
+				<MultiTrigger>
+					<MultiTrigger.Conditions>
+						<Condition Property="Window.WindowStyle" Value="None"/>
+						<Condition Property="Window.ResizeMode" Value="NoResize"/>
+					</MultiTrigger.Conditions>
+					<Setter Property="Visibility" TargetName="topResizeFrame" Value="Collapsed"/>
+					<Setter Property="Visibility" TargetName="leftResizeFrame" Value="Collapsed"/>
+					<Setter Property="Visibility" TargetName="rightResizeFrame" Value="Collapsed"/>
+					<Setter Property="Visibility" TargetName="bottomResizeFrame" Value="Collapsed"/>
+				</MultiTrigger>
+				<MultiTrigger>
+					<MultiTrigger.Conditions>
+						<Condition Property="Window.WindowStyle" Value="None"/>
+						<Condition Property="Window.ResizeMode" Value="CanMinimize"/>
+					</MultiTrigger.Conditions>
+					<Setter Property="Visibility" TargetName="topResizeFrame" Value="Collapsed"/>
+					<Setter Property="Visibility" TargetName="leftResizeFrame" Value="Collapsed"/>
+					<Setter Property="Visibility" TargetName="rightResizeFrame" Value="Collapsed"/>
+					<Setter Property="Visibility" TargetName="bottomResizeFrame" Value="Collapsed"/>
+				</MultiTrigger>
+			</ControlTemplate.Triggers>
+		</ControlTemplate>		
+	</Window.Resources>
 	
 	<StackPanel>
 		<ToolBarTray DockPanel.Dock="Top">
@@ -36,15 +206,14 @@
 				</Button>
 			</ToolBar>
 		</ToolBarTray>
-      
-          <TabControl Margin="8" Height="136" Width="298">
-            <TabItem Header="One" />
-            <TabItem Header="Two" />
-            <TabItem Header="Three" />
-            <TabItem Header="Four" />
-          </TabControl>
-
+		<TabControl Grid.Row="0" Grid.Column="0">
+			<TabItem Header="Page 1">
+			</TabItem>
+			<TabItem Header="Page 2">
+			</TabItem>
+		</TabControl>
 
 	</StackPanel>
+	
 
 </Window>
