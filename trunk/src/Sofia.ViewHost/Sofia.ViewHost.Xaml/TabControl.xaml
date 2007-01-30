@@ -4,11 +4,7 @@
 	<!-- Resource dictionary entries should be defined here. -->
 	<SolidColorBrush x:Key="TabControlNormalBorderBrush"
 		Color="#919B9C"/>
-
-
-
-
-  
+ 
      
 	<LinearGradientBrush x:Key="TabControlPaneTopNormalBackground"
 		StartPoint="0,0"
@@ -238,11 +234,8 @@
 		<GradientStop Color="#FFECEBE6"
 			Offset="1"/>
 	</LinearGradientBrush>
-	<LinearGradientBrush x:Key="TabItemSelectedBackground"
-		EndPoint="1,0.5" StartPoint="0,0.5" SpreadMethod="Reflect">
-		<GradientStop Color="#FFFFFFFF" Offset="0.462"/>
-		<GradientStop Color="#FF97B2FF" Offset="0.645"/>
-	</LinearGradientBrush>
+	<SolidColorBrush x:Key="TabItemSelectedBackground"
+		Color="#FFFFFFFF"/>
 	<SolidColorBrush x:Key="TabItemDisabledBackground"
 		Color="#FFF5F4EA"/>
 	<SolidColorBrush x:Key="TabItemDisabledBorderBrush"
@@ -304,9 +297,7 @@
 							Value="true">
 							<Setter Property="Panel.ZIndex"
 								Value="1"/>
-							<Setter TargetName="Bd"
-								Property="Background"
-								Value="{StaticResource TabItemSelectedBackground}"/>
+							<Setter Property="Background" TargetName="Bd" Value="{DynamicResource TabItemSelectedBackground}"/>
 						</Trigger>
 						<Trigger Property="TabStripPlacement"
 							Value="Bottom">

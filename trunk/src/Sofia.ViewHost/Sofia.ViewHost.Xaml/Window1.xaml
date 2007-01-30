@@ -5,7 +5,7 @@
 	x:Class="Sofia.Window1"
 	x:Name="Window"
 	Title="Window"
-	Width="640" Height="480" AllowDrop="True" WindowStartupLocation="CenterScreen" WindowState="Normal" WindowStyle="SingleBorderWindow" Icon="ServiceCleyris.png" xmlns:d="http://schemas.microsoft.com/expression/blend/2006" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" Template="{DynamicResource WindowTemplate}">
+	Width="640" Height="480" AllowDrop="True" WindowStartupLocation="CenterScreen" WindowState="Normal" WindowStyle="SingleBorderWindow" xmlns:d="http://schemas.microsoft.com/expression/blend/2006" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d">
 
 	<Window.Resources>	    
 		<XmlDataProvider x:Key="MainMenuData">

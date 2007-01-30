@@ -30,6 +30,5 @@
     </Compile>
     <Page Include="TabControl.xaml" />
     <Page Include="Window1.xaml" />
-    <Resource Include="ServiceCleyris.png" />
   </ItemGroup>
 </Project>
