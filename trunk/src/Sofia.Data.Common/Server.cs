@@ -38,6 +38,13 @@ namespace Sofia.Data.Common
         private string _ProviderName;
         private string _DatabaseName;
         private int _Port;
+        private string _lastError;
+
+        public string LastError
+        {
+            get { return _lastError; }
+            set { _lastError = value; }
+        }
         private string _ConnectionString;
 
         /// <summary>
@@ -67,6 +74,7 @@ namespace Sofia.Data.Common
         ///<seealso cref="Format du fichier ini des logiciels Axilog"/>
         public bool OpenConnection()
         {
+            string connectionString = String.Format("initial catalog={0};user id=sysdba;password=masterkey;character set=NONE;port={1};", _DatabaseName, _Port);
             //Initialisation de la connexion
             try
             {
@@ -76,6 +84,7 @@ namespace Sofia.Data.Common
             }
             catch (Exception e)
             {
+                _lastError = e.Message;
                 return false;
             }
 
@@ -84,11 +93,11 @@ namespace Sofia.Data.Common
             {
                 _DbConnection.Open();
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                _lastError = e.Message;
                 return false;
             }
-
             return true;
         }
 

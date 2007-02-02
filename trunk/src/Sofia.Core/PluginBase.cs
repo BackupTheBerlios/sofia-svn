@@ -18,10 +18,10 @@ namespace Sofia.Plugins
 
 #if GTK
         private static string UILibraryName = "Gtk";
-#else
+#endif
 #if XAML
         private static string UILibraryName = "Xaml";
-#else 
+#endif 
 #if WINDOWSFORM
         private static string UILibraryName = "WindowsForm";
 #endif        

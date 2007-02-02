@@ -63,7 +63,7 @@ namespace Sofia.Data.Common
 
                 //Initialization of the field instance's properties
                 fieldInstance.Filtered = false;
-                fieldInstance.Value = null;
+                fieldInstance.ObjectValue = null;
                 if (fieldInfo.FieldType == typeof(DbStringField))
                     (fieldInstance as DbStringField).Size = GetDbTypeSize(fieldInfo);
             }
@@ -127,10 +127,13 @@ namespace Sofia.Data.Common
                 foreach (FieldInfo fieldInfo in GetFields())
                 {
                     object fieldValue = fieldInfo.GetValue(this);
+                    PropertyInfo propertyInfo = fieldValue.GetType().GetProperty("Value");
+
                     DbField field = (DbField)fieldValue;
                     if (ReaderHasRow(field))
                     {
-                        field.Value = _DbDataReader[field.Name];
+                        if (_DbDataReader[field.Name].GetType() != typeof(System.DBNull))
+                            propertyInfo.SetValue(fieldValue, _DbDataReader[field.Name], null);
                     }
                 }
                 //TODO : DataHistory.add(this);
@@ -344,7 +347,7 @@ namespace Sofia.Data.Common
         private bool IsAffectedNonPrimaryField(FieldInfo fieldInfo)
         {
             DbField field = (DbField)fieldInfo.GetValue(this);
-            return (field.Value != null && !IsPrimaryKeyField(fieldInfo));
+            return (field.ObjectValue != null && !IsPrimaryKeyField(fieldInfo));
         }
         /// <summary>
         /// Gets the derived class public member list.
@@ -654,7 +657,7 @@ namespace Sofia.Data.Common
                 object fieldValue = fieldInfo.GetValue(this);
                 DbField field = (DbField)fieldValue;
                 DbType dbType = field.DbType;
-                fbQuery.AddParameter(field.Name, dbType, field.Value);
+                fbQuery.AddParameter(field.Name, dbType, field.ObjectValue);
             }
         }
         #endregion
@@ -683,7 +686,7 @@ namespace Sofia.Data.Common
         /// <summary>
         /// The field value.
         /// </summary>
-        private object _Value;
+        private object _ObjectValue;
         /// <summary>
         /// Indicates the field is used in WHERE clause.
         /// </summary>
@@ -717,10 +720,10 @@ namespace Sofia.Data.Common
         /// <summary>
         /// Gets or sets the field value.
         /// </summary>
-        public object Value
+        public object ObjectValue
         {
-            get { return _Value; }
-            set { _Value = value; }
+            get { return _ObjectValue; }
+            set { _ObjectValue = value; }
         }
         /// <summary>
         /// Gets or sets the field's presence in the WHERE clause.
@@ -757,7 +760,7 @@ namespace Sofia.Data.Common
         /// </summary>
         public void Clear()
         {
-            _Value = null;
+            _ObjectValue = null;
         }
         /// <summary>
         /// Indicates if th field value is undefined
@@ -765,7 +768,7 @@ namespace Sofia.Data.Common
         /// <returns>True if the value is not assigned, else false.</returns>
         public bool IsEmpty()
         {
-            return _Value == null;
+            return _ObjectValue == null;
         }
         #endregion
     }
@@ -784,12 +787,12 @@ namespace Sofia.Data.Common
         /// <summary>
         /// Gets or sets the int32 field value.
         /// </summary>
-        public new int Value
+        public int Value
         {
             get { return _Value; }
             set
             {
-                base.Value = value;
+                base.ObjectValue = value;
                 _Value = value;
             }
         }
@@ -819,12 +822,12 @@ namespace Sofia.Data.Common
         /// <summary>
         /// Gets or sets the int64 field value.
         /// </summary>
-        public new long Value
+        public long Value
         {
             get { return _Value; }
             set
             {
-                base.Value = value;
+                base.ObjectValue = value;
                 _Value = value;
             }
         }
@@ -854,12 +857,12 @@ namespace Sofia.Data.Common
         /// <summary>
         /// Gets or sets the DateTime field value.
         /// </summary>
-        public new DateTime Value
+        public DateTime Value
         {
             get { return _Value; }
             set
             {
-                base.Value = value;
+                base.ObjectValue = value;
                 _Value = value;
             }
         }
@@ -901,7 +904,7 @@ namespace Sofia.Data.Common
         /// <summary>
         /// Gets or sets the string field value. Crop value if value size is greater than the field size.
         /// </summary>
-        public new string Value
+        public string Value
         {
             get
             {
@@ -915,7 +918,7 @@ namespace Sofia.Data.Common
                 if (Size != -1)
                     if (value.Length > Size)
                         _Value = value.Remove(Size);
-                base.Value = _Value;
+                base.ObjectValue = _Value;
             }
         }
         #endregion
@@ -961,12 +964,12 @@ namespace Sofia.Data.Common
         /// <summary>
         /// Gets or sets the int32 field value.
         /// </summary>
-        public new object Value
+        public object Value
         {
             get { return _Value; }
             set
             {
-                base.Value = value;
+                base.ObjectValue = value;
                 _Value = value;
             }
         }
@@ -1091,4 +1094,3 @@ namespace Sofia.Data.Common
 
     #endregion
 }
-

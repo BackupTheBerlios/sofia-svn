@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
-	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2006" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d">
 	<!-- Resource dictionary entries should be defined here. -->
 	<SolidColorBrush x:Key="TabControlNormalBorderBrush"
 		Color="#919B9C"/>
@@ -267,7 +267,7 @@
 								<Border x:Name="Bd"
 									CornerRadius="3,10,0,0"
 									BorderBrush="{TemplateBinding BorderBrush}"
-									BorderThickness="{TemplateBinding BorderThickness}">
+									BorderThickness="{TemplateBinding BorderThickness}" Width="Auto" Height="Auto">
 									<Border.Background>
 										<LinearGradientBrush EndPoint="0.476,0.987" StartPoint="0.476,-0.013">
 											<GradientStop Color="#FFFFFFFF" Offset="0"/>
@@ -284,6 +284,7 @@
 									VerticalAlignment="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
 									RecognizesAccessKey="True"/>
 							</Border>
+							<Button HorizontalAlignment="Left" Margin="97.917,8,0,0" VerticalAlignment="Top" Content="Button" Width="18.083"/>
 						</Grid>
 					</Border>
 					<ControlTemplate.Triggers>
@@ -384,10 +385,5 @@
 		</Setter>
 	</Style>
 
-
-
- 
-
- 
 	
 </ResourceDictionary>
