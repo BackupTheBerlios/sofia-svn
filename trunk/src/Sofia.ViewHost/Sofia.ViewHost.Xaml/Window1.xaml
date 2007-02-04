@@ -206,10 +206,12 @@
 				</Button>
 			</ToolBar>
 		</ToolBarTray>
-		<TabControl Grid.Row="0" Grid.Column="0">
+		<TabControl IsSynchronizedWithCurrentItem="True">
 			<TabItem Header="Page 1">
+				<Grid/>
 			</TabItem>
-			<TabItem Header="Page 2">
+			<TabItem Header="TabItem">
+				<Grid/>
 			</TabItem>
 		</TabControl>
 

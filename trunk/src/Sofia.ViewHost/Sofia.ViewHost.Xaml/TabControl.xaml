@@ -4,14 +4,18 @@
 	<!-- Resource dictionary entries should be defined here. -->
 	<SolidColorBrush x:Key="TabControlNormalBorderBrush"
 		Color="#919B9C"/>
- 
+
+
+
+
+  
      
 	<LinearGradientBrush x:Key="TabControlPaneTopNormalBackground"
 		StartPoint="0,0"
 		EndPoint="0,1">
 		<GradientStop Color="#FFFCFCFE"
 			Offset="0"/>
-		<GradientStop Color="#FFFFFFFF"
+		<GradientStop Color="#FFF4F3EE"
 			Offset="1"/>
 	</LinearGradientBrush>
 	<LinearGradientBrush x:Key="TabControlPaneBottomNormalBackground"
@@ -19,7 +23,7 @@
 		EndPoint="0,0">
 		<GradientStop Color="#FFFCFCFE"
 			Offset="0"/>
-		<GradientStop Color="#FFFFFFFF"
+		<GradientStop Color="#FFF4F3EE"
 			Offset="1"/>
 	</LinearGradientBrush>
 	<LinearGradientBrush x:Key="TabControlPaneLeftNormalBackground"
@@ -196,9 +200,6 @@
 
 
  
-
- 
-	
 	<Style x:Key="TabItemFocusVisual">
 		<Setter Property="Control.Template">
 			<Setter.Value>
@@ -222,9 +223,19 @@
 		StartPoint="0,0"
 		EndPoint="0,1">
 		<GradientStop Color="#FFFFFFFF"
-			Offset="0.355"/>
-		<GradientStop Color="#FFCBD8FD"
-			Offset="0.586"/>
+			Offset="0"/>
+		<GradientStop Color="#FFECEBE6"
+			Offset="1"/>
+	</LinearGradientBrush>
+	<LinearGradientBrush x:Key="TabItemHotBorderBrush"
+		EndPoint="1,0.5" StartPoint="0,0.5">
+		<GradientStop Color="#FF919B9C" Offset="0"/>
+		<GradientStop Color="#FFE68B2C" Offset="1"/>
+	</LinearGradientBrush>
+	<LinearGradientBrush x:Key="TabItemHotBorderBackround"
+		EndPoint="1,0.5" StartPoint="0,0.5">
+		<GradientStop Color="#FFFFFFFF" Offset="0"/>
+		<GradientStop Color="#FFFFC73C" Offset="1"/>
 	</LinearGradientBrush>
 	<LinearGradientBrush x:Key="TabItemHotBackground"
 		StartPoint="0,0"
@@ -234,8 +245,18 @@
 		<GradientStop Color="#FFECEBE6"
 			Offset="1"/>
 	</LinearGradientBrush>
+	<LinearGradientBrush x:Key="TabItemSelectedBorderBrush"
+		EndPoint="1,0.5" StartPoint="0,0.5">
+		<GradientStop Color="#FF919B9C" Offset="0"/>
+		<GradientStop Color="#FFE68B2C" Offset="1"/>
+	</LinearGradientBrush>
+	<LinearGradientBrush x:Key="TabItemSelectedBorderBackround"
+		EndPoint="1,0.5" StartPoint="0,0.5">
+		<GradientStop Color="#FFFFFFFF" Offset="0"/>
+		<GradientStop Color="#FFFFC73C" Offset="1"/>
+	</LinearGradientBrush>
 	<SolidColorBrush x:Key="TabItemSelectedBackground"
-		Color="#FFFFFFFF"/>
+		Color="#FFFCFCFE"/>
 	<SolidColorBrush x:Key="TabItemDisabledBackground"
 		Color="#FFF5F4EA"/>
 	<SolidColorBrush x:Key="TabItemDisabledBorderBrush"
@@ -265,31 +286,35 @@
 						<Grid Margin="0,0,1,0">
 							<Grid x:Name="Transform">
 								<Border x:Name="Bd"
-									CornerRadius="3,10,0,0"
+									CornerRadius="13,3,0,0"
+									Background="{TemplateBinding Background}"
 									BorderBrush="{TemplateBinding BorderBrush}"
-									BorderThickness="{TemplateBinding BorderThickness}" Width="Auto" Height="Auto">
-									<Border.Background>
-										<LinearGradientBrush EndPoint="0.476,0.987" StartPoint="0.476,-0.013">
-											<GradientStop Color="#FFFFFFFF" Offset="0"/>
-											<GradientStop Color="#FFECEBE6" Offset="1"/>
-										</LinearGradientBrush>
-									</Border.Background>
-								</Border>
+									BorderThickness="{TemplateBinding BorderThickness}"/>
+								<Border x:Name="HighlightBorder"
+									Height="3"
+									BorderThickness="1,1,1,0"
+									CornerRadius="10,3,0,0"
+									VerticalAlignment="Top" Margin="6,0,0,0"/>
 							</Grid>
 							<Border BorderThickness="{TemplateBinding BorderThickness}"
-								Padding="{TemplateBinding Padding}" CornerRadius="0,0,80,0">
+								Padding="{TemplateBinding Padding}" CornerRadius="0,0,0,0">
 								<ContentPresenter ContentSource="Header"
 									SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
 									HorizontalAlignment="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
 									VerticalAlignment="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
 									RecognizesAccessKey="True"/>
 							</Border>
-							<Button HorizontalAlignment="Left" Margin="97.917,8,0,0" VerticalAlignment="Top" Content="Button" Width="18.083"/>
 						</Grid>
 					</Border>
 					<ControlTemplate.Triggers>
 						<Trigger Property="IsMouseOver"
 							Value="true">
+							<Setter TargetName="HighlightBorder"
+								Property="BorderBrush"
+								Value="{StaticResource TabItemHotBorderBrush}"/>
+							<Setter TargetName="HighlightBorder"
+								Property="Background"
+								Value="{StaticResource TabItemHotBorderBackround}"/>
 							<Setter TargetName="Bd"
 								Property="Background"
 								Value="{StaticResource TabItemHotBackground}"/>
@@ -298,7 +323,15 @@
 							Value="true">
 							<Setter Property="Panel.ZIndex"
 								Value="1"/>
-							<Setter Property="Background" TargetName="Bd" Value="{DynamicResource TabItemSelectedBackground}"/>
+							<Setter TargetName="HighlightBorder"
+								Property="BorderBrush"
+								Value="{StaticResource TabItemSelectedBorderBrush}"/>
+							<Setter TargetName="HighlightBorder"
+								Property="Background"
+								Value="{StaticResource TabItemSelectedBorderBackround}"/>
+							<Setter TargetName="Bd"
+								Property="Background"
+								Value="{StaticResource TabItemSelectedBackground}"/>
 						</Trigger>
 						<Trigger Property="TabStripPlacement"
 							Value="Bottom">
@@ -385,5 +418,7 @@
 		</Setter>
 	</Style>
 
-	
+
+
+ 
 </ResourceDictionary>
