@@ -283,7 +283,7 @@
 						<Grid Margin="0,0,1,0">
 							<Grid x:Name="Transform">								
 								<Grid 
-									Margin="0,3.5,0,0" 
+									Margin="0,0,0,-0.5" 
 									VerticalAlignment="Stretch" 
 									x:Name="grid" HorizontalAlignment="Stretch">			
 									<Grid.ColumnDefinitions>
@@ -293,20 +293,19 @@
 									<Rectangle x:Name="BdRectangle"
 										Stroke="{TemplateBinding Background}" 
 										StrokeThickness="1" 
-										Margin="1.662,0,0.002,0" 
+										Margin="0,0,0,0" 
 										VerticalAlignment="Bottom" 
 										Height="1"
-									d:LayoutOverrides="GridBox"
 									/>
 									<Path x:Name="BdPath" 
 										Fill="{TemplateBinding Background}" 
 										Stroke="{TemplateBinding BorderBrush}" 
 										StrokeThickness="1" 
 										HorizontalAlignment="Stretch" 
-										Margin="-0.5,0,43,-0.603" 
+										Margin="-1,0,0,0" 
 										VerticalAlignment="Bottom" 
-										Height="25.103" 
-										Grid.ColumnSpan="2" 
+										Height="25" 
+										Grid.ColumnSpan="1" 
 										Data="M81,24.5 L81,0.50000001 C81,0.50000001 33,0.50000001 25,0.50000001 17,0.50000001 5.4259259,24.603011 0.5,24.603011"
 									/>
 									<Border x:Name="BdBorder"
@@ -335,7 +334,7 @@
 										RecognizesAccessKey="True"
 										SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
 										HorizontalAlignment="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-										VerticalAlignment="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+										VerticalAlignment="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" Margin="30,0,-5,0"/>
 							</Border>
 						</Grid>
 					</Border>
