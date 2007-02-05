@@ -228,12 +228,12 @@
 			Offset="1"/>
 	</LinearGradientBrush>
 	<LinearGradientBrush x:Key="TabItemHotBorderBrush"
-		EndPoint="1,0" StartPoint="1,1">
+		EndPoint="1,0.5" StartPoint="0,0.5">
 		<GradientStop Color="#FF919B9C" Offset="0"/>
 		<GradientStop Color="#FFE68B2C" Offset="1"/>
 	</LinearGradientBrush>
 	<LinearGradientBrush x:Key="TabItemHotBorderBackround"
-		EndPoint="1,0" StartPoint="1,1">
+		EndPoint="1,0.5" StartPoint="0,0.5">
 		<GradientStop Color="#FFFFFFFF" Offset="0"/>
 		<GradientStop Color="#FFFFC73C" Offset="1"/>
 	</LinearGradientBrush>
@@ -246,12 +246,12 @@
 			Offset="1"/>
 	</LinearGradientBrush>
 	<LinearGradientBrush x:Key="TabItemSelectedBorderBrush"
-		EndPoint="1,0" StartPoint="1,1">
+		EndPoint="1,0.5" StartPoint="0,0.5">
 		<GradientStop Color="#FF919B9C" Offset="0"/>
 		<GradientStop Color="#FFE68B2C" Offset="1"/>
 	</LinearGradientBrush>
 	<LinearGradientBrush x:Key="TabItemSelectedBorderBackround"
-		EndPoint="1,0" StartPoint="1,1">
+		EndPoint="1,0.5" StartPoint="0,0.5">
 		<GradientStop Color="#FFFFFFFF" Offset="0"/>
 		<GradientStop Color="#FFFFC73C" Offset="1"/>
 	</LinearGradientBrush>
@@ -284,25 +284,54 @@
 				<ControlTemplate TargetType="{x:Type TabItem}">
 					<Border SnapsToDevicePixels="true">
 						<Grid Margin="0,0,1,0">
-							<Grid x:Name="Transform" ShowGridLines="False">
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="*"/>
-								</Grid.ColumnDefinitions>
-								<Path x:Name="Bd"
-									  Fill="{TemplateBinding Background}"
-									  Stroke="{TemplateBinding BorderBrush}"
-									  Data="M96.5,24.5 L96.5,0.5 32.5,0.5 0.5,24.5" StrokeThickness="1" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Bottom" Width="Auto" Height="Auto" Grid.ColumnSpan="1"/>
-								<!--
-								<Border x:Name="Bd"
-									CornerRadius="13,3,0,0"
-									Background="{TemplateBinding Background}"
-									BorderBrush="{TemplateBinding BorderBrush}"
-									BorderThickness="{TemplateBinding BorderThickness}"/>
-								-->
+							<Grid x:Name="Transform">
+								
+								<Grid 
+									Margin="0,0,0,0" 
+									VerticalAlignment="Top" 
+									Height="40.426">			
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="80"/>
+										<ColumnDefinition Width="*"/>
+									</Grid.ColumnDefinitions>
+									<Rectangle x:Name="BdRectangle"
+										Stroke="{TemplateBinding Background}" 
+										StrokeThickness="1" 
+										Margin="0,0,0,-1" 
+										VerticalAlignment="Bottom" 
+										Height="1"
+									/>
+									<Path x:Name="BdPath"
+										d:LayoutOverrides="GridBox" 
+										Fill="{TemplateBinding Background}" 
+										Stroke="{TemplateBinding BorderBrush}" 
+										StrokeThickness="1" 
+										HorizontalAlignment="Stretch" 
+										Margin="-1,0,0,-1" 
+										VerticalAlignment="Bottom" 
+										Height="25" 
+										Grid.ColumnSpan="1" 
+										Data="M80.5,24.5 L80.5,0.49999995 C80.5,0.49999995 32.5,0.49999995 24.5,0.49999995 16.5,0.49999995 5.4259259,24.5 0.50000001,24.5"
+									/>
+									<Border x:Name="BdBorder"
+										d:LayoutOverrides="GridBox" 
+										HorizontalAlignment="Stretch" 
+										Margin="-2,0,0,-1" 
+										VerticalAlignment="Bottom" 
+										Width="Auto" 
+										Height="25" 
+										Grid.Column="1" 
+										Grid.ColumnSpan="1" 
+										Background="{TemplateBinding Background}" 
+										BorderBrush="{TemplateBinding BorderBrush}" 
+										BorderThickness="0,1,1,0" 
+									/>
+								</Grid>
 								<Border x:Name="HighlightBorder"
+									Height="3"
 									BorderThickness="1,1,1,0"
-									CornerRadius="13,3,0,0"
-									Margin="24,16.745,37.059,17.645" d:LayoutOverrides="Margin" HorizontalAlignment="Stretch" Grid.ColumnSpan="1"/>															
+									CornerRadius="10,3,0,0"
+									VerticalAlignment="Top" Margin="6,0,0,0"/>
 							</Grid>
 							<Border BorderThickness="{TemplateBinding BorderThickness}"
 								Padding="{TemplateBinding Padding}" CornerRadius="0,0,0,0">
@@ -323,8 +352,14 @@
 							<Setter TargetName="HighlightBorder"
 								Property="Background"
 								Value="{StaticResource TabItemHotBorderBackround}"/>
-							<Setter TargetName="Bd"
+							<Setter TargetName="BdRectangle"
+								Property="Stroke"
+								Value="{StaticResource TabItemHotBackground}"/>	
+							<Setter TargetName="BdPath"
 								Property="Fill"
+								Value="{StaticResource TabItemHotBackground}"/>		
+							<Setter TargetName="BdBorder"
+								Property="Background"
 								Value="{StaticResource TabItemHotBackground}"/>
 						</Trigger>
 						<Trigger Property="IsSelected"
@@ -337,9 +372,15 @@
 							<Setter TargetName="HighlightBorder"
 								Property="Background"
 								Value="{StaticResource TabItemSelectedBorderBackround}"/>
-							<Setter TargetName="Bd"
+							<Setter TargetName="BdRectangle"
+								Property="Stroke"
+								Value="{StaticResource TabItemSelectedBackground}"/>	
+							<Setter TargetName="BdPath"
 								Property="Fill"
-								Value="{StaticResource TabItemSelectedBackground}"/>
+								Value="{StaticResource TabItemSelectedBackground}"/>		
+							<Setter TargetName="BdBorder"
+								Property="Background"
+								Value="{StaticResource TabItemSelectedBackground}"/>							
 						</Trigger>
 						<Trigger Property="TabStripPlacement"
 							Value="Bottom">
@@ -373,12 +414,21 @@
 							Value="false">
 							<Setter Property="Foreground"
 								Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-							<Setter TargetName="Bd"
-								Property="Fill"
-								Value="{StaticResource TabItemDisabledBackground}"/>
-							<Setter TargetName="Bd"
+							<Setter TargetName="BdRectangle"
 								Property="Stroke"
-								Value="{StaticResource TabItemDisabledBorderBrush}"/>
+								Value="{StaticResource TabItemDisabledBackground}"/>	
+							<Setter TargetName="BdPath"
+								Property="Fill"
+								Value="{StaticResource TabItemDisabledBackground}"/>		
+							<Setter TargetName="BdBorder"
+								Property="Background"
+								Value="{StaticResource TabItemDisabledBackground}"/>
+							<Setter TargetName="BdPath"
+								Property="Stroke"
+								Value="{StaticResource TabItemDisabledBorderBrush}"/>		
+							<Setter TargetName="BdBorder"
+								Property="BorderBrush"
+								Value="{StaticResource TabItemDisabledBorderBrush}"/>																							
 						</Trigger>
 						<MultiTrigger>
 							<MultiTrigger.Conditions>
