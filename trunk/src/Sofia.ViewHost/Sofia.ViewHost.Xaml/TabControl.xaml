@@ -284,11 +284,10 @@
 				<ControlTemplate TargetType="{x:Type TabItem}">
 					<Border SnapsToDevicePixels="true">
 						<Grid Margin="0,0,1,0">
-							<Grid x:Name="Transform">
-								
+							<Grid x:Name="Transform">								
 								<Grid 
 									Margin="0,0,0,0" 
-									VerticalAlignment="Top" 
+									VerticalAlignment="Bottom" 
 									Height="40.426">			
 									<Grid.ColumnDefinitions>
 										<ColumnDefinition Width="80"/>
@@ -297,7 +296,7 @@
 									<Rectangle x:Name="BdRectangle"
 										Stroke="{TemplateBinding Background}" 
 										StrokeThickness="1" 
-										Margin="0,0,0,-1" 
+										Margin="0,0,0,0" 
 										VerticalAlignment="Bottom" 
 										Height="1"
 									/>
@@ -307,7 +306,7 @@
 										Stroke="{TemplateBinding BorderBrush}" 
 										StrokeThickness="1" 
 										HorizontalAlignment="Stretch" 
-										Margin="-1,0,0,-1" 
+										Margin="0,0,0,0" 
 										VerticalAlignment="Bottom" 
 										Height="25" 
 										Grid.ColumnSpan="1" 
@@ -316,7 +315,7 @@
 									<Border x:Name="BdBorder"
 										d:LayoutOverrides="GridBox" 
 										HorizontalAlignment="Stretch" 
-										Margin="-2,0,0,-1" 
+										Margin="0,0,0,0" 
 										VerticalAlignment="Bottom" 
 										Width="Auto" 
 										Height="25" 
@@ -334,12 +333,12 @@
 									VerticalAlignment="Top" Margin="6,0,0,0"/>
 							</Grid>
 							<Border BorderThickness="{TemplateBinding BorderThickness}"
-								Padding="{TemplateBinding Padding}" CornerRadius="0,0,0,0">
-								<ContentPresenter ContentSource="Header"
-									SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-									HorizontalAlignment="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-									VerticalAlignment="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-									RecognizesAccessKey="True"/>
+									Margin="0,10,0,-1" Padding="{TemplateBinding Padding}">
+									<ContentPresenter ContentSource="Header"
+										RecognizesAccessKey="True"
+										SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+										HorizontalAlignment="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+										VerticalAlignment="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" Margin="0,0,0,-1"/>
 							</Border>
 						</Grid>
 					</Border>
