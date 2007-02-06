@@ -5,6 +5,10 @@
 		<GradientStop Color="#FF000000" Offset="0.995"/>
 		<GradientStop Color="#FFFFFFFF" Offset="0.328"/>
 	</LinearGradientBrush>
+	<LinearGradientBrush x:Key="ButtonPressedBackground" EndPoint="0,0.1" StartPoint="0,0.5">
+		<GradientStop Color="#FF000000" Offset="0.995"/>
+		<GradientStop Color="#FFFFFFFF" Offset="0.328"/>
+	</LinearGradientBrush>
 	<!-- Resource dictionary entries should be defined here. -->
 	<Style TargetType="{x:Type Button}" x:Key="PhantomStyle">
 		<Setter Property="Template"> 
@@ -17,7 +21,10 @@
 						</Grid>
 					</Border>    				
 					<ControlTemplate.Triggers>
-						<Trigger Property="IsPressed" Value="True"/>
+						<Trigger Property="IsPressed" Value="True">
+							<Setter Property="Background" TargetName="Transform" Value="{DynamicResource ButtonPressedBackground}"/>
+							<Setter Property="BorderBrush" TargetName="Transform" Value="#FF000000"/>
+						</Trigger>
 						<Trigger Property="IsMouseOver" Value="True">
 							<Setter Property="Background" TargetName="Transform" Value="{DynamicResource ButtonHoverBackground}"/>
 							<Setter Property="BorderBrush" TargetName="Transform" Value="#FF000000"/>
@@ -27,4 +34,4 @@
     		</Setter.Value>
     	</Setter>
 	</Style>
-</ResourceDictionary>
+</ResourceDictionary>	
