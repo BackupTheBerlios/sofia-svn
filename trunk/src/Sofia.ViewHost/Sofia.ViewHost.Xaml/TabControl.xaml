@@ -13,9 +13,9 @@
 	<LinearGradientBrush x:Key="TabControlPaneTopNormalBackground"
 		StartPoint="0,0"
 		EndPoint="0,1">
-		<GradientStop Color="#FFFCFCFE"
+		<GradientStop Color="#FFE1EEFF"
 			Offset="0"/>
-		<GradientStop Color="#FFF4F3EE"
+		<GradientStop Color="#FFB1D4FF"
 			Offset="1"/>
 	</LinearGradientBrush>
 	<LinearGradientBrush x:Key="TabControlPaneBottomNormalBackground"
@@ -65,9 +65,9 @@
 						SnapsToDevicePixels="true"
 						ClipToBounds="true">
 						<Grid.ColumnDefinitions>
-							<ColumnDefinition x:Name="ColumnDefinition0"/>
+							<ColumnDefinition x:Name="ColumnDefinition0" Width="*"/>
 							<ColumnDefinition x:Name="ColumnDefinition1"
-								Width="0"/>
+								Width="2"/>
 						</Grid.ColumnDefinitions>
 						<Grid.RowDefinitions>
 							<RowDefinition x:Name="RowDefinition0"
@@ -80,8 +80,8 @@
 							KeyboardNavigation.TabIndex="1"
 							Grid.Column="0"
 							Grid.Row="0"
-							Margin="2,2,2,0"
-							IsItemsHost="true"/>
+							Margin="2,-1,2,0"
+							IsItemsHost="true" VerticalAlignment="Stretch" Background="#FFEEF6FF"/>
 						<Border x:Name="ContentPanel"
 							BorderThickness="0,0,1,1"
 							BorderBrush="#D0CEBF"
@@ -216,23 +216,15 @@
    
   
   
-	<LinearGradientBrush x:Key="TabItemNormalBackground"
-		StartPoint="0,0"
-		EndPoint="0,1">
-		<GradientStop Color="#FFFFFFFF"
-			Offset="0"/>
-		<GradientStop Color="#FFECEBE6"
-			Offset="1"/>
-	</LinearGradientBrush>
 	<LinearGradientBrush x:Key="TabItemHotBorderBrush"
 		EndPoint="1,0.5" StartPoint="0,0.5">
 		<GradientStop Color="#FF919B9C" Offset="0"/>
-		<GradientStop Color="#FFE68B2C" Offset="1"/>
+		<GradientStop Color="#FF000000" Offset="1"/>
 	</LinearGradientBrush>
 	<LinearGradientBrush x:Key="TabItemHotBorderBackround"
 		EndPoint="1,0.5" StartPoint="0,0.5">
 		<GradientStop Color="#FFFFFFFF" Offset="0"/>
-		<GradientStop Color="#FFFFC73C" Offset="1"/>
+		<GradientStop Color="#FF3C8AFF" Offset="1"/>
 	</LinearGradientBrush>
 	<LinearGradientBrush x:Key="TabItemHotBackground"
 		StartPoint="0,0"
@@ -245,15 +237,34 @@
 	<LinearGradientBrush x:Key="TabItemSelectedBorderBrush"
 		EndPoint="1,0.5" StartPoint="0,0.5">
 		<GradientStop Color="#FF919B9C" Offset="0"/>
-		<GradientStop Color="#FFE68B2C" Offset="1"/>
+		<GradientStop Color="#FF000000" Offset="1"/>
 	</LinearGradientBrush>
 	<LinearGradientBrush x:Key="TabItemSelectedBorderBackround"
 		EndPoint="1,0.5" StartPoint="0,0.5">
 		<GradientStop Color="#FFFFFFFF" Offset="0"/>
-		<GradientStop Color="#FFFFC73C" Offset="1"/>
+		<GradientStop Color="#FF3C93FF" Offset="1"/>
 	</LinearGradientBrush>
-	<SolidColorBrush x:Key="TabItemSelectedBackground"
-		Color="#FFFCFCFE"/>
+	<LinearGradientBrush x:Key="TabItemNormalBackground"
+			StartPoint="0,0"
+			EndPoint="0,1">
+			<GradientStop Color="#FFFFFFFF"
+				Offset="0"/>
+			<GradientStop Color="#FFBDBEDE"
+				Offset="1"/>
+		</LinearGradientBrush>
+
+    
+   
+  
+  
+	<LinearGradientBrush x:Key="TabItemSelectedBackground"
+		StartPoint="0,0"
+		EndPoint="0,1">
+		<GradientStop Color="#FFFFFFFF"
+			Offset="0"/>
+		<GradientStop Color="#FFD7E9FF"
+			Offset="1"/>
+	</LinearGradientBrush>
 	<SolidColorBrush x:Key="TabItemDisabledBackground"
 		Color="#FFF5F4EA"/>
 	<SolidColorBrush x:Key="TabItemDisabledBorderBrush"
@@ -283,17 +294,17 @@
 						<Grid Margin="0,0,1,0">
 							<Grid x:Name="Transform">								
 								<Grid 
-									Margin="0,0,0,-0.5" 
+									Margin="0,0,0,0" 
 									VerticalAlignment="Stretch" 
-									x:Name="grid" HorizontalAlignment="Stretch">			
+									x:Name="grid" HorizontalAlignment="Stretch" ShowGridLines="False">			
 									<Grid.ColumnDefinitions>
 										<ColumnDefinition Width="80"/>
 										<ColumnDefinition Width="*"/>
 									</Grid.ColumnDefinitions>
 									<Rectangle x:Name="BdRectangle"
-										Stroke="{TemplateBinding Background}" 
+										Stroke="{DynamicResource TabItemNormalBackground}" 
 										StrokeThickness="1" 
-										Margin="0,0,0,0" 
+										Margin="1,-1,0,0" 
 										VerticalAlignment="Bottom" 
 										Height="1"
 									/>
@@ -302,7 +313,7 @@
 										Stroke="{TemplateBinding BorderBrush}" 
 										StrokeThickness="1" 
 										HorizontalAlignment="Stretch" 
-										Margin="-1,0,0,0" 
+										Margin="-1,0,0,-0.5" 
 										VerticalAlignment="Bottom" 
 										Height="25" 
 										Grid.ColumnSpan="1" 
@@ -311,10 +322,10 @@
 									<Border x:Name="BdBorder"
 										d:LayoutOverrides="GridBox" 
 										HorizontalAlignment="Stretch" 
-										Margin="0,0,0,0" 
+										Margin="-1,0,0,0" 
 										VerticalAlignment="Bottom" 
 										Width="Auto" 
-										Height="25" 
+										Height="24.5" 
 										Grid.Column="1" 
 										Grid.ColumnSpan="1" 
 										Background="{TemplateBinding Background}" 
@@ -324,21 +335,22 @@
 									<Image 
 										Margin="24,16,0,3.5" Width="16" Source="document.png"
 								d:LayoutOverrides="Height" HorizontalAlignment="Left" VerticalAlignment="Bottom" Stretch="Uniform" StretchDirection="Both"
+							x:Name="Image"
 							/>
 								</Grid>
 								<Border x:Name="HighlightBorder"
-										Height="3"
-										BorderThickness="1,1,1,0"
-										CornerRadius="3,3,0,0"
-										VerticalAlignment="Top"/>
+										Height="2.93"
+										BorderThickness="0,1,1,0"
+										CornerRadius="0,0,0,0"
+										VerticalAlignment="Bottom" d:LayoutOverrides="Margin" HorizontalAlignment="Stretch" Margin="23.998,0,0.002,21.573" Width="Auto"/>
 							</Grid>
 							<Border BorderThickness="{TemplateBinding BorderThickness}"
-									Padding="{TemplateBinding Padding}">
+									Padding="{TemplateBinding Padding}" d:LayoutOverrides="Margin" Margin="-1.595,0,1.595,0" x:Name="border">
 									<ContentPresenter ContentSource="Header"
 										RecognizesAccessKey="True"
 										SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
 										HorizontalAlignment="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-										Margin="30,13,-5,0" VerticalAlignment="Bottom" Height="15"/>
+										Margin="30,13,-5,0" VerticalAlignment="Bottom" Height="16"/>
 							</Border>
 						</Grid>
 					</Border>
@@ -351,15 +363,9 @@
 							<Setter TargetName="HighlightBorder"
 								Property="Background"
 								Value="{StaticResource TabItemHotBorderBackround}"/>
-							<Setter TargetName="BdRectangle"
-								Property="Stroke"
-								Value="{StaticResource TabItemHotBackground}"/>	
-							<Setter TargetName="BdPath"
-								Property="Fill"
-								Value="{StaticResource TabItemHotBackground}"/>		
-							<Setter TargetName="BdBorder"
-								Property="Background"
-								Value="{StaticResource TabItemHotBackground}"/>
+							<Setter Property="Background" TargetName="BdBorder" Value="{DynamicResource TabItemNormalBackground}"/>
+							<Setter Property="Fill" TargetName="BdPath" Value="{DynamicResource TabItemNormalBackground}"/>
+							<Setter Property="Stroke" TargetName="BdRectangle" Value="{DynamicResource TabItemNormalBackground}"/>
 						</Trigger>
 						<Trigger Property="IsSelected"
 							Value="true">
@@ -473,6 +479,14 @@
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
+	</Style>
+
+
+
+ 
+	<Style TargetType="{x:Type ToolBarTray}" >
+		<Setter Property="Background" 
+			Value="{StaticResource ToolBarTrayBackground}"/>
 	</Style>
 
 
