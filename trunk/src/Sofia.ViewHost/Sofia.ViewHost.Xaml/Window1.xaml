@@ -79,7 +79,15 @@
 		</ToolBarTray>
 		<TabControl IsSynchronizedWithCurrentItem="True" FontFamily="Verdana" FontSize="10">
 			<TabItem Header="Page avec un nom très très long">
-				<Grid/>
+				<Grid Height="200">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="0.25*"/>
+						<ColumnDefinition Width="0.75*"/>
+					</Grid.ColumnDefinitions>
+					<TextBox Margin="75,27.5,8,0" VerticalAlignment="Top" Text="" TextWrapping="Wrap"/>
+					<TextBlock HorizontalAlignment="Left" Margin="8,30.5,0,0" VerticalAlignment="Top" Width="63" Height="10.153" Text="Nom" TextAlignment="Right" TextWrapping="Wrap"/>
+					<Border HorizontalAlignment="Left" Margin="80.25,40.653,0,0" VerticalAlignment="Top" Width="80" Height="39.847" Grid.Column="1"/>
+				</Grid>
 			</TabItem>		
 			<TabItem Header="TabItem">
 				<Grid/>

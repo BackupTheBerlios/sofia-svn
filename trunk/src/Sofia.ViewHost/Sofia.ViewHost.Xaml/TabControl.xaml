@@ -13,7 +13,7 @@
 	<LinearGradientBrush x:Key="TabControlPaneTopNormalBackground"
 		StartPoint="0,0"
 		EndPoint="0,1">
-		<GradientStop Color="#FFE1EEFF"
+		<GradientStop Color="#FFD7E9FF"
 			Offset="0"/>
 		<GradientStop Color="#FFB1D4FF"
 			Offset="1"/>
