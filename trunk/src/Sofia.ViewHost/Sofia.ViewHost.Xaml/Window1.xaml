@@ -7,7 +7,14 @@
 	Title="Window"
 	Width="640" Height="480" AllowDrop="True" WindowStartupLocation="CenterScreen" WindowState="Normal" WindowStyle="SingleBorderWindow" xmlns:d="http://schemas.microsoft.com/expression/blend/2006" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d">
 
-	<Window.Resources>	    
+	<Window.Resources>	 
+			<XmlDataProvider x:Key="MainToolBarData">
+			<x:XData>
+				<Items xmlns="">
+					<Item Title="Nouveau" ImageSource="filenew_16.png" />
+				</Items>
+			</x:XData>
+		</XmlDataProvider>  
 		<!--
 		<XmlDataProvider x:Key="MainMenuData">
 			<x:XData>
@@ -33,6 +40,28 @@
               </Grid>
 		</DataTemplate>		
 		-->
+		<DataTemplate x:Key="MainToolBarDataTemplate">
+			<Button Style="{DynamicResource PhantomStyle}" Width="Auto" Height="Auto" FontFamily="Verdana" FontSize="9">
+				<Grid Width="Auto" Height="Auto" Margin="0,0,0,0">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="16"/>
+						<ColumnDefinition Width="Auto" MinWidth="16"/>
+					</Grid.ColumnDefinitions>
+					<Image 
+						Source="{Binding Mode=OneWay, XPath=@ImageSource}" 
+						HorizontalAlignment="Stretch" 						
+						Width = "Auto"
+						Height = "22"
+						x:Name="image"
+						Margin="0,0,0,0" VerticalAlignment="Stretch" Grid.ColumnSpan="1"
+					/>
+					<TextBlock 
+						Text="{Binding Mode=OneWay, XPath=@Title}" 						
+						d:LayoutOverrides="Height" HorizontalAlignment="Stretch" Margin="2,0,2,0" VerticalAlignment="Center" Grid.Column="1" 						
+					/>
+				</Grid>
+			</Button>
+		</DataTemplate>
 		
 	</Window.Resources>
 	
@@ -41,9 +70,14 @@
 			<ToolBarTray.Background>
 				<DynamicResource ResourceKey="ToolBarTrayBackground"/>
 			</ToolBarTray.Background>			
-			<ToolBar Width="336" Height="32" Margin="0,0,0,0"/>			
+			<ToolBar Width="336" Height="Auto" 
+				FontFamily="Verdana" 
+				FontSize="9" 
+				ItemsSource="{Binding Mode=Default, Source={StaticResource MainToolBarData}, XPath=/Items/Item}" 
+				ItemTemplate="{DynamicResource MainToolBarDataTemplate}"
+			/>				
 		</ToolBarTray>
-		<TabControl IsSynchronizedWithCurrentItem="True" FontFamily="Verdana">
+		<TabControl IsSynchronizedWithCurrentItem="True" FontFamily="Verdana" FontSize="10">
 			<TabItem Header="Page avec un nom très très long">
 				<Grid/>
 			</TabItem>		
@@ -51,6 +85,9 @@
 				<Grid/>
 			</TabItem>		
 		</TabControl>
+
+		 <Grid>    
+  </Grid>
 
 	</StackPanel>
 	

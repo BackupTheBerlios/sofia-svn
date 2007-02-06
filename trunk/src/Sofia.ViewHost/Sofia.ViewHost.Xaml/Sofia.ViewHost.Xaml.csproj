@@ -17,6 +17,7 @@
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="PresentationFramework.Luna" />
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
@@ -28,7 +29,11 @@
     <Compile Include="Window1.xaml.cs">
       <DependentUpon>Window1.xaml</DependentUpon>
     </Compile>
+    <Page Include="Buttons.xaml" />
     <Page Include="TabControl.xaml" />
+    <Page Include="ToolBar.xaml" />
     <Page Include="Window1.xaml" />
+    <Resource Include="document.png" />
+    <Resource Include="filenew_16.png" />
   </ItemGroup>
 </Project>
