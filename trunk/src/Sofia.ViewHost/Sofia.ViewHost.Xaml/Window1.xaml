@@ -67,10 +67,7 @@
 	</Window.Resources>
 	
 	<StackPanel>
-		<ToolBarTray Height="Auto" DockPanel.Dock="Top">			
-			<ToolBarTray.Background>
-				<DynamicResource ResourceKey="ToolBarTrayBackground"/>
-			</ToolBarTray.Background>			
+		<ToolBarTray Height="Auto" DockPanel.Dock="Top" Background="{DynamicResource ToolBarTrayBackground}">			
 			<ToolBar Width="336" Height="Auto" 
 				FontFamily="Verdana" 
 				FontSize="9" 
