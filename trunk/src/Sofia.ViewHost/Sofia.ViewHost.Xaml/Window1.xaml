@@ -2,10 +2,11 @@
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xml:lang="fr-FR"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2006" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
 	x:Class="Sofia.Window1"
 	x:Name="Window"
 	Title="Window"
-	Width="640" Height="480" AllowDrop="True" WindowStartupLocation="CenterScreen" WindowState="Normal" WindowStyle="SingleBorderWindow" xmlns:d="http://schemas.microsoft.com/expression/blend/2006" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d">
+	Width="640" Height="480" AllowDrop="True" WindowStartupLocation="CenterScreen" WindowState="Normal" WindowStyle="SingleBorderWindow">
 
 	<Window.Resources>	 
 			<XmlDataProvider x:Key="MainToolBarData">
@@ -66,7 +67,7 @@
 	</Window.Resources>
 	
 	<StackPanel>
-		<ToolBarTray DockPanel.Dock="Top">			
+		<ToolBarTray Height="Auto" DockPanel.Dock="Top">			
 			<ToolBarTray.Background>
 				<DynamicResource ResourceKey="ToolBarTrayBackground"/>
 			</ToolBarTray.Background>			

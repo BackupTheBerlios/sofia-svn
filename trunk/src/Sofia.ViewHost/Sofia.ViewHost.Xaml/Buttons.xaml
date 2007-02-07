@@ -9,8 +9,11 @@
 		<GradientStop Color="#FF000000" Offset="0.995"/>
 		<GradientStop Color="#FFFFFFFF" Offset="0.328"/>
 	</LinearGradientBrush>
+	<SolidColorBrush x:Key="ButtonActiveBackground" Color="#FFFFFFFF"/>
+	<BevelBitmapEffect x:Key="ButtonBevelEffect" BevelWidth="3" Relief="0.1" Smoothness="0.5"/>
+	<BevelBitmapEffect x:Key="ButtonPushedEffect" BevelWidth="3" LightAngle="315" Relief="0.1" Smoothness="0.5"/>
 	<!-- Resource dictionary entries should be defined here. -->
-	<Style TargetType="{x:Type Button}" x:Key="PhantomStyle">
+	<Style x:Key="PhantomStyle" TargetType="{x:Type Button}">
 		<Setter Property="OverridesDefaultStyle" Value="True" />
 		<Setter Property="Focusable" Value="False" />
 		<Setter Property="Cursor" Value="Hand" />
@@ -27,20 +30,22 @@
 					<Border x:Name="Bd" CornerRadius="3,3,3,3" Padding="2,2,2,2">
 						<Grid Width="Auto" Height="Auto" Margin="0,0,0,0" x:Name="grid">
 							<Border Margin="0,0,0,0" x:Name="Transform" Opacity="0.2" BorderThickness="1,1,1,1" CornerRadius="3,3,3,3"/>
-							<ContentPresenter d:LayoutOverrides="Width, Height" Margin="5,0,5,3" x:Name="contentPresenter"/>
+							<ContentPresenter d:LayoutOverrides="Width, Height" Margin="5,3,5,3" x:Name="contentPresenter"/>
 						</Grid>
 					</Border>    				
 					<ControlTemplate.Triggers>
 						<Trigger Property="IsFocused" Value="True"/>
 						<Trigger Property="IsDefaulted" Value="True"/>
 						<Trigger Property="IsMouseOver" Value="True">
-							<Setter Property="Background" TargetName="Transform" Value="{DynamicResource ButtonHoverBackground}"/>
 							<Setter Property="BorderBrush" TargetName="Transform" Value="#FF000000"/>
+							<Setter Property="Background" TargetName="Transform" Value="{DynamicResource ButtonActiveBackground}"/>
+							<Setter Property="BitmapEffect" TargetName="Transform" Value="{DynamicResource ButtonBevelEffect}"/>
 						</Trigger>
 						<Trigger Property="IsPressed" Value="True">
-							<Setter Property="Background" TargetName="Transform" Value="{DynamicResource ButtonPressedBackground}"/>
 							<Setter Property="BorderBrush" TargetName="Transform" Value="#FF000000"/>
-							<Setter Property="Margin" TargetName="Bd" Value="1,1,-1,-1"/>
+							<Setter Property="Margin" TargetName="Bd" Value="0.5,0.5,-0.5,-0.5"/>
+							<Setter Property="Background" TargetName="Transform" Value="{DynamicResource ButtonActiveBackground}"/>
+							<Setter Property="BitmapEffect" TargetName="Transform" Value="{DynamicResource ButtonPushedEffect}"/>
 						</Trigger>
 						<Trigger Property="IsEnabled" Value="False"/>
 					</ControlTemplate.Triggers>    				
