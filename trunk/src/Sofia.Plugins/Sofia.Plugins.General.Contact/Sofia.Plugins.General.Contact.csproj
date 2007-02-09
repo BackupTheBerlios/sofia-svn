@@ -48,8 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Sofia.Plugins.General.Contact.xsd">
-      <SubType>
-      </SubType>
+      <SubType>Designer</SubType>
     </None>
     <None Include="Sofia.Plugins.General.Contact.xsx">
       <DependentUpon>Sofia.Plugins.General.Contact.xsd</DependentUpon>

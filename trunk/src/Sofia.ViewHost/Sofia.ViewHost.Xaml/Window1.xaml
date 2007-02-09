@@ -6,41 +6,20 @@
 	x:Class="Sofia.Window1"
 	x:Name="Window"
 	Title="Window"
-	Width="640" Height="480" AllowDrop="True" WindowStartupLocation="CenterScreen" WindowState="Normal" WindowStyle="SingleBorderWindow">
+	Width="640" Height="480" AllowDrop="True" WindowStartupLocation="CenterScreen" WindowState="Normal" WindowStyle="SingleBorderWindow" FontSize="22">
 
 	<Window.Resources>	 
 			<XmlDataProvider x:Key="MainToolBarData">
 			<x:XData>
 				<Items xmlns="">
 					<Item Title="Nouveau" ImageSource="filenew_16.png" />
+					<Item Title="test1" ImageSource="filenew_16.png" />
+					<Item Title="test2" ImageSource="filenew_16.png" />
+					<Item Title="test3" ImageSource="filenew_16.png" />
+					
 				</Items>
 			</x:XData>
 		</XmlDataProvider>  
-		<!--
-		<XmlDataProvider x:Key="MainMenuData">
-			<x:XData>
-				<Items xmlns="">
-					<Item Title="Nouveau" GroupName="Dossiers" />
-					<Item Title="Nouveau..." GroupName="Documents" />
-					<Item Title="Sauvegarder" GroupName="Documents" />
-				</Items>
-			</x:XData>
-		</XmlDataProvider>
-		
-		<CollectionViewSource x:Key="MainMenuViewSource" Source="{Binding Mode=Default, Source={StaticResource MainMenuData}, XPath=/Items/Item}">
-			<CollectionViewSource.GroupDescriptions>
-				<PropertyGroupDescription PropertyName="@GroupName"/>
-			</CollectionViewSource.GroupDescriptions>
-		</CollectionViewSource>
-		
-		<DataTemplate x:Key="GroupHeaderTemplate">
-			<Grid Background="#d9e4ec">
-                <TextBlock Text="{Binding Mode=Default, Source={StaticResource MainMenuData}, XPath=/Items/Item}" Margin="4"/>
-                <Rectangle Stroke="{x:Static SystemColors.MenuBrush}" VerticalAlignment="Top" Height="1" />
-                <Rectangle Stroke="#bbb" VerticalAlignment="Bottom"  Height="1" />
-              </Grid>
-		</DataTemplate>		
-		-->
 		<DataTemplate x:Key="MainToolBarDataTemplate">
 			<Button Style="{DynamicResource PhantomStyle}" Width="Auto" Height="Auto" FontFamily="Verdana" FontSize="9">
 				<Grid Width="Auto" Height="Auto" Margin="0,0,0,0">
@@ -62,39 +41,12 @@
 					/>
 				</Grid>
 			</Button>
-		</DataTemplate>
-		
+		</DataTemplate>		
 	</Window.Resources>
 	
-	<StackPanel>
-		<ToolBarTray Height="Auto" DockPanel.Dock="Top" Background="{DynamicResource ToolBarTrayBackground}">			
-			<ToolBar Width="336" Height="Auto" 
-				FontFamily="Verdana" 
-				FontSize="9" 
-				ItemsSource="{Binding Mode=Default, Source={StaticResource MainToolBarData}, XPath=/Items/Item}" 
-				ItemTemplate="{DynamicResource MainToolBarDataTemplate}"
-			/>				
-		</ToolBarTray>
-		<TabControl IsSynchronizedWithCurrentItem="True" FontFamily="Verdana" FontSize="10" x:Name="TabDoc">
-			<TabItem Header="Page avec un nom très très long">
-				<Grid Height="200">
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="0.25*"/>
-						<ColumnDefinition Width="0.75*"/>
-					</Grid.ColumnDefinitions>
-					<TextBox Margin="75,27.5,8,0" VerticalAlignment="Top" Text="" TextWrapping="Wrap"/>
-					<TextBlock HorizontalAlignment="Left" Margin="8,30.5,0,0" VerticalAlignment="Top" Width="63" Height="10.153" Text="Nom" TextAlignment="Right" TextWrapping="Wrap"/>
-				</Grid>
-			</TabItem>		
-			<TabItem Header="TabItem">
-				<Grid/>
-			</TabItem>		
-		</TabControl>
-
-		 <Grid>    
-  </Grid>
-
-	</StackPanel>
+	<Grid Width="Auto" Height="Auto">
+		<ToolBar Margin="0,0,0,0" VerticalAlignment="Top" Height="Auto" ItemTemplate="{DynamicResource MainToolBarDataTemplate}" ItemsSource="{Binding Mode=Default, Source={StaticResource MainToolBarData}, XPath=/Items/Item}"/>
+	</Grid>
 	
 
 </Window>

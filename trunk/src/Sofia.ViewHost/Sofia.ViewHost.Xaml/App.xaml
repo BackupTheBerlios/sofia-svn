@@ -7,9 +7,9 @@
 		<!-- Resources scoped at the Application level should be defined here. -->
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="TabControl.xaml"/>
-				<ResourceDictionary Source="ToolBar.xaml"/>
 				<ResourceDictionary Source="Buttons.xaml"/>
+				<ResourceDictionary Source="ToolBar.xaml"/>
+				<ResourceDictionary Source="TabControl.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Application.Resources>

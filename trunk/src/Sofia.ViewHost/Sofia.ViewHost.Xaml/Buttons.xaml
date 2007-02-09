@@ -14,7 +14,6 @@
 	<BevelBitmapEffect x:Key="ButtonPushedEffect" BevelWidth="3" LightAngle="315" Relief="0.1" Smoothness="0.5"/>
 	<!-- Resource dictionary entries should be defined here. -->
 	<Style x:Key="PhantomStyle" TargetType="{x:Type Button}">
-		<Setter Property="OverridesDefaultStyle" Value="True" />
 		<Setter Property="Template"> 
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type Button}">
@@ -36,19 +35,19 @@
 						<Storyboard x:Key="OnMouseLeave">
 							<ColorAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="Transform" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
 								<SplineColorKeyFrame KeyTime="00:00:00" Value="#FFFFFFFF"/>
-								<SplineColorKeyFrame KeyTime="00:00:00.2" Value="#00FFFFFF"/>
+								<SplineColorKeyFrame KeyTime="00:00:00.5" Value="#00FFFFFF"/>
 							</ColorAnimationUsingKeyFrames>
 							<ColorAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="Transform" Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)">
 								<SplineColorKeyFrame KeyTime="00:00:00" Value="#FF000000"/>
-								<SplineColorKeyFrame KeyTime="00:00:00.2" Value="#00000000"/>
+								<SplineColorKeyFrame KeyTime="00:00:00.5" Value="#00000000"/>
 							</ColorAnimationUsingKeyFrames>							
 							<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="Transform" Storyboard.TargetProperty="(UIElement.Opacity)">
 								<SplineDoubleKeyFrame KeyTime="00:00:00" Value="0.2"/>
-								<SplineDoubleKeyFrame KeyTime="00:00:00.2" Value="0"/>
+								<SplineDoubleKeyFrame KeyTime="00:00:00.5" Value="0"/>
 							</DoubleAnimationUsingKeyFrames>							
 						</Storyboard>						
 					</ControlTemplate.Resources>
-					<Border x:Name="Bd" CornerRadius="3,3,3,3" Padding="2,2,2,2">
+					<Border x:Name="Bd" CornerRadius="0,0,0,0" Padding="2,2,2,2">
 						<Grid Width="Auto" Height="Auto" Margin="0,0,0,0" x:Name="grid">
 							<Border Margin="0,0,0,0" x:Name="Transform" Opacity="0" BorderThickness="1,1,1,1" CornerRadius="3,3,3,3" Background="#FF000000" BorderBrush="#FF000000" BitmapEffect="{DynamicResource ButtonBevelEffect}"/>
 							<ContentPresenter d:LayoutOverrides="Width, Height" Margin="5,3,5,3" x:Name="contentPresenter" RenderTransformOrigin="0.5,0.5">
@@ -107,7 +106,5 @@
     			</ControlTemplate>
     		</Setter.Value>
     	</Setter>
-		<Setter Property="Foreground" Value="#FF000000"/>
-		<Setter Property="Opacity" Value="1"/>
 	</Style>
 </ResourceDictionary>	
