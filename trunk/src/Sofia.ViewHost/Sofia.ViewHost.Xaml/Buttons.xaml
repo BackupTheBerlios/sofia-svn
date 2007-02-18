@@ -49,7 +49,7 @@
 					</ControlTemplate.Resources>
 					<Border x:Name="Bd" CornerRadius="0,0,0,0" Padding="2,2,2,2">
 						<Grid Width="Auto" Height="Auto" Margin="0,0,0,0" x:Name="grid">
-							<Border Margin="0,0,0,0" x:Name="Transform" Opacity="0" BorderThickness="1,1,1,1" CornerRadius="3,3,3,3" Background="#FF000000" BorderBrush="#FF000000" BitmapEffect="{DynamicResource ButtonBevelEffect}"/>
+							<Border Margin="0,0,0,0" x:Name="Transform" Opacity="0" BorderThickness="1,1,1,1" CornerRadius="1,1,1,1" Background="#FF000000" BorderBrush="#FF000000"/>
 							<ContentPresenter d:LayoutOverrides="Width, Height" Margin="5,3,5,3" x:Name="contentPresenter" RenderTransformOrigin="0.5,0.5">
 								<ContentPresenter.RenderTransform>
 									<TransformGroup>
@@ -106,5 +106,7 @@
     			</ControlTemplate>
     		</Setter.Value>
     	</Setter>
+		<Setter Property="FontFamily" Value="Verdana"/>
+		<Setter Property="FontSize" Value="12"/>
 	</Style>
 </ResourceDictionary>	

@@ -45,7 +45,7 @@
 	</Window.Resources>
 	
 	<Grid Width="Auto" Height="Auto">
-		<ToolBar Margin="0,0,0,0" VerticalAlignment="Top" Height="Auto" ItemTemplate="{DynamicResource MainToolBarDataTemplate}" ItemsSource="{Binding Mode=Default, Source={StaticResource MainToolBarData}, XPath=/Items/Item}"/>
+		<ToolBar Margin="0,0,0,0" VerticalAlignment="Top" Height="Auto" ItemTemplate="{DynamicResource MainToolBarDataTemplate}" ItemsSource="{Binding Mode=Default, Source={StaticResource MainToolBarData}, XPath=/Items/Item}" FontFamily="Verdana" FontSize="12"/>
 	</Grid>
 	
 

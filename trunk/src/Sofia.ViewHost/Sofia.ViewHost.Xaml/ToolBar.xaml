@@ -178,5 +178,7 @@
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
+		<Setter Property="FontFamily" Value="Verdana"/>
+		<Setter Property="FontSize" Value="12"/>
 	</Style>
 </ResourceDictionary>
