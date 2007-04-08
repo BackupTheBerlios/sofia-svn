@@ -1,58 +1,32 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Sofia.Commands
 {
 
-    public class CommandManager
+    public class CommandManager : KeyedCollection<string, ICommand>
     {
 
-        Dictionary<string, ICommand> cmds = new Dictionary<string, ICommand>();
-
         /// <summary>
-        /// Constructeur
+        /// Register a new command
         /// </summary>
-        public CommandManager()
+        /// <param name="cmd">A command instance</param>
+        public void RegisterCommand(ICommand command)
         {
+            this.Add(command);            
+            command.CommandManager = this;
         }
 
-        /// <summary>
-        /// Enregistre une nouvelle commande
-        /// </summary>
-        /// <param name="cmd">Un objet commande</param>
-        public void RegisterCommand(ICommand cmd)
+        #region protected methods
+
+        protected override string GetKeyForItem(ICommand item)
         {
-            cmds[cmd.Identifier] = cmd;
-            cmd.CommandManager = this;
+            return item.Identifier;
         }
 
-        /// <summary>
-        /// Retourne un objet commande
-        /// </summary>
-        /// <param name="cmdId">Identifiant de la commande</param>
-        /// <returns>Un objet commande</returns>
-        public ICommand CommandByName(string cmdId)
-        {
-            if (!cmds.ContainsKey(cmdId))
-                throw new InvalidOperationException("Identifiant de commande introuvable: " + cmdId);
-
-            ICommand cmd = cmds[cmdId] as ICommand;
-
-            return cmd;
-        }
-
-        /// <summary>
-        /// Retourne les propriétés d'une commande
-        /// </summary>
-        /// <param name="cmdId">Identifiant de la commande</param>
-        /// <returns>Un objet propriétés de commande</returns>
-        public CommandProperties PropertiesByName(string cmdId)
-        {
-            ICommand cmd = CommandByName(cmdId);
-            return cmd.Properties;
-        }
-
+        #endregion
     }
 
 }

@@ -25,9 +25,9 @@ namespace Sofia.Mvc
 
         #region implémentation de l'interface
 
-        public virtual void ExecuteCommand(string ident, string parameters)
+        public virtual void ExecuteCommand(string identifier, string parameters)
         {
-            _CommandManager.CommandByName(ident).Execute(parameters);
+            _CommandManager[identifier].Execute(parameters);
         }
 
         public IView Find(string contentId)

@@ -16,17 +16,19 @@ namespace Sofia.Plugins
         string _PluginAssembly;
         string _ViewAssembly;
 
-#if GTK
-        private static string UILibraryName = "Gtk";
-#endif
-#if XAML
-        private static string UILibraryName = "Xaml";
-#endif 
-#if WINDOWSFORM
-        private static string UILibraryName = "WindowsForm";
-#endif        
 
-        public PluginBase() {
+        //#if GTK
+        // private static string UILibraryName = "Gtk";
+        //#endif
+        //#if XAML
+        private static string UILibraryName = "Xaml";
+        //#endif 
+        //#if WINDOWSFORM
+        //private static string UILibraryName = "WindowsForm";
+        //#endif        
+
+        public PluginBase()
+        {
 
             _PluginAssembly = this.GetType().Assembly.CodeBase;
             _ViewAssembly = _PluginAssembly.Insert(_PluginAssembly.Length - 4, "." + UILibraryName);
@@ -49,7 +51,7 @@ namespace Sofia.Plugins
 
         public IView CreateView()
         {
-            return (IView)InstanceFactory.CreateInstanceFrom(_ViewAssembly, typeof(IView), new object[] { _Model, _Controller }, new Type[] { typeof(IModel), typeof(IController) });    
+            return (IView)InstanceFactory.CreateInstanceFrom(_ViewAssembly, typeof(IView), new object[] { _Model, _Controller }, new Type[] { typeof(IModel), typeof(IController) });
         }
 
         public virtual string Description
