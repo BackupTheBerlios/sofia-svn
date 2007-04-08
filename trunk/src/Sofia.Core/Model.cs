@@ -13,16 +13,15 @@ using Sofia.Properties;
 
 namespace Sofia.Mvc
 {
-    /// <summary>
-    /// Classe représentant le modèle
+    /// <summary> Classe représentant le modèle
     /// </summary>
     public class Model : IObservable, IModel
     {
 
         #region Champs privés
 
-        Server _Server;
-        List<IObserver> _Observers;
+        Server _server;
+        List<IObserver> _observers;
 
         #endregion
 
@@ -31,9 +30,9 @@ namespace Sofia.Mvc
         /// </summary>
         public Model()
         {
-            _Observers = new List<IObserver>();
+            _observers = new List<IObserver>();
             string databasePath = AppDomain.CurrentDomain.BaseDirectory;
-            _Server = new Server("FirebirdSql.Data.FirebirdClient", databasePath + "Sofia.Data.Database.fdb", new FirebirdDDL(), Settings.Default.FirebirdPort);
+            _server = new Server("FirebirdSql.Data.FirebirdClient", databasePath + "Sofia.Data.Database.fdb", new FirebirdDDL(), Settings.Default.FirebirdPort);
         }
 
         #region Implémentation de l'interface IModel
@@ -43,7 +42,7 @@ namespace Sofia.Mvc
         /// </summary>
         public void UpdateDocument(string contentId, string contentSummary, string contentXml, bool isMasterDocument, string[] tags)
         {
-            Content content = new Content(_Server);
+            Content content = new Content(_server);
             content.ContentId.Value = contentId;
             content.ContentSummary.Value = contentSummary;
             content.ContentXml.Value = contentXml;
@@ -52,7 +51,7 @@ namespace Sofia.Mvc
             //et on rattache le document à ce dossier
             if (!content.Exists() && isMasterDocument)
             {
-                Folder folder = new Folder(_Server);
+                Folder folder = new Folder(_server);
                 folder.FldId.Value = Guid.NewGuid().ToString("N");
                 folder.FldCaption.Value = content.ContentSummary.Value;
                 content.FldId.Value = folder.FldId.Value;
@@ -62,13 +61,13 @@ namespace Sofia.Mvc
             //Mise à jour des tags auto du document
             foreach (string s in tags)
             {
-                TaggedContent taggedContent = new TaggedContent(_Server);
+                TaggedContent taggedContent = new TaggedContent(_server);
                 taggedContent.ContentId.Value = content.ContentId.Value;
                 taggedContent.TagId.Value = s.GetHashCode();
 
                 if (!taggedContent.Exists())
                 {
-                    Tag tag = new Tag(_Server);
+                    Tag tag = new Tag(_server);
                     tag.TagId.Value = taggedContent.TagId.Value;
                     tag.TagCaption.Value = s;
                     tag.Update();
@@ -184,8 +183,8 @@ namespace Sofia.Mvc
         /// </summary>
         public void RegisterObserver(IObserver o)
         {
-            if (!_Observers.Contains(o))
-                _Observers.Add(o);
+            if (!_observers.Contains(o))
+                _observers.Add(o);
         }
 
         /// <summary>
@@ -193,12 +192,12 @@ namespace Sofia.Mvc
         /// </summary>
         public void UnregisterObserver(IObserver o)
         {
-            _Observers.Remove(o);
+            _observers.Remove(o);
         }
 
         public void NotifyObservers(object notification)
         {
-            foreach (IObserver o in _Observers)
+            foreach (IObserver o in _observers)
             {
                 o.Update(this, notification);
             }

@@ -8,13 +8,18 @@ namespace Sofia.Data.Common
 {
     public class EntityUpdater
     {
-        EntityBase _Entity;
+
+        #region private fields
+
+        EntityBase _entity;
+
+        #endregion
 
         #region Constructeur
 
         public EntityUpdater(EntityBase entity)
         {
-            _Entity = entity;
+            _entity = entity;
         }
 
 
@@ -28,16 +33,16 @@ namespace Sofia.Data.Common
         /// <returns>Vrai si la table existe, faux sinon</returns>
         private DataTable FindEntitySchema()
         {
-            _Entity.Server.OpenConnection();
+            _entity.Server.OpenConnection();
             try
             {
                 string[] restrictions = new string[4];
-                restrictions[0] = _Entity.Server.DbConnection.Database;
+                restrictions[0] = _entity.Server.DbConnection.Database;
                 restrictions[1] = "SYSDBA";
-                restrictions[2] = _Entity.Name.ToUpper();
+                restrictions[2] = _entity.Name.ToUpper();
                 restrictions[3] = "BASE TABLE";
 
-                DataTable table = _Entity.Server.DbConnection.GetSchema("Tables", restrictions);
+                DataTable table = _entity.Server.DbConnection.GetSchema("Tables", restrictions);
 
                 if (table.Rows.Count == 0)
                     return null;
@@ -46,7 +51,7 @@ namespace Sofia.Data.Common
             }
             finally
             {
-                _Entity.Server.CloseConnexion();
+                _entity.Server.CloseConnexion();
             }
         }
 
@@ -57,8 +62,8 @@ namespace Sofia.Data.Common
         /// </summary>
         public void Check()
         {
-            _Entity.Server.SgbdDDL.CreateDatabase(_Entity.Server);
-            if (FindEntitySchema() == null) _Entity.Create();
+            _entity.Server.SgbdDDL.CreateDatabase(_entity.Server);
+            if (FindEntitySchema() == null) _entity.Create();
         }
 
 

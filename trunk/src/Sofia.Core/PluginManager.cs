@@ -4,49 +4,13 @@ using System.Text;
 using System.IO;
 
 using Sofia.Reflection;
+using System.Collections.ObjectModel;
 
 namespace Sofia.Plugins
 {
-    public class PluginManager
+    public class PluginManager : KeyedCollection<string, IPlugin>
+
     {
-        #region Constructeur
-
-        /// <summary>
-        /// Constructeur
-        /// </summary>
-        public PluginManager()
-        {
-            _Plugins = new List<IPlugin>();
-        }
-
-        #endregion
-
-        List<IPlugin> _Plugins;
-
-        /// <summary>
-        /// Ajoute un plugin dans la liste des plugins
-        /// </summary>
-        /// <param name="plugin">Un objet qui implémente IPlugin</param>
-        public void Add(IPlugin plugin)
-        {
-            if (!_Plugins.Contains(plugin))
-                _Plugins.Add(plugin);
-        }
-
-        /// <summary>
-        /// Accès aux objets plugins de la liste des plugins
-        /// </summary>
-        /// <param name="id">Identifiant du plugin</param>
-        /// <returns>Un objet plugin</returns>
-        /// <example>fullname : Sofia.Plugins.General.Contact</example>
-        public IPlugin this[string fullName]
-        {
-            get
-            {
-                return _Plugins.Find(delegate(IPlugin plugin) { return plugin.GetType().FullName == fullName + ".Plugin"; });
-            }
-        }
-
         public void AutoRegister()
         {
             DirectoryInfo dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
@@ -57,10 +21,14 @@ namespace Sofia.Plugins
             {
                 IPlugin plugin = (IPlugin)InstanceFactory.CreateInstanceFrom(file.FullName, typeof(IPlugin), null, Type.EmptyTypes);
                 if (plugin != null)
-                    Add(plugin);
+                    this.Add(plugin);
             }
 
         }
 
+        protected override string GetKeyForItem(IPlugin item)
+        {
+            return item.GetType().FullName;
+        }
     }
 }

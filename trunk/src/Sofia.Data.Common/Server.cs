@@ -11,23 +11,22 @@ namespace Sofia.Data.Common
     {
         #region Membres privés
 
-        private DbConnection _DbConnection;
-        private DbProviderFactory _DbProviderFactory;
-        private ISgbdDDL _SgbdDDL;
+        private DbConnection _dbConnection;
+        private DbProviderFactory _dbProviderFactory;
+        private ISgbdDDL _sgbdDdl;
 
         #endregion
 
         #region Propriétés
 
-        /// <summary>
-        /// Constantes spécifique à un SGBD. Permet la contruction de chaînes SQL en conformité
-        /// avec le SGBD.
+        /// <summary> Constantes spécifique à un SGBD. 
+        /// Permet la contruction de chaînes SQL en conformité avec le SGBD.
         /// </summary>
         public ISgbdDDL SgbdDDL
         {
             get
             {
-                return _SgbdDDL;
+                return _sgbdDdl;
             }
         }
 
@@ -35,9 +34,9 @@ namespace Sofia.Data.Common
 
         #region Connexion/Déconnexion
 
-        private string _ProviderName;
-        private string _DatabaseName;
-        private int _Port;
+        private string _providerName;
+        private string _databaseName;
+        private int _port;
         private string _lastError;
 
         public string LastError
@@ -45,42 +44,35 @@ namespace Sofia.Data.Common
             get { return _lastError; }
             set { _lastError = value; }
         }
-        private string _ConnectionString;
 
-        /// <summary>
-        /// Chaine de connexion
+        private string _connectionString;
+
+        /// <summary> Chaine de connexion
         /// </summary>
         public string ConnectionString
         {
-            get { return _ConnectionString; }
-            set { _ConnectionString = value; }
+            get { return _connectionString; }
+            set { _connectionString = value; }
         }
 
-        /// <summary>
-        /// Nom de la base de données
+        /// <summary> Nom de la base de données
         /// </summary>
         public string DatabaseName
         {
-            get { return _DatabaseName; }
+            get { return _databaseName; }
         }
 
-        /// <summary>
-        /// Initialisation d'une connexion à partir d'un fichier de configuration au format XML
+        /// <summary> Initialisation d'une connexion
         /// </summary>
-        /// <param name="configFilePath">
-        /// Nom du fichier de configuration. Il doit contenir le chemin 
-        /// de l'application dont le fichier ini contient le chemin de la base de donnée
-        /// </param>
-        ///<seealso cref="Format du fichier ini des logiciels Axilog"/>
         public bool OpenConnection()
         {
-            string connectionString = String.Format("initial catalog={0};user id=sysdba;password=masterkey;character set=NONE;port={1};", _DatabaseName, _Port);
+            string connectionString = String.Format("initial catalog={0};user id=sysdba;password=masterkey;character set=NONE;port={1};", _databaseName, _port);
             //Initialisation de la connexion
             try
             {
-                _DbProviderFactory = DbProviderFactories.GetFactory(_ProviderName);
-                _DbConnection = _DbProviderFactory.CreateConnection();
-                _DbConnection.ConnectionString = _ConnectionString;
+                _dbProviderFactory = DbProviderFactories.GetFactory(_providerName);
+                _dbConnection = _dbProviderFactory.CreateConnection();
+                _dbConnection.ConnectionString = _connectionString;
             }
             catch (Exception e)
             {
@@ -91,7 +83,7 @@ namespace Sofia.Data.Common
             //Ouverture de la connexion
             try
             {
-                _DbConnection.Open();
+                _dbConnection.Open();
             }
             catch (Exception e)
             {
@@ -106,7 +98,7 @@ namespace Sofia.Data.Common
         /// </summary>
         public void CloseConnexion()
         {
-            _DbConnection.Close();
+            _dbConnection.Close();
         }
 
 
@@ -114,38 +106,35 @@ namespace Sofia.Data.Common
 
         #region Propriétés
 
-        /// <summary>
-        /// Fabrique de DbProvider
+        /// <summary> Fabrique de DbProvider
         /// </summary>
         /// 
         public DbProviderFactory DbProviderFactory
         {
-            get { return _DbProviderFactory; }
-            set { _DbProviderFactory = value; }
+            get { return _dbProviderFactory; }
+            set { _dbProviderFactory = value; }
         }
 
-        /// <summary>
-        /// Objet connexion abstraite
+        /// <summary> Objet connexion abstraite
         /// </summary>
         public DbConnection DbConnection
         {
-            get { return _DbConnection; }
+            get { return _dbConnection; }
         }
 
         #endregion
 
         #region Constructeur
 
-        /// <summary>
-        /// Constructeur
+        /// <summary> Constructeur
         /// </summary>
         public Server(string providerName, string databaseName, ISgbdDDL sgbdConsts, int port)
         {
-            _ProviderName = providerName;
-            _DatabaseName = databaseName;
-            _Port = port;
-            _ConnectionString = String.Format("initial catalog={0};user id=sysdba;password=masterkey;character set=NONE;data source=localhost;port={1};", _DatabaseName, _Port);
-            _SgbdDDL = sgbdConsts;
+            _providerName = providerName;
+            _databaseName = databaseName;
+            _port = port;
+            _connectionString = String.Format("initial catalog={0};user id=sysdba;password=masterkey;character set=NONE;data source=localhost;port={1};", _databaseName, _port);
+            _sgbdDdl = sgbdConsts;
         }
 
         public Server(string providerName, string databaseName, ISgbdDDL sgbdConsts)

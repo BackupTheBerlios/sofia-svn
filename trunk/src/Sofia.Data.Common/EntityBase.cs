@@ -9,21 +9,23 @@ using System.Data.Common;
 namespace Sofia.Data.Common
 {
     #region EntityBase class
-    /// <summary>
-    /// Represents a database table.
+
+    /// <summary> Represents a database table.
     /// </summary>
     public abstract class EntityBase
     {
         #region Private fields
-        /// <summary>
-        /// Holds the database connexion object.
+
+        /// <summary> Holds the database connexion object.
         /// </summary>
-        private Server _Server;
-        private DbDataReader _DbDataReader;
+        private Server _server;
+        private DbDataReader _dbDataReader;
+
         #endregion
+
         #region Public properties
-        /// <summary>
-        /// Gets the type name.
+
+        /// <summary> Gets the type name.
         /// </summary>
         public string Name
         {
@@ -32,26 +34,29 @@ namespace Sofia.Data.Common
                 return this.GetType().Name;
             }
         }
-        /// <summary>
-        /// Gets the database connexion object.
+
+        /// <summary> Gets the database connexion object.
         /// </summary>
         public Server Server
         {
             get
             {
-                return _Server;
+                return _server;
             }
         }
+
         #endregion
+
         #region Public methods
+
         #region Initialization
-        /// <summary>
-        /// Initialize a new instance of the class.
+
+        /// <summary> Initialize a new instance of the class.
         /// </summary>
         /// <param name="server">Database connexion object</param>
         public EntityBase(Server server)
         {
-            _Server = server;
+            _server = server;
 
             //Initialize fields instance based upon the public members in the derived class
             foreach (FieldInfo fieldInfo in GetFields())
@@ -72,10 +77,12 @@ namespace Sofia.Data.Common
             entityUpdater.Check();
 #endif
         }
+
         #endregion
+
         #region Field's properties reseting
-        /// <summary>
-        /// Resets the sort for each field
+
+        /// <summary> Resets the sort for each field
         /// </summary>
         public void ResetSort()
         {
@@ -86,8 +93,8 @@ namespace Sofia.Data.Common
                 field.SortDirection = SqlSortDirection.None;
             }
         }
-        /// <summary>
-        /// Resets each field value
+
+        /// <summary> Resets each field value
         /// </summary>
         public void FlushFields()
         {
@@ -98,8 +105,8 @@ namespace Sofia.Data.Common
                 field.Clear();
             }
         }
-        /// <summary>
-        /// Resets the Filtered property of each field
+
+        /// <summary> Resets the Filtered property of each field
         /// </summary>
         public void ResetFilters()
         {
@@ -110,17 +117,19 @@ namespace Sofia.Data.Common
                 field.Filtered = false;
             }
         }
+
         #endregion
+
         #region Reading
-        /// <summary>
-        /// Invoke the Read method of the internal DbDataReader and sets each field's value property
-        /// with the content of the internal DbDataReader.
+
+        /// <summary> Invoke the Read method of the internal DbDataReader 
+        /// and sets each field's value property with the content of the internal DbDataReader.
         /// </summary>
-        /// <returns>True if any record can be read, else false.</returns>
+        /// <returns>True if any record can be read, false otherwise.</returns>
         public bool Read()
         {
             bool hasRecords;
-            hasRecords = _DbDataReader.Read();
+            hasRecords = _dbDataReader.Read();
 
             if (hasRecords)
             {
@@ -132,8 +141,8 @@ namespace Sofia.Data.Common
                     DbField field = (DbField)fieldValue;
                     if (ReaderHasRow(field))
                     {
-                        if (_DbDataReader[field.Name].GetType() != typeof(System.DBNull))
-                            propertyInfo.SetValue(fieldValue, _DbDataReader[field.Name], null);
+                        if (_dbDataReader[field.Name].GetType() != typeof(System.DBNull))
+                            propertyInfo.SetValue(fieldValue, _dbDataReader[field.Name], null);
                     }
                 }
                 //TODO : DataHistory.add(this);
@@ -141,40 +150,42 @@ namespace Sofia.Data.Common
 
             return hasRecords;
         }
+
         #endregion
+
         #region Frontend DML methods
-        /// <summary>
-        /// Indicates if a record already exists in the database table, based upon the primary key value.
+
+        /// <summary> Indicates if a record already exists in the database table, 
+        /// based upon the primary key value.
         /// </summary>
-        /// <returns>True if the record already exists, else false.</returns>
+        /// <returns>True if the record already exists, false otherwise.</returns>
         public bool Exists()
         {
             return BuildQuery(GetPrimarySelect, IsPrimaryKeyField, false);
         }
-        /// <summary>
-        /// Fills the properties value with the result of a SELECT query.
+
+        /// <summary> Fills the properties value with the result of a SELECT query.
         /// </summary>
-        /// <returns>True if no errors, else false.</returns>
+        /// <returns>True if no errors, false otherwise.</returns>
         public bool Fill()
         {
             return BuildQuery(GetDefaultSelect, IsPrimaryKeyField, false);
         }
-        /// <summary>
-        /// Fills the properties vallue with the result of a SELECT WHERE query. The WHERE clause is builded with the
-        /// filtered fields.
+
+        /// <summary> Fills the properties vallue with the result of a SELECT WHERE query. 
+        /// The WHERE clause is builded with the filtered fields.
         /// </summary>
-        // <returns>True if no errors, else false.</returns>
+        // <returns>True if no errors, false otherwise.</returns>
         public bool Filter()
         {
             return BuildQuery(GetFilteredSelect, IsFilteredField, false);
         }
-        /// <summary>
-        /// Executes an INSERT query if the primary key value does not exists 
-        /// in the database table, or an UPDATE query if the primary key value 
-        /// already exists. The values updated in the database are picked up 
-        /// from the fields assigned value property.
+
+        /// <summary> Executes an INSERT query if the primary key value does not exists in the database table, 
+        /// or an UPDATE query if the primary key value already exists. 
+        /// The values updated in the database are picked up  from the fields assigned value property.
         /// </summary>
-        /// <returns>True if no errors, else false.</returns>
+        /// <returns>True if no errors, false otherwise.</returns>
         public bool Update()
         {
             if (Exists())
@@ -182,27 +193,27 @@ namespace Sofia.Data.Common
             else
                 return BuildQuery(GetDefaultInsert, IsAffectedField, true);
         }
-        /// <summary>
-        /// Executes an INSERT query. The values updated in the database are 
-        /// picked up from the fields assigned value property.
+
+        /// <summary> Executes an INSERT query. 
+        /// The values updated in the database are picked up from the fields assigned value property.
         /// </summary>
-        /// <returns>True if no errors, else false.</returns>
+        /// <returns>True if no errors, false otherwise.</returns>
         public bool Insert()
         {
             return BuildQuery(GetDefaultInsert, IsAffectedField, true);
         }
-        /// <summary>
-        /// Deletes the database table record with the specified primary key value.
+
+        /// <summary> Deletes the database table record with the specified primary key value.
         /// </summary>
-        /// <returns>True if no errors, else false.</returns>
+        /// <returns>True if no errors, false otherwise.</returns>
         public bool Delete()
         {
             return BuildQuery(GetDefaultDelete, IsPrimaryKeyField, true);
         }
-        /// <summary>
-        /// Creates the database table with the name of the derived class name.
+
+        /// <summary> Creates the database table with the name of the derived class name.
         /// </summary>
-        /// <returns>True if no errors, else false.</returns>
+        /// <returns>True if no errors, false otherwise.</returns>
         public bool Create()
         {
             bool result;
@@ -218,12 +229,16 @@ namespace Sofia.Data.Common
                 return false;
             }
         }
+
         #endregion
+
         #endregion
+
         #region Private methods
+
         #region Fields property reflection methods
-        /// <summary>
-        /// Gets the size attributed to the specified field.
+
+        /// <summary> Gets the size attributed to the specified field.
         /// </summary>
         /// <param name="fieldInfo">A field property info.</param>
         /// <returns>The integer representing the field's size.</returns>
@@ -240,18 +255,20 @@ namespace Sofia.Data.Common
                 return -1;
             }
         }
+
         #endregion
+
         #region Reading
-        /// <summary>
-        /// Indicates a row exists in the internal DbDataReader, based on the field name.
+
+        /// <summary> Indicates a row exists in the internal DbDataReader, based on the field name.
         /// </summary>
         /// <param name="field">A field object.</param>
-        /// <returns>True if the row exists, else false.</returns>
+        /// <returns>True if the row exists, false otherwise.</returns>
         private bool ReaderHasRow(DbField field)
         {
             try
             {
-                _DbDataReader.GetOrdinal(field.Name);
+                _dbDataReader.GetOrdinal(field.Name);
                 return true;
             }
             catch (IndexOutOfRangeException)
@@ -259,55 +276,59 @@ namespace Sofia.Data.Common
                 return false;
             }
         }
+
         #endregion
+
         #region Low-level querying methods
-        /// <summary>
-        /// Invokes the ExecuteReader method on the internal Query object. Initialize the internal
-        /// DbDataReader object.
+
+        /// <summary> Invokes the ExecuteReader method on the internal Query object. 
+        /// Initialize the internal/ DbDataReader object.
         /// </summary>
         /// <param name="query">A Query object.</param>
-        /// <returns>True if no errors, else false.</returns>
+        /// <returns>True if no errors, false otherwise.</returns>
         private bool ExecuteReader(Query query)
         {
-            if (_DbDataReader != null)
-                _DbDataReader.Close();
+            if (_dbDataReader != null)
+                _dbDataReader.Close();
 
             //Query execution
-            _DbDataReader = query.ExecuteReader();
+            _dbDataReader = query.ExecuteReader();
 
-            if (_DbDataReader == null)
+            if (_dbDataReader == null)
                 return false;
 
             //First DbDataReader Read in order to initialize field's value property
             return Read();
         }
-        /// <summary>
-        /// Invokes the ExecuteNonQuery method on the internal Query object.
+
+        /// <summary>/ Invokes the ExecuteNonQuery method on the internal Query object.
         /// </summary>
         /// <param name="query">A Query object</param>
-        /// <returns>True if no errors, else false.</returns>
+        /// <returns>True if no errors, false otherwise.</returns>
         protected bool ExecuteNonQuery(Query query)
         {
             //Query execution
             return query.ExecuteNonQuery();
         }
+
         #endregion
+
         #region Field searching
-        /// <summary>
-        /// Predicate delegate based upon the field's Filtered property.
+
+        /// <summary> Predicate delegate based upon the field's Filtered property.
         /// </summary>
         /// <param name="fieldInfo">A Field property info.</param>
-        /// <returns>True if the field is Filtered, else false.</returns>
+        /// <returns>True if the field is Filtered, false otherwise.</returns>
         private bool IsFilteredField(FieldInfo fieldInfo)
         {
             DbField field = (DbField)fieldInfo.GetValue(this);
             return field.Filtered;
         }
-        /// <summary>
-        /// Predicate delegate based upon the field's PrimaryKey attribute.
+
+        /// <summary> Predicate delegate based upon the field's PrimaryKey attribute.
         /// </summary>
         /// <param name="fieldInfo">A Field property info.</param>
-        /// <returns>True if the field is marked as primary key, else false.</returns>
+        /// <returns>True if the field is marked as primary key, false otherwise.</returns>
         private bool IsPrimaryKeyField(FieldInfo fieldInfo)
         {
             foreach (object attribute in fieldInfo.GetCustomAttributes(true))
@@ -319,46 +340,46 @@ namespace Sofia.Data.Common
             }
             return false;
         }
-        /// <summary>
-        /// Predicate delegate based upon the field's SortDirection property.
+
+        /// <summary> Predicate delegate based upon the field's SortDirection property.
         /// </summary>
         /// <param name="fieldInfo">A Field property info.</param>
-        /// <returns>True if the field is sorted, else false.</returns>
+        /// <returns>True if the field is sorted, false otherwise.</returns>
         private bool IsSortedField(FieldInfo fieldInfo)
         {
             DbField field = (DbField)fieldInfo.GetValue(this);
             return field.SortDirection != SqlSortDirection.None;
         }
-        /// <summary>
-        /// Predicate delegate based upon the field's value.
+
+        /// <summary> Predicate delegate based upon the field's value.
         /// </summary>
         /// <param name="fieldInfo">A Field property info.</param>
-        /// <returns>True if the field value is assigned, else false.</returns>
+        /// <returns>True if the field value is assigned, false otherwise.</returns>
         private bool IsAffectedField(FieldInfo fieldInfo)
         {
             DbField field = (DbField)fieldInfo.GetValue(this);
             return !field.IsEmpty();
         }
-        /// <summary>
-        /// Predicate delegate based upon the PrimaryKey attribute and the field's value
+
+        /// <summary> Predicate delegate based upon the PrimaryKey attribute and the field's value
         /// </summary>
         /// <param name="fieldInfo">A Field property info.</param>
-        /// <returns>True if the fied value is assigned and the field is a primary key, else false.</returns>
+        /// <returns>True if the fied value is assigned and the field is a primary key, false otherwise.</returns>
         private bool IsAffectedNonPrimaryField(FieldInfo fieldInfo)
         {
             DbField field = (DbField)fieldInfo.GetValue(this);
             return (field.ObjectValue != null && !IsPrimaryKeyField(fieldInfo));
         }
-        /// <summary>
-        /// Gets the derived class public member list.
+
+        /// <summary> Gets the derived class public member list.
         /// </summary>
         /// <returns>A generic list of FieldInfo objects.</returns>
         private List<FieldInfo> GetFields()
         {
             return new List<FieldInfo>(this.GetType().GetFields());
         }
-        /// <summary>
-        /// Gets a field with the specified name.
+
+        /// <summary> Gets a field with the specified name.
         /// </summary>
         /// <param name="name">Field name.</param>
         /// <returns>A field property info</returns>
@@ -367,16 +388,17 @@ namespace Sofia.Data.Common
             List<FieldInfo> fields = new List<FieldInfo>(this.GetType().GetFields());
             return fields.Find(delegate(FieldInfo field) { return field.Name == name; });
         }
+
         #endregion
+
         #region String field list building
-        /// <summary>
-        /// Field name string transformation action delegate.
+        /// <summary> Field name string transformation action delegate.
         /// </summary>
         /// <param name="field">A field object.</param>
         /// <returns>A string containing the field name transformed.</returns>
         private delegate string FieldTransformation(DbField field);
-        /// <summary>
-        /// Transforms the field to a parameterized field.
+
+        /// <summary> Transforms the field to a parameterized field.
         /// <example>FIELD => @FIELD</example>
         /// </summary>
         /// <param name="field">A field object.</param>
@@ -385,8 +407,8 @@ namespace Sofia.Data.Common
         {
             return "@" + field.Name;
         }
-        /// <summary>
-        /// Transforms the field to an ordered field.
+
+        /// <summary> Transforms the field to an ordered field.
         /// <example>FIELD => FIELD Asc</example>
         /// </summary>
         /// <param name="field">A field object.</param>
@@ -395,8 +417,8 @@ namespace Sofia.Data.Common
         {
             return field.Name + " " + Enum.GetName(typeof(SqlSortDirection), field.SortDirection);
         }
-        /// <summary>
-        /// Transforms the field to a parameterized field with assignation.
+
+        /// <summary> Transforms the field to a parameterized field with assignation.
         /// <example>FIELD => FIELD = @FIELD</example>
         /// </summary>
         /// <param name="field">A field object.</param>
@@ -405,8 +427,8 @@ namespace Sofia.Data.Common
         {
             return field.Name + " = @" + field.Name;
         }
-        /// <summary>
-        /// Transforms the field to a typed field.
+
+        /// <summary> Transforms the field to a typed field.
         /// <example>FIELD => FIELD VARCHAR(32)</example>
         /// </summary>
         /// <param name="field">A field object.</param>
@@ -417,15 +439,15 @@ namespace Sofia.Data.Common
 
             if (fieldInfo != null)
             {
-                string type = _Server.SgbdDDL.GetDDLType(field.DbType, GetDbTypeSize(fieldInfo), IsPrimaryKeyField(fieldInfo));
+                string type = _server.SgbdDDL.GetDDLType(field.DbType, GetDbTypeSize(fieldInfo), IsPrimaryKeyField(fieldInfo));
                 return String.Format("{0} {1}", field.Name, type);
             }
             else return "";
         }
-        /// <summary>
-        /// Gets a string field list with the specified separator. The fields match the specified match 
-        /// predicate delegate and their names are transformed by the specified 
-        /// string transformation action delegate.
+
+        /// <summary> Gets a string field list with the specified separator. 
+        /// The fields match the specified match  predicate delegate and their names are transformed by 
+        /// the specified string transformation action delegate.
         /// </summary>
         /// <param name="match">A match predicate delegate.</param>
         /// <param name="transformation">A string transformation action delegate.</param>
@@ -469,10 +491,10 @@ namespace Sofia.Data.Common
             return fieldList;
 
         }
-        /// <summary>
-        /// Gets a string field list. The fields match the specified match 
-        /// predicate delegate and their names are transformed by the specified 
-        /// string transformation action delegate.
+
+        /// <summary> Gets a string field list. 
+        /// The fields match the specified match predicate delegate and their names are transformed by 
+        /// the specified string transformation action delegate.
         /// </summary>
         /// <param name="match">A match predicate delegate.</param>
         /// <param name="transformation">A string transformation action delegate.</param>
@@ -481,9 +503,9 @@ namespace Sofia.Data.Common
         {
             return GetFieldList(match, transformation, ",");
         }
-        /// <summary>
-        /// Gets a string field list. The fields match the specified match 
-        /// predicate delegate.
+
+        /// <summary> Gets a string field list. 
+        /// The fields match the specified match predicate delegate.
         /// </summary>
         /// <param name="match">A match predicate delegate.</param>
         /// <returns>A string field list separated by commas.</returns>
@@ -491,23 +513,25 @@ namespace Sofia.Data.Common
         {
             return GetFieldList(match, null, ",");
         }
-        /// <summary>
-        /// Gets the string field list.
+
+        /// <summary> Gets the string field list.
         /// </summary>
         /// <returns>The string field list separated by commas.</returns>
         private string GetFieldList()
         {
             return GetFieldList(null, null, ",");
         }
+
         #endregion
+
         #region SQL command text building
-        /// <summary>
-        /// SQL clause builder delegate.
+
+        /// <summary> SQL clause builder delegate.
         /// </summary>
         /// <returns>A string SQL clause.</returns>
         private delegate string BuildSqlClauseDelegate();
-        /// <summary>
-        /// Builds a SELECT * clause with a WHERE clause that filters the primary key value.
+
+        /// <summary> Builds a SELECT * clause with a WHERE clause that filters the primary key value.
         /// </summary>
         /// <returns>A SELECT SQL clause.</returns>
         private string GetDefaultSelect()
@@ -521,9 +545,8 @@ namespace Sofia.Data.Common
 
             return string.Format("SELECT {0} FROM {1} WHERE {2} {3}", fieldList, Name, whereClause, sortedList);
         }
-        /// <summary>
-        /// Builds a SELECT primary key fields clause with a WHERE clause that filters the primary key value.
-        /// Génération d'une requête SELECT ne prenant en compte que la clé primaire. Sert pour vérifier l'existance d'un enregistrement.
+
+        /// <summary> Builds a SELECT primary key fields clause with a WHERE clause that filters the primary key value.        
         /// </summary>
         /// <returns>A SELECT SQL clause.</returns>
         private string GetPrimarySelect()
@@ -532,8 +555,8 @@ namespace Sofia.Data.Common
             string whereClause = GetFieldList(IsPrimaryKeyField, TransformToParametizedAffectationField, " AND ");
             return string.Format("SELECT {0} FROM {1} WHERE {2}", fieldList, Name, whereClause);
         }
-        /// <summary>
-        /// Builds a SELECT * clause with a WHERE clause builded with the filtered fields.
+
+        /// <summary> Builds a SELECT * clause with a WHERE clause builded with the filtered fields.
         /// </summary>
         /// <returns>A SELECT SQL clause.</returns>
         private string GetFilteredSelect()
@@ -550,8 +573,8 @@ namespace Sofia.Data.Common
 
             return string.Format("SELECT {0} FROM {1} {2} {3}", fieldList, Name, whereClause, sortedList);
         }
-        /// <summary>
-        /// Builds an INSERT clause with the assigned fields.
+
+        /// <summary> Builds an INSERT clause with the assigned fields.
         /// </summary>
         /// <returns>An INSERT SQL clause.</returns>
         private string GetDefaultInsert()
@@ -560,8 +583,8 @@ namespace Sofia.Data.Common
             string parameterList = GetFieldList(IsAffectedField, TransformToParametizedField);
             return string.Format("INSERT INTO {0} ({1}) VALUES ({2})", Name, fieldList, parameterList);
         }
-        /// <summary>
-        /// Builds an UPDATE clause with th assigned fields.
+
+        /// <summary> Builds an UPDATE clause with th assigned fields.
         /// </summary>
         /// <returns>An UPDATE SQL clause.</returns>
         private string GetDefaultUpdate()
@@ -573,8 +596,8 @@ namespace Sofia.Data.Common
             string whereClause = GetFieldList(IsPrimaryKeyField, TransformToParametizedAffectationField, " AND ");
             return string.Format("UPDATE {0} SET {1} WHERE {2}", Name, fieldList, whereClause);
         }
-        /// <summary>
-        /// Builds a DELETE clause with a WHERE clause builded with the primary key value.
+
+        /// <summary> Builds a DELETE clause with a WHERE clause builded with the primary key value.
         /// </summary>
         /// <returns>A DELETE SQL clause.</returns>
         private string GetDefaultDelete()
@@ -582,8 +605,8 @@ namespace Sofia.Data.Common
             string parameterList = GetFieldList(IsPrimaryKeyField, TransformToParametizedAffectationField, " AND ");
             return string.Format("DELETE FROM {0} WHERE {1}", Name, parameterList);
         }
-        /// <summary>
-        /// Builds a CREATE TABLE clause. Uses the field properties and
+
+        /// <summary> Builds a CREATE TABLE clause. Uses the field properties and
         /// attributes of the derived class.
         /// </summary>
         /// <returns>A CREATE TABLE SQL clause.</returns>
@@ -592,8 +615,8 @@ namespace Sofia.Data.Common
             string fieldList = GetFieldList(null, TransformToTypedField);
             return string.Format("CREATE TABLE {0} ({1})", Name, fieldList);
         }
-        /// <summary>
-        /// Builds an SQL clause to add primary key constaint to a database table.
+
+        /// <summary> Builds an SQL clause to add primary key constaint to a database table.
         /// </summary>
         /// <returns>An ALTER TABLE ADD CONTRAINT PRIMARY KEY clause.</returns>
         private string GetDefaultAddPrimaryConstraint()
@@ -601,8 +624,8 @@ namespace Sofia.Data.Common
             string fieldList = GetFieldList(IsPrimaryKeyField);
             return string.Format("ALTER TABLE {0} ADD CONSTRAINT PK_{0} PRIMARY KEY ({1});", Name, fieldList);
         }
-        /// <summary>
-        /// Builds the whole SQL commant text.
+
+        /// <summary> Builds the whole SQL commant text.
         /// </summary>
         /// <param name="buildSqlClauseDelegate">A SQL clause builder delegate.</param>
         /// <param name="parametersFillingPredicate">A predicate delagate to indicate the way of initializing query parameters value.</param>
@@ -612,7 +635,7 @@ namespace Sofia.Data.Common
             Predicate<FieldInfo> parametersFillingPredicate, bool nonQuery)
         {
             //Instanciate the Query object
-            Query fbQuery = new Query(_Server);
+            Query fbQuery = new Query(_server);
             fbQuery.CommandText = buildSqlClauseDelegate();
 
             if (fbQuery.CommandText.Length == 0)
@@ -622,7 +645,7 @@ namespace Sofia.Data.Common
             FillParameters(fbQuery, parametersFillingPredicate);
 
             //Execute the query
-            _Server.OpenConnection();
+            _server.OpenConnection();
             try
             {
                 if (nonQuery)
@@ -632,13 +655,15 @@ namespace Sofia.Data.Common
             }
             finally
             {
-                _Server.CloseConnexion();
+                _server.CloseConnexion();
             }
         }
+
         #endregion
+
         #region Parameters initialization
-        /// <summary>
-        /// Initializes parameters value. Gets the value from the fields value property.
+
+        /// <summary> Initializes parameters value. Gets the value from the fields value property.
         /// </summary>
         /// <param name="query">A Query object.</param>
         /// <param name="match">Predicate delegate to filter parameters that must be initialized.</param>
@@ -660,286 +685,321 @@ namespace Sofia.Data.Common
                 fbQuery.AddParameter(field.Name, dbType, field.ObjectValue);
             }
         }
+
         #endregion
+
         #endregion
     }
+
     #endregion
+
     #region Public enums
+
     public enum SqlSortDirection
     {
         None,
         Asc,
         Desc
     }
+
     #endregion
+
     #region Field type classes
-    /// <summary>
-    /// Represents a database field.
+
+    /// <summary> Represents a database field.
     /// </summary>
     public class DbField
     {
         #region Private fields
-        /// <summary>
-        /// The field name.
+
+        /// <summary> The field name.
         /// </summary>
-        private string _Name;
-        /// <summary>
-        /// The field value.
+        private string _name;
+
+        /// <summary> The field value.
         /// </summary>
-        private object _ObjectValue;
-        /// <summary>
-        /// Indicates the field is used in WHERE clause.
+        private object _objectValue;
+
+        /// <summary> Indicates the field is used in WHERE clause.
         /// </summary>
-        private bool _IsFiltered;
-        /// <summary>
-        /// Indicates the field is used in a ORDER BY clause. Holds the sort direction.
+        private bool _isFiltered;
+
+        /// <summary> Indicates the field is used in a ORDER BY clause. Holds the sort direction.
         /// </summary>
-        private SqlSortDirection _SortDirection;
-        /// <summary>
-        /// Holds the underlying database type.
+        private SqlSortDirection _sortDirection;
+
+        /// <summary> Holds the underlying database type.
         /// </summary>
-        private DbType _DbType;
+        private DbType _dbType;
+
         #endregion
+
         #region Public properties
-        /// <summary>
-        /// Gets or sets the field name.
+
+        /// <summary> Gets or sets the field name.
         /// </summary>
         public string Name
         {
-            get { return _Name; }
-            set { _Name = value; }
+            get { return _name; }
+            set { _name = value; }
         }
-        /// <summary>
-        /// Gets or sets the underlying database type.
+
+        /// <summary> Gets or sets the underlying database type.
         /// </summary>
         public DbType DbType
         {
-            get { return _DbType; }
-            set { _DbType = value; }
+            get { return _dbType; }
+            set { _dbType = value; }
         }
-        /// <summary>
-        /// Gets or sets the field value.
+
+        /// <summary> Gets or sets the field value.
         /// </summary>
         public object ObjectValue
         {
-            get { return _ObjectValue; }
-            set { _ObjectValue = value; }
+            get { return _objectValue; }
+            set { _objectValue = value; }
         }
-        /// <summary>
-        /// Gets or sets the field's presence in the WHERE clause.
+
+        /// <summary> Gets or sets the field's presence in the WHERE clause.
         /// </summary>
         public bool Filtered
         {
-            get { return _IsFiltered; }
-            set { _IsFiltered = value; }
+            get { return _isFiltered; }
+            set { _isFiltered = value; }
         }
-        /// <summary>
-        /// Gets or sets the field's presence in the ORDER BY clause. Gets or sets its sort direction.
+
+        /// <summary> Gets or sets the field's presence in the ORDER BY clause. Gets or sets its sort direction.
         /// </summary>
         public SqlSortDirection SortDirection
         {
-            get { return _SortDirection; }
-            set { _SortDirection = value; }
+            get { return _sortDirection; }
+            set { _sortDirection = value; }
         }
+
         #endregion
+
         #region Public methods
-        /// <summary>
-        /// Initialize a new instance of the class.
+
+        /// <summary> Initialize a new instance of the class.
         /// </summary>
         /// <param name="name">The field name</param>
         public DbField(string name)
         {
-            _Name = name;
+            _name = name;
         }
-        /// <summary>
-        /// Default constructor
+
+        /// <summary> Default constructor
         /// </summary>
         public DbField() : this("") { }
-        /// <summary>
-        /// Sets null to field value.
+
+        /// <summary> Sets null to field value.
         /// </summary>
         public void Clear()
         {
-            _ObjectValue = null;
+            _objectValue = null;
         }
-        /// <summary>
-        /// Indicates if th field value is undefined
+
+        /// <summary> Indicates if th field value is undefined
         /// </summary>
-        /// <returns>True if the value is not assigned, else false.</returns>
+        /// <returns>True if the value is not assigned, false otherwise.</returns>
         public bool IsEmpty()
         {
-            return _ObjectValue == null;
+            return _objectValue == null;
         }
+
         #endregion
+
     }
-    /// <summary>
-    /// Represents a int32 field.
+
+    /// <summary> Represents a int32 field.
     /// </summary>
     public class DbInt32Field : DbField
     {
         #region Private fields
-        /// <summary>
-        /// Holds the int32 value.
+
+        /// <summary> Holds the int32 value.
         /// </summary>
-        private int _Value;
+        private int _value;
+
         #endregion
+
         #region Public properties
-        /// <summary>
-        /// Gets or sets the int32 field value.
+
+        /// <summary> Gets or sets the int32 field value.
         /// </summary>
         public int Value
         {
-            get { return _Value; }
+            get { return _value; }
             set
             {
                 base.ObjectValue = value;
-                _Value = value;
+                _value = value;
             }
         }
+
         #endregion
+
         #region Public methods
-        /// <summary>
-        /// Initialize a new instance of the class. Sets the underlying database type to DbType.Int32.
+
+        /// <summary> Initialize a new instance of the class. Sets the underlying database type to DbType.Int32.
         /// </summary>
         public DbInt32Field()
         {
             DbType = DbType.Int32;
         }
+
         #endregion
     }
-    /// <summary>
-    /// Represents a int64 field.
+
+    /// <summary> Represents a int64 field.
     /// </summary>
     public class DbInt64Field : DbField
     {
         #region Private fields
-        /// <summary>
-        /// Holds the int64 value.
+
+        /// <summary> Holds the int64 value.
         /// </summary>
-        private long _Value;
+        private long _value;
+
         #endregion
+
         #region Public properties
-        /// <summary>
-        /// Gets or sets the int64 field value.
+
+        /// <summary> Gets or sets the int64 field value.
         /// </summary>
         public long Value
         {
-            get { return _Value; }
+            get { return _value; }
             set
             {
                 base.ObjectValue = value;
-                _Value = value;
+                _value = value;
             }
         }
+
         #endregion
+
         #region Public methods
-        /// <summary>
-        /// Initialize a new instance of the class. Sets the underlying database type to DbType.Int64.
+
+        /// <summary>/ Initialize a new instance of the class. Sets the underlying database type to DbType.Int64.
         /// </summary>
         public DbInt64Field()
         {
             DbType = DbType.Int64;
         }
+
         #endregion
     }
-    /// <summary>
-    /// Represents a DateTime field.
+
+    /// <summary> Represents a DateTime field.
     /// </summary>
     public class DbDateTimeField : DbField
     {
         #region Private fields
-        /// <summary>
-        /// Holds the DateTime field value.
+
+        /// <summary> Holds the DateTime field value.
         /// </summary>
-        private DateTime _Value;
+        private DateTime _value;
+
         #endregion
+
         #region Public properties
-        /// <summary>
-        /// Gets or sets the DateTime field value.
+
+        /// <summary> Gets or sets the DateTime field value.
         /// </summary>
         public DateTime Value
         {
-            get { return _Value; }
+            get { return _value; }
             set
             {
                 base.ObjectValue = value;
-                _Value = value;
+                _value = value;
             }
         }
+
         #endregion
+
         #region Public methods
-        /// <summary>
-        /// Initialize a new instance of the class. Sets the underlying database type to DbType.DateTime.
+
+        /// <summary> Initialize a new instance of the class. Sets the underlying database type to DbType.DateTime.
         /// </summary>
         public DbDateTimeField()
         {
             DbType = DbType.DateTime;
         }
+
         #endregion
     }
-    /// <summary>
-    /// Represents a string field.
+
+    /// <summary> Represents a string field.
     /// </summary>
     public class DbStringField : DbField
     {
         #region Private fields
-        /// <summary>
-        /// Holds the field size.
+
+        /// <summary> Holds the field size.
         /// </summary>
-        private int _Size;
-        /// <summary>
-        /// Holds the string field value.
+        private int _size;
+
+        /// <summary> Holds the string field value.
         /// </summary>
-        private string _Value;
+        private string _value;
+
         #endregion
+
         #region Public properties
-        /// <summary>
-        /// Gets or sets the field size.
+
+        /// <summary> Gets or sets the field size.
         /// </summary>
         public int Size
         {
-            get { return _Size; }
-            set { _Size = value; }
+            get { return _size; }
+            set { _size = value; }
         }
-        /// <summary>
-        /// Gets or sets the string field value. Crop value if value size is greater than the field size.
+
+        /// <summary>/ Gets or sets the string field value. 
+        /// Crop value if value size is greater than the field size.
         /// </summary>
         public string Value
         {
             get
             {
-                return _Value;
+                return _value;
             }
             set
             {
                 // todo : lever l'exception si Value.Lengyh > Size
                 // todo : retourner false si Value.Lengyh > Size
-                _Value = value;
+                _value = value;
                 if (Size != -1)
                     if (value.Length > Size)
-                        _Value = value.Remove(Size);
-                base.ObjectValue = _Value;
+                        _value = value.Remove(Size);
+                base.ObjectValue = _value;
             }
         }
+
         #endregion
+
         #region Public methods
-        /// <summary>
-        /// Initialize a new instance of the class. Sets the underlying database type to DbType.String.
+
+        /// <summary> Initialize a new instance of the class. Sets the underlying database type to DbType.String.
         /// </summary>
         public DbStringField()
         {
             DbType = DbType.String;
         }
+
         #endregion
     }
-    /// <summary>
-    /// Represents a text blob field.
+
+    /// <summary> Represents a text blob field.
     /// </summary>
     public class DbTextField : DbStringField
     {
         #region Public methods
-        /// <summary>
-        /// Initialize a new instance of the class. Sets the underlying database type to DbType.String.
+
+        /// <summary> Initialize a new instance of the class. 
+        /// Sets the underlying database type to DbType.String.
         /// Sets the size to -1.
         /// </summary>
         public DbTextField()
@@ -947,95 +1007,97 @@ namespace Sofia.Data.Common
             DbType = DbType.String;
             Size = -1;
         }
+
         #endregion
     }
-    /// <summary>
-    /// Represents a binary blob field.
+
+    /// <summary> Represents a binary blob field.
     /// </summary>
     public class DbBinaryField : DbField
     {
         #region Private fields
-        /// <summary>
-        /// Holds the int32 value.
+
+        /// <summary> Holds the int32 value.
         /// </summary>
-        private object _Value;
+        private object _value;
+
         #endregion
-        #region Public properties
-        /// <summary>
-        /// Gets or sets the int32 field value.
+
+        #region Public properties      
+        
+        /// <summary> Gets or sets the int32 field value.
         /// </summary>
         public object Value
         {
-            get { return _Value; }
+            get { return _value; }
             set
             {
                 base.ObjectValue = value;
-                _Value = value;
+                _value = value;
             }
         }
+        
         #endregion
+
         #region Public methods
-        /// <summary>
-        /// Initialize a new instance of the class. Sets the underlying database type to DbType.Int32.
+
+        /// <summary> Initialize a new instance of the class. Sets the underlying database type to DbType.Int32.
         /// </summary>
         public DbBinaryField()
         {
             DbType = DbType.Binary;
         }
+
         #endregion
     }
 
     #endregion
+
     #region DDL attributes
 
-    /// <summary>
-    /// Marks the field as primary key
+    /// <summary> Marks the field as primary key
     /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
     public class PrimaryKeyAttribute : Attribute
     {
-        /// <summary>
-        /// Initialize a new instance of the class
+        /// <summary> Initialize a new instance of the class
         /// </summary>
         public PrimaryKeyAttribute()
         {
         }
     }
 
-    /// <summary>
-    /// Marks the fiels as sized field and sets its size.
+    /// <summary> Marks the fiels as sized field and sets its size.
     /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
     public class FieldSizeAttribute : Attribute
     {
-        /// <summary>
-        /// Initialize a new instance of the class.
+        /// <summary> Initialize a new instance of the class.
         /// </summary>
         /// <param name="size">The field size.</param>
         public FieldSizeAttribute(int size)
         {
-            _Size = size;
+            _size = size;
         }
 
-        /// <summary>
-        /// The field size.
+        /// <summary> The field size.
         /// </summary>
-        private int _Size;
+        private int _size;
 
-        /// <summary>
-        /// Gets the field size.
+        /// <summary> Gets the field size.
         /// </summary>
         public int Size
         {
             get
             {
-                return _Size;
+                return _size;
             }
         }
 
     }
 
     #endregion
+
     #region Metadata update attributes
 
     /*
@@ -1093,4 +1155,5 @@ namespace Sofia.Data.Common
     */
 
     #endregion
+
 }

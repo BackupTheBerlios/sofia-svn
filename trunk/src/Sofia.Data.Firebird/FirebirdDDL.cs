@@ -1,5 +1,5 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using System.Data;
 using System.Data.Common;
@@ -12,15 +12,15 @@ namespace Sofia.Data.Firebird
 {
     public class FirebirdDDL : ISgbdDDL
     {
-        private Hashtable _Types;
+        private Dictionary<DbType, string> _types;
 
         public FirebirdDDL()
         {
-            _Types = new Hashtable();
+            _types = new Dictionary<DbType, string>();
 
-            _Types[DbType.String] = "VARCHAR";
-            _Types[DbType.Int32] = "INTEGER";
-            _Types[DbType.Binary] = "BLOB SUB_TYPE 0";
+            _types[DbType.String] = "VARCHAR";
+            _types[DbType.Int32] = "INTEGER";
+            _types[DbType.Binary] = "BLOB SUB_TYPE 0";
 
         }
 
@@ -28,7 +28,7 @@ namespace Sofia.Data.Firebird
 
         public string GetDDLType(DbType dbType, int size, bool isNotNullable)
         {
-            string type = _Types[dbType].ToString();
+            string type = _types[dbType].ToString();
 
             if (size > 0) type += String.Format("({0})", size.ToString());
             if (dbType == DbType.String && size == -1) type = "BLOB SUB_TYPE 1";

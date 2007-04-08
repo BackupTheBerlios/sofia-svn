@@ -10,15 +10,13 @@ namespace Sofia.Data.Common
     {
         #region Membres privés
 
-        /// <summary>
-        /// Objet connexion abstraite
+        /// <summary> Objet connexion abstraite
         /// </summary>
-        private Server _DbServer;
+        private Server _server/* _DbServer */;
 
-        /// <summary>
-        /// Composition avec une fabrique de commandes SQL
+        /// <summary> Composition avec une fabrique de commandes SQL
         /// </summary>
-        private ICommandFactory _CommandFactory;
+        private ICommandFactory _commandFactory;
 
         #endregion
 
@@ -33,35 +31,32 @@ namespace Sofia.Data.Common
 
         #region Propriétés
 
-        /// <summary>
-        /// Obtient ou définit texte de la requête SQL ou le nom de la procédure stockée
+        /// <summary> Obtient ou définit texte de la requête SQL ou le nom de la procédure stockée
         /// </summary>
         public string CommandText
         {
-            get { return _CommandFactory.CommandText; }
-            set { _CommandFactory.CommandText = value; }
+            get { return _commandFactory.CommandText; }
+            set { _commandFactory.CommandText = value; }
         }
 
          #endregion
 
         #region Méthodes publiques
 
-        /// <summary>
-        /// Constructeur
+        /// <summary> Constructeur
         /// </summary>
         /// <param name="dbConnection"></param>
         public Query(Server server)
         {
-            _DbServer = server;            
-            _CommandFactory = new CommandFactory(_DbServer);
+            _server = server;            
+            _commandFactory = new CommandFactory(_server);
         }
 
-        /// <summary>
-        /// Execute une requête SQL de type INSERT, UPDATE ou DELETE
+        /// <summary> Execute une requête SQL de type INSERT, UPDATE ou DELETE
         /// </summary>
         public bool ExecuteNonQuery()
         {
-            DbCommand dbCommand = _CommandFactory.CreateCommand(CommandType.Text);
+            DbCommand dbCommand = _commandFactory.CreateCommand(CommandType.Text);
             try
             {                
                 dbCommand.ExecuteNonQuery();
@@ -74,12 +69,11 @@ namespace Sofia.Data.Common
             }
         }
 
-        /// <summary>
-        /// Execute une procédure stockée
+        /// <summary> Execute une procédure stockée
         /// </summary>
         public bool ExecuteStoredProc()
         {
-            DbCommand dbCommand = _CommandFactory.CreateCommand(CommandType.StoredProcedure);
+            DbCommand dbCommand = _commandFactory.CreateCommand(CommandType.StoredProcedure);
             try
             {
                 dbCommand.ExecuteNonQuery();
@@ -93,13 +87,12 @@ namespace Sofia.Data.Common
         }        
 
 
-        /// <summary>
-        /// Execute une commande SQL de type SELECT
+        /// <summary> Execute une commande SQL de type SELECT
         /// </summary>
         /// <returns></returns>
         public DbDataReader ExecuteReader()
         {
-            DbCommand dbCommand = _CommandFactory.CreateCommand(CommandType.Text);
+            DbCommand dbCommand = _commandFactory.CreateCommand(CommandType.Text);
 
             try
             {
@@ -113,15 +106,14 @@ namespace Sofia.Data.Common
 
         }
 
-        /// <summary>
-        /// Ajoute un paramètre dans la liste des parametres
+        /// <summary> Ajoute un paramètre dans la liste des parametres
         /// </summary>
         /// <param name="name">Nom du paramètre</param>
         /// <param name="type">Type du paramètre</param>
         /// <param name="value">Valeur du paramètre</param>
         public void AddParameter(string name, DbType type, object value, ParameterDirection direction)
         {
-            _CommandFactory.AddParameter(name, type, value, direction);
+            _commandFactory.AddParameter(name, type, value, direction);
         }
 
         public void AddParameter(string name, DbType type, object value)
@@ -134,22 +126,20 @@ namespace Sofia.Data.Common
             AddParameter(name, type, null, ParameterDirection.ReturnValue);
         }
 
-        /// <summary>
-        /// Obtient la valeur d'un paramètre
+        /// <summary> Obtient la valeur d'un paramètre
         /// </summary>
         /// <param name="parameterName">Nom du paramètre</param>
         /// <returns>La valeur du paramètre, null si le paramètre est introuvable</returns>
         public object GetParameterValue(string parameterName)
         {
-            return _CommandFactory.GetParameterValue(parameterName);
+            return _commandFactory.GetParameterValue(parameterName);
         }
 
-        /// <summary>
-        /// Efface la liste des paramètres
+        /// <summary> Efface la liste des paramètres
         /// </summary>
         public void FlushParameters()
         {
-            _CommandFactory.FlushParameters();
+            _commandFactory.FlushParameters();
         }
 
         #endregion

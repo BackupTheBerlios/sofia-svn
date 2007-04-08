@@ -8,15 +8,13 @@ namespace Sofia.Data.Common
 {
     public interface ISgbdDDL
     {
-        /// <summary>
-        /// Obtient la chaine de caractère représentant le type de donnée spécifique à un SGBD
+        /// <summary> Obtient la chaine de caractère représentant le type de donnée spécifique à un SGBD
         /// </summary>
         /// <param name="dbType">Le type de donnée abstrait</param>
         /// <returns></returns>
         string GetDDLType(DbType dbType, int size, bool isNotNullable);
 
-        /// <summary>
-        /// Méthode de création de la base de données
+        /// <summary> Méthode de création de la base de données
         /// </summary>
         /// <param name="databaseName"></param>
         void CreateDatabase(Server server);

@@ -13,19 +13,19 @@ namespace Sofia.Data.Common
         /// <summary>
         /// Liste générique de paramètres Firebird.NET 
         /// </summary>
-        private List<DbParameter> _Parameters;
+        private List<DbParameter> _parameters;
 
         /// <summary>
         /// Objet connexion abstraite
         /// </summary>
-        private Server _DbServer;
+        private Server _server;
 
-        private string _SqlText;
+        private string _sqlText;
 
         public string CommandText
         {
-            get { return _SqlText; }
-            set { _SqlText = value; }
+            get { return _sqlText; }
+            set { _sqlText = value; }
         }
 
         #endregion
@@ -38,8 +38,8 @@ namespace Sofia.Data.Common
         /// <param name="dbConnection"></param>
         public CommandFactory(Server server)
         {
-            _DbServer = server;
-            _Parameters = new List<DbParameter>();
+            _server = server;
+            _parameters = new List<DbParameter>();
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Sofia.Data.Common
         /// </summary>
         public void FlushParameters()
         {
-            _Parameters = new List<DbParameter>();
+            _parameters = new List<DbParameter>();
         }
 
         /// <summary>
@@ -58,13 +58,13 @@ namespace Sofia.Data.Common
         /// <param name="value">Valeur du paramètre</param>
         public void AddParameter(string name, DbType type, object value, ParameterDirection direction)
         {
-            DbParameter parameter = _DbServer.DbProviderFactory.CreateParameter();
+            DbParameter parameter = _server.DbProviderFactory.CreateParameter();
             parameter.ParameterName = "@" + name;
             parameter.DbType = type;
             if (value != null)
                 parameter.Value = value;
             parameter.Direction = direction;
-            _Parameters.Add(parameter);
+            _parameters.Add(parameter);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace Sofia.Data.Common
         /// <returns>La valeur du paramètre, null si le paramètre est introuvable</returns>
         public object GetParameterValue(string parameterName)
         {
-            DbParameter parameter = _Parameters.Find(
+            DbParameter parameter = _parameters.Find(
                 delegate(DbParameter dbParameter) { return dbParameter.ParameterName.EndsWith(parameterName); });
 
             if (parameter != null)
@@ -89,11 +89,11 @@ namespace Sofia.Data.Common
         /// <returns>Une commande SQL</returns>
         public DbCommand CreateCommand(CommandType commandType)
         {
-            DbCommand dbCommand = _DbServer.DbConnection.CreateCommand();
-            dbCommand.CommandText = _SqlText;
+            DbCommand dbCommand = _server.DbConnection.CreateCommand();
+            dbCommand.CommandText = _sqlText;
             dbCommand.CommandType = commandType;
 
-            foreach (DbParameter parameter in _Parameters)
+            foreach (DbParameter parameter in _parameters)
                 dbCommand.Parameters.Add(parameter);
 
             return dbCommand;
