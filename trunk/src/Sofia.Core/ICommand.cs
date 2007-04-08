@@ -20,7 +20,7 @@ namespace Sofia.Commands
 		/// <summary>
 		/// Identifiant de la commande
 		/// </summary>
-		string Id  { 
+		string Identifier  { 
 			get; 
 		}
 		

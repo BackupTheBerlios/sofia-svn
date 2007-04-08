@@ -1,24 +1,24 @@
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 
 namespace Sofia.Commands
 {
 	
-	public  class CommandBase : ICommand
+	public class CommandBase : ICommand
 	{
 				
-		string _Id;
-		CommandProperties _Properties;
-		Hashtable _ParamList;
-		CommandManager _CommandManager;
-        ICommandReceiver _CommandReceiver;
+		string _identifier;
+		CommandProperties _properties;
+		Dictionary<string, string> _paramList;
+		CommandManager _commandManager;
+        ICommandReceiver _commandReceiver;
 		
-		public CommandBase(string id, string text, string icon, string accelKey, string description)
+		public CommandBase(string identifier, string text, string icon, string accelKey, string description)
 		{		 	
-		 	_Id = id;
-		 	_Properties = new CommandProperties(text, icon, accelKey, description);
-		 	_ParamList = new Hashtable();
+		 	_identifier = identifier;
+		 	_properties = new CommandProperties(text, icon, accelKey, description);
+            _paramList = new Dictionary<string, string>();
 		}
 		
 		public virtual void Execute(string parameters) 
@@ -26,14 +26,14 @@ namespace Sofia.Commands
 			Xml.XPath xpn= new Xml.XPath();
 			xpn.LoadXML(parameters);
      		
-     		ArrayList names = xpn.GetAttributes("/Params", "name");
-     		ArrayList values = xpn.GetAttributes("/Params", "value");
+     		List<string> names = xpn.GetAttributes("/Params", "name");
+     		List<string> values = xpn.GetAttributes("/Params", "value");
      		
      		for (int i = 0; i < names.Count; i++) {
-     			_ParamList[names[i].ToString()] = values[i].ToString();
+     			_paramList[names[i]] = values[i];
      		}
 
-            _CommandReceiver.Action(this);
+            _commandReceiver.Action(this);
 
 		}
 		
@@ -42,27 +42,27 @@ namespace Sofia.Commands
 			throw new NotSupportedException();
 		}
 		
-		public string Id { 
-			get { return _Id; } 
+		public string Identifier { 
+			get { return _identifier; } 
 		}
 		
 		public CommandProperties Properties { 
-			get { return _Properties; } 
+			get { return _properties; } 
 		}
 		
 		public CommandManager CommandManager { 
-			get { return _CommandManager; } 
-			set { _CommandManager = value; }
+			get { return _commandManager; } 
+			set { _commandManager = value; }
 		}
 
         public ICommandReceiver CommandReceiver
         {
-            get { return _CommandReceiver; }
-            set { _CommandReceiver = value; }
+            get { return _commandReceiver; }
+            set { _commandReceiver = value; }
         }
 				
-		public Hashtable ParamList {
-			get { return _ParamList; }
+		public Dictionary<string, string> ParamList {
+			get { return _paramList; }
 		}
 		
 	}

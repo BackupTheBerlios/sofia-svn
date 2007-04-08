@@ -2,14 +2,14 @@
 using System;
 using System.Xml;
 using System.Xml.XPath;
-using System.Collections;
 using System.IO;
+using System.Collections.Generic;
 
 namespace Sofia.Xml
 {
 
     /// <summary>
-    /// Cette classe permet de retourner la valeur d'une expression XPAth
+    /// Cette classe permet de retourner la valeur d'une expression XPath
     /// </summary>
     public class XPath
     {
@@ -37,14 +37,14 @@ namespace Sofia.Xml
         /// <param name="xPathString">Expression XPath de recherche du noeud</param>
         /// <param name="attribute">Attribut à rechercher</param>
         /// <returns>Une ArrayList contenant la liste des attributs recherchés</returns>
-        public ArrayList GetAttributes(string xPathString, string attribute)
+        public List<string> GetAttributes(string xPathString, string attribute)
         {
 
             // Initilisation des variables                    
             XPathNodeIterator xpathNodeIterator;
             XPathExpression expr;
 
-            ArrayList attributes = new ArrayList();
+            List<string> attributes = new List<string>();
 
             // Parcours du fichier XML
             xpathNavigator = xpathDoc.CreateNavigator();
