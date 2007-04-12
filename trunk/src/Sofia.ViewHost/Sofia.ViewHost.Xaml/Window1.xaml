@@ -15,10 +15,7 @@
                         EndPoint="0,1"
                         StartPoint="0,0">
 			<GradientStop
-                                Offset="0"
-                                Color="#FFFFFFFF" />
-			<GradientStop
-				Offset="0.01"
+				Offset="0"
 				Color="{DynamicResource DeepBlueColor}" />
 			<GradientStop
 				Offset="1"
@@ -55,6 +52,22 @@
 				Offset="1"
 				Color="#FF00C996" />
 	</LinearGradientBrush>
+		<LinearGradientBrush x:Key="ToolBarHorizontalGreenBackground2" 
+			EndPoint="0,1"
+			StartPoint="0,0">
+			<GradientStop
+				Offset="0"
+				Color="#FFFFFFFF" />
+			<GradientStop
+				Offset="0.53"
+				Color="#FF00694F" />
+			<GradientStop
+				Offset="0.485"
+				Color="#FFACECDC" />
+			<GradientStop
+				Offset="1"
+				Color="#FF00C996" />
+		</LinearGradientBrush>
 	<LinearGradientBrush x:Key="ToolBarHorizontalBlackBackground" 
                         EndPoint="0,1"
                         StartPoint="0,0">
@@ -71,6 +84,12 @@
 				Offset="1"
 				Color="#FF505050" />
 	</LinearGradientBrush>
+		<LinearGradientBrush x:Key="LeftRightShadowedGreenBrush" EndPoint="1.04,0.497" StartPoint="-0.063,0.497">
+			<GradientStop Color="#FF33957D" Offset="1"/>
+			<GradientStop Color="#FFB9F2E4" Offset="0.269"/>
+			<GradientStop Color="#FF33957D" Offset="0"/>
+			<GradientStop Color="#FFB9F2E4" Offset="0.76"/>
+		</LinearGradientBrush>
 	</Window.Resources>
 
 	
@@ -91,6 +110,11 @@
 			<TreeView Margin="0,0,0,0" BorderThickness="0,0,0,0" Grid.Row="2" Grid.RowSpan="1"/>
 			<GridSplitter RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Margin="0,0,0,0" Width="3" Grid.Column="1" Grid.Row="2" Background="{DynamicResource VerticalSeparatorBrush}"/>		
 			<Border Margin="3,3,3,3" Grid.Column="1" Grid.Row="2" Background="#FFFFFFFF" CornerRadius="5,5,5,5"/>		
+			<StackPanel HorizontalAlignment="Right" Margin="0,4,3,24" Width="78" Grid.Column="1">
+				<Border Opacity="1" Width="24.723" Height="16" Background="{DynamicResource ToolBarHorizontalGreenBackground}" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" CornerRadius="2,2,2,2">
+					<Border Opacity="0.8" Background="{DynamicResource LeftRightShadowedGreenBrush}" BorderBrush="#FFFFFFFF" BorderThickness="1,1,1,1" CornerRadius="0,0,0,0"/>
+				</Border>
+			</StackPanel>		
 		</Grid>	
 
 	</Border>	
