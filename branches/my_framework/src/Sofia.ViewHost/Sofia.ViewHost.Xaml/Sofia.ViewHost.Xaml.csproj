@@ -1,0 +1,39 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition="'$(Configuration)'==''">Debug</Configuration>
+    <DefaultClrNameSpace>Sofia</DefaultClrNameSpace>
+    <AssemblyName>Sofia.ViewHost</AssemblyName>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <ApplicationVersion>1.0.0.*</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <AlwaysCompileMarkupFilesInSeparateDomain>false</AlwaysCompileMarkupFilesInSeparateDomain>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Sofia</RootNamespace>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ProjectGuid>{5C724868-5D7B-4A63-82C3-DB7BA0326C23}</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildBinPath)\Microsoft.WinFX.targets" />
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="PresentationFramework.Luna" />
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+    <ApplicationDefinition Include="App.xaml" />
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Window1.xaml.cs">
+      <DependentUpon>Window1.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Buttons.xaml" />
+    <Page Include="TabControl.xaml" />
+    <Page Include="ToolBar.xaml" />
+    <Page Include="Window1.xaml" />
+    <Resource Include="document.png" />
+    <Resource Include="filenew_16.png" />
+  </ItemGroup>
+</Project>
