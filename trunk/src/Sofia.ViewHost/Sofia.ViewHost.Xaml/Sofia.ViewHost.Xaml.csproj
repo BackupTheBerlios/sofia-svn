@@ -1,4 +1,4 @@
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition="'$(Configuration)'==''">Debug</Configuration>
     <DefaultClrNameSpace>Sofia</DefaultClrNameSpace>
@@ -35,5 +35,11 @@
     <Page Include="Window1.xaml" />
     <Resource Include="document.png" />
     <Resource Include="filenew_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Sofia.Core\Sofia.Core.csproj">
+      <Project>{51B6B859-A247-40CD-AB52-F77042DDCE4C}</Project>
+      <Name>Sofia.Core</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
