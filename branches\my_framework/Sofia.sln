@@ -1,0 +1,73 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual C# Express 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.Core", "src\Sofia.Core\Sofia.Core.csproj", "{51B6B859-A247-40CD-AB52-F77042DDCE4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.ViewHost.WindowsForm", "src\Sofia.ViewHost\Sofia.ViewHost.WindowsForm\Sofia.ViewHost.WindowsForm.csproj", "{164568BC-E2FD-494B-B315-886761461F39}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.Plugins.General.Contact", "src\Sofia.Plugins\Sofia.Plugins.General.Contact\Sofia.Plugins.General.Contact.csproj", "{061042A5-5994-44BD-827F-251BF83AB140}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.Plugins.General.Contact.WindowsForm", "src\Sofia.Plugins\Sofia.Plugins.General.Contact\Sofia.Plugins.General.Contact.WindowsForm\Sofia.Plugins.General.Contact.WindowsForm.csproj", "{22909231-7D82-4678-9CD2-C9CB9C031BD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.Core.WindowsForm", "src\Sofia.Core\Sofia.Core.WindowsForm\Sofia.Core.WindowsForm.csproj", "{73D80817-ECE0-4CD9-A0E6-CE43138BA819}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.Data.Common", "src\Sofia.Data.Common\Sofia.Data.Common.csproj", "{D5881349-ED6F-4904-9A22-29B698CB60D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.Data.Firebird", "src\Sofia.Data.Firebird\Sofia.Data.Firebird.csproj", "{59F28981-0DDB-4B50-9F9D-F215E7DC04D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.Plugins.Core.Search", "src\Sofia.Plugins\Sofia.Plugins.Core.SearchBar\Sofia.Plugins.Core.Search.csproj", "{B36AA6D4-4941-4B6D-A2A8-7404C555638B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.Plugins.Core.Search.WindowsForm", "src\Sofia.Plugins\Sofia.Plugins.Core.SearchBar\Sofia.Plugins.Core.SearchBar.WindowsForm\Sofia.Plugins.Core.Search.WindowsForm.csproj", "{719EEE2F-B75D-47E6-A553-92E4318A950C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.ViewHost.Xaml", "src\Sofia.ViewHost\Sofia.ViewHost.Xaml\Sofia.ViewHost.Xaml.csproj", "{5C724868-5D7B-4A63-82C3-DB7BA0326C23}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{51B6B859-A247-40CD-AB52-F77042DDCE4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51B6B859-A247-40CD-AB52-F77042DDCE4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51B6B859-A247-40CD-AB52-F77042DDCE4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51B6B859-A247-40CD-AB52-F77042DDCE4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{164568BC-E2FD-494B-B315-886761461F39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{164568BC-E2FD-494B-B315-886761461F39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{164568BC-E2FD-494B-B315-886761461F39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{164568BC-E2FD-494B-B315-886761461F39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{061042A5-5994-44BD-827F-251BF83AB140}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{061042A5-5994-44BD-827F-251BF83AB140}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{061042A5-5994-44BD-827F-251BF83AB140}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{061042A5-5994-44BD-827F-251BF83AB140}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22909231-7D82-4678-9CD2-C9CB9C031BD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22909231-7D82-4678-9CD2-C9CB9C031BD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22909231-7D82-4678-9CD2-C9CB9C031BD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22909231-7D82-4678-9CD2-C9CB9C031BD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73D80817-ECE0-4CD9-A0E6-CE43138BA819}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73D80817-ECE0-4CD9-A0E6-CE43138BA819}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73D80817-ECE0-4CD9-A0E6-CE43138BA819}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73D80817-ECE0-4CD9-A0E6-CE43138BA819}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5881349-ED6F-4904-9A22-29B698CB60D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5881349-ED6F-4904-9A22-29B698CB60D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5881349-ED6F-4904-9A22-29B698CB60D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5881349-ED6F-4904-9A22-29B698CB60D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59F28981-0DDB-4B50-9F9D-F215E7DC04D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59F28981-0DDB-4B50-9F9D-F215E7DC04D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59F28981-0DDB-4B50-9F9D-F215E7DC04D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59F28981-0DDB-4B50-9F9D-F215E7DC04D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B36AA6D4-4941-4B6D-A2A8-7404C555638B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B36AA6D4-4941-4B6D-A2A8-7404C555638B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B36AA6D4-4941-4B6D-A2A8-7404C555638B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B36AA6D4-4941-4B6D-A2A8-7404C555638B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{719EEE2F-B75D-47E6-A553-92E4318A950C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{719EEE2F-B75D-47E6-A553-92E4318A950C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{719EEE2F-B75D-47E6-A553-92E4318A950C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{719EEE2F-B75D-47E6-A553-92E4318A950C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C724868-5D7B-4A63-82C3-DB7BA0326C23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C724868-5D7B-4A63-82C3-DB7BA0326C23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C724868-5D7B-4A63-82C3-DB7BA0326C23}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C724868-5D7B-4A63-82C3-DB7BA0326C23}.Release|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
