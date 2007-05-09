@@ -24,7 +24,7 @@ namespace Sofia.Data.Firebird
 
         }
 
-        #region Implémentation de l'interface
+        #region ISgdbDDL members
 
         public string GetDDLType(DbType dbType, int size, bool isNotNullable)
         {

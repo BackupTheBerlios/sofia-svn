@@ -1,0 +1,33 @@
+<UserControl x:Class="BankTellerModule.CustomerSummaryView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:btm="clr-namespace:BankTellerModule"
+	xmlns:cab="clr-namespace:Microsoft.Practices.CompositeUI.Windows.Workspaces;assembly=Microsoft.Practices.CompositeUI.Windows">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+
+		<btm:CustomerHeaderView/>
+
+		<cab:TabWorkspace x:Name="tabbedWorkspace1" Grid.Row="1">
+			<TabItem Header="Summary">
+				<TabItem.Content>
+					<btm:CustomerDetailView/>
+				</TabItem.Content>
+			</TabItem>
+			<TabItem Header="Accounts">
+				<TabItem.Content>
+					<btm:CustomerAccountsView/>
+				</TabItem.Content>
+			</TabItem>
+		</cab:TabWorkspace>
+
+		<Button Grid.Row="2" Click="OnSave" HorizontalAlignment="Right">Save</Button>
+	</Grid>
+</UserControl>
