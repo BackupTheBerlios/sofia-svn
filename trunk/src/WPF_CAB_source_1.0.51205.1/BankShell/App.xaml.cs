@@ -17,7 +17,7 @@ namespace BankShell
 			base.OnStartup(e);
 
 			//start the CAB app up, which will result in our root window being shown
-//			new BankShellApplication().Run();
+			//new BankShellApplication().Run();
 		}
 	}
 }
