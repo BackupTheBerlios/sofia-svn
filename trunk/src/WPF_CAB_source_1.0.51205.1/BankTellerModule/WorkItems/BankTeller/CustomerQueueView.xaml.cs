@@ -14,7 +14,6 @@ using Microsoft.Practices.CompositeUI;
 using Microsoft.Practices.CompositeUI.Commands;
 using Microsoft.Practices.CompositeUI.SmartParts;
 using BankTellerCommon;
-using System.Collections.Generic;
 using Microsoft.Practices.CompositeUI.Utility;
 using Microsoft.Practices.ObjectBuilder;
 

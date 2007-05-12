@@ -10,6 +10,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+using CompositeUI = Microsoft.Practices.CompositeUI;
+
 
 namespace Sofia.Shell
 {
@@ -20,7 +22,12 @@ namespace Sofia.Shell
   public partial class Window1 : System.Windows.Window
   {
 
-    public Window1()
+      #region fields
+
+      private CompositeUI.WorkItem workItem;
+
+      #endregion
+      public Window1()
     {
       InitializeComponent();
     }

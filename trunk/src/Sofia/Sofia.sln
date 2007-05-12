@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C# Express Codename Orcas
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.Data.Common", "..\Sofia.Data.Common\Sofia.Data.Common.csproj", "{D5881349-ED6F-4904-9A22-29B698CB60D1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.Data.Firebird", "..\Sofia.Data.Firebird\Sofia.Data.Firebird.csproj", "{59F28981-0DDB-4B50-9F9D-F215E7DC04D1}"
