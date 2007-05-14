@@ -27,6 +27,7 @@ namespace Sofia.Shell
       private CompositeUI.WorkItem workItem;
 
       #endregion
+
       public Window1()
     {
       InitializeComponent();
