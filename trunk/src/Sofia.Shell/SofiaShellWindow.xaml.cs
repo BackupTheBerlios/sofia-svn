@@ -10,28 +10,26 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-using CompositeUI = Microsoft.Practices.CompositeUI;
+using Microsoft.Practices.CompositeUI;
 
 
 namespace Sofia.Shell
 {
-  /// <summary>
-  /// Interaction logic for Window1.xaml
-  /// </summary>
+    /// <summary>
+    /// Interaction logic for Window1.xaml
+    /// </summary>
 
-  public partial class Window1 : System.Windows.Window
-  {
-
-      #region fields
-
-      private CompositeUI.WorkItem workItem;
-
-      #endregion
-
-      public Window1()
+    public partial class SofiaShellWindow : System.Windows.Window
     {
-      InitializeComponent();
-    }
 
-  }
+        #region fields
+
+        private WorkItem workItem;
+
+        #endregion
+        public SofiaShellWindow()
+        {
+            InitializeComponent();
+        }
+    }
 }
