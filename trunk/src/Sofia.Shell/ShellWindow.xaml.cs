@@ -11,20 +11,24 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 using Microsoft.Practices.CompositeUI;
+using Microsoft.Practices.CompositeUI.Services;
+using Microsoft.Practices.ObjectBuilder;
+using Microsoft.Practices.CompositeUI.Commands;
 
 
-namespace Sofia.Shell
+namespace Sofia.Cab.Shell
 {
     /// <summary>
     /// Interaction logic for Window1.xaml
     /// </summary>
 
-    public partial class SofiaShellWindow : System.Windows.Window
+    public partial class ShellWindow : System.Windows.Window
     {
 
         #region fields
 
         private WorkItem workItem;
+        private IWorkItemTypeCatalogService workItemTypeCatalog;
 
         #endregion
 
@@ -48,9 +52,31 @@ namespace Sofia.Shell
 
         #endregion
 
-        public SofiaShellWindow()
+        #region ctor
+
+        public ShellWindow()
         {
             InitializeComponent();
         }
+
+        [InjectionConstructor]
+        public ShellWindow(WorkItem workItem, IWorkItemTypeCatalogService workItemTypeCatalog)
+            : this()
+        {
+            this.workItem = workItem;
+            this.workItemTypeCatalog = workItemTypeCatalog;
+        }
+
+        #endregion
+
+        #region Command handlers
+
+        [CommandHandler("FileExit")]
+        public void OnFileExit(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        #endregion
     }
 }
