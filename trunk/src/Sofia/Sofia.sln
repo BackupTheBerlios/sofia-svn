@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.Data.Firebird", "..\S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.Cab.Shell", "..\Sofia.Cab.Shell\Sofia.Cab.Shell.csproj", "{2C01FDC5-D79A-4C94-9421-1EC90B634CA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.Cab.Common", "Sofia.Cab.Common\Sofia.Cab.Common.csproj", "{033EFB79-2753-4A82-BD50-D7E9C68511C9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.Cab.Common", "..\Sofia.Cab.Common\Sofia.Cab.Common.csproj", "{033EFB79-2753-4A82-BD50-D7E9C68511C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
