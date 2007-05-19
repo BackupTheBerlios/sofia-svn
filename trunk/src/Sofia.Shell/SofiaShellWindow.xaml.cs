@@ -27,6 +27,27 @@ namespace Sofia.Shell
         private WorkItem workItem;
 
         #endregion
+
+        #region properties
+
+        public Menu Menu
+        {
+            get
+            {
+                return _menu;
+            }
+        }
+
+        public MenuItem FileMenuItem
+        {
+            get
+            {
+                return _fileMenuItem;
+            }
+        }
+
+        #endregion
+
         public SofiaShellWindow()
         {
             InitializeComponent();

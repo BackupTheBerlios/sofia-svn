@@ -1,9 +1,14 @@
-﻿<Window x:Class="Sofia.Shell.SofiaShellWindow"
+﻿<Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="Sofia.Shell.SofiaShellWindow"
     Title="Sofia.Shell" Height="300" Width="300"
     >
     <Grid>
+        
+    	<Menu VerticalAlignment="Top" Height="24" x:Name="_menu">
+    		<MenuItem x:Name="_fileMenuItem" Header="_File"/>
+    	</Menu>
         
     </Grid>
 </Window>
