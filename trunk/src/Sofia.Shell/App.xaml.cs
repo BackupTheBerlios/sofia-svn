@@ -4,7 +4,7 @@ using System.Data;
 using System.Xml;
 using System.Configuration;
 
-namespace Sofia.Shell
+namespace Sofia.Cab.Shell
 {
   /// <summary>
   /// Interaction logic for App.xaml
