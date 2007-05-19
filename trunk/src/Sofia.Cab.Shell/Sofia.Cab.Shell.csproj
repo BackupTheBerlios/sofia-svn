@@ -28,6 +28,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <StartupObject>Sofia.Cab.Shell.Entry</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -85,6 +86,7 @@
   <ItemGroup>
     <Compile Include="Config\MenuItemElement.cs" />
     <Compile Include="Config\MenuItemElementCollection.cs" />
+    <Compile Include="Entry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -110,6 +112,12 @@
     <Compile Include="ShellApplication.cs" />
     <Compile Include="UIElementBuilder.cs" />
     <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sofia.Cab.Common\Sofia.Cab.Common.csproj">
+      <Project>{033EFB79-2753-4A82-BD50-D7E9C68511C9}</Project>
+      <Name>Sofia.Cab.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

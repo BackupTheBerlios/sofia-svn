@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='iso-8859-1'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Sofia.Cab.Shell.Properties" GeneratedClassName="Settings">
   <Profiles />
-  <Settings />
+  <Settings>
+    <Setting Name="Test" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Test</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>

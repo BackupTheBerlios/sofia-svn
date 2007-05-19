@@ -6,15 +6,15 @@ using System.Configuration;
 
 namespace Sofia.Cab.Shell
 {
-  /// <summary>
-  /// Interaction logic for App.xaml
-  /// </summary>
+    /// <summary>
+    /// Interaction logic for App.xaml
+    /// </summary>
 
-  public partial class App : System.Windows.Application
-  {
-    protected override void OnStartup(StartupEventArgs e)
+    public partial class App : System.Windows.Application
     {
-      base.OnStartup(e);
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+        }
     }
-  }
 }

@@ -18,8 +18,8 @@ namespace Sofia.Cab.Shell
 		// Loads the menu items from App.config and put them into the menu strip, hooking
 		// up the menu URIs for command dispatching.
 		public static void LoadFromConfig(WorkItem workItem)
-		{
-			ShellItemsSection section = (ShellItemsSection) ConfigurationManager.GetSection("shellitems");
+		{                        
+			ShellItemsSection section = (ShellItemsSection) ConfigurationManager.GetSection("shellItems");
 
 			foreach (MenuItemElement menuItem in section.MenuItems)
 			{
