@@ -22,14 +22,5 @@ namespace Sofia.Cab.Shell.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Test")]
-        public string Test {
-            get {
-                return ((string)(this["Test"]));
-            }
-        }
     }
 }
