@@ -13,16 +13,16 @@ using Sofia.Cab.Common;
 
 namespace Sofia.Cab.Modules.HomeChief
 {
-    public class ModuleInit : Microsoft.Practices.CompositeUI.ModuleInit
+    public class HomeChiefModuleInit : ModuleInit
     {
         #region fields
 
-        private HomeChiefWorkItem _workItem;
+        private WorkItem _workItem;
 
         #endregion
 
         [InjectionConstructor]
-        public ModuleInit([ServiceDependency] HomeChiefWorkItem workItem)
+        public HomeChiefModuleInit([ServiceDependency] WorkItem workItem)
         {
             _workItem = workItem;
         }

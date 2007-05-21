@@ -1,14 +1,33 @@
 ﻿<Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cab="http://schemas.microsoft.com/cab/wpf"
     x:Class="Sofia.Cab.Shell.ShellWindow"
     Title="Sofia.Shell" Height="300" Width="300"
     >
     <Grid>
-        
-    	<Menu VerticalAlignment="Top" Height="21" x:Name="_menu">
-    		<MenuItem x:Name="_fileMenuItem" Header="_File"/>
-    	</Menu>
-        
-    </Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="20" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="20" />      
+    </Grid.RowDefinitions>
+    <Menu x:Name="_menu" Height="20" Grid.Row="0">
+		<MenuItem x:Name="_fileMenuItem" Header="_File"/>
+    </Menu>
+    
+      <Grid Grid.Row="1" Margin="0,0,0,0" >
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="30*" />
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="70*" />
+        </Grid.ColumnDefinitions>
+        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+		<cab:DeckWorkspace x:Name="contentWorkspace" Grid.Column="2"/>
+        <cab:DeckWorkspace x:Name="sideBarWorkspace"   Grid.ColumnSpan="2" Margin="0,0,5,0" />
+      </Grid>
+    
+    <StatusBar Name="_statusBar" Grid.Row="2"  >
+		<StatusBarItem Height="20" Name="_statusBarItem" Margin="0,0,0,0"  >StatusBarItem</StatusBarItem>
+    </StatusBar>    
+  </Grid>
 </Window>
