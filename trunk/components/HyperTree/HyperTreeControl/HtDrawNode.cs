@@ -216,9 +216,9 @@ namespace HyperTreeControl
      *
      * @param t    the translation vector
      */
-    void translate(HtCoordE t)
+    public void Translate(HtCoordE t)
     {
-      ze.translate(oldZe, t);
+      ze.Translate(oldZe, t);
     }
 
     /**

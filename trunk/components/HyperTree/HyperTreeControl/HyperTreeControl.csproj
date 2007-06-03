@@ -84,5 +84,28 @@
     <Compile Include="WpfHtView.cs" />
     <AppDesigner Include="Properties\" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="java\AbstractHTNode.java" />
+    <Content Include="java\AWTHTView.java" />
+    <Content Include="java\HTAction.java" />
+    <Content Include="java\HTCoordE.java" />
+    <Content Include="java\HTCoordS.java" />
+    <Content Include="java\HTDraw.java" />
+    <Content Include="java\HTDrawNode.java" />
+    <Content Include="java\HTDrawNodeComposite.java" />
+    <Content Include="java\HTGeodesic.java" />
+    <Content Include="java\HTModel.java" />
+    <Content Include="java\HTModelNode.java" />
+    <Content Include="java\HTModelNodeComposite.java" />
+    <Content Include="java\HTNode.java" />
+    <Content Include="java\HTNodeLabel.java" />
+    <Content Include="java\HTTransformation.java" />
+    <Content Include="java\HTView.java" />
+    <Content Include="java\HyperTree.java" />
+    <Content Include="java\SwingHTView.java" />
+    <Content Include="java\TestAllHT.java" />
+    <Content Include="java\TestHTCoord.java" />
+    <Content Include="java\TestHTModel.java" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

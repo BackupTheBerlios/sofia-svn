@@ -180,17 +180,19 @@ namespace HyperTreeControl
      *
      * @param t    the translation vector
      */
-    void translate(HTCoordE t) {
+    void translate(HtCoordE t) {
         super.translate(t);
 
-        HTDrawNode child = null;
-        for (Iterator i = children(); i.hasNext(); ) {
-            child = (HTDrawNode) i.next();
-            child.translate(t);
-            HTGeodesic geod = (HTGeodesic) geodesics.get(child);
-            if (geod != null) {
+        HtDrawNode child = null;
+        foreach (HtDrawNode child in children)
+        {
+            child.Translate(t);
+            HtGeodesic geod = geodesics[child];
+            if (geod != null)
+            {
                 geod.rebuild();
             }
+
         }
 
     }
