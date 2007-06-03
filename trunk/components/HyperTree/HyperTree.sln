@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C# Express Codename Orcas
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HyperTree", "HyperTree\HyperTree.csproj", "{9FA26CDE-7724-4014-98C5-6BB7C3474FA4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HyperTreeControl", "HyperTreeControl\HyperTreeControl.csproj", "{C093FA13-8F7C-4B29-BBF1-2BE448BFF3F9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9FA26CDE-7724-4014-98C5-6BB7C3474FA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FA26CDE-7724-4014-98C5-6BB7C3474FA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FA26CDE-7724-4014-98C5-6BB7C3474FA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FA26CDE-7724-4014-98C5-6BB7C3474FA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C093FA13-8F7C-4B29-BBF1-2BE448BFF3F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C093FA13-8F7C-4B29-BBF1-2BE448BFF3F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C093FA13-8F7C-4B29-BBF1-2BE448BFF3F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C093FA13-8F7C-4B29-BBF1-2BE448BFF3F9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
