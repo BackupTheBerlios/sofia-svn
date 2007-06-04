@@ -44,8 +44,8 @@ namespace HyperTreeControl
 
     /// <summary> Gets the preferred width of the border of the node.
     ///Reasonable values are from 1 to 4.
-    /// <returns>The border width.</returns>
     /// </summary>
+    /// <returns>The border width.</returns>
     int BorderSize { get; }
 
     /// <summary> Gets the image (icon) which should be displayed insidethe node. 

@@ -53,17 +53,17 @@ namespace HyperTreeControl
       _p.X = first.X + second.X;
       _p.Y = first.Y + second.Y;
 
-      HtCoordE d = new HtCoordE(second);
-      d.Y = -d.Y;
-      d.Multiply(first);
-      d.X += 1;
-      _p.Divide(d);
+      HtCoordE __d = new HtCoordE(second);
+      __d.Y = -__d.Y;
+      __d.Multiply(first);
+      __d.X += 1;
+      _p.Divide(__d);
 
       _o.X = first.X;
       _o.Y = -first.Y;
       _o.Multiply(second);
       _o.X += 1;
-      _o.Divide(d);
+      _o.Divide(__d);
     }
 
     #endregion
@@ -75,10 +75,10 @@ namespace HyperTreeControl
     /// <returns></returns>
     public override string ToString()
     {
-      string result = "Transformation : " +
+      string __result = "Transformation : " +
                       "\n\tP = " + _p +
                       "\n\tO = " + _o;
-      return result;
+      return __result;
     }
 
     #endregion

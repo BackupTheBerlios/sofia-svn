@@ -22,11 +22,10 @@ namespace HyperTreeControl
         private HtCoordS sOrigin = null;  // origin of the screen plane
         private HtCoordS sMax = null;  // max point in the screen plane 
 
-        private bool fastMode = false; // fast mode
+        private bool _fastMode = false; // fast mode
         private Dictionary<IHtNode, HtDrawNode> _drawToHTNodeMap;
 
         #endregion
-
 
         #region ctor
 
@@ -131,7 +130,7 @@ namespace HyperTreeControl
                 return sMax;
             }
         }
-       
+
         #endregion
 
         #region Drawing
@@ -158,8 +157,7 @@ namespace HyperTreeControl
 
         #region Translation
 
-        /// <summary>
-        ///Translates the hyperbolic tree by the given vector.
+        /// <summary> Translates the hyperbolic tree by the given vector.
         /// </summary>
         /// <param name="zs">The first coordinates.</param>
         /// <param name="ze">The second coordinates.</param>
@@ -188,48 +186,41 @@ namespace HyperTreeControl
             }
         }
 
-        /**
-         * Signal that the translation ended.
-         */
+        /// <summary> Signal that the translation ended.
+        /// </summary>
         public static void EndTranslation()
         {
             _drawRoot.EndTranslation();
         }
 
-        /**
-         * Translate the hyperbolic tree so that the given node 
-         * is put at the origin of the hyperbolic tree.
-         *
-         * @param node    the given HTDrawNode
-         */
-        void translateToOrigin(HtDrawNode node)
+        /// <summary> Translate the hyperbolic tree 
+        /// so that the given node  is put at the origin of the hyperbolic tree.        
+        /// </summary>
+        /// <param name="node">The given <see cref="HtDrawNode"/></param>
+        private void TranslateToOrigin(HtDrawNode node)
         {
             _view.StopMouseListening();
-            AnimThread t = new AnimThread(node);
-            t.Start();
+            AnimThread __t = new AnimThread(node);
+            __t.Start();
         }
 
-        /**
-         * Restores the hyperbolic tree to its origin.
-         */
-        void restore()
+        /// <summary> Restores the hyperbolic tree to its origin.
+        /// </summary>
+        private void Restore()
         {
             _drawRoot.Restore();
             _view.Repaint();
         }
 
-        /**
-         * Sets the fast mode, where nodes are no more drawed.
-         *
-         * @param mode    setting on or off.
-         */
+        /// <summary> Sets the fast mode, where nodes are no more drawed.
+        /// </summary>
         public bool FastMode
         {
             set
             {
-                if (value != fastMode)
+                if (value != _fastMode)
                 {
-                    fastMode = value;
+                    _fastMode = value;
                     _drawRoot.FastMode = value;
                     if (value == false)
                     {
@@ -241,135 +232,138 @@ namespace HyperTreeControl
 
         #endregion
 
-        /* --- Node searching --- */
+        #region Node searching
 
-        /**
-         * Returns the node (if any) whose screen coordinates' zone
-         * contains thoses given in parameters.
-         *
-         * @param zs    the given screen coordinate
-         * @return      the searched HTDrawNode if found;
-         *              <CODE>null</CODE> otherwise
-         */
+        /// <summary> Returns the node (if any) whose screen coordinates' zone
+        /// contains thoses given in parameters.
+        /// </summary>
+        /// <param name="zs">The given screen coordinate.</param>
+        /// <returns>The searched <see cref="HtDrawNode"/> if found;
+        /// <code>null</code> otherwise</returns>
         private HtDrawNode FindNode(HtCoordS zs)
         {
             return _drawRoot.FindNode(zs);
         }
 
 
-        /** Maps a {@link HTNode} to a {@link HTDrawNode}.
-         * Used for backwards finding a {@link HTDrawNode} instance for a given
-         * {@link HTNode}.
-         * @param htNode the {@link HTNode}.
-         * @param drawNode the {@link HTDrawNode} for the given {@link HTNode}.
-         */
+        /// <summary> Maps a <see cref="IHtNode"/> to a <see cref="HtDrawNode"/>.
+        /// Used for backwards finding a <see cref="HtDrawNode"/> instance for a given
+        /// <see cref="IHtNode"/>.
+        /// </summary>
+        /// <param name="htNode">The <see cref="IHtNode"/></param>
+        /// <param name="drawNode">the <see cref="HtDrawNode"/> for the given <see cref="IHtNode"/></param>
         public void MapNode(IHtNode htNode, HtDrawNode drawNode)
         {
             _drawToHTNodeMap.Add(htNode, drawNode);
         }
 
-        /** Finds a {@link HTDrawNode} for a given {@link HTNode}.
-         * @param htNode the {@link HTNode} for which we want to find the
-         *     {@link HTDrawNode}.
-         * @return the {@link HTDrawNode} for the given {@link HTNode}.
-         */
-        protected HtDrawNode findDrawNode(IHtNode htNode)
+        /// <summary> Finds a <see cref="HtDrawNode"/> for a given <see cref="IHtNode"/>.
+        /// </summary>
+        /// <param name="htNode">the <see cref="IHtNode"/> for which we want to find the <see cref="HtDrawNode"/>.</param>
+        /// <returns>The <see cref="HtDrawNode"/> for the given <see cref="IHtNode"/>.</returns>
+        private HtDrawNode FindDrawNode(IHtNode htNode)
         {
-
-            HtDrawNode drawNode = _drawToHTNodeMap[htNode];
-            return drawNode;
+            HtDrawNode __drawNode = _drawToHTNodeMap[htNode];
+            return __drawNode;
         }
 
-    }
+        #endregion
+    }        
 
-    /* --- Inner animation thread --- */
+    #region Inner animation thread
 
     internal delegate void AnimDelegate();
 
+    /// <summary>
+    /// Used for the Dispatcher delegate invoke
+    /// </summary>
     internal interface IRunnable
     {
         void Run();
     }
 
-    /**
-     * The AnimThread class implements the thread that do the animation
-     * when clicking on a node.
-     */
+    /// <summary> The AnimThread class implements the thread that do the animation
+    /// when clicking on a node.
+    /// </summary>
     internal class AnimThread
     {
 
-        private HtDrawNode node = null; // node to put at the origin
-        private IRunnable tTask = null; // translation task
+        private HtDrawNode _node = null; // node to put at the origin
+        private IRunnable _task = null; // translation task
 
-        /**
-         * Constructor.
-         *
-         * @param node    the node to put at the origin
-         */
+        /// <summary> Constructor.
+        /// </summary>
+        /// <param name="node">The node to put at the origin.</param>
         public AnimThread(HtDrawNode node)
         {
-            this.node = node;
-            return;
+            _node = node;
         }
 
-        /**
-         * Do the animation.
-         */
+        /// <summary> Starts the animation.
+        /// </summary>
         public void Start()
         {
             ThreadPool.QueueUserWorkItem(new WaitCallback(this.Run));
         }
 
+        /// <summary> Delegate for the  <see cref="System.Windows.Threading.Dispatcher"/> event queue.
+        /// </summary>
+        /// <param name="stateInfo"></param>
         private void Run(object stateInfo)
         {
-            HtCoordE zn = node.OldCoordinates;
-            HtCoordE zf = new HtCoordE();
 
-            int frames = HtDraw.NBR_FRAMES;
-            int nodes = HtDraw.Model.NumberOfNodes;
+            HtCoordE __zn = _node.OldCoordinates;
+            HtCoordE __zf = new HtCoordE();
 
-            double d = zn.D();
-            for (int i = 0; i < HtDraw.Ray.Length; i++)
+            int __frames = HtDraw.NBR_FRAMES;
+            int __nodes = HtDraw.Model.NumberOfNodes;
+
+            double __d = __zn.D();
+            for (int __i = 0; __i < HtDraw.Ray.Length; __i++)
             {
-                if (d > HtDraw.Ray[i])
+                if (__d > HtDraw.Ray[__i])
                 {
-                    frames += HtDraw.NBR_FRAMES / 2;
+                    __frames += HtDraw.NBR_FRAMES / 2;
                 }
             }
 
-            double factorX = zn.X / frames;
-            double factorY = zn.Y / frames;
+            double __factorX = __zn.X / __frames;
+            double __factorY = __zn.Y / __frames;
 
-            for (int i = 1; i < frames; i++)
+            for (int __i = 1; __i < __frames; __i++)
             {
-                zf.X = zn.X - (i * factorX);
-                zf.Y = zn.Y - (i * factorY);
-                tTask = new TranslateThread(zn, zf);
+                __zf.X = __zn.X - (__i * __factorX);
+                __zf.Y = __zn.Y - (__i * __factorY);
+                _task = new TranslateThread(__zn, __zf);
                 try
                 {
-                    Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Render, new AnimDelegate(tTask.Run));
+                    Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Render, new AnimDelegate(_task.Run));
                 }
                 catch (Exception)
                 {
+                    //TODO : throw more convenient exception
                     throw;
                 }
             }
 
-            zf.X = 0.0;
-            zf.Y = 0.0;
-            tTask = new LastTranslateThread(zn, zf);
+            __zf.X = 0.0;
+            __zf.Y = 0.0;
+            _task = new LastTranslateThread(__zn, __zf);
             try
             {
-                Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Render, new AnimDelegate(tTask.Run));
+                Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Render, new AnimDelegate(_task.Run));
             }
             catch (Exception)
             {
+                //TODO : throw more convenient exception
                 throw;
             }
         }
 
     }
 
+    /// <summary> Part of the animation thread.
+    /// </summary>
     internal class TranslateThread : IRunnable
     {
 
@@ -382,6 +376,8 @@ namespace HyperTreeControl
             zEnd = z2;
         }
 
+        /// <summary> Implementation of <see cref="IRunnable"/>.
+        /// </summary>
         public void Run()
         {
             HtDraw.Translate(zStart, zEnd);
@@ -389,6 +385,8 @@ namespace HyperTreeControl
         }
     }
 
+    /// <summary> Part of the animation thread.    
+    /// </summary>
     internal class LastTranslateThread : IRunnable
     {
 
@@ -401,6 +399,8 @@ namespace HyperTreeControl
             zEnd = z2;
         }
 
+        /// <summary> Implementation of <see cref="IRunnable"/>.
+        /// </summary>
         public void Run()
         {
             HtDraw.Translate(zStart, zEnd);
@@ -410,4 +410,5 @@ namespace HyperTreeControl
         }
     }
 
+    #endregion
 }

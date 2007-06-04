@@ -49,11 +49,11 @@ namespace HyperTreeControl
         {
           __child = new HtModelNodeComposite(__childNode, this, model);
         }
-        AddChild(__child);
+        this.AddChild(__child);
       }
 
       // here the down of the tree is built, so we can compute the weight
-      ComputeWeight();
+      this.ComputeWeight();
     }
 
     #endregion
@@ -82,14 +82,14 @@ namespace HyperTreeControl
     {
       get
       {
-        return this._children;
+        return _children;
       }
     }
 
     /// <summary> Adds the HtModelNode as a children.
     /// </summary>
     /// <param name="child">The child.</param>  
-    void AddChild(HtModelNode child)
+    private void AddChild(HtModelNode child)
     {
       _children.Add(child);
     }
@@ -164,11 +164,11 @@ namespace HyperTreeControl
 
     public override string ToString()
     {
-      string result = base.ToString();
-      result += "\n\tChildren :";
-      foreach (HtModelNode child in _children)
-        result += "\n\t-> " + child.Name;
-      return result;
+      string __result = base.ToString();
+      __result += "\n\tChildren :";
+      foreach (HtModelNode __child in _children)
+        __result += "\n\t-> " + __child.Name;
+      return __result;
     }
 
     #endregion

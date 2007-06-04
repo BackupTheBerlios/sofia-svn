@@ -16,158 +16,157 @@ namespace HyperTreeControl
             Arc = 1
         }
 
-        private const double EPSILON = 1.0E-10; // epsilon
+        #region fields
 
-        private DrawType type = DrawType.Line; // type of the geodesic
+        private static readonly double EPSILON = 1.0E-10; // epsilon
 
-        private HtCoordE za = null; // first point (Euclidian)
-        private HtCoordE zb = null; // second point (Euclidian)
-        private HtCoordE zc = null; // control point (Euclidian)
-        private HtCoordE zo = null; // center of the geodesic;
+        private DrawType _type = DrawType.Line; // type of the geodesic
 
-        private HtCoordS a = null; // first point (on the screen)
-        private HtCoordS b = null; // second point (on the screen)
-        private HtCoordS c = null; // control point (on the screen)
+        private HtCoordE _za = null; // first point (Euclidian)
+        private HtCoordE _zb = null; // second point (Euclidian)
+        private HtCoordE _zc = null; // control point (Euclidian)
+        private HtCoordE _zo = null; // center of the geodesic;
 
+        private HtCoordS _a = null; // first point (on the screen)
+        private HtCoordS _b = null; // second point (on the screen)
+        private HtCoordS _c = null; // control point (on the screen)
 
-        /* --- Constructor --- */
+        #endregion
 
-        /**
-         * Constructor.
-         *
-         * @param za       the first point
-         * @param zb       the second point
-         */
+        #region Constructor
+
+        /// <summary> Constructor.
+        /// </summary>
+        /// <param name="za">The first point.</param>
+        /// <param name="zb">The second point.</param>
         public HtGeodesic(HtCoordE za, HtCoordE zb)
         {
-            this.za = za;
-            this.zb = zb;
+            _za = za;
+            _zb = zb;
 
-            zc = new HtCoordE();
-            zo = new HtCoordE();
+            _zc = new HtCoordE();
+            _zo = new HtCoordE();
 
-            a = new HtCoordS();
-            b = new HtCoordS();
-            c = new HtCoordS();
+            _a = new HtCoordS();
+            _b = new HtCoordS();
+            _c = new HtCoordS();
 
             this.Rebuild();
         }
 
+        #endregion
 
-        /* --- Refresh --- */
+        #region Refresh
 
-        /**
-         * Refresh the screen coordinates of this node.
-         *
-         * @param sOrigin   the origin of the screen plane
-         * @param sMax      the (xMax, yMax) point in the screen plane
-         */
+        /// <summary> Refresh the screen coordinates of this node.
+        /// </summary>
+        /// <param name="sOrigin">The origin of the screen plane.</param>
+        /// <param name="sMax">The (xMax, yMax) point in the screen plane.</param>
         public void RefreshScreenCoordinates(HtCoordS sOrigin, HtCoordS sMax)
         {
-            a.ProjectionEtoS(za, sOrigin, sMax);
-            b.ProjectionEtoS(zb, sOrigin, sMax);
-            c.ProjectionEtoS(zc, sOrigin, sMax);
+            _a.ProjectionEtoS(_za, sOrigin, sMax);
+            _b.ProjectionEtoS(_zb, sOrigin, sMax);
+            _c.ProjectionEtoS(_zc, sOrigin, sMax);
         }
 
+        #endregion
 
-        /* --- Rebuild --- */
+        #region Rebuild
 
-        /**
-         * Builds the geodesic.
-         */
+        /// <summary> Builds the geodesic.
+        /// </summary>
         public void Rebuild()
         {
-            if ((Math.Abs(za.D()) < EPSILON) ||                       // za == origin
-                 (Math.Abs(zb.D()) < EPSILON) ||                       // zb == origin
-                 (Math.Abs((za.X / zb.X) - (za.Y / zb.Y)) < EPSILON)) // za = lambda.zb
+            if ((Math.Abs(_za.D()) < EPSILON) ||                          // za == origin
+                 (Math.Abs(_zb.D()) < EPSILON) ||                         // zb == origin
+                 (Math.Abs((_za.X / _zb.X) - (_za.Y / _zb.Y)) < EPSILON)) // za = lambda.zb
             {
-                type = DrawType.Line;
+                _type = DrawType.Line;
             }
             else
             {
-                type = DrawType.Arc;
+                _type = DrawType.Arc;
 
-                double da = 1 + za.X * za.X + za.Y * za.Y;
-                double db = 1 + zb.X * zb.X + zb.Y * zb.Y;
-                double dd = 2 * (za.X * zb.Y - zb.X * za.Y);
+                double __da = 1 + _za.X * _za.X + _za.Y * _za.Y;
+                double __db = 1 + _zb.X * _zb.X + _zb.Y * _zb.Y;
+                double __dd = 2 * (_za.X * _zb.Y - _zb.X * _za.Y);
 
-                zo.X = (zb.Y * da - za.Y * db) / dd;
-                zo.Y = (za.X * db - zb.X * da) / dd;
+                _zo.X = (_zb.Y * __da - _za.Y * __db) / __dd;
+                _zo.Y = (_za.X * __db - _zb.X * __da) / __dd;
 
-                double det = (zb.X - zo.X) * (za.Y - zo.Y) - (za.X - zo.X) * (zb.Y - zo.Y);
-                double fa = za.Y * (za.Y - zo.Y) - za.X * (zo.X - za.X);
-                double fb = zb.Y * (zb.Y - zo.Y) - zb.X * (zo.X - zb.X);
+                double __det = (_zb.X - _zo.X) * (_za.Y - _zo.Y) - (_za.X - _zo.X) * (_zb.Y - _zo.Y);
+                double __fa = _za.Y * (_za.Y - _zo.Y) - _za.X * (_zo.X - _za.X);
+                double __fb = _zb.Y * (_zb.Y - _zo.Y) - _zb.X * (_zo.X - _zb.X);
 
-                zc.X = ((za.Y - zo.Y) * fb - (zb.Y - zo.Y) * fa) / det;
-                zc.Y = ((zo.X - za.X) * fb - (zo.X - zb.X) * fa) / det;
+                _zc.X = ((_za.Y - _zo.Y) * __fb - (_zb.Y - _zo.Y) * __fa) / __det;
+                _zc.Y = ((_zo.X - _za.X) * __fb - (_zo.X - _zb.X) * __fa) / __det;
             }
         }
 
+        #endregion
 
-        /* --- Draw --- */
+        #region Draw
 
-        /**
-         * Draws this geodesic.
-         *
-         * @param g    the graphic context
-         */
-        public void Draw(Canvas g)
+        /// <summary> Draw the geodesic.
+        /// </summary>
+        /// <param name="canvas">The graphic canvas.</param>
+        public void Draw(Canvas canvas)
         {
-            g.Background = new SolidColorBrush(Colors.Black);
-            switch (type)
+            canvas.Background = new SolidColorBrush(Colors.Black);
+            switch (_type)
             {
                 case DrawType.Line:
-                    Line line = new Line();
-                    line.X1 = a.X;
-                    line.Y1 = a.Y;
-                    line.X2 = b.X;
-                    line.Y2 = b.Y;
-                    g.Children.Add(line);
+                    Line __line = new Line();
+                    __line.X1 = _a.X;
+                    __line.Y1 = _a.Y;
+                    __line.X2 = _b.X;
+                    __line.Y2 = _b.Y;
+                    canvas.Children.Add(__line);
                     break;
                 case DrawType.Arc:
                     List<PathFigure> __pathFigures = new List<PathFigure>();
                     List<PathSegment> __pathSegments = new List<PathSegment>();
-                    __pathSegments.Add(new QuadraticBezierSegment(new Point(c.X, c.Y), new Point(b.X, b.Y), false));
-                    PathFigure __pathFigure = new PathFigure(new Point(a.X, a.Y), __pathSegments, false);
+                    __pathSegments.Add(new QuadraticBezierSegment(new Point(_c.X, _c.Y), new Point(_b.X, _b.Y), false));
+                    PathFigure __pathFigure = new PathFigure(new Point(_a.X, _a.Y), __pathSegments, false);
                     __pathFigures.Add(__pathFigure);
                     PathGeometry __pathGeometry = new PathGeometry(__pathFigures);
                     Path __path = new Path();
                     __path.Data = __pathGeometry;
-                    g.Children.Add(__path);
+                    canvas.Children.Add(__path);
                     break;
                 default:
                     break;
             }
         }
 
+        #endregion
 
-        /* --- ToString --- */
+        #region ToString
 
-        /**
-         * Returns a string representation of the object.
-         *
-         * @return    a String representation of the object
-         */
+        /// <summary> Returns a string representation of the object.
+        /// </summary>
+        /// <returns>A string representation of the object.</returns>
         public override string ToString()
         {
-            string result = "Geodesic betweens : " +
-                            "\n\t A: " + za +
-                            "\n\t B: " + zb +
+            string __result = "Geodesic betweens : " +
+                            "\n\t A: " + _za +
+                            "\n\t B: " + _zb +
                             "\n\t is ";
-            switch (type)
+            switch (_type)
             {
-             case   DrawType.Line:
-                    result += "a line.";
+                case DrawType.Line:
+                    __result += "a line.";
                     break;
                 case DrawType.Arc:
-                    result += "an arc.";
+                    __result += "an arc.";
                     break;
                 default:
-                    result += "nothing ?";
+                    __result += "nothing ?";
                     break;
             }
-            return result;
+            return __result;
         }
 
+        #endregion
     }
 }

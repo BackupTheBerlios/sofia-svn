@@ -57,7 +57,7 @@
     <Compile Include="HtModel.cs" />
     <Compile Include="HtModelNode.cs" />
     <Compile Include="HtModelNodeComposite.cs" />
-    <Compile Include="HtNodeLabel.cs" />
+    <Compile Include="HtNodeControl.cs" />
     <Compile Include="HtTransformation.cs" />
     <Compile Include="IHtNode.cs" />
     <Compile Include="IHtView.cs" />

@@ -7,341 +7,322 @@ using System.Windows.Controls;
 
 namespace HyperTreeControl
 {
-  public class HtDrawNode
-  {
-      
-    private HtDraw model = null;  // drawing model
-    private HtModelNode node = null;  // encapsulated HTModelNode
-
-    private HtCoordE ze = null;  // current euclidian coordinates
-    private HtCoordE oldZe = null;  // old euclidian coordinates
-    protected HtCoordS zs = null;  // current screen coordinates
-
-    private HtDrawNodeComposite father = null;  // father of this node
-    private HtDrawNode brother = null;  // brother of this node
-
-    private HtNodeLabel label = null;  // label of the node
-
-    protected bool fastMode = false; // fast mode
-
-
-    /* --- Constructor --- */
-
-    /**
-     * Constructor.
-     *
-     * @param father    the father of this node
-     * @param node      the encapsulated HtModelNode
-     * @param model     the drawing model
-     */
-    public HtDrawNode(HtDrawNodeComposite father, HtModelNode node, HtDraw model)
+    public class HtDrawNode
     {
-      this.father = father;
-      this.node = node;
-      this.model = model;
+        #region fields
 
-      label = new HtNodeLabel(this);
+        private HtDraw _model = null;  // drawing model
+        private HtModelNode _node = null;  // encapsulated HTModelNode
 
-      ze = new HtCoordE(node.Coordinates);
-      oldZe = new HtCoordE(ze);
-      zs = new HtCoordS();
+        private HtCoordE _ze = null;  // current euclidian coordinates
+        private HtCoordE _oldZe = null;  // old euclidian coordinates
+        protected HtCoordS _zs = null;  // current screen coordinates
 
-      // store this object in HTNode -> HTDrawNode mapping
-      model.MapNode(node.Node, this);
+        private HtDrawNodeComposite _father = null;  // father of this node
+        private HtDrawNode _brother = null;  // brother of this node
 
-      return;
+        private HtNodeControl _control = null;  // UI control of the node
+
+        private bool _fastMode = false; // fast mode
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary> Constructor.
+        /// </summary>
+        /// <param name="father">The father of this node.</param>
+        /// <param name="node">The encapsulated <see cref="HtModelNode"/>.</param>
+        /// <param name="model">The drawing model.</param>
+        public HtDrawNode(HtDrawNodeComposite father, HtModelNode node, HtDraw model)
+        {
+            _father = father;
+            _node = node;
+            _model = model;
+
+            _control = new HtNodeControl(this);
+
+            _ze = new HtCoordE(node.Coordinates);
+            _oldZe = new HtCoordE(_ze);
+            _zs = new HtCoordS();
+
+            // store this object in IHtNode -> HtDrawNode mapping
+            model.MapNode(node.Node, this);
+        }
+
+        #endregion
+
+        #region General accessors
+
+        /// <summary> Gets or sets the brother of this node.
+        /// </summary>
+        public HtDrawNode Brother
+        {
+            get
+            {
+                return _brother;
+            }
+
+            set
+            {
+                _brother = value;
+            }
+        }
+
+        /// <summary> Gets the encapsulated HtModelNode.
+        /// </summary>
+        public HtModelNode HtModelNode
+        {
+            get
+            {
+                return _node;
+            }
+        }
+
+        /// <summary> Gets the color of the node.
+        /// </summary>
+        public Color Color
+        {
+            get
+            {
+                return _node.Node.Color;
+            }
+        }
+
+        /// <summary> Gets the name of this node.
+        /// </summary>
+        public string Name
+        {
+            get
+            {
+                return _node.Name;
+            }
+        }
+
+        /// <summary> Gets the size of the node.
+        /// </summary>
+        public int Size
+        {
+            get
+            {
+                return _node.Node.Size;
+            }
+        }
+
+
+        /// <summary> Gets the thickness of the border.
+        /// </summary>
+        public int BorderSize
+        {
+            get
+            {
+                return _node.Node.BorderSize;
+            }
+        }
+
+        /// <summary> Gets the image which is displayed inside the node.
+        /// </summary>
+        public Image Image
+        {
+            get
+            {
+                return _node.Node.Image;
+            }
+        }
+
+        #endregion
+
+        #region Coordinates
+
+        /// <summary> Gets the current coordinates of this node.
+        /// </summary>
+        public HtCoordE Coordinates
+        {
+            get
+            {
+                return _ze;
+            }
+        }
+
+        /// <summary> Gets the old coordinates of this node.
+        /// </summary>
+        public HtCoordE OldCoordinates
+        {
+            get
+            {
+                return _oldZe;
+            }
+        }
+
+        /// <summary> Gets the screen coordinates of this node.
+        /// </summary>
+        public HtCoordS ScreenCoordinates
+        {
+            get
+            {
+                return _zs;
+            }
+        }
+
+        /// <summary> Refresh the screen coordinates of this node. 
+        /// </summary>
+        /// <param name="sOrigin">The origin of the screen plane.</param>
+        /// <param name="sMax">The (xMax, yMax) point in the screen plane.</param>
+        public virtual void RefreshScreenCoordinates(HtCoordS sOrigin, HtCoordS sMax)
+        {
+            _zs.ProjectionEtoS(_ze, sOrigin, sMax);
+        }
+
+        #endregion
+
+        #region Drawing
+
+
+        /// <summary> Draws the branches from this node to its children.
+        /// </summary>
+        /// <remarks>Overriden by the <see cref="HtDrawNodeComposite"/> class.</remarks>
+        /// <param name="canvas">The graphic canvas.</param>
+        public virtual void DrawBranches(Canvas canvas) { }
+
+        /// <summary> Draw this node.
+        /// </summary>
+        /// <param name="canvas">The graphic canvas.</param>
+        public virtual void DrawNodes(Canvas canvas)
+        {
+            if (_fastMode == false)
+            {
+                _control.Draw(canvas);
+            }
+        }
+
+        /// <summary> Returns the minimal distance between this node
+        /// and his father and his brother.
+        /// </summary>
+        /// <returns>The minimal distance.</returns>
+        public virtual int GetSpace()
+        {
+            int __dF = -1;
+            int __dB = -1;
+
+            if (_father != null)
+            {
+                HtCoordS __zF = _father.ScreenCoordinates;
+                __dF = _zs.GetDistance(__zF);
+            }
+            if (_brother != null)
+            {
+                HtCoordS __zB = _brother.ScreenCoordinates;
+                __dB = _zs.GetDistance(__zB);
+            }
+
+            // this means that the node is a standalone node
+            if ((__dF == -1) && (__dB == -1))
+            {
+                return int.MaxValue;
+            }
+            else if (__dF == -1)
+            {
+                return __dB;
+            }
+            else if (__dB == -1)
+            {
+                return __dF;
+            }
+            else
+            {
+                return Math.Min(__dF, __dB);
+            }
+        }
+
+        #endregion
+
+        #region Translation
+
+        /// <summary> Translates this node by the given vector.
+        /// </summary>
+        /// <param name="t">The translation vector.</param>
+        public virtual void Translate(HtCoordE t)
+        {
+            _ze.Translate(_oldZe, t);
+        }
+
+        /// <summary> Transform this node by the given transformation.
+        /// </summary>
+        /// <param name="t">The transformation.</param>
+        public virtual void Transform(HtTransformation t)
+        {
+            _ze.Copy(_oldZe);
+            _ze.Transform(t);
+        }
+
+        /// <summary> Ends the translation.
+        /// </summary>
+        public virtual void EndTranslation()
+        {
+            _oldZe.Copy(_ze);
+        }
+
+        /// <summary> Restores the hyperbolic tree to its origin.
+        /// </summary>
+        public virtual void Restore()
+        {
+            HtCoordE __orig = _node.Coordinates;
+            _ze.X = __orig.X;
+            _ze.Y = __orig.Y;
+            _oldZe.Copy(_ze);
+        }
+
+        /// <summary> Sets the fast mode, where nodes are no more drawed.
+        /// </summary>
+        public virtual bool FastMode
+        {
+            get
+            {
+                return _fastMode;
+            }
+
+            set
+            {
+                _fastMode = value;
+            }
+        }
+
+        #endregion
+
+        #region Node searching
+
+        /// <summary> Returns the node (if any) whose screen coordinates' zone
+        /// contains thoses given in parameters.
+        /// </summary>
+        /// <param name="zs">The given screen coordinate.</param>
+        /// <returns>the searched <see cref="HtDrawNode"/> if found; <code>null</code> otherwise.</returns>
+        public virtual HtDrawNode FindNode(HtCoordS zs)
+        {
+            if (_control.Contains(zs))
+            {
+                return this;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        #endregion
+
+        #region ToString
+
+        /// <summary> Returns a string representation of the object.
+        /// </summary>
+        /// <returns>A string representation of the object.</returns>
+        public override string ToString()
+        {
+            string __result = Name +
+                            "\n\t" + _ze +
+                            "\n\t" + _zs;
+            return __result;
+        }
+
+        #endregion
     }
-
-    /// <summary>
-    /// Gets or sets the brother of this node.
-    /// </summary>
-    public HtDrawNode Brother
-    {
-      get
-      {
-        return brother;
-      }
-
-      set
-      {
-        brother = value;
-      }
-    }
-
-    /// <summary>
-    /// Gets the encapsulated HtModelNode.
-    /// </summary>
-    public HtModelNode HtModelNode
-    {
-      get
-      {
-        return node;
-      }
-    }
-
-    /// <summary>
-    /// Gets the color of the node.
-    /// </summary>
-    public Color Color
-    {
-      get
-      {
-        return node.Node.Color;
-      }
-    }
-
-    /// <summary>
-    /// Gets the name of this node.
-    /// </summary>
-    public string Name
-    {
-      get
-      {
-        return node.Name;
-      }
-    }
-
-    /// <summary>
-    /// Gets the current coordinates of this node.
-    /// </summary>
-    public HtCoordE Coordinates
-    {
-      get
-      {
-        return ze;
-      }
-    }
-
-    public HtCoordE OldCoordinates
-    {
-      get
-      {
-        return oldZe;
-      }
-    }
-
-    public HtCoordS ScreenCoordinates
-    {
-      get
-      {
-        return zs;
-      }
-    }
-
-
-    /**
-     * Refresh the screen coordinates of this node.
-     *
-     * @param sOrigin   the origin of the screen plane
-     * @param sMax      the (xMax, yMax) point in the screen plane
-     */
-    public virtual void RefreshScreenCoordinates(HtCoordS sOrigin, HtCoordS sMax)
-    {
-      zs.ProjectionEtoS(ze, sOrigin, sMax);
-    }
-
-
-    #region Drawing
-
-    /**
-     * Draws the branches from this node to 
-     * its children.
-     * Overidden by HTDrawNodeComposite
-     *
-     * @param g    the graphic context
-     */
-    public void DrawBranches(FrameworkElement canvas) { }
-
-    /**
-     * Draws this node.
-     *
-     * @param g    the graphic context
-     */
-      public virtual void DrawNodes(Canvas canvas)
-    {
-      if (fastMode == false)
-      {
-        label.Draw(canvas);
-      }
-    }
-
-    /**
-     * Returns the minimal distance between this node
-     * and his father and his brother.
-     *
-     * @return    the minimal distance
-     */
-    public virtual int GetSpace()
-    {
-      int dF = -1;
-      int dB = -1;
-
-      if (father != null)
-      {
-        HtCoordS zF = father.ScreenCoordinates;
-        dF = zs.GetDistance(zF);
-      }
-      if (brother != null)
-      {
-        HtCoordS zB = brother.ScreenCoordinates;
-        dB = zs.GetDistance(zB);
-      }
-
-      // this means that the node is a standalone node
-      if ((dF == -1) && (dB == -1))
-      {
-        return int.MaxValue;
-      }
-      else if (dF == -1)
-      {
-        return dB;
-      }
-      else if (dB == -1)
-      {
-        return dF;
-      }
-      else
-      {
-        return Math.Min(dF, dB);
-      }
-    }
-
-    #endregion
-
-    #region Translation
-    /* --- Translation --- */
-
-    /**
-     * Translates this node by the given vector.
-     *
-     * @param t    the translation vector
-     */
-    public virtual void Translate(HtCoordE t)
-    {
-      ze.Translate(oldZe, t);
-    }
-
-    /**
-     * Transform this node by the given transformation.
-     *
-     * @param t    the transformation
-     */
-    public virtual void Transform(HtTransformation t)
-    {
-      ze.Copy(oldZe);
-      ze.Transform(t);
-    }
-
-    /**
-     * Ends the translation.
-     */
-    public virtual void EndTranslation()
-    {
-      oldZe.Copy(ze);
-    }
-
-    /**
-     * Restores the hyperbolic tree to its origin.
-     */
-    public virtual void Restore()
-    {
-      HtCoordE orig = node.Coordinates;
-      ze.X = orig.X;
-      ze.Y = orig.Y;
-      oldZe.Copy(ze);
-    }
-
-    /// <summary>
-    /// Sets the fast mode, where nodes are no more drawed.
-    /// </summary>
-    public virtual bool FastMode
-    {
-      get
-      {
-        return fastMode;
-      }
-
-      set
-      {
-        fastMode = value;
-      }
-    }
-
-    #endregion
-
-
-    #region Node searching
-    /* --- Node searching --- */
-
-    /**
-     * Returns the node (if any) whose screen coordinates' zone
-     * contains thoses given in parameters.
-     *
-     * @param zs    the given screen coordinate
-     * @return      the searched HTDrawNode if found;
-     *              <CODE>null</CODE> otherwise
-     */
-    public virtual HtDrawNode FindNode(HtCoordS zs)
-    {
-      if (label.Contains(zs))
-      {
-        return this;
-      }
-      else
-      {
-        return null;
-      }
-    }
-
-    #endregion
-
-
-    /**
-     * Returns a string representation of the object.
-     *
-     * @return    a String representation of the object
-     */
-    public override string ToString()
-    {
-      string result = Name +
-                      "\n\t" + ze +
-                      "\n\t" + zs;
-      return result;
-    }
-
-    /// <summary>
-    /// Gets the size of the node.
-    /// </summary>
-    public int Size
-    {
-      get
-      {
-        return node.Node.Size;
-      }
-    }
-
-
-    /// <summary>
-    /// Gets the thickness of the border.
-    /// </summary>
-    public int BorderSize
-    {
-      get
-      {
-        return node.Node.BorderSize;
-      }
-    }
-
-    /// <summary>
-    /// Gets the image which is displayed inside the node.
-    /// </summary>
-    public Image Image
-    {
-      get
-      {
-        return node.Node.Image;
-      }
-    }
-
-  }
 }

@@ -186,11 +186,12 @@ namespace HyperTreeControl
     #region  ToString
     public override string ToString()
     {
-      String result = Name +
+      string __result = Name +
                       "\n\t" + _z +
                       "\n\tWeight = " + _weight;
-      return result;
+      return __result;
     }
+
     #endregion
 
   }
