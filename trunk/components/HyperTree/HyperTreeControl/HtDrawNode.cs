@@ -229,7 +229,7 @@ namespace HyperTreeControl
     public virtual void Transform(HtTransformation t)
     {
       ze.Copy(oldZe);
-      ze._transform(t);
+      ze.Transform(t);
     }
 
     /**

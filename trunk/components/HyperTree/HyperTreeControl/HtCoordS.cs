@@ -11,7 +11,7 @@ namespace HyperTreeControl
   {
     #region Private fields
 
-    private static int ZONE_LENGTH = 4; // size of the zone
+    private static readonly int ZONE_LENGTH = 4; // size of the zone
     private int _x = 0; // x coord
     private int _y = 0; // y coord
 
@@ -88,7 +88,7 @@ namespace HyperTreeControl
     /// <returns>true if it is, false otherwise</returns>
     public bool Contains(HtCoordS zs)
     {
-      int __length = GetDistance(zs);
+      int __length = this.GetDistance(zs);
       return __length <= ZONE_LENGTH;
     }
 

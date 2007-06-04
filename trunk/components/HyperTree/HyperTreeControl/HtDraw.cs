@@ -10,36 +10,35 @@ namespace HyperTreeControl
 {
     public class HtDraw
     {
-        public static int NBR_FRAMES = 10; // number of intermediates animation frames
+        #region fields
+
+        public static readonly int NBR_FRAMES = 10; // number of intermediates animation frames
 
         private static HtModel _model = null;  // the tree model
         private static IHtView _view = null;  // the view using this drawing model
         private static HtDrawNode _drawRoot = null;  // the root of the drawing tree 
+        private static double[] _ray = null;
 
         private HtCoordS sOrigin = null;  // origin of the screen plane
         private HtCoordS sMax = null;  // max point in the screen plane 
 
-        private static double[] _ray = null;
-
         private bool fastMode = false; // fast mode
+        private Dictionary<IHtNode, HtDrawNode> _drawToHTNodeMap;
 
-        /** Maps {@link HTNode}s to {@link HTDrawNode}s. */
-        private Dictionary<IHtNode, HtDrawNode> drawToHTNodeMap;
+        #endregion
 
 
-        /* --- Constructor --- */
+        #region ctor
 
-        /**
-         * Constructor.
-         *
-         * @param model    the tree model to draw 
-         * @param view     the view using this drawing model
-         */
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="model">The tree model to draw.</param>
+        /// <param name="view">The view using this drawing model.</param>
         public HtDraw(HtModel model, IHtView view)
         {
-
             // initialize mapping
-            drawToHTNodeMap = new Dictionary<IHtNode, HtDrawNode>();
+            _drawToHTNodeMap = new Dictionary<IHtNode, HtDrawNode>();
 
             _view = view;
             _model = model;
@@ -63,54 +62,11 @@ namespace HyperTreeControl
             {
                 _drawRoot = new HtDrawNodeComposite(null, (HtModelNodeComposite)root, this);
             }
-
-            return;
         }
 
+        #endregion
 
-        /* --- Screen coordinates --- */
-
-        /**
-         * Refresh the screen coordinates of the drawing tree.
-         */
-        void refreshScreenCoordinates()
-        {
-            Rect insets = _view.Insets;
-            sMax.X = (int)((_view.Width - insets.Left - insets.Right) / 2);
-            sMax.Y = (int)((_view.Height - insets.Top - insets.Bottom) / 2);
-            sOrigin.X = sMax.X + (int)insets.Left;
-            sOrigin.Y = sMax.Y + (int)insets.Top;
-            _drawRoot.RefreshScreenCoordinates(sOrigin, sMax);
-        }
-
-        /**
-         * Returns the origin of the screen plane.
-         * WARNING : this is not a copy but the original object.
-         *
-         * @return    the origin of the screen plane
-         */
-        public HtCoordS SOrigin
-        {
-            get
-            {
-                return sOrigin;
-            }
-        }
-
-        /**
-         * Return the point representing the up right corner
-         * of the screen plane, thus giving x and y maxima.
-         * WARNING : this is not a copy but the original object.
-         *
-         * @return    the max point
-         */
-        public HtCoordS SMax
-        {
-            get
-            {
-                return sMax;
-            }
-        }
+        #region Internal classes accessors
 
         public static HtModel Model
         {
@@ -136,57 +92,98 @@ namespace HyperTreeControl
             }
         }
 
-        /* --- Drawing --- */
+        #endregion
 
-        /**
-         * Draws the branches of the hyperbolic tree.
-         *
-         * @param g    the graphic context
-         */
-        void drawBranches(Canvas g)
+        #region Screen coordinates
+
+        /// <summary>
+        /// Refresh the screen coordinates of the drawing tree.
+        /// </summary>
+        private void RefreshScreenCoordinates()
         {
-            _drawRoot.DrawBranches(g);
+            Rect insets = _view.Insets;
+            sMax.X = (int)((_view.Width - insets.Left - insets.Right) / 2);
+            sMax.Y = (int)((_view.Height - insets.Top - insets.Bottom) / 2);
+            sOrigin.X = sMax.X + (int)insets.Left;
+            sOrigin.Y = sMax.Y + (int)insets.Top;
+            _drawRoot.RefreshScreenCoordinates(sOrigin, sMax);
         }
 
-        /**
-         * Draws the nodes of the hyperbolic tree.
-         *
-         * @param g    the graphic context
-         */
-        void drawNodes(Canvas g)
+        /// <summary>
+        /// Gets the origin of the screen plane.
+        /// </summary>
+        public HtCoordS SOrigin
         {
-            _drawRoot.DrawNodes(g);
+            get
+            {
+                return sOrigin;
+            }
         }
 
+        /// <summary>
+        /// Gets the point representing the up right corner of the screen plane, 
+        /// thus giving x and y maxima.
+        /// </summary>
+        public HtCoordS SMax
+        {
+            get
+            {
+                return sMax;
+            }
+        }
+       
+        #endregion
 
-        /* --- Translation --- */
+        #region Drawing
 
-        /**
-         * Translates the hyperbolic tree by the given vector.
-         *
-         * @param t    the translation vector
-         */
+        /// <summary>
+        ///Draws the branches of the hyperbolic tree.
+        /// </summary>
+        /// <param name="canvas">The graphic canvas.</param>
+        private void DrawBranches(Canvas canvas)
+        {
+            _drawRoot.DrawBranches(canvas);
+        }
+
+        /// <summary>
+        /// Draws the nodes of the hyperbolic tree.
+        /// </summary>
+        /// <param name="canvas">The graphic canvas.</param>
+        private void DrawNodes(Canvas canvas)
+        {
+            _drawRoot.DrawNodes(canvas);
+        }
+
+        #endregion
+
+        #region Translation
+
+        /// <summary>
+        ///Translates the hyperbolic tree by the given vector.
+        /// </summary>
+        /// <param name="zs">The first coordinates.</param>
+        /// <param name="ze">The second coordinates.</param>
         public static void Translate(HtCoordE zs, HtCoordE ze)
         {
-            HtCoordE zo = new HtCoordE(_drawRoot.OldCoordinates);
-            zo.X = -zo.X;
-            zo.Y = -zo.Y;
-            HtCoordE zs2 = new HtCoordE(zs);
-            zs2.Translate(zo);
+            HtCoordE __zo = new HtCoordE(_drawRoot.OldCoordinates);
+            __zo.X = -__zo.X;
+            __zo.Y = -__zo.Y;
+            HtCoordE __zs2 = new HtCoordE(zs);
+            __zs2.Translate(__zo);
 
-            HtCoordE t = new HtCoordE();
-            double de = ze.D2();
-            double ds = zs2.D2();
-            double dd = 1.0 - de * ds;
-            t.X = (ze.X * (1.0 - ds) - zs2.X * (1.0 - de)) / dd;
-            t.Y = (ze.Y * (1.0 - ds) - zs2.Y * (1.0 - de)) / dd;
+            HtCoordE __t = new HtCoordE();
+            double __de = ze.D2();
+            double __ds = __zs2.D2();
+            double __dd = 1.0 - __de * __ds;
+            __t.X = (ze.X * (1.0 - __ds) - __zs2.X * (1.0 - __de)) / __dd;
+            __t.Y = (ze.Y * (1.0 - __ds) - __zs2.Y * (1.0 - __de)) / __dd;
 
-            if (t.IsValid)
+            if (__t.IsValid)
             {
-                HtTransformation to = new HtTransformation();
-                to.Composition(zo, t);
+                HtTransformation __to = new HtTransformation();
+                __to.Composition(__zo, __t);
 
-                _drawRoot.Transform(to);
+                _drawRoot.Transform(__to);
                 _view.Repaint();
             }
         }
@@ -242,6 +239,7 @@ namespace HyperTreeControl
             }
         }
 
+        #endregion
 
         /* --- Node searching --- */
 
@@ -267,7 +265,7 @@ namespace HyperTreeControl
          */
         public void MapNode(IHtNode htNode, HtDrawNode drawNode)
         {
-            drawToHTNodeMap.Add(htNode, drawNode);
+            _drawToHTNodeMap.Add(htNode, drawNode);
         }
 
         /** Finds a {@link HTDrawNode} for a given {@link HTNode}.
@@ -278,9 +276,9 @@ namespace HyperTreeControl
         protected HtDrawNode findDrawNode(IHtNode htNode)
         {
 
-            HtDrawNode drawNode = drawToHTNodeMap[htNode];
+            HtDrawNode drawNode = _drawToHTNodeMap[htNode];
             return drawNode;
-        }        
+        }
 
     }
 
@@ -319,10 +317,10 @@ namespace HyperTreeControl
          */
         public void Start()
         {
-            ThreadPool.QueueUserWorkItem(new WaitCallback(run));
+            ThreadPool.QueueUserWorkItem(new WaitCallback(this.Run));
         }
 
-        private void run(object stateInfo)
+        private void Run(object stateInfo)
         {
             HtCoordE zn = node.OldCoordinates;
             HtCoordE zf = new HtCoordE();
@@ -330,7 +328,7 @@ namespace HyperTreeControl
             int frames = HtDraw.NBR_FRAMES;
             int nodes = HtDraw.Model.NumberOfNodes;
 
-            double d = zn._d();
+            double d = zn.D();
             for (int i = 0; i < HtDraw.Ray.Length; i++)
             {
                 if (d > HtDraw.Ray[i])
@@ -372,7 +370,7 @@ namespace HyperTreeControl
 
     }
 
-    internal class TranslateThread: IRunnable
+    internal class TranslateThread : IRunnable
     {
 
         HtCoordE zStart = null;
@@ -391,7 +389,7 @@ namespace HyperTreeControl
         }
     }
 
-    internal class LastTranslateThread: IRunnable
+    internal class LastTranslateThread : IRunnable
     {
 
         HtCoordE zStart = null;

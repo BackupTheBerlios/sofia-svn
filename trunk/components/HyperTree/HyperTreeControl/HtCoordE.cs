@@ -36,8 +36,8 @@ namespace HyperTreeControl
     /// <param name="y">The y coord.</param>
     public HtCoordE(double x, double y)
     {
-      this._x = x;
-      this._y = y;
+      _x = x;
+      _y = y;
     }
 
     #endregion
@@ -49,8 +49,8 @@ namespace HyperTreeControl
     /// <param name="z">The HtCoordE to copy.</param>
     public void Copy(HtCoordE z)
     {
-      this._x = z._x;
-      this._y = z._y;
+      _x = z._x;
+      _y = z._y;
     }
 
     #endregion
@@ -83,7 +83,7 @@ namespace HyperTreeControl
     /// <param name="y">The y screen coordinate.</param>
     /// <param name="sOrigin">The origin of the screen plane.</param>
     /// <param name="sMax">The (xMax, yMax) point in the screen plane.</param>
-    void ProjectionStoE(int x, int y, HtCoordS sOrigin, HtCoordS sMax)
+    private void ProjectionStoE(int x, int y, HtCoordS sOrigin, HtCoordS sMax)
     {
       _x = (double)(x - sOrigin.X) / (double)sMax.X;
       _y = -((double)(y - sOrigin.Y) / (double)sMax.Y);
@@ -155,7 +155,7 @@ namespace HyperTreeControl
     /// </summary>
     /// <param name="a">The first coord.</param>
     /// <param name="b">The second coord.</param>
-    void _sub(HtCoordE a, HtCoordE b)
+    private void Sub(HtCoordE a, HtCoordE b)
     {
       _x = a._x - b._x;
       _y = a._y - b._y;
@@ -190,7 +190,7 @@ namespace HyperTreeControl
     /// <summary> Returns the distance from the origin  to this point.
     /// </summary>
     /// <returns>The distance.</returns>
-    public double _d()
+    public double D()
     {
       return Math.Sqrt(D2());
     }
@@ -199,7 +199,7 @@ namespace HyperTreeControl
     /// </summary>
     /// <param name="p">The other point.</param>
     /// <returns>The distance between the 2 points.</returns>
-    double _d(HtCoordE p)
+    private double D(HtCoordE p)
     {
       return Math.Sqrt((p._x - _x) * (p._x - _x) + (p._y - _y) * (p._y - _y));
     }
@@ -239,7 +239,7 @@ namespace HyperTreeControl
     /// Transform this node by the given transformation.
     /// </summary>
     /// <param name="t">The transformation.</param>
-    public void _transform(HtTransformation t)
+    public void Transform(HtTransformation t)
     {
 
       HtCoordE __z = new HtCoordE(this);

@@ -77,8 +77,8 @@ namespace HyperTreeControl
          */
         public void Rebuild()
         {
-            if ((Math.Abs(za._d()) < EPSILON) ||                       // za == origin
-                 (Math.Abs(zb._d()) < EPSILON) ||                       // zb == origin
+            if ((Math.Abs(za.D()) < EPSILON) ||                       // za == origin
+                 (Math.Abs(zb.D()) < EPSILON) ||                       // zb == origin
                  (Math.Abs((za.X / zb.X) - (za.Y / zb.Y)) < EPSILON)) // za = lambda.zb
             {
                 type = DrawType.Line;
