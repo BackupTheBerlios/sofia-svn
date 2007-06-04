@@ -58,12 +58,12 @@ namespace HyperTreeControl
          * @return    <CODE>true</CODE> if it is,
          *            <CODE>false</CODE> otherwise
          */
-        bool contains(HtCoordS zs)
+        public bool Contains(HtCoordS zs)
         {
             if (active)
             {
-                if ((zs.x >= x) && (zs.x <= (x + width)) &&
-                    (zs.y >= y) && (zs.y <= (y + height)))
+                if ((zs.X >= x) && (zs.X <= (x + width)) &&
+                    (zs.Y >= y) && (zs.Y <= (y + height)))
                 {
                     return true;
                 }

@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace HyperTreeControl
 {
-    class HtGeodesic
+    public class HtGeodesic
     {
         enum DrawType
         {
@@ -16,7 +16,7 @@ namespace HyperTreeControl
             Arc = 1
         }
 
-        private static const double EPSILON = 1.0E-10; // epsilon
+        private const double EPSILON = 1.0E-10; // epsilon
 
         private DrawType type = DrawType.Line; // type of the geodesic
 
@@ -38,7 +38,7 @@ namespace HyperTreeControl
          * @param za       the first point
          * @param zb       the second point
          */
-        HtGeodesic(HtCoordE za, HtCoordE zb)
+        public HtGeodesic(HtCoordE za, HtCoordE zb)
         {
             this.za = za;
             this.zb = zb;
@@ -50,7 +50,7 @@ namespace HyperTreeControl
             b = new HtCoordS();
             c = new HtCoordS();
 
-            rebuild();
+            this.Rebuild();
         }
 
 
@@ -62,7 +62,7 @@ namespace HyperTreeControl
          * @param sOrigin   the origin of the screen plane
          * @param sMax      the (xMax, yMax) point in the screen plane
          */
-        void refreshScreenCoordinates(HtCoordS sOrigin, HtCoordS sMax)
+        public void RefreshScreenCoordinates(HtCoordS sOrigin, HtCoordS sMax)
         {
             a.ProjectionEtoS(za, sOrigin, sMax);
             b.ProjectionEtoS(zb, sOrigin, sMax);
@@ -75,11 +75,11 @@ namespace HyperTreeControl
         /**
          * Builds the geodesic.
          */
-        void rebuild()
+        public void Rebuild()
         {
-            if ((Math.abs(za._d()) < EPSILON) ||                       // za == origin
-                 (Math.abs(zb._d()) < EPSILON) ||                       // zb == origin
-                 (Math.abs((za.x / zb.x) - (za.y / zb.y)) < EPSILON)) // za = lambda.zb
+            if ((Math.Abs(za._d()) < EPSILON) ||                       // za == origin
+                 (Math.Abs(zb._d()) < EPSILON) ||                       // zb == origin
+                 (Math.Abs((za.X / zb.X) - (za.Y / zb.Y)) < EPSILON)) // za = lambda.zb
             {
                 type = DrawType.Line;
             }
@@ -87,19 +87,19 @@ namespace HyperTreeControl
             {
                 type = DrawType.Arc;
 
-                double da = 1 + za.x * za.x + za.y * za.y;
-                double db = 1 + zb.x * zb.x + zb.y * zb.y;
-                double dd = 2 * (za.x * zb.y - zb.x * za.y);
+                double da = 1 + za.X * za.X + za.Y * za.Y;
+                double db = 1 + zb.X * zb.X + zb.Y * zb.Y;
+                double dd = 2 * (za.X * zb.Y - zb.X * za.Y);
 
-                zo.x = (zb.y * da - za.y * db) / dd;
-                zo.y = (za.x * db - zb.x * da) / dd;
+                zo.X = (zb.Y * da - za.Y * db) / dd;
+                zo.Y = (za.X * db - zb.X * da) / dd;
 
-                double det = (zb.x - zo.x) * (za.y - zo.y) - (za.x - zo.x) * (zb.y - zo.y);
-                double fa = za.y * (za.y - zo.y) - za.x * (zo.x - za.x);
-                double fb = zb.y * (zb.y - zo.y) - zb.x * (zo.x - zb.x);
+                double det = (zb.X - zo.X) * (za.Y - zo.Y) - (za.X - zo.X) * (zb.Y - zo.Y);
+                double fa = za.Y * (za.Y - zo.Y) - za.X * (zo.X - za.X);
+                double fb = zb.Y * (zb.Y - zo.Y) - zb.X * (zo.X - zb.X);
 
-                zc.x = ((za.y - zo.y) * fb - (zb.y - zo.y) * fa) / det;
-                zc.y = ((zo.x - za.x) * fb - (zo.x - zb.x) * fa) / det;
+                zc.X = ((za.Y - zo.Y) * fb - (zb.Y - zo.Y) * fa) / det;
+                zc.Y = ((zo.X - za.X) * fb - (zo.X - zb.X) * fa) / det;
             }
         }
 
@@ -111,17 +111,17 @@ namespace HyperTreeControl
          *
          * @param g    the graphic context
          */
-        void draw(Canvas g)
+        public void Draw(Canvas g)
         {
             g.Background = new SolidColorBrush(Colors.Black);
             switch (type)
             {
                 case DrawType.Line:
                     Line line = new Line();
-                    line.X1 = a.x;
-                    line.Y1 = a.y;
-                    line.X2 = b.x;
-                    line.Y2 = b.y;
+                    line.X1 = a.X;
+                    line.Y1 = a.Y;
+                    line.X2 = b.X;
+                    line.Y2 = b.Y;
                     g.Children.Add(line);
                     break;
                 case DrawType.Arc:

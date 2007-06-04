@@ -7,9 +7,9 @@ using System.Windows.Controls;
 
 namespace HyperTreeControl
 {
-  class HtDrawNode
+  public class HtDrawNode
   {
-
+      
     private HtDraw model = null;  // drawing model
     private HtModelNode node = null;  // encapsulated HTModelNode
 
@@ -34,7 +34,7 @@ namespace HyperTreeControl
      * @param node      the encapsulated HtModelNode
      * @param model     the drawing model
      */
-    HtDrawNode(HtDrawNodeComposite father, HtModelNode node, HtDraw model)
+    public HtDrawNode(HtDrawNodeComposite father, HtModelNode node, HtDraw model)
     {
       this.father = father;
       this.node = node;
@@ -135,7 +135,7 @@ namespace HyperTreeControl
      * @param sOrigin   the origin of the screen plane
      * @param sMax      the (xMax, yMax) point in the screen plane
      */
-    void refreshScreenCoordinates(HtCoordS sOrigin, HtCoordS sMax)
+    public virtual void RefreshScreenCoordinates(HtCoordS sOrigin, HtCoordS sMax)
     {
       zs.ProjectionEtoS(ze, sOrigin, sMax);
     }
@@ -150,14 +150,14 @@ namespace HyperTreeControl
      *
      * @param g    the graphic context
      */
-    void drawBranches(FrameworkElement canvas) { }
+    public void DrawBranches(FrameworkElement canvas) { }
 
     /**
      * Draws this node.
      *
      * @param g    the graphic context
      */
-      void drawNodes(Canvas canvas)
+      public virtual void DrawNodes(Canvas canvas)
     {
       if (fastMode == false)
       {
@@ -171,7 +171,7 @@ namespace HyperTreeControl
      *
      * @return    the minimal distance
      */
-    public int GetSpace()
+    public virtual int GetSpace()
     {
       int dF = -1;
       int dB = -1;
@@ -179,18 +179,18 @@ namespace HyperTreeControl
       if (father != null)
       {
         HtCoordS zF = father.ScreenCoordinates;
-        dF = zs._getDistance(zF);
+        dF = zs.GetDistance(zF);
       }
       if (brother != null)
       {
         HtCoordS zB = brother.ScreenCoordinates;
-        dB = zs.getDistance(zB);
+        dB = zs.GetDistance(zB);
       }
 
       // this means that the node is a standalone node
       if ((dF == -1) && (dB == -1))
       {
-        return Integer.MAX_VALUE;
+        return int.MaxValue;
       }
       else if (dF == -1)
       {
@@ -202,7 +202,7 @@ namespace HyperTreeControl
       }
       else
       {
-        return Math.min(dF, dB);
+        return Math.Min(dF, dB);
       }
     }
 
@@ -216,7 +216,7 @@ namespace HyperTreeControl
      *
      * @param t    the translation vector
      */
-    public void Translate(HtCoordE t)
+    public virtual void Translate(HtCoordE t)
     {
       ze.Translate(oldZe, t);
     }
@@ -226,35 +226,35 @@ namespace HyperTreeControl
      *
      * @param t    the transformation
      */
-    void transform(HtTransformation t)
+    public virtual void Transform(HtTransformation t)
     {
-      ze.copy(oldZe);
-      ze.transform(t);
+      ze.Copy(oldZe);
+      ze._transform(t);
     }
 
     /**
      * Ends the translation.
      */
-    void endTranslation()
+    public virtual void EndTranslation()
     {
-      oldZe.copy(ze);
+      oldZe.Copy(ze);
     }
 
     /**
      * Restores the hyperbolic tree to its origin.
      */
-    void restore()
+    public virtual void Restore()
     {
-      HTCoordE orig = node.getCoordinates();
-      ze.x = orig.x;
-      ze.y = orig.y;
-      oldZe.copy(ze);
+      HtCoordE orig = node.Coordinates;
+      ze.X = orig.X;
+      ze.Y = orig.Y;
+      oldZe.Copy(ze);
     }
 
     /// <summary>
     /// Sets the fast mode, where nodes are no more drawed.
     /// </summary>
-    public bool FastMode
+    public virtual bool FastMode
     {
       get
       {
@@ -281,9 +281,9 @@ namespace HyperTreeControl
      * @return      the searched HTDrawNode if found;
      *              <CODE>null</CODE> otherwise
      */
-    HtDrawNode findNode(HtCoordS zs)
+    public virtual HtDrawNode FindNode(HtCoordS zs)
     {
-      if (label.contains(zs))
+      if (label.Contains(zs))
       {
         return this;
       }
@@ -303,7 +303,7 @@ namespace HyperTreeControl
      */
     public override string ToString()
     {
-      string result = Name() +
+      string result = Name +
                       "\n\t" + ze +
                       "\n\t" + zs;
       return result;

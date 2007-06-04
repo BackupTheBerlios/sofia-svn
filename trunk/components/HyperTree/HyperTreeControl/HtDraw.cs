@@ -3,21 +3,23 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Windows.Controls;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace HyperTreeControl
 {
-    class HtDraw
+    public class HtDraw
     {
-        private static int NBR_FRAMES = 10; // number of intermediates animation frames
+        public static int NBR_FRAMES = 10; // number of intermediates animation frames
 
-        private HtModel model = null;  // the tree model
-        private IHtView view = null;  // the view using this drawing model
-        private HtDrawNode drawRoot = null;  // the root of the drawing tree 
+        private static HtModel _model = null;  // the tree model
+        private static IHtView _view = null;  // the view using this drawing model
+        private static HtDrawNode _drawRoot = null;  // the root of the drawing tree 
 
         private HtCoordS sOrigin = null;  // origin of the screen plane
         private HtCoordS sMax = null;  // max point in the screen plane 
 
-        private double[] ray = null;
+        private static double[] _ray = null;
 
         private bool fastMode = false; // fast mode
 
@@ -33,33 +35,33 @@ namespace HyperTreeControl
          * @param model    the tree model to draw 
          * @param view     the view using this drawing model
          */
-        HtDraw(HtModel model, IHtView view)
+        public HtDraw(HtModel model, IHtView view)
         {
 
             // initialize mapping
             drawToHTNodeMap = new Dictionary<IHtNode, HtDrawNode>();
 
-            this.view = view;
-            this.model = model;
-            HTModelNode root = model.getRoot();
-            sOrigin = new HTCoordS();
+            _view = view;
+            _model = model;
+            HtModelNode root = model.Root;
+            sOrigin = new HtCoordS();
             sMax = new HtCoordS();
 
-            ray = new double[4];
-            ray[0] = model.Length();
+            _ray = new double[4];
+            _ray[0] = model.Length;
 
-            for (int i = 1; i < ray.length; i++)
+            for (int i = 1; i < _ray.Length; i++)
             {
-                ray[i] = (ray[0] + ray[i - 1]) / (1 + (ray[0] * ray[i - 1]));
+                _ray[i] = (_ray[0] + _ray[i - 1]) / (1 + (_ray[0] * _ray[i - 1]));
             }
 
-            if (root.isLeaf())
+            if (root.IsLeaf)
             {
-                drawRoot = new HtDrawNode(null, root, this);
+                _drawRoot = new HtDrawNode(null, root, this);
             }
             else
             {
-                drawRoot = new HtDrawNodeComposite(null, (HtModelNodeComposite)root, this);
+                _drawRoot = new HtDrawNodeComposite(null, (HtModelNodeComposite)root, this);
             }
 
             return;
@@ -73,12 +75,12 @@ namespace HyperTreeControl
          */
         void refreshScreenCoordinates()
         {
-            Insets insets = view.getInsets();
-            sMax.x = (view.getWidth() - insets.left - insets.right) / 2;
-            sMax.y = (view.getHeight() - insets.top - insets.bottom) / 2;
-            sOrigin.x = sMax.x + insets.left;
-            sOrigin.y = sMax.y + insets.top;
-            drawRoot.refreshScreenCoordinates(sOrigin, sMax);
+            Rect insets = _view.Insets;
+            sMax.X = (int)((_view.Width - insets.Left - insets.Right) / 2);
+            sMax.Y = (int)((_view.Height - insets.Top - insets.Bottom) / 2);
+            sOrigin.X = sMax.X + (int)insets.Left;
+            sOrigin.Y = sMax.Y + (int)insets.Top;
+            _drawRoot.RefreshScreenCoordinates(sOrigin, sMax);
         }
 
         /**
@@ -110,6 +112,29 @@ namespace HyperTreeControl
             }
         }
 
+        public static HtModel Model
+        {
+            get
+            {
+                return _model;
+            }
+        }
+
+        public static double[] Ray
+        {
+            get
+            {
+                return _ray;
+            }
+        }
+
+        public static IHtView View
+        {
+            get
+            {
+                return _view;
+            }
+        }
 
         /* --- Drawing --- */
 
@@ -120,7 +145,7 @@ namespace HyperTreeControl
          */
         void drawBranches(Canvas g)
         {
-            drawRoot.drawBranches(g);
+            _drawRoot.DrawBranches(g);
         }
 
         /**
@@ -130,7 +155,7 @@ namespace HyperTreeControl
          */
         void drawNodes(Canvas g)
         {
-            drawRoot.drawNodes(g);
+            _drawRoot.DrawNodes(g);
         }
 
 
@@ -141,37 +166,37 @@ namespace HyperTreeControl
          *
          * @param t    the translation vector
          */
-        void translate(HtCoordE zs, HtCoordE ze)
+        public static void Translate(HtCoordE zs, HtCoordE ze)
         {
-            HtCoordE zo = new HtCoordE(drawRoot.OldCoordinates);
-            zo.x = -zo.x;
-            zo.y = -zo.y;
+            HtCoordE zo = new HtCoordE(_drawRoot.OldCoordinates);
+            zo.X = -zo.X;
+            zo.Y = -zo.Y;
             HtCoordE zs2 = new HtCoordE(zs);
-            zs2._translate(zo);
+            zs2.Translate(zo);
 
             HtCoordE t = new HtCoordE();
-            double de = ze._d2();
-            double ds = zs2._d2();
+            double de = ze.D2();
+            double ds = zs2.D2();
             double dd = 1.0 - de * ds;
-            t.x = (ze.x * (1.0 - ds) - zs2.x * (1.0 - de)) / dd;
-            t.y = (ze.y * (1.0 - ds) - zs2.y * (1.0 - de)) / dd;
+            t.X = (ze.X * (1.0 - ds) - zs2.X * (1.0 - de)) / dd;
+            t.Y = (ze.Y * (1.0 - ds) - zs2.Y * (1.0 - de)) / dd;
 
-            if (t.isValid())
+            if (t.IsValid)
             {
                 HtTransformation to = new HtTransformation();
-                to._composition(zo, t);
+                to.Composition(zo, t);
 
-                drawRoot._transform(to);
-                view.repaint();
+                _drawRoot.Transform(to);
+                _view.Repaint();
             }
         }
 
         /**
          * Signal that the translation ended.
          */
-        void endTranslation()
+        public static void EndTranslation()
         {
-            drawRoot.endTranslation();
+            _drawRoot.EndTranslation();
         }
 
         /**
@@ -182,9 +207,9 @@ namespace HyperTreeControl
          */
         void translateToOrigin(HtDrawNode node)
         {
-            view.stopMouseListening();
+            _view.StopMouseListening();
             AnimThread t = new AnimThread(node);
-            t.start();
+            t.Start();
         }
 
         /**
@@ -192,8 +217,8 @@ namespace HyperTreeControl
          */
         void restore()
         {
-            drawRoot.restore();
-            view.repaint();
+            _drawRoot.Restore();
+            _view.Repaint();
         }
 
         /**
@@ -208,10 +233,10 @@ namespace HyperTreeControl
                 if (value != fastMode)
                 {
                     fastMode = value;
-                    drawRoot.FastMode = value;
+                    _drawRoot.FastMode = value;
                     if (value == false)
                     {
-                        view.repaint();
+                        _view.Repaint();
                     }
                 }
             }
@@ -228,9 +253,9 @@ namespace HyperTreeControl
          * @return      the searched HTDrawNode if found;
          *              <CODE>null</CODE> otherwise
          */
-        HtDrawNode findNode(HtCoordS zs)
+        private HtDrawNode FindNode(HtCoordS zs)
         {
-            return drawRoot._findNode(zs);
+            return _drawRoot.FindNode(zs);
         }
 
 
@@ -253,129 +278,138 @@ namespace HyperTreeControl
         protected HtDrawNode findDrawNode(IHtNode htNode)
         {
 
-            HtDrawNode drawNode = (HtDrawNode)drawToHTNodeMap.get(htNode);
+            HtDrawNode drawNode = drawToHTNodeMap[htNode];
             return drawNode;
-        }
+        }        
 
+    }
 
-        /* --- Inner animation thread --- */
+    /* --- Inner animation thread --- */
+
+    internal delegate void AnimDelegate();
+
+    internal interface IRunnable
+    {
+        void Run();
+    }
+
+    /**
+     * The AnimThread class implements the thread that do the animation
+     * when clicking on a node.
+     */
+    internal class AnimThread
+    {
+
+        private HtDrawNode node = null; // node to put at the origin
+        private IRunnable tTask = null; // translation task
 
         /**
-         * The AnimThread class implements the thread that do the animation
-         * when clicking on a node.
+         * Constructor.
+         *
+         * @param node    the node to put at the origin
          */
-        class AnimThread
+        public AnimThread(HtDrawNode node)
         {
+            this.node = node;
+            return;
+        }
 
-            private HtDrawNode node = null; // node to put at the origin
-            private Thread tTask = null; // translation task
+        /**
+         * Do the animation.
+         */
+        public void Start()
+        {
+            ThreadPool.QueueUserWorkItem(new WaitCallback(run));
+        }
 
-            /**
-             * Constructor.
-             *
-             * @param node    the node to put at the origin
-             */
-            AnimThread(HtDrawNode node)
+        private void run(object stateInfo)
+        {
+            HtCoordE zn = node.OldCoordinates;
+            HtCoordE zf = new HtCoordE();
+
+            int frames = HtDraw.NBR_FRAMES;
+            int nodes = HtDraw.Model.NumberOfNodes;
+
+            double d = zn._d();
+            for (int i = 0; i < HtDraw.Ray.Length; i++)
             {
-                this.node = node;
-                return;
+                if (d > HtDraw.Ray[i])
+                {
+                    frames += HtDraw.NBR_FRAMES / 2;
+                }
             }
 
-            /**
-             * Do the animation.
-             */
-            public void run()
+            double factorX = zn.X / frames;
+            double factorY = zn.Y / frames;
+
+            for (int i = 1; i < frames; i++)
             {
-                HtCoordE zn = node.OldCoordinates;
-                HtCoordE zf = new HtCoordE();
-
-                int frames = NBR_FRAMES;
-                int nodes = model.NumberOfNodes;
-
-                double d = zn._d();
-                for (int i = 0; i < ray.length; i++)
-                {
-                    if (d > ray[i])
-                    {
-                        frames += NBR_FRAMES / 2;
-                    }
-                }
-
-                double factorX = zn.x / frames;
-                double factorY = zn.y / frames;
-
-                for (int i = 1; i < frames; i++)
-                {
-                    zf.x = zn.x - (i * factorX);
-                    zf.y = zn.y - (i * factorY);
-                    tTask = new TranslateThread(zn, zf);
-                    try
-                    {
-                        SwingUtilities.invokeAndWait(tTask);
-                    }
-                    catch (Exception e)
-                    {
-                        throw;
-                    }
-                }
-
-                zf.x = 0.0;
-                zf.y = 0.0;
-                tTask = new LastTranslateThread(zn, zf);
+                zf.X = zn.X - (i * factorX);
+                zf.Y = zn.Y - (i * factorY);
+                tTask = new TranslateThread(zn, zf);
                 try
                 {
-                    SwingUtilities.invokeAndWait(tTask);
+                    Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Render, new AnimDelegate(tTask.Run));
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     throw;
                 }
             }
 
-            /* --- Inner's inner --- */
-
-            class TranslateThread
+            zf.X = 0.0;
+            zf.Y = 0.0;
+            tTask = new LastTranslateThread(zn, zf);
+            try
             {
-
-                HtCoordE zStart = null;
-                HtCoordE zEnd = null;
-
-                TranslateThread(HtCoordE z1, HtCoordE z2)
-                {
-                    zStart = z1;
-                    zEnd = z2;
-                }
-
-                public void run()
-                {
-                    translate(zStart, zEnd);
-                    view.repaint();
-                }
+                Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Render, new AnimDelegate(tTask.Run));
             }
-
-            class LastTranslateThread
+            catch (Exception)
             {
-
-                HtCoordE zStart = null;
-                HtCoordE zEnd = null;
-
-                LastTranslateThread(HtCoordE z1, HtCoordE z2)
-                {
-                    zStart = z1;
-                    zEnd = z2;
-                }
-
-                public void run()
-                {
-                    translate(zStart, zEnd);
-                    endTranslation();
-                    view.repaint();
-                    view.startMouseListening();
-                }
+                throw;
             }
-
-
         }
 
     }
+
+    internal class TranslateThread: IRunnable
+    {
+
+        HtCoordE zStart = null;
+        HtCoordE zEnd = null;
+
+        public TranslateThread(HtCoordE z1, HtCoordE z2)
+        {
+            zStart = z1;
+            zEnd = z2;
+        }
+
+        public void Run()
+        {
+            HtDraw.Translate(zStart, zEnd);
+            HtDraw.View.Repaint();
+        }
+    }
+
+    internal class LastTranslateThread: IRunnable
+    {
+
+        HtCoordE zStart = null;
+        HtCoordE zEnd = null;
+
+        public LastTranslateThread(HtCoordE z1, HtCoordE z2)
+        {
+            zStart = z1;
+            zEnd = z2;
+        }
+
+        public void Run()
+        {
+            HtDraw.Translate(zStart, zEnd);
+            HtDraw.EndTranslation();
+            HtDraw.View.Repaint();
+            HtDraw.View.StartMouseListening();
+        }
+    }
+
 }

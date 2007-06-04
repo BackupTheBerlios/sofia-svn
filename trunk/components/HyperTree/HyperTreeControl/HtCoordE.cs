@@ -10,7 +10,6 @@ namespace HyperTreeControl
   {
     #region Private fields
 
-    private static double EPSILON = 1.0E-10; // epsilon
     private double _x = 0.0; // x coord
     private double _y = 0.0; // y coord
 
@@ -48,7 +47,7 @@ namespace HyperTreeControl
     /// <summary> Copy the given HtCoordE into this HtCoordE.
     /// </summary>
     /// <param name="z">The HtCoordE to copy.</param>
-    void Copy(HtCoordE z)
+    public void Copy(HtCoordE z)
     {
       this._x = z._x;
       this._y = z._y;
@@ -98,9 +97,12 @@ namespace HyperTreeControl
     /// <summary> Is this coordinate in the hyperbolic disc ?
     /// </summary>
     /// <returns><code>true</code> if this point is in; <code>false</code> otherwise</returns>
-    bool _isValid()
+    public bool IsValid
     {
-      return (this._d2() < 1.0);
+        get
+        {
+            return (this.D2() < 1.0);
+        }
     }
 
     #endregion
@@ -142,7 +144,7 @@ namespace HyperTreeControl
     /// <param name="z">The coord to divide with.</param>
     public void Divide(HtCoordE z)
     {
-      double d = z._d2();
+      double d = z.D2();
       double tx = _x;
       double ty = _y;
       _x = ((tx * z._x) + (ty * z._y)) / d;
@@ -180,7 +182,7 @@ namespace HyperTreeControl
     /// <summary> Returns the square of the distance from the origin to this point.
     /// </summary>
     /// <returns>The square of the distance.</returns>
-    double _d2()
+    public double D2()
     {
       return (_x * _x) + (_y * _y);
     }
@@ -190,7 +192,7 @@ namespace HyperTreeControl
     /// <returns>The distance.</returns>
     public double _d()
     {
-      return Math.Sqrt(_d2());
+      return Math.Sqrt(D2());
     }
 
     /// <summary> Returns the distance from this point to the point given in parameter.
@@ -227,7 +229,7 @@ namespace HyperTreeControl
     /// </summary>
     /// <param name="s">The source point.</param>
     /// <param name="t">The translation vector.</param>
-    void _translate(HtCoordE s, HtCoordE t)
+    public void Translate(HtCoordE s, HtCoordE t)
     {
       this.Copy(s);
       this.Translate(t);
@@ -237,7 +239,7 @@ namespace HyperTreeControl
     /// Transform this node by the given transformation.
     /// </summary>
     /// <param name="t">The transformation.</param>
-    void _transform(HtTransformation t)
+    public void _transform(HtTransformation t)
     {
 
       HtCoordE __z = new HtCoordE(this);

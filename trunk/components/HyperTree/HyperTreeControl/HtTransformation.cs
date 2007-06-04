@@ -6,7 +6,7 @@ namespace HyperTreeControl
 {
   /// <summary> The HTTransformation class implements a isometrie transformation in the hyperbolic space.
   /// </summary>
-  class HtTransformation
+  public class HtTransformation
   {
     #region Private fields
 
@@ -18,7 +18,7 @@ namespace HyperTreeControl
     #region ctor
     /// <summary> Constructor.
     /// </summary>
-    HtTransformation()
+    public HtTransformation()
     {
       _p = new HtCoordE();
       _o = new HtCoordE();
@@ -48,7 +48,7 @@ namespace HyperTreeControl
     /// </summary>
     /// <param name="first"></param>
     /// <param name="second"></param>
-    void composition(HtCoordE first, HtCoordE second)
+    public void Composition(HtCoordE first, HtCoordE second)
     {
       _p.X = first.X + second.X;
       _p.Y = first.Y + second.Y;

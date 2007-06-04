@@ -7,19 +7,19 @@ using System.Windows;
 
 namespace HyperTreeControl
 {
-  interface IHtView
+  public interface IHtView
   {   
-    void startMouseListening();
+    void StartMouseListening();
 
-    void stopMouseListening();
+    void StopMouseListening();
 
-    void repaint();
+    void Repaint();
 
     int Height { get; }
 
     int Width { get; }
 
-    Rect getInsets();
+    Rect Insets {get;}
 
     IHtNode getNodeUnderTheMouse(MouseEventHandler mouseEventHandler);
 

@@ -7,7 +7,7 @@ namespace HyperTreeControl
   /// <summary> The HTCoordS class implements the coordinates of a point in the Screen space.
   /// As the screen space is represented with finite pixels, we just use int instead of float or double.
   /// </summary>
-  class HtCoordS
+  public class HtCoordS
   {
     #region Private fields
 
@@ -88,7 +88,7 @@ namespace HyperTreeControl
     /// <returns>true if it is, false otherwise</returns>
     public bool Contains(HtCoordS zs)
     {
-      int __length = _getDistance(zs);
+      int __length = GetDistance(zs);
       return __length <= ZONE_LENGTH;
     }
 
@@ -100,7 +100,7 @@ namespace HyperTreeControl
     /// </summary>
     /// <param name="z">The given point.</param>
     /// <returns>The distance.</returns>
-    int _getDistance(HtCoordS z)
+    public int GetDistance(HtCoordS z)
     {
       int __d2 = (z._x - _x) * (z._x - _x) + (z._y - _y) * (z._y - _y);
       return (int)Math.Round(Math.Sqrt(__d2));
