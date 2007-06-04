@@ -8,62 +8,61 @@ namespace HyperTreeControl
 {
     class HtNodeLabel : Label
     {
-        private HtDrawNode node = null;  // represented node
-        private int x = 0;     // x up-left corner
-        private int y = 0;     // y up-left corner
-        private int width = 0;     // width of the label
-        private int height = 0;     // height of the label
-        private bool active = false; // should be drawed ?
+        #region fields
 
+        private HtDrawNode _node = null;  // represented node
+        private int _x = 0;     // x up-left corner
+        private int _y = 0;     // y up-left corner
+        private int _width = 0;     // width of the control
+        private int _height = 0;     // height of the control
+        private bool _active = false; // should be drawed ?
 
-        /* ---  Constructor --- */
+        #endregion
 
-        /**
-         * Constructor.
-         * 
-         * @param node    the represented node
-         */
+        #region  Constructor
+
+        /// <summary> Constructor.
+        /// </summary>
+        /// <param name="node">The represented node.</param>
         public HtNodeLabel(HtDrawNode node)
         {
-            this.node = node;
+            _node = node;
         }
 
+        #endregion
 
-        /* --- Draw --- */
+        #region Draw 
 
-        /**
-         * Draw this label, if there is enought space.
-         *
-         * @param g    the graphic context
-         */
-        public void Draw(Canvas g)
+        /// <summary> Draw this control, if there is enought space.
+        /// </summary>
+        /// <param name="canvas">The graphic canvas.</param>
+        public void Draw(Canvas canvas)
         {
-            int space = node.GetSpace();
-            if (space >= Height)
+            int __space = _node.GetSpace();
+            if (__space >= this.Height)
             {
-                active = true;
+                _active = true;
             }
             else
             {
-                active = false;
+                _active = false;
             }
         }
 
+        #endregion
 
-        /* --- Zone containing --- */
+        #region Zone containing
 
-        /**
-         * Is the given HTCoordS within this label ?
-         *
-         * @return    <CODE>true</CODE> if it is,
-         *            <CODE>false</CODE> otherwise
-         */
+        /// <summary> Is the given <see cref="HtCoordS"/> within this control ?
+        /// </summary>
+        /// <param name="zs">The given point.</param>
+        /// <returns><code>true</code> if it is, <code>false</code> otherwise.</returns>
         public bool Contains(HtCoordS zs)
         {
-            if (active)
+            if (_active)
             {
-                if ((zs.X >= x) && (zs.X <= (x + width)) &&
-                    (zs.Y >= y) && (zs.Y <= (y + height)))
+                if ((zs.X >= _x) && (zs.X <= (_x + _width)) &&
+                    (zs.Y >= _y) && (zs.Y <= (_y + _height)))
                 {
                     return true;
                 }
@@ -74,25 +73,26 @@ namespace HyperTreeControl
             }
             else
             {
-                return node.ScreenCoordinates.Contains(zs);
+                return _node.ScreenCoordinates.Contains(zs);
             }
         }
 
+        #endregion
 
-        /* --- ToString --- */
+        #region ToString
 
-        /**
-         * Returns a string representation of the object.
-         *
-         * @return    a String representation of the object
-         */
+        /// <summary> Returns a string representation of the object.
+        /// </summary>
+        /// <returns>A string representation of the object.</returns>
         public override string ToString()
         {
-            string result = "label of " + node.Name +
-                            "\n\tx = " + x + " : y = " + y +
-                            "\n\tw = " + width + " : h = " + height;
-            return result;
+            string __result = "control of " + _node.Name +
+                            "\n\tx = " + _x + " : y = " + _y +
+                            "\n\tw = " + _width + " : h = " + _height;
+            return __result;
         }
+
+        #endregion
 
     }
 }

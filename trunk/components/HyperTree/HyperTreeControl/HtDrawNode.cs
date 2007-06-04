@@ -21,7 +21,7 @@ namespace HyperTreeControl
         private HtDrawNodeComposite _father = null;  // father of this node
         private HtDrawNode _brother = null;  // brother of this node
 
-        private HtNodeControl _control = null;  // UI control of the node
+        private HtNodeLabel _control = null;  // UI control of the node
 
         private bool _fastMode = false; // fast mode
 
@@ -40,7 +40,7 @@ namespace HyperTreeControl
             _node = node;
             _model = model;
 
-            _control = new HtNodeControl(this);
+            _control = new HtNodeLabel(this);
 
             _ze = new HtCoordE(node.Coordinates);
             _oldZe = new HtCoordE(_ze);
