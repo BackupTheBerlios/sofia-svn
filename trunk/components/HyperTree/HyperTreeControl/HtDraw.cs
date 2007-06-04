@@ -5,6 +5,7 @@ using System.Threading;
 using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Threading;
+using System.Windows.Media;
 
 namespace HyperTreeControl
 {
@@ -98,7 +99,7 @@ namespace HyperTreeControl
         /// <summary>
         /// Refresh the screen coordinates of the drawing tree.
         /// </summary>
-        private void RefreshScreenCoordinates()
+        public void RefreshScreenCoordinates()
         {
             Rect insets = _view.Insets;
             sMax.X = (int)((_view.Width - insets.Left - insets.Right) / 2);
@@ -139,18 +140,18 @@ namespace HyperTreeControl
         ///Draws the branches of the hyperbolic tree.
         /// </summary>
         /// <param name="canvas">The graphic canvas.</param>
-        private void DrawBranches(Canvas canvas)
+        public void DrawBranches(DrawingContext dc)
         {
-            _drawRoot.DrawBranches(canvas);
+            _drawRoot.DrawBranches(dc);
         }
 
         /// <summary>
         /// Draws the nodes of the hyperbolic tree.
         /// </summary>
         /// <param name="canvas">The graphic canvas.</param>
-        private void DrawNodes(Canvas canvas)
+        public void DrawNodes(DrawingContext dc)
         {
-            _drawRoot.DrawNodes(canvas);
+            _drawRoot.DrawNodes(dc);
         }
 
         #endregion

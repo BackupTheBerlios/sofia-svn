@@ -122,7 +122,7 @@ namespace HyperTreeControl
         /// <summary> Draws the branches from this node to its children. 
         /// </summary>
         /// <param name="canvas">The graphic canvas.</param>
-        public override void DrawBranches(Canvas canvas)
+        public override void DrawBranches(DrawingContext dc)
         {
             foreach (HtDrawNode child in _children)
             {
@@ -138,7 +138,7 @@ namespace HyperTreeControl
         /// <summary> Draw this node.
         /// </summary>
         /// <param name="canvas">The graphic canvas.</param>
-        public override void DrawNodes(Canvas canvas)
+        public override void DrawNodes(DrawingContext dc)
         {
             if (FastMode == false)
             {

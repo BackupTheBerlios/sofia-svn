@@ -110,7 +110,7 @@ namespace HyperTreeControl
         /// <summary> Draw the geodesic.
         /// </summary>
         /// <param name="canvas">The graphic canvas.</param>
-        public void Draw(Canvas canvas)
+        public void Draw(DrawingContext dc)
         {
             canvas.Background = new SolidColorBrush(Colors.Black);
             switch (_type)

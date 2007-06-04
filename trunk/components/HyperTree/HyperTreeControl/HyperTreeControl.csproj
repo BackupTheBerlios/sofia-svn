@@ -48,6 +48,7 @@
     <Reference Include="System.IdentityModel" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HtAction.cs" />
     <Compile Include="HtCoordE.cs" />
     <Compile Include="HtCoordS.cs" />
     <Compile Include="HtDraw.cs" />

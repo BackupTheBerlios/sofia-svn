@@ -6,7 +6,7 @@ using System.Windows.Media;
 
 namespace HyperTreeControl
 {
-    class HtNodeLabel : Label
+    class HtNodeLabel
     {
         #region fields
 
@@ -36,10 +36,10 @@ namespace HyperTreeControl
         /// <summary> Draw this control, if there is enought space.
         /// </summary>
         /// <param name="canvas">The graphic canvas.</param>
-        public void Draw(Canvas canvas)
+        public void Draw(DrawingContext dc)
         {
             int __space = _node.GetSpace();
-            if (__space >= this.Height)
+            if (__space >= _height)
             {
                 _active = true;
             }

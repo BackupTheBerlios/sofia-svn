@@ -182,12 +182,12 @@ namespace HyperTreeControl
         /// </summary>
         /// <remarks>Overriden by the <see cref="HtDrawNodeComposite"/> class.</remarks>
         /// <param name="canvas">The graphic canvas.</param>
-        public virtual void DrawBranches(Canvas canvas) { }
+        public virtual void DrawBranches(DrawingContext dc) { }
 
         /// <summary> Draw this node.
         /// </summary>
         /// <param name="canvas">The graphic canvas.</param>
-        public virtual void DrawNodes(Canvas canvas)
+        public virtual void DrawNodes(DrawingContext dc)
         {
             if (_fastMode == false)
             {
