@@ -15,18 +15,18 @@ namespace HyperTreeControl
 
         void Repaint();
 
-        int Height { get; }
+        //int Height { get; }
 
-        int Width { get; }
+        //int Width { get; }
 
-        Rect Insets { get; }
+        //Rect Insets { get; }
 
-        IHtNode GetNodeUnderTheMouse(MouseEventHandler mouseEventHandler);
+        IHtNode GetNodeUnderTheMouse(MouseEventArgs e);
 
         void TranslateToOrigin(IHtNode node);
 
         Image Image { get; set; }
 
-        void AddMouseListener(MouseEventHandler mouseEventHandler);
+        //void AddMouseListener(MouseEventHandler mouseEventHandler);
     }
 }

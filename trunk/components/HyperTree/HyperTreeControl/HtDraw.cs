@@ -198,7 +198,7 @@ namespace HyperTreeControl
         /// so that the given node  is put at the origin of the hyperbolic tree.        
         /// </summary>
         /// <param name="node">The given <see cref="HtDrawNode"/></param>
-        private void TranslateToOrigin(HtDrawNode node)
+        public void TranslateToOrigin(HtDrawNode node)
         {
             _view.StopMouseListening();
             AnimThread __t = new AnimThread(node);
@@ -207,7 +207,7 @@ namespace HyperTreeControl
 
         /// <summary> Restores the hyperbolic tree to its origin.
         /// </summary>
-        private void Restore()
+        public void Restore()
         {
             _drawRoot.Restore();
             _view.Repaint();
@@ -241,7 +241,7 @@ namespace HyperTreeControl
         /// <param name="zs">The given screen coordinate.</param>
         /// <returns>The searched <see cref="HtDrawNode"/> if found;
         /// <code>null</code> otherwise</returns>
-        private HtDrawNode FindNode(HtCoordS zs)
+        public HtDrawNode FindNode(HtCoordS zs)
         {
             return _drawRoot.FindNode(zs);
         }

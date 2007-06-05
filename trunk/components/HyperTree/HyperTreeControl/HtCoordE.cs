@@ -83,7 +83,7 @@ namespace HyperTreeControl
     /// <param name="y">The y screen coordinate.</param>
     /// <param name="sOrigin">The origin of the screen plane.</param>
     /// <param name="sMax">The (xMax, yMax) point in the screen plane.</param>
-    private void ProjectionStoE(int x, int y, HtCoordS sOrigin, HtCoordS sMax)
+    public void ProjectionStoE(int x, int y, HtCoordS sOrigin, HtCoordS sMax)
     {
       _x = (double)(x - sOrigin.X) / (double)sMax.X;
       _y = -((double)(y - sOrigin.Y) / (double)sMax.Y);
