@@ -20,7 +20,7 @@ namespace HyperTreeControl
 
         private static readonly double EPSILON = 1.0E-10; // epsilon
 
-        private DrawType _type = DrawType.Line; // type of the geodesic
+        private DrawType _type = DrawType.Arc; // type of the geodesic
 
         private HtCoordE _za = null; // first point (Euclidian)
         private HtCoordE _zb = null; // second point (Euclidian)
@@ -112,31 +112,24 @@ namespace HyperTreeControl
         /// <param name="canvas">The graphic canvas.</param>
         public void Draw(DrawingContext dc)
         {
-            canvas.Background = new SolidColorBrush(Colors.Black);
+            List<PathFigure> __pathFigures = new List<PathFigure>();
+            List<PathSegment> __pathSegments = new List<PathSegment>();
+
             switch (_type)
             {
-                case DrawType.Line:
-                    Line __line = new Line();
-                    __line.X1 = _a.X;
-                    __line.Y1 = _a.Y;
-                    __line.X2 = _b.X;
-                    __line.Y2 = _b.Y;
-                    canvas.Children.Add(__line);
+                case DrawType.Line:                    
+                    __pathSegments.Add(new LineSegment(new Point(_b.X, _b.Y), false));
                     break;
                 case DrawType.Arc:
-                    List<PathFigure> __pathFigures = new List<PathFigure>();
-                    List<PathSegment> __pathSegments = new List<PathSegment>();
-                    __pathSegments.Add(new QuadraticBezierSegment(new Point(_c.X, _c.Y), new Point(_b.X, _b.Y), false));
-                    PathFigure __pathFigure = new PathFigure(new Point(_a.X, _a.Y), __pathSegments, false);
-                    __pathFigures.Add(__pathFigure);
-                    PathGeometry __pathGeometry = new PathGeometry(__pathFigures);
-                    Path __path = new Path();
-                    __path.Data = __pathGeometry;
-                    canvas.Children.Add(__path);
+                    __pathSegments.Add(new QuadraticBezierSegment(new Point(_c.X, _c.Y), new Point(_b.X, _b.Y), false));                                        
+                    
                     break;
                 default:
                     break;
             }
+
+            __pathFigures.Add(new PathFigure(new Point(_a.X, _a.Y), __pathSegments, false));
+            dc.DrawGeometry(Brushes.Black, new Pen(Brushes.Black, 1), new PathGeometry(__pathFigures));
         }
 
         #endregion

@@ -130,9 +130,9 @@ namespace HyperTreeControl
                 HtGeodesic __geod = _geodesics[child];
                 if (__geod != null)
                 {
-                    __geod.Draw(canvas);
+                    __geod.Draw(dc);
                 }
-                child.DrawBranches(canvas);
+                child.DrawBranches(dc);
             }
         }
 
@@ -143,11 +143,11 @@ namespace HyperTreeControl
         {
             if (FastMode == false)
             {
-                base.DrawNodes(canvas);
+                base.DrawNodes(dc);
 
                 foreach (HtDrawNode __child in _children)
                 {
-                    __child.DrawNodes(canvas);
+                    __child.DrawNodes(dc);
                 }
             }
         }

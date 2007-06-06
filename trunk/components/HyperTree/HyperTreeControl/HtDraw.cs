@@ -102,8 +102,8 @@ namespace HyperTreeControl
         public void RefreshScreenCoordinates()
         {
             Rect insets = _view.Insets;
-            sMax.X = (int)((_view.Width - insets.Left - insets.Right) / 2);
-            sMax.Y = (int)((_view.Height - insets.Top - insets.Bottom) / 2);
+            sMax.X = (int)((insets.Right - insets.Left) / 2);
+            sMax.Y = (int)((insets.Bottom - insets.Top) / 2);
             sOrigin.X = sMax.X + (int)insets.Left;
             sOrigin.Y = sMax.Y + (int)insets.Top;
             _drawRoot.RefreshScreenCoordinates(sOrigin, sMax);
@@ -262,7 +262,7 @@ namespace HyperTreeControl
         /// </summary>
         /// <param name="htNode">the <see cref="IHtNode"/> for which we want to find the <see cref="HtDrawNode"/>.</param>
         /// <returns>The <see cref="HtDrawNode"/> for the given <see cref="IHtNode"/>.</returns>
-        private HtDrawNode FindDrawNode(IHtNode htNode)
+        public HtDrawNode FindDrawNode(IHtNode htNode)
         {
             HtDrawNode __drawNode = _drawToHTNodeMap[htNode];
             return __drawNode;

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows;
+using System.Windows.Shapes;
+using System.Globalization;
 
 namespace HyperTreeControl
 {
@@ -31,17 +34,63 @@ namespace HyperTreeControl
 
         #endregion
 
-        #region Draw 
+        #region Draw
 
         /// <summary> Draw this control, if there is enought space.
         /// </summary>
         /// <param name="canvas">The graphic canvas.</param>
         public void Draw(DrawingContext dc)
         {
+            FontFamily __font = new FontFamily("Arial");
+            FormattedText __formattedText = new FormattedText(
+               _node.Name,
+               CultureInfo.CurrentCulture,
+               FlowDirection.LeftToRight,
+               new Typeface(
+                   __font,
+                   FontStyles.Normal,
+                   FontWeights.Light,
+                   FontStretches.Normal),
+               10,
+               Brushes.Black
+               );            
+            
+            int __height = (int)__formattedText.Height;
+            int __width = (int)__formattedText.Width;
+
+            _height = __height + 2 * _node.Size;
+            _width = __width + 10 + 2 * _node.Size;
+            HtCoordS __zs = _node.ScreenCoordinates;
+
+            _x = __zs.X - (_width / 2) - _node.Size;
+            _y = __zs.Y - (__height / 2) - _node.Size;
+
+            int __sx = __zs.X - (__width / 2) - _node.Size;
+            int __sy = _y + (int)__formattedText.OverhangTrailing + ((int)__formattedText.OverhangLeading / 2) + _node.Size;
+            
             int __space = _node.GetSpace();
-            if (__space >= _height)
+            if (__space >= __height)
             {
                 _active = true;
+
+                StreamGeometry __geometry = new StreamGeometry();
+                __geometry.FillRule = FillRule.EvenOdd;
+
+                using (StreamGeometryContext ctx = __geometry.Open())
+                {
+                    ctx.BeginFigure(new Point(_x, _y), true, true);
+                    ctx.LineTo(new Point(_x + _width, _y), false, false);
+                    ctx.LineTo(new Point(_x + _width, _y + _height), false, false);
+                    ctx.LineTo(new Point(_x, _y + _height), false, false);
+                    ctx.LineTo(new Point(_x, _y), false, false);
+                }
+
+                __geometry.Freeze();
+
+                dc.DrawGeometry(Brushes.LightBlue, new Pen(Brushes.Black, 1), __geometry);
+                Geometry __textGeometry = __formattedText.BuildGeometry(new Point(__sx, __sy));
+                dc.DrawGeometry(Brushes.Black, new Pen(Brushes.Black, 0), __textGeometry);
+
             }
             else
             {

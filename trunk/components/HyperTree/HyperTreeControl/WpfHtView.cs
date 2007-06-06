@@ -9,20 +9,16 @@ using System.Windows.Shapes;
 
 namespace HyperTreeControl
 {
-    class WpfHtView : FrameworkElement, IHtView
+    public partial class WpfHtView : Canvas, IHtView
     {
 
         #region fields
-        private HtModel _model = null; // the tree model represented
-        private HtDraw draw = null; // the drawing model
-        private HtAction action = null; // action manager
-        private bool fastMode = false;
-        private bool longNameMode = false;
-        private bool circleMode = false;
-        private bool transNotCorrected = false;
-        private bool quadMode = true;
 
-        private Image image = null;
+        private HtModel _model = null; // the tree model represented
+        private HtDraw _draw = null; // the drawing model
+        private HtAction _action = null; // action manager
+
+        private Image _image = null;
 
         #endregion
 
@@ -38,9 +34,13 @@ namespace HyperTreeControl
             //this.Background = new SolidColorBrush(Colors.White);
 
             _model = model;
-            draw = new HtDraw(_model, this);
-            action = new HtAction(draw);
+            _draw = new HtDraw(_model, this);
+            _action = new HtAction(_draw);
             this.StartMouseListening();
+        }
+
+        public WpfHtView()
+        {
         }
 
         #endregion
@@ -57,7 +57,7 @@ namespace HyperTreeControl
             int x = (int)e.GetPosition(this).X;
             int y = (int)e.GetPosition(this).Y;
 
-            HtDrawNode node = draw.FindNode(new HtCoordS(x, y));
+            HtDrawNode node = _draw.FindNode(new HtCoordS(x, y));
             if (node != null)
             {
                 return node.HtModelNode.Node;
@@ -85,7 +85,7 @@ namespace HyperTreeControl
             int x = (int)e.GetPosition(this).X;
             int y = (int)e.GetPosition(this).Y;
 
-            HtDrawNode node = draw.FindNode(new HtCoordS(x, y));
+            HtDrawNode node = _draw.FindNode(new HtCoordS(x, y));
             if (node != null)
             {
                 return node.Name;
@@ -111,55 +111,81 @@ namespace HyperTreeControl
         /// <summary>Overrides the <see cref="System.Windows.FrameworkElement.OnRender"/> method.
         /// </summary>
         /// <param name="drawingContext"></param>
-        protected override void OnRender(DrawingContext drawingContext)
+        protected override void OnRender(DrawingContext dc)
         {
-            base.OnRender(drawingContext);
-            if (image != null)
-            {
-                drawingContext.DrawImage(image, new Rect(0, 0, this.Width, this.Height));
+            base.OnRender(dc);
 
-                draw.RefreshScreenCoordinates();
-                draw.DrawBranches(g);
-                draw.DrawNodes(g);
+            if (_image != null)
+            {
+                dc.DrawImage(_image.Source, new Rect(0, 0, this.Width, this.Height));
             }
+
+            _draw.RefreshScreenCoordinates();
+            _draw.DrawBranches(dc);
+            _draw.DrawNodes(dc);
         }
 
         #endregion
+
+        #region Mouse handling
 
         /// <summary> Stops the listening of mouse events.
         /// </summary>
         public void StopMouseListening()
         {
-            Mouse.RemoveMouseDownHandler(this, action.MouseDownHandler);
-            Mouse.RemoveMouseUpHandler(this, action.MouseUpHandler);
+            Mouse.RemoveMouseDownHandler(this, _action.MouseDownHandler);
+            Mouse.RemoveMouseUpHandler(this, _action.MouseUpHandler);
         }
 
         /// <summary> Starts the listening of mouse events.
         /// </summary>
         public void StartMouseListening()
         {
-            Mouse.AddMouseDownHandler(this, action.MouseDownHandler);
-            Mouse.AddMouseUpHandler(this, action.MouseUpHandler);
+            Mouse.AddMouseDownHandler(this, _action.MouseDownHandler);
+            Mouse.AddMouseUpHandler(this, _action.MouseUpHandler);
         }
+
+        #endregion
+
+        #region IHtView Members
 
         public void TranslateToOrigin(IHtNode node)
         {
-            HtDrawNode __drawNode = draw.FindDrawNode(node);
-            draw.TranslateToOrigin(__drawNode);
+            HtDrawNode __drawNode = _draw.FindDrawNode(node);
+            _draw.TranslateToOrigin(__drawNode);
+        }
+
+        public new int Height
+        {
+            get { return (int)base.Height; }
+            set { base.Height = value; }
+        }
+
+        public new int Width
+        {
+            get { return (int)base.Width; }
+            set { base.Width = value; }
+        }
+
+        public Rect Insets
+        {
+            get { return new Rect(new Size(base.Width, base.Height)); }
         }
 
         public Image Image
         {
             get
             {
-                return this.image;
+                return this._image;
             }
 
             set
             {
-                this.image = value;
+                this._image = value;
             }
         }
+
+        #endregion
     }
 
 }

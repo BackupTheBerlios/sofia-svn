@@ -191,7 +191,7 @@ namespace HyperTreeControl
         {
             if (_fastMode == false)
             {
-                _control.Draw(canvas);
+                _control.Draw(dc);
             }
         }
 
