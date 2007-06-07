@@ -135,7 +135,8 @@ namespace HyperTreeControl
         {
             Mouse.RemoveMouseDownHandler(this, _action.MouseDownHandler);
             Mouse.RemoveMouseUpHandler(this, _action.MouseUpHandler);
-        }
+            Mouse.RemoveMouseMoveHandler(this, _action.MouseMoveHandler);            
+        }        
 
         /// <summary> Starts the listening of mouse events.
         /// </summary>
@@ -143,6 +144,7 @@ namespace HyperTreeControl
         {
             Mouse.AddMouseDownHandler(this, _action.MouseDownHandler);
             Mouse.AddMouseUpHandler(this, _action.MouseUpHandler);
+            Mouse.AddMouseMoveHandler(this, _action.MouseMoveHandler);
         }
 
         #endregion

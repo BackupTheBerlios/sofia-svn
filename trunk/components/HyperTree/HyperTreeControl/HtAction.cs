@@ -142,6 +142,24 @@ namespace HyperTreeControl
             }
         }
 
+        public void MouseMoveHandler(object sender, MouseEventArgs e)
+        {
+            Point __p = e.GetPosition((IInputElement)(sender));
+            HtCoordS __zs = new HtCoordS((int)__p.X, (int)__p.Y);
+
+            if (__zs != null)
+            {
+                if (startPoint.IsValid)
+                {
+                    endPoint.ProjectionStoE(__zs.X, __zs.Y, model.SOrigin, model.SMax);
+                    if (endPoint.IsValid)
+                    {
+                        HtDraw.Translate(startPoint, endPoint);
+                    }
+                }
+            }
+        }
+
 
         #endregion
     }
