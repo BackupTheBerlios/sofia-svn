@@ -121,14 +121,14 @@ namespace HyperTreeControl
                     __pathSegments.Add(new LineSegment(new Point(_b.X, _b.Y), false));
                     break;
                 case DrawType.Arc:
-                    __pathSegments.Add(new QuadraticBezierSegment(new Point(_c.X, _c.Y), new Point(_b.X, _b.Y), false));                                        
+                    __pathSegments.Add(new QuadraticBezierSegment(new Point(_c.X, _c.Y), new Point(_b.X, _b.Y), false));
                     
                     break;
                 default:
                     break;
             }
 
-            __pathFigures.Add(new PathFigure(new Point(_a.X, _a.Y), __pathSegments, false));
+            __pathFigures.Add(new PathFigure(new Point(_a.X, _a.Y), __pathSegments, true));
             dc.DrawGeometry(Brushes.Black, new Pen(Brushes.Black, 1), new PathGeometry(__pathFigures));
         }
 

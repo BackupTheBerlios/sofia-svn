@@ -50,8 +50,8 @@ namespace TestHyperTree
         public void Window1_Loaded(object sender, RoutedEventArgs e)
         {
             WpfHtView __ht = new WpfHtView(_model);
-            __ht.Height = 200;
-            __ht.Width = 200;
+            __ht.Height = 300;
+            __ht.Width = 300;
 
             __ht.Margin = new Thickness(10);
             _grid.Children.Add(__ht);

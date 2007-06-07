@@ -26,6 +26,8 @@ namespace HyperTreeControl
         private bool _fastMode = false; // fast mode
         private Dictionary<IHtNode, HtDrawNode> _drawToHTNodeMap;
 
+        private static object lockObject = new object();
+
         #endregion
 
         #region ctor
@@ -164,26 +166,29 @@ namespace HyperTreeControl
         /// <param name="ze">The second coordinates.</param>
         public static void Translate(HtCoordE zs, HtCoordE ze)
         {
-            HtCoordE __zo = new HtCoordE(_drawRoot.OldCoordinates);
-            __zo.X = -__zo.X;
-            __zo.Y = -__zo.Y;
-            HtCoordE __zs2 = new HtCoordE(zs);
-            __zs2.Translate(__zo);
-
-            HtCoordE __t = new HtCoordE();
-            double __de = ze.D2();
-            double __ds = __zs2.D2();
-            double __dd = 1.0 - __de * __ds;
-            __t.X = (ze.X * (1.0 - __ds) - __zs2.X * (1.0 - __de)) / __dd;
-            __t.Y = (ze.Y * (1.0 - __ds) - __zs2.Y * (1.0 - __de)) / __dd;
-
-            if (__t.IsValid)
+            lock (lockObject)
             {
-                HtTransformation __to = new HtTransformation();
-                __to.Composition(__zo, __t);
+                HtCoordE __zo = new HtCoordE(_drawRoot.OldCoordinates);
+                __zo.X = -__zo.X;
+                __zo.Y = -__zo.Y;
+                HtCoordE __zs2 = new HtCoordE(zs);
+                __zs2.Translate(__zo);
 
-                _drawRoot.Transform(__to);
-                _view.Repaint();
+                HtCoordE __t = new HtCoordE();
+                double __de = ze.D2();
+                double __ds = __zs2.D2();
+                double __dd = 1.0 - __de * __ds;
+                __t.X = (ze.X * (1.0 - __ds) - __zs2.X * (1.0 - __de)) / __dd;
+                __t.Y = (ze.Y * (1.0 - __ds) - __zs2.Y * (1.0 - __de)) / __dd;
+
+                if (__t.IsValid)
+                {
+                    HtTransformation __to = new HtTransformation();
+                    __to.Composition(__zo, __t);
+
+                    _drawRoot.Transform(__to);
+                    _view.Repaint();
+                }
             }
         }
 
@@ -191,7 +196,10 @@ namespace HyperTreeControl
         /// </summary>
         public static void EndTranslation()
         {
-            _drawRoot.EndTranslation();
+            lock (lockObject)
+            {
+                _drawRoot.EndTranslation();
+            }
         }
 
         /// <summary> Translate the hyperbolic tree 
