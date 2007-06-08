@@ -9,7 +9,7 @@ using System.Windows.Shapes;
 
 namespace HyperTreeControl
 {
-    public partial class WpfHtView : Canvas, IHtView
+    public partial class WpfHtView : FrameworkElement, IHtView
     {
 
         #region fields
@@ -135,16 +135,17 @@ namespace HyperTreeControl
         {
             Mouse.RemoveMouseDownHandler(this, _action.MouseDownHandler);
             Mouse.RemoveMouseUpHandler(this, _action.MouseUpHandler);
-            Mouse.RemoveMouseMoveHandler(this, _action.MouseMoveHandler);            
+            Mouse.RemoveMouseMoveHandler(this, _action.MouseMoveHandler);                        
         }        
 
         /// <summary> Starts the listening of mouse events.
         /// </summary>
         public void StartMouseListening()
         {
-            Mouse.AddMouseDownHandler(this, _action.MouseDownHandler);
-            Mouse.AddMouseUpHandler(this, _action.MouseUpHandler);
-            Mouse.AddMouseMoveHandler(this, _action.MouseMoveHandler);
+            //Mouse.AddMouseDownHandler(this, _action.MouseDownHandler);
+            //Mouse.AddMouseUpHandler(this, _action.MouseUpHandler);
+            //Mouse.AddMouseMoveHandler(this, _action.MouseMoveHandler);
+            this.PreviewMouseDown += _action.MouseDownHandler;
         }
 
         #endregion

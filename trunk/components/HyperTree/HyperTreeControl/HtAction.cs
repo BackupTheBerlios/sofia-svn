@@ -16,7 +16,7 @@ namespace HyperTreeControl
         private HtCoordE endPoint = null; // ending point of dragging
         private HtCoordS clickPoint = null; // clicked point    
 
-        private bool _statusClicked = false;
+        private bool _statusButtonDown = false;
 
         #endregion
 
@@ -62,7 +62,7 @@ namespace HyperTreeControl
             {
                 startPoint.ProjectionStoE(__p.X, __p.Y, model.SOrigin, model.SMax);
 
-                _statusClicked = true;
+                _statusButtonDown = true;
                 clickPoint.X = __p.X;
                 clickPoint.Y = __p.Y;
             }
@@ -82,9 +82,9 @@ namespace HyperTreeControl
 
             if (__p != null)
             {
-                if (_statusClicked)
+                if (_statusButtonDown)
                 {
-                    _statusClicked = false;
+                    _statusButtonDown = false;
                     if (__p.X - clickPoint.X < 5 && __p.Y - clickPoint.Y < 5)
                     {
                         this.MouseClicked(sender, e);
@@ -144,17 +144,20 @@ namespace HyperTreeControl
 
         public void MouseMoveHandler(object sender, MouseEventArgs e)
         {
-            Point __p = e.GetPosition((IInputElement)(sender));
-            HtCoordS __zs = new HtCoordS((int)__p.X, (int)__p.Y);
-
-            if (__zs != null)
+            if (_statusButtonDown == true)
             {
-                if (startPoint.IsValid)
+                Point __p = e.GetPosition((IInputElement)(sender));
+                HtCoordS __zs = new HtCoordS((int)__p.X, (int)__p.Y);
+
+                if (__zs != null)
                 {
-                    endPoint.ProjectionStoE(__zs.X, __zs.Y, model.SOrigin, model.SMax);
-                    if (endPoint.IsValid)
+                    if (startPoint.IsValid)
                     {
-                        HtDraw.Translate(startPoint, endPoint);
+                        endPoint.ProjectionStoE(__zs.X, __zs.Y, model.SOrigin, model.SMax);
+                        if (endPoint.IsValid)
+                        {
+                            HtDraw.Translate(startPoint, endPoint);
+                        }
                     }
                 }
             }
