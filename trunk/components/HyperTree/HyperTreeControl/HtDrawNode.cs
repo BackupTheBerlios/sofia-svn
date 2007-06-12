@@ -7,7 +7,7 @@ using System.Windows.Controls;
 
 namespace HyperTreeControl
 {
-    public class HtDrawNode
+    public class HtDrawNode: Label
     {
         #region fields
 

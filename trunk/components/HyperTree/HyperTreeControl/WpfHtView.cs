@@ -9,7 +9,7 @@ using System.Windows.Shapes;
 
 namespace HyperTreeControl
 {
-    public partial class WpfHtView : FrameworkElement, IHtView
+    public partial class WpfHtView : Canvas, IHtView
     {
 
         #region fields
@@ -30,8 +30,6 @@ namespace HyperTreeControl
         public WpfHtView(HtModel model)
         {
             this.Margin = new System.Windows.Thickness(250);
-            //TODO : inherits from Canvas in order to have the background property ?
-            //this.Background = new SolidColorBrush(Colors.White);
 
             _model = model;
             _draw = new HtDraw(_model, this);
@@ -142,10 +140,10 @@ namespace HyperTreeControl
         /// </summary>
         public void StartMouseListening()
         {
-            //Mouse.AddMouseDownHandler(this, _action.MouseDownHandler);
-            //Mouse.AddMouseUpHandler(this, _action.MouseUpHandler);
-            //Mouse.AddMouseMoveHandler(this, _action.MouseMoveHandler);
-            this.PreviewMouseDown += _action.MouseDownHandler;
+            Mouse.AddMouseDownHandler(this, _action.MouseDownHandler);
+            Mouse.AddMouseUpHandler(this, _action.MouseUpHandler);
+            Mouse.AddMouseMoveHandler(this, _action.MouseMoveHandler);
+            //this.PreviewMouseDown += _action.MouseDownHandler;
         }
 
         #endregion

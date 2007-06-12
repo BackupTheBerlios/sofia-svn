@@ -56,7 +56,7 @@
     <Reference Include="System.IdentityModel" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseHtNode.cs" />
+    <Compile Include="WpfHtNode.cs" />
     <Compile Include="HtAction.cs" />
     <Compile Include="HtCoordE.cs" />
     <Compile Include="HtCoordS.cs" />

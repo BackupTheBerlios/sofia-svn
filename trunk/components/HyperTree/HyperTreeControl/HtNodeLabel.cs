@@ -9,7 +9,7 @@ using System.Globalization;
 
 namespace HyperTreeControl
 {
-    class HtNodeLabel
+    class HtNodeLabel: Label
     {
         #region fields
 
@@ -30,6 +30,8 @@ namespace HyperTreeControl
         public HtNodeLabel(HtDrawNode node)
         {
             _node = node;
+
+            this.Background = new SolidColorBrush(Colors.Azure);
         }
 
         #endregion
@@ -40,7 +42,9 @@ namespace HyperTreeControl
         /// </summary>
         /// <param name="canvas">The graphic canvas.</param>
         public void Draw(DrawingContext dc)
-        {
+        {            
+            
+
             FontFamily __font = new FontFamily("Arial");
             FormattedText __formattedText = new FormattedText(
                _node.Name,
@@ -65,13 +69,17 @@ namespace HyperTreeControl
             _x = __zs.X - (_width / 2) - _node.Size;
             _y = __zs.Y - (__height / 2) - _node.Size;
 
+
             int __sx = __zs.X - (__width / 2) - _node.Size;
             int __sy = _y + (int)__formattedText.OverhangTrailing + ((int)__formattedText.OverhangLeading / 2) + _node.Size;
+
             
             int __space = _node.GetSpace();
             if (__space >= __height)
             {
                 _active = true;
+
+                /*
 
                 StreamGeometry __geometry = new StreamGeometry();
                 __geometry.FillRule = FillRule.EvenOdd;
@@ -90,12 +98,13 @@ namespace HyperTreeControl
                 dc.DrawGeometry(Brushes.LightBlue, new Pen(Brushes.Black, 1), __geometry);
                 Geometry __textGeometry = __formattedText.BuildGeometry(new Point(__sx, __sy));
                 dc.DrawGeometry(Brushes.Black, new Pen(Brushes.Black, 0), __textGeometry);
-
+            */
             }
             else
             {
                 _active = false;
             }
+            
         }
 
         #endregion
