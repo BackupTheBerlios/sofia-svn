@@ -51,26 +51,36 @@ namespace TestHyperTree
             _ht.Width = 300;
             _ht.Margin = new Thickness(10);
 
-            _root.Add(_ht, _r1);
-            _root.Add(_ht, _f);
-            _r1.Add(_ht, _r1f);
-            _r1.Add(_ht, _r1r1);
-            _r1.Add(_ht, _r1r2);
-            _r1r1.Add(_ht, _r1r1f);
+            _ht.Children.Add(_root);
+            _ht.Children.Add(_r1);
+            _ht.Children.Add(_f);
+            _ht.Children.Add(_r1f);
+            _ht.Children.Add(_r1r1);
+            _ht.Children.Add(_r1r2);
+            _ht.Children.Add(_r1r1f);
+
 
             _grid.Children.Add(_ht);
         }
 
         private void SetUp()
         {            
-            _root = new TestNode("root", false);
-            _model = new HtModel(_root);
+            _root = new TestNode("root", false);            
             _r1 = new TestNode("r1", false);
             _f = new TestNode("f");
             _r1f = new TestNode("r1f");
             _r1r1 = new TestNode("r1r1", false);
             _r1r2 = new TestNode("r1r2", false);
-            _r1r1f = new TestNode("r1r1f");                                 
+            _r1r1f = new TestNode("r1r1f");
+
+            _root.Add(_r1);
+            _root.Add(_f);
+            _r1.Add(_r1f);
+            _r1.Add(_r1r1);
+            _r1.Add(_r1r2);
+            _r1r1.Add(_r1r1f);
+
+            _model = new HtModel(_root);    
         }
     }
 
@@ -127,6 +137,11 @@ namespace TestHyperTree
             {
                 return _children;
             }
+        }
+
+        public void Add(IHtNode node)
+        {            
+            _children.Add(node);
         }
 
     }

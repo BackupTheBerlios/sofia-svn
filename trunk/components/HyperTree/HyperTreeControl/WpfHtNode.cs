@@ -8,7 +8,7 @@ using System.Windows.Markup;
 
 namespace HyperTreeControl
 {
-    public abstract class WpfHtNode: Label, IHtNode
+    public abstract class WpfHtNode : Label, IHtNode
     {
         #region IHtNode Members
 
@@ -46,14 +46,9 @@ namespace HyperTreeControl
         {
             get { return null; }
         }
-
-        public virtual void Add(IAddChild parent, IHtNode node)
-        {
-            Children.Add(node);
-            parent.AddChild(this);
-        }
+        
 
         #endregion
-        
+
     }
 }

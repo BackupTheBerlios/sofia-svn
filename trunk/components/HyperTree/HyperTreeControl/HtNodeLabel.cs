@@ -44,7 +44,7 @@ namespace HyperTreeControl
         public void Draw(DrawingContext dc)
         {            
             
-
+            
             FontFamily __font = new FontFamily("Arial");
             FormattedText __formattedText = new FormattedText(
                _node.Name,
@@ -80,7 +80,6 @@ namespace HyperTreeControl
                 _active = true;
 
                 /*
-
                 StreamGeometry __geometry = new StreamGeometry();
                 __geometry.FillRule = FillRule.EvenOdd;
 
@@ -98,7 +97,8 @@ namespace HyperTreeControl
                 dc.DrawGeometry(Brushes.LightBlue, new Pen(Brushes.Black, 1), __geometry);
                 Geometry __textGeometry = __formattedText.BuildGeometry(new Point(__sx, __sy));
                 dc.DrawGeometry(Brushes.Black, new Pen(Brushes.Black, 0), __textGeometry);
-            */
+                 */
+
             }
             else
             {

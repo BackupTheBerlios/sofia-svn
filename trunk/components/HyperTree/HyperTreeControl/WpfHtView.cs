@@ -112,7 +112,7 @@ namespace HyperTreeControl
         protected override void OnRender(DrawingContext dc)
         {
             base.OnRender(dc);
-
+            /*
             if (_image != null)
             {
                 dc.DrawImage(_image.Source, new Rect(0, 0, this.Width, this.Height));
@@ -121,6 +121,7 @@ namespace HyperTreeControl
             _draw.RefreshScreenCoordinates();
             _draw.DrawBranches(dc);
             _draw.DrawNodes(dc);
+             * */
         }
 
         #endregion

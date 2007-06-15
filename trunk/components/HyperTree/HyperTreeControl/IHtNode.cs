@@ -53,8 +53,7 @@ namespace HyperTreeControl
         /// null is interpreted as no image.
         /// </summary>
         Image Image { get; }
-
-        void Add(IAddChild parent, IHtNode node);
+        
     }
 
 }
