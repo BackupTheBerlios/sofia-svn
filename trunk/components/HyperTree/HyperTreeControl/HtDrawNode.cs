@@ -39,10 +39,11 @@ namespace HyperTreeControl
             _node = node;
             _model = model;
 
-            this.Background = Brushes.Red;
-            this.BorderBrush = Brushes.Coral;
+            this.Background = new LinearGradientBrush(Colors.DarkGray, Colors.LightGray, 90);
+            this.BorderBrush = Brushes.White;
             this.BorderThickness = new Thickness(1);
             this.CornerRadius = new CornerRadius(3);
+            this.Opacity = 0.9;
 
             this.Child = new HtNodeLabel(this);
             

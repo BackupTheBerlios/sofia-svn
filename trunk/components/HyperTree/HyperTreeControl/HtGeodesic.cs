@@ -128,7 +128,7 @@ namespace HyperTreeControl
             }
 
             __pathFigures.Add(new PathFigure(new Point(_a.X, _a.Y), __pathSegments, false));
-            dc.DrawGeometry(null, new Pen(Brushes.Black, 1), new PathGeometry(__pathFigures));
+            dc.DrawGeometry(null, new Pen(Brushes.LightGray, 1), new PathGeometry(__pathFigures));
         }
 
         #endregion

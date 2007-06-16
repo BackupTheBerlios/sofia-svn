@@ -49,6 +49,7 @@ namespace TestHyperTree
             _ht = new WpfHtView(_model, _grid);
             _ht.Height = 500;
             _ht.Width = 500;
+            
         }
 
         private void SetUp()

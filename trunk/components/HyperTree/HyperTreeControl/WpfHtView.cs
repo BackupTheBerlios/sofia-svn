@@ -101,19 +101,7 @@ namespace HyperTreeControl
         public void Repaint()
         {
             _draw.InvalidateVisual();
-            /*
-            if (_image != null)
-            {
-                dc.DrawImage(_image.Source, new Rect(0, 0, this.Width, this.Height));
-            }
-            */
-            //_draw.RefreshScreenCoordinates();
-            //_draw.InvalidateVisual();
-            //_draw.DrawBranches(dc);
-            //_draw.DrawNodes(dc);
         }
-
-
 
         #endregion
 
@@ -151,13 +139,21 @@ namespace HyperTreeControl
         public int Height
         {
             get { return (int)_draw.Height; }
-            set { _draw.Height = value; }
+            set
+            {
+                _draw.Height = value;
+                _draw.RefreshScreenCoordinates();
+            }
         }
 
-        public  int Width
+        public int Width
         {
             get { return (int)_draw.Width; }
-            set { _draw.Width = value; }
+            set
+            {
+                _draw.Width = value;
+                _draw.RefreshScreenCoordinates();
+            }
         }
 
         public Rect Insets

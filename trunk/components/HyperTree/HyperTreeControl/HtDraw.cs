@@ -10,11 +10,11 @@ using System.Windows.Markup;
 
 namespace HyperTreeControl
 {
-    public class HtDraw: Canvas
+    public class HtDraw : Canvas
     {
         #region fields
 
-        public static readonly int NBR_FRAMES = 10; // number of intermediates animation frames
+        public static readonly int NBR_FRAMES = 50; // number of intermediates animation frames
 
         private static HtModel _model = null;  // the tree model
         private static IHtView _view = null;  // the view using this drawing model
@@ -44,7 +44,7 @@ namespace HyperTreeControl
 
             _view = view;
             _model = model;
-            
+
             _sOrigin = new HtCoordS();
             _sMax = new HtCoordS();
 
@@ -66,7 +66,7 @@ namespace HyperTreeControl
                 _drawRoot = new HtDrawNodeComposite(null, (HtModelNodeComposite)__root, this);
             }
 
-            this.Background = Brushes.WhiteSmoke;            
+            this.Background = new LinearGradientBrush(Colors.Black, Colors.Indigo, 90);          
         }
 
         #endregion
@@ -143,7 +143,7 @@ namespace HyperTreeControl
         protected override void OnRender(DrawingContext dc)
         {
             this.RefreshScreenCoordinates();
-            base.OnRender(dc);            
+            base.OnRender(dc);
             this.DrawBranches(dc);
             this.DrawNodes(dc);
         }
@@ -230,7 +230,7 @@ namespace HyperTreeControl
             _drawRoot.Restore();
             _view.Repaint();
         }
-        
+
         #endregion
 
         #region Node searching
@@ -269,7 +269,7 @@ namespace HyperTreeControl
         }
 
         #endregion
-    }        
+    }
 
     #region Inner animation thread
 
@@ -335,6 +335,7 @@ namespace HyperTreeControl
             {
                 __zf.X = __zn.X - (__i * __factorX);
                 __zf.Y = __zn.Y - (__i * __factorY);
+
                 _task = new TranslateThread(__zn, __zf);
                 try
                 {

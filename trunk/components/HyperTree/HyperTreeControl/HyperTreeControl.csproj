@@ -118,10 +118,5 @@
     <Content Include="java\TestHTCoord.java" />
     <Content Include="java\TestHTModel.java" />
   </ItemGroup>
-  <ItemGroup>
-    <Page Include="NodeTemplate.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -28,10 +28,8 @@ namespace HyperTreeControl
             this.Content = _node.NodeName;
             this.HorizontalAlignment = HorizontalAlignment.Center;
             this.VerticalAlignment = VerticalAlignment.Center;
-            //this.Background = Brushes.Cyan;
-            //this.Foreground = Brushes.Black;
             this.FontFamily = new FontFamily("Arial");
-            this.FontSize = 10;
+            this.FontSize = 11;
             this.Padding = new Thickness(1);
         }
 
