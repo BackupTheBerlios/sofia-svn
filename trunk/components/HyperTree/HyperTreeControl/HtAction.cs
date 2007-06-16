@@ -33,7 +33,7 @@ namespace HyperTreeControl
 
         #region Mouse handling
 
-        private HtCoordS GetPosition(object sender, MouseButtonEventArgs e)
+        private HtCoordS GetPosition(object sender, MouseEventArgs e)
         {
             IInputElement __relativeTo = sender as IInputElement;
             if (__relativeTo != null)
@@ -53,18 +53,27 @@ namespace HyperTreeControl
         /// <param name="e"></param>
         public void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
-            if (e.MiddleButton == MouseButtonState.Pressed)
-                model.FastMode = true;
-
-            HtCoordS __p = GetPosition(sender, e);
-
-            if (__p != null)
+            if (e.OriginalSource is System.Windows.Controls.TextBlock)
             {
-                startPoint.ProjectionStoE(__p.X, __p.Y, model.SOrigin, model.SMax);
+                HtCoordS __p = GetPosition(sender, e);
 
-                _statusButtonDown = true;
-                clickPoint.X = __p.X;
-                clickPoint.Y = __p.Y;
+                if (__p != null)
+                {
+                    startPoint.ProjectionStoE(__p.X, __p.Y, model.SOrigin, model.SMax);
+
+                    clickPoint.X = __p.X;
+                    clickPoint.Y = __p.Y;
+
+                    if (e.ClickCount > 1)
+                    {
+                        _statusButtonDown = false;
+                        MouseClicked(sender, e);
+                    }
+                    else
+                    {
+                        _statusButtonDown = true;
+                    }
+                }
             }
         }
 
@@ -75,27 +84,23 @@ namespace HyperTreeControl
         /// <param name="e"></param>
         public void MouseUpHandler(object sender, MouseButtonEventArgs e)
         {
-            model.FastMode = false;
             HtDraw.EndTranslation();
 
-             HtCoordS __p = GetPosition(sender, e);
+            HtCoordS __p = GetPosition(sender, e);
 
             if (__p != null)
             {
+                //uncomment this to allow translate to node clicked
                 if (_statusButtonDown)
                 {
-                    _statusButtonDown = false;
                     if (__p.X - clickPoint.X < 5 && __p.Y - clickPoint.Y < 5)
                     {
                         this.MouseClicked(sender, e);
                     }
-                    else
-                    {
-                        this.MouseDragged(sender, e);
-
-                    }
                 }
             }
+
+            _statusButtonDown = false;
         }
 
         /// <summary> Called when a user clicked on the hyperbolic tree.
@@ -146,14 +151,18 @@ namespace HyperTreeControl
         {
             if (_statusButtonDown == true)
             {
-                Point __p = e.GetPosition((IInputElement)(sender));
+                /*
+                Point __p = e.GetPosition((IInputElement)(e.OriginalSource));
                 HtCoordS __zs = new HtCoordS((int)__p.X, (int)__p.Y);
+                 */
+                HtCoordS __p = this.GetPosition(sender, e);
 
-                if (__zs != null)
+
+                if (__p != null)
                 {
                     if (startPoint.IsValid)
                     {
-                        endPoint.ProjectionStoE(__zs.X, __zs.Y, model.SOrigin, model.SMax);
+                        endPoint.ProjectionStoE(__p.X, __p.Y, model.SOrigin, model.SMax);
                         if (endPoint.IsValid)
                         {
                             HtDraw.Translate(startPoint, endPoint);

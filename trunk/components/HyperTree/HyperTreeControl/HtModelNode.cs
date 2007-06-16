@@ -56,7 +56,7 @@ namespace HyperTreeControl
     {
       get
       {
-        return _node.Name;
+        return _node.NodeName;
       }
     }
 

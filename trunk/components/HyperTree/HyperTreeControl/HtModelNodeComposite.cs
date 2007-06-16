@@ -39,7 +39,7 @@ namespace HyperTreeControl
       _children = new List<HtModelNode>();
 
       HtModelNode __child = null;
-      foreach (IHtNode __childNode in node.Children)
+      foreach (IHtNode __childNode in node.ChildNodes)
       {
         if (__childNode.IsLeaf)
         {

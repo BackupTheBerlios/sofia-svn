@@ -46,21 +46,9 @@ namespace TestHyperTree
         public void Window1_Loaded(object sender, RoutedEventArgs e)
         {            
 
-            _ht = new WpfHtView(_model);
-            _ht.Height = 300;
-            _ht.Width = 300;
-            _ht.Margin = new Thickness(10);
-
-            _ht.Children.Add(_root);
-            _ht.Children.Add(_r1);
-            _ht.Children.Add(_f);
-            _ht.Children.Add(_r1f);
-            _ht.Children.Add(_r1r1);
-            _ht.Children.Add(_r1r2);
-            _ht.Children.Add(_r1r1f);
-
-
-            _grid.Children.Add(_ht);
+            _ht = new WpfHtView(_model, _grid);
+            _ht.Height = 500;
+            _ht.Width = 500;
         }
 
         private void SetUp()
@@ -123,7 +111,7 @@ namespace TestHyperTree
 
         /// <summary> Gets the name.
         /// </summary>
-        public override string Name
+        public override string NodeName
         {
             get
             {
@@ -131,7 +119,7 @@ namespace TestHyperTree
             }
         }
 
-        public override List<IHtNode> Children
+        public override List<IHtNode> ChildNodes
         {
             get
             {

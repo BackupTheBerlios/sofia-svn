@@ -4,10 +4,11 @@ using System.Text;
 using System.Windows.Media;
 using System.Windows;
 using System.Windows.Controls;
+using System.Globalization;
 
 namespace HyperTreeControl
 {
-    public class HtDrawNode: Label
+    public class HtDrawNode: Border
     {
         #region fields
 
@@ -21,9 +22,7 @@ namespace HyperTreeControl
         private HtDrawNodeComposite _father = null;  // father of this node
         private HtDrawNode _brother = null;  // brother of this node
 
-        private HtNodeLabel _control = null;  // UI control of the node
-
-        private bool _fastMode = false; // fast mode
+        private bool _active = false; // should be drawed ?
 
         #endregion
 
@@ -40,14 +39,21 @@ namespace HyperTreeControl
             _node = node;
             _model = model;
 
-            _control = new HtNodeLabel(this);
+            this.Background = Brushes.Red;
+            this.BorderBrush = Brushes.Coral;
+            this.BorderThickness = new Thickness(1);
+            this.CornerRadius = new CornerRadius(3);
 
+            this.Child = new HtNodeLabel(this);
+            
             _ze = new HtCoordE(node.Coordinates);
             _oldZe = new HtCoordE(_ze);
             _zs = new HtCoordS();
 
             // store this object in IHtNode -> HtDrawNode mapping
             model.MapNode(node.Node, this);
+
+            model.Children.Add(this);
         }
 
         #endregion
@@ -91,7 +97,7 @@ namespace HyperTreeControl
 
         /// <summary> Gets the name of this node.
         /// </summary>
-        public string Name
+        public string NodeName
         {
             get
             {
@@ -189,12 +195,44 @@ namespace HyperTreeControl
         /// <param name="canvas">The graphic canvas.</param>
         public virtual void DrawNodes(DrawingContext dc)
         {
-            if (_fastMode == false)
+            FontFamily __font = new FontFamily("Arial");
+            FormattedText __formattedText = new FormattedText(
+               this.NodeName,
+               CultureInfo.CurrentCulture,
+               FlowDirection.LeftToRight,
+               new Typeface(
+                   __font,
+                   FontStyles.Normal,
+                   FontWeights.Light,
+                   FontStretches.Normal),
+               10,
+               Brushes.Black
+               );
+
+            int __height = (int)__formattedText.Height;
+            int __width = (int)__formattedText.Width;
+            this.Height = __height + 2 * this.Size;
+            this.Width = __width + 10 + 2 * this.Size;
+            HtCoordS __zs = this.ScreenCoordinates;
+
+            double __x = __zs.X - (this.Width / 2) - this.Size;
+            double __y = __zs.Y - (this.Height / 2) - this.Size;
+
+            int __space = this.GetSpace();
+            if (__space >= __height)
             {
-                _control.Draw(dc);
+                _active = true;
+                this.Visibility = Visibility.Visible;
+                Canvas.SetLeft(this, __x);
+                Canvas.SetTop(this, __y);
+            }
+            else
+            {
+                _active = false;
+                this.Visibility = Visibility.Collapsed;
             }
         }
-
+        
         /// <summary> Returns the minimal distance between this node
         /// and his father and his brother.
         /// </summary>
@@ -272,21 +310,6 @@ namespace HyperTreeControl
             _oldZe.Copy(_ze);
         }
 
-        /// <summary> Sets the fast mode, where nodes are no more drawed.
-        /// </summary>
-        public virtual bool FastMode
-        {
-            get
-            {
-                return _fastMode;
-            }
-
-            set
-            {
-                _fastMode = value;
-            }
-        }
-
         #endregion
 
         #region Node searching
@@ -298,13 +321,41 @@ namespace HyperTreeControl
         /// <returns>the searched <see cref="HtDrawNode"/> if found; <code>null</code> otherwise.</returns>
         public virtual HtDrawNode FindNode(HtCoordS zs)
         {
-            if (_control.Contains(zs))
+            if (this.Contains(zs))
             {
                 return this;
             }
             else
             {
                 return null;
+            }
+        }
+
+        #endregion
+
+        #region Zone containing
+
+        /// <summary> Is the given <see cref="HtCoordS"/> within this control ?
+        /// </summary>
+        /// <param name="zs">The given point.</param>
+        /// <returns><code>true</code> if it is, <code>false</code> otherwise.</returns>
+        public bool Contains(HtCoordS zs)
+        {
+            if (_active)
+            {
+                if ((zs.X >= Canvas.GetLeft(this)) && (zs.X <= (Canvas.GetLeft(this) + this.Width)) &&
+                    (zs.Y >= Canvas.GetTop(this)) && (zs.Y <= (Canvas.GetTop(this) + this.Height)))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return this.ScreenCoordinates.Contains(zs);
             }
         }
 
@@ -317,7 +368,7 @@ namespace HyperTreeControl
         /// <returns>A string representation of the object.</returns>
         public override string ToString()
         {
-            string __result = Name +
+            string __result = NodeName +
                             "\n\t" + _ze +
                             "\n\t" + _zs;
             return __result;

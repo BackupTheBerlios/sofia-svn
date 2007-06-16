@@ -21,7 +21,7 @@ namespace HyperTreeControl
         ///All objects contained in the Enumeration should implements IHtNode.
         ///<returns>an Enumeration containing childs of this node</returns>
         /// </summary>    
-        List<IHtNode> Children { get; }
+        List<IHtNode> ChildNodes { get; }
 
         /// <summary> Checks if this node is a leaf or not. 
         ///A node could have no children and still not be a leaf.
@@ -32,7 +32,7 @@ namespace HyperTreeControl
         /// <summary> Gets the name of this node.
         ///Used to display a label in the hyperbolic tree.     
         /// </summary>
-        string Name { get; }
+        string NodeName { get; }
 
         /// <summary> Gets the color of the node.
         ///Used in the drawing of the node label.

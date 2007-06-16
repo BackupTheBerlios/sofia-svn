@@ -91,6 +91,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="SmartBorder.cs" />
     <Compile Include="WpfHtView.cs" />
     <AppDesigner Include="Properties\" />
   </ItemGroup>
@@ -116,6 +117,11 @@
     <Content Include="java\TestAllHT.java" />
     <Content Include="java\TestHTCoord.java" />
     <Content Include="java\TestHTModel.java" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="NodeTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

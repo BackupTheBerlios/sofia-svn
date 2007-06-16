@@ -8,11 +8,11 @@ using System.Windows.Markup;
 
 namespace HyperTreeControl
 {
-    public abstract class WpfHtNode : Label, IHtNode
+    public abstract class WpfHtNode : StackPanel, IHtNode
     {
         #region IHtNode Members
 
-        public virtual List<IHtNode> Children
+        public virtual List<IHtNode> ChildNodes
         {
             get { throw new Exception("The method or operation is not implemented."); }
         }
@@ -22,7 +22,7 @@ namespace HyperTreeControl
             get { throw new Exception("The method or operation is not implemented."); }
         }
 
-        public virtual string Name
+        public virtual string NodeName
         {
             get { throw new Exception("The method or operation is not implemented."); }
         }
@@ -34,7 +34,7 @@ namespace HyperTreeControl
 
         public int Size
         {
-            get { return 1; }
+            get { return 4; }
         }
 
         public int BorderSize
@@ -46,7 +46,6 @@ namespace HyperTreeControl
         {
             get { return null; }
         }
-        
 
         #endregion
 

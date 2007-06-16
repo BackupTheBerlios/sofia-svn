@@ -20,7 +20,7 @@ namespace HyperTreeControl
 
         private static readonly double EPSILON = 1.0E-10; // epsilon
 
-        private DrawType _type = DrawType.Arc; // type of the geodesic
+        private DrawType _type = DrawType.Line; // type of the geodesic
 
         private HtCoordE _za = null; // first point (Euclidian)
         private HtCoordE _zb = null; // second point (Euclidian)
@@ -118,18 +118,17 @@ namespace HyperTreeControl
             switch (_type)
             {
                 case DrawType.Line:                    
-                    __pathSegments.Add(new LineSegment(new Point(_b.X, _b.Y), false));
+                    __pathSegments.Add(new LineSegment(new Point(_b.X, _b.Y), true));                    
                     break;
                 case DrawType.Arc:
-                    __pathSegments.Add(new QuadraticBezierSegment(new Point(_c.X, _c.Y), new Point(_b.X, _b.Y), false));
-                    
+                    __pathSegments.Add(new QuadraticBezierSegment(new Point(_c.X, _c.Y), new Point(_b.X, _b.Y), true));
                     break;
                 default:
                     break;
             }
 
-            __pathFigures.Add(new PathFigure(new Point(_a.X, _a.Y), __pathSegments, true));
-            dc.DrawGeometry(Brushes.Black, new Pen(Brushes.Black, 1), new PathGeometry(__pathFigures));
+            __pathFigures.Add(new PathFigure(new Point(_a.X, _a.Y), __pathSegments, false));
+            dc.DrawGeometry(null, new Pen(Brushes.Black, 1), new PathGeometry(__pathFigures));
         }
 
         #endregion

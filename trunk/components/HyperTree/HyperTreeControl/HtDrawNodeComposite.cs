@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows;
 
 namespace HyperTreeControl
 {
@@ -11,7 +12,7 @@ namespace HyperTreeControl
         #region fields
 
         private HtModelNodeComposite _node = null; // encapsulated HtModelNode
-        private List<HtDrawNode> _children = null; // children of this node
+        private List<HtDrawNode> _childNodes = null; // children of this node
         private Dictionary<HtDrawNode, HtGeodesic> _geodesics = null; // geodesics linking the children
 
         #endregion
@@ -28,7 +29,7 @@ namespace HyperTreeControl
         {
 
             _node = node;
-            _children = new List<HtDrawNode>();
+            _childNodes = new List<HtDrawNode>();
             _geodesics = new Dictionary<HtDrawNode, HtGeodesic>();
 
             HtDrawNode __child = null;
@@ -73,11 +74,11 @@ namespace HyperTreeControl
 
         /// <summary> Gets the children of this node.
         /// </summary>
-        public List<HtDrawNode> Children
+        public List<HtDrawNode> ChildNodes
         {
             get
             {
-                return _children;
+                return _childNodes;
             }
         }
 
@@ -86,7 +87,7 @@ namespace HyperTreeControl
         /// <param name="child">The child.</param>
         private void AddChild(HtDrawNode child)
         {
-            _children.Add(child);
+            _childNodes.Add(child);
             _geodesics.Add(child, new HtGeodesic(Coordinates, child.Coordinates));
         }
 
@@ -103,7 +104,7 @@ namespace HyperTreeControl
         {
             base.RefreshScreenCoordinates(sOrigin, sMax);
 
-            foreach (HtDrawNode child in _children)
+            foreach (HtDrawNode child in _childNodes)
             {
                 child.RefreshScreenCoordinates(sOrigin, sMax);
                 HtGeodesic geod = _geodesics[child];
@@ -125,7 +126,7 @@ namespace HyperTreeControl
         /// <param name="canvas">The graphic canvas.</param>
         public override void DrawBranches(DrawingContext dc)
         {
-            foreach (HtDrawNode child in _children)
+            foreach (HtDrawNode child in _childNodes)
             {
                 HtGeodesic __geod = _geodesics[child];
                 if (__geod != null)
@@ -141,14 +142,11 @@ namespace HyperTreeControl
         /// <param name="canvas">The graphic canvas.</param>
         public override void DrawNodes(DrawingContext dc)
         {
-            if (FastMode == false)
-            {
-                base.DrawNodes(dc);
+            base.DrawNodes(dc);
 
-                foreach (HtDrawNode __child in _children)
-                {
-                    __child.DrawNodes(dc);
-                }
+            foreach (HtDrawNode __child in _childNodes)
+            {
+                __child.DrawNodes(dc);
             }
         }
 
@@ -160,9 +158,9 @@ namespace HyperTreeControl
         {
             int __space = base.GetSpace();
 
-            if (_children.Count > 0)
+            if (_childNodes.Count > 0)
             {
-                HtDrawNode __child = _children[0];
+                HtDrawNode __child = _childNodes[0];
                 HtCoordS __zC = __child.ScreenCoordinates;
                 int __dC = _zs.GetDistance(__zC);
 
@@ -192,7 +190,7 @@ namespace HyperTreeControl
         {
             base.Translate(t);
 
-            foreach (HtDrawNode __child in _children)
+            foreach (HtDrawNode __child in _childNodes)
             {
                 __child.Translate(t);
                 HtGeodesic __geod = _geodesics[__child];
@@ -202,7 +200,7 @@ namespace HyperTreeControl
                 }
             }
         }
-        
+
         /// <summary> Transform this node by the given transformation.
         /// </summary>
         /// <param name="t">The transformation.</param>
@@ -210,7 +208,7 @@ namespace HyperTreeControl
         {
             base.Transform(t);
 
-            foreach (HtDrawNode __child in _children)
+            foreach (HtDrawNode __child in _childNodes)
             {
                 __child.Transform(t);
                 HtGeodesic __geod = _geodesics[__child];
@@ -227,7 +225,7 @@ namespace HyperTreeControl
         {
             base.EndTranslation();
 
-            foreach (HtDrawNode __child in _children)
+            foreach (HtDrawNode __child in _childNodes)
             {
                 __child.EndTranslation();
             }
@@ -239,30 +237,13 @@ namespace HyperTreeControl
         {
             base.Restore();
 
-            foreach (HtDrawNode __child in _children)
+            foreach (HtDrawNode __child in _childNodes)
             {
                 __child.Restore();
                 HtGeodesic __geod = _geodesics[__child];
                 if (__geod != null)
                 {
                     __geod.Rebuild();
-                }
-            }
-        }
-
-        /// <summary> Sets the fast mode, where nodes are no more drawed.
-        /// </summary>
-        public override bool FastMode
-        {
-            get
-            {
-                return base.FastMode;
-            }
-            set
-            {
-                foreach (HtDrawNode child in _children)
-                {
-                    child.FastMode = value;
                 }
             }
         }
@@ -285,7 +266,7 @@ namespace HyperTreeControl
             }
             else
             {
-                foreach (HtDrawNode __child in _children)
+                foreach (HtDrawNode __child in _childNodes)
                 {
                     __result = __child.FindNode(zs);
                     if (__result != null)
@@ -300,7 +281,7 @@ namespace HyperTreeControl
 
         #endregion
 
-        #region ToString 
+        #region ToString
 
         /// <summary> Returns a string representation of the object.
         /// </summary>
@@ -309,9 +290,9 @@ namespace HyperTreeControl
         {
             string __result = base.ToString();
             __result += "\n\tChildren :";
-            foreach (HtDrawNode __child in _children)
+            foreach (HtDrawNode __child in _childNodes)
             {
-                __result += "\n\t-> " + __child.Name;
+                __result += "\n\t-> " + __child.NodeName;
             }
 
             return __result;

@@ -6,17 +6,19 @@ using System.Windows.Media;
 using System.Windows.Input;
 using System.Windows;
 using System.Windows.Shapes;
+using System.Windows.Markup;
 
 namespace HyperTreeControl
 {
-    public partial class WpfHtView : Canvas, IHtView
+    public partial class WpfHtView : IHtView
     {
 
         #region fields
 
-        private HtModel _model = null; // the tree model represented
-        private HtDraw _draw = null; // the drawing model
-        private HtAction _action = null; // action manager
+        private HtModel _model; // the tree model represented
+        private HtDraw _draw; // the drawing model
+        private HtAction _action; // action manager
+        private IAddChild _visualRoot;
 
         private Image _image = null;
 
@@ -27,18 +29,15 @@ namespace HyperTreeControl
         /// <summary> Constructor. 
         /// </summary>
         /// <param name="model">The tree model to view.</param>
-        public WpfHtView(HtModel model)
+        public WpfHtView(HtModel model, IAddChild visualRoot)
         {
-            this.Margin = new System.Windows.Thickness(250);
-
             _model = model;
             _draw = new HtDraw(_model, this);
+            _visualRoot = visualRoot;
             _action = new HtAction(_draw);
             this.StartMouseListening();
-        }
 
-        public WpfHtView()
-        {
+            _visualRoot.AddChild(_draw);
         }
 
         #endregion
@@ -52,8 +51,8 @@ namespace HyperTreeControl
         /// <returns>the node containing this event; could be <code>null</code> if no node was found.</returns>
         public IHtNode GetNodeUnderTheMouse(MouseEventArgs e)
         {
-            int x = (int)e.GetPosition(this).X;
-            int y = (int)e.GetPosition(this).Y;
+            int x = (int)e.GetPosition(_draw).X;
+            int y = (int)e.GetPosition(_draw).Y;
 
             HtDrawNode node = _draw.FindNode(new HtCoordS(x, y));
             if (node != null)
@@ -71,22 +70,20 @@ namespace HyperTreeControl
 
         #region Tooltip
 
-        /**
-     * 
-     * Returns the tooltip to be displayed.
-     * @param event    the event triggering the tooltip
-     * @return         the String to be displayed
-     */
 
+        /// <summary> Returns the tooltip to be displayed
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns> 
         public string GetToolTipText(MouseEventArgs e)
         {
-            int x = (int)e.GetPosition(this).X;
-            int y = (int)e.GetPosition(this).Y;
+            int x = (int)e.GetPosition(_draw).X;
+            int y = (int)e.GetPosition(_draw).Y;
 
             HtDrawNode node = _draw.FindNode(new HtCoordS(x, y));
             if (node != null)
             {
-                return node.Name;
+                return node.NodeName;
             }
             else
             {
@@ -103,26 +100,20 @@ namespace HyperTreeControl
         /// <param name="drawingContext"></param>
         public void Repaint()
         {
-            base.InvalidateVisual();
-        }
-
-        /// <summary>Overrides the <see cref="System.Windows.FrameworkElement.OnRender"/> method.
-        /// </summary>
-        /// <param name="drawingContext"></param>
-        protected override void OnRender(DrawingContext dc)
-        {
-            base.OnRender(dc);
+            _draw.InvalidateVisual();
             /*
             if (_image != null)
             {
                 dc.DrawImage(_image.Source, new Rect(0, 0, this.Width, this.Height));
             }
-
-            _draw.RefreshScreenCoordinates();
-            _draw.DrawBranches(dc);
-            _draw.DrawNodes(dc);
-             * */
+            */
+            //_draw.RefreshScreenCoordinates();
+            //_draw.InvalidateVisual();
+            //_draw.DrawBranches(dc);
+            //_draw.DrawNodes(dc);
         }
+
+
 
         #endregion
 
@@ -132,24 +123,24 @@ namespace HyperTreeControl
         /// </summary>
         public void StopMouseListening()
         {
-            Mouse.RemoveMouseDownHandler(this, _action.MouseDownHandler);
-            Mouse.RemoveMouseUpHandler(this, _action.MouseUpHandler);
-            Mouse.RemoveMouseMoveHandler(this, _action.MouseMoveHandler);                        
-        }        
+            Mouse.RemoveMouseDownHandler(_draw, _action.MouseDownHandler);
+            Mouse.RemoveMouseUpHandler(_draw, _action.MouseUpHandler);
+            Mouse.RemoveMouseMoveHandler(_draw, _action.MouseMoveHandler);
+        }
 
         /// <summary> Starts the listening of mouse events.
         /// </summary>
         public void StartMouseListening()
         {
-            Mouse.AddMouseDownHandler(this, _action.MouseDownHandler);
-            Mouse.AddMouseUpHandler(this, _action.MouseUpHandler);
-            Mouse.AddMouseMoveHandler(this, _action.MouseMoveHandler);
-            //this.PreviewMouseDown += _action.MouseDownHandler;
+            Mouse.AddMouseDownHandler(_draw, _action.MouseDownHandler);
+            Mouse.AddMouseUpHandler(_draw, _action.MouseUpHandler);
+            Mouse.AddMouseMoveHandler(_draw, _action.MouseMoveHandler);
         }
 
         #endregion
 
         #region IHtView Members
+
 
         public void TranslateToOrigin(IHtNode node)
         {
@@ -157,21 +148,21 @@ namespace HyperTreeControl
             _draw.TranslateToOrigin(__drawNode);
         }
 
-        public new int Height
+        public int Height
         {
-            get { return (int)base.Height; }
-            set { base.Height = value; }
+            get { return (int)_draw.Height; }
+            set { _draw.Height = value; }
         }
 
-        public new int Width
+        public  int Width
         {
-            get { return (int)base.Width; }
-            set { base.Width = value; }
+            get { return (int)_draw.Width; }
+            set { _draw.Width = value; }
         }
 
         public Rect Insets
         {
-            get { return new Rect(new Size(base.Width, base.Height)); }
+            get { return new Rect(new Size(_draw.Width, _draw.Height)); }
         }
 
         public Image Image
@@ -188,6 +179,8 @@ namespace HyperTreeControl
         }
 
         #endregion
+
+
     }
 
 }

@@ -6,10 +6,11 @@ using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Threading;
 using System.Windows.Media;
+using System.Windows.Markup;
 
 namespace HyperTreeControl
 {
-    public class HtDraw
+    public class HtDraw: Canvas
     {
         #region fields
 
@@ -20,13 +21,12 @@ namespace HyperTreeControl
         private static HtDrawNode _drawRoot = null;  // the root of the drawing tree 
         private static double[] _ray = null;
 
-        private HtCoordS sOrigin = null;  // origin of the screen plane
-        private HtCoordS sMax = null;  // max point in the screen plane 
+        private HtCoordS _sOrigin = null;  // origin of the screen plane
+        private HtCoordS _sMax = null;  // max point in the screen plane 
 
-        private bool _fastMode = false; // fast mode
         private Dictionary<IHtNode, HtDrawNode> _drawToHTNodeMap;
 
-        private static object lockObject = new object();
+        private static object _lockObject = new object();
 
         #endregion
 
@@ -44,9 +44,9 @@ namespace HyperTreeControl
 
             _view = view;
             _model = model;
-            HtModelNode root = model.Root;
-            sOrigin = new HtCoordS();
-            sMax = new HtCoordS();
+            
+            _sOrigin = new HtCoordS();
+            _sMax = new HtCoordS();
 
             _ray = new double[4];
             _ray[0] = model.Length;
@@ -56,14 +56,17 @@ namespace HyperTreeControl
                 _ray[i] = (_ray[0] + _ray[i - 1]) / (1 + (_ray[0] * _ray[i - 1]));
             }
 
-            if (root.IsLeaf)
+            HtModelNode __root = model.Root;
+            if (__root.IsLeaf)
             {
-                _drawRoot = new HtDrawNode(null, root, this);
+                _drawRoot = new HtDrawNode(null, __root, this);
             }
             else
             {
-                _drawRoot = new HtDrawNodeComposite(null, (HtModelNodeComposite)root, this);
+                _drawRoot = new HtDrawNodeComposite(null, (HtModelNodeComposite)__root, this);
             }
+
+            this.Background = Brushes.WhiteSmoke;            
         }
 
         #endregion
@@ -103,12 +106,11 @@ namespace HyperTreeControl
         /// </summary>
         public void RefreshScreenCoordinates()
         {
-            Rect insets = _view.Insets;
-            sMax.X = (int)((insets.Right - insets.Left) / 2);
-            sMax.Y = (int)((insets.Bottom - insets.Top) / 2);
-            sOrigin.X = sMax.X + (int)insets.Left;
-            sOrigin.Y = sMax.Y + (int)insets.Top;
-            _drawRoot.RefreshScreenCoordinates(sOrigin, sMax);
+            _sMax.X = (int)((this.Width) / 2);
+            _sMax.Y = (int)((this.Height) / 2);
+            _sOrigin.X = _sMax.X + 0;
+            _sOrigin.Y = _sMax.Y + 0;
+            _drawRoot.RefreshScreenCoordinates(_sOrigin, _sMax);
         }
 
         /// <summary>
@@ -118,7 +120,7 @@ namespace HyperTreeControl
         {
             get
             {
-                return sOrigin;
+                return _sOrigin;
             }
         }
 
@@ -130,13 +132,21 @@ namespace HyperTreeControl
         {
             get
             {
-                return sMax;
+                return _sMax;
             }
         }
 
         #endregion
 
         #region Drawing
+
+        protected override void OnRender(DrawingContext dc)
+        {
+            this.RefreshScreenCoordinates();
+            base.OnRender(dc);            
+            this.DrawBranches(dc);
+            this.DrawNodes(dc);
+        }
 
         /// <summary>
         ///Draws the branches of the hyperbolic tree.
@@ -166,7 +176,7 @@ namespace HyperTreeControl
         /// <param name="ze">The second coordinates.</param>
         public static void Translate(HtCoordE zs, HtCoordE ze)
         {
-            lock (lockObject)
+            lock (_lockObject)
             {
                 HtCoordE __zo = new HtCoordE(_drawRoot.OldCoordinates);
                 __zo.X = -__zo.X;
@@ -196,7 +206,7 @@ namespace HyperTreeControl
         /// </summary>
         public static void EndTranslation()
         {
-            lock (lockObject)
+            lock (_lockObject)
             {
                 _drawRoot.EndTranslation();
             }
@@ -220,25 +230,7 @@ namespace HyperTreeControl
             _drawRoot.Restore();
             _view.Repaint();
         }
-
-        /// <summary> Sets the fast mode, where nodes are no more drawed.
-        /// </summary>
-        public bool FastMode
-        {
-            set
-            {
-                if (value != _fastMode)
-                {
-                    _fastMode = value;
-                    _drawRoot.FastMode = value;
-                    if (value == false)
-                    {
-                        _view.Repaint();
-                    }
-                }
-            }
-        }
-
+        
         #endregion
 
         #region Node searching
