@@ -19,8 +19,6 @@ namespace HyperTreeControl
 
         int Width { get; }
 
-        Rect Insets { get; }
-
         IHtNode GetNodeUnderTheMouse(MouseEventArgs e);
 
         void TranslateToOrigin(IHtNode node);

@@ -143,6 +143,7 @@ namespace HyperTreeControl
             {
                 _draw.Height = value;
                 _draw.RefreshScreenCoordinates();
+                _draw.InvalidateMeasure();
             }
         }
 
@@ -153,12 +154,8 @@ namespace HyperTreeControl
             {
                 _draw.Width = value;
                 _draw.RefreshScreenCoordinates();
+                _draw.InvalidateMeasure();
             }
-        }
-
-        public Rect Insets
-        {
-            get { return new Rect(new Size(_draw.Width, _draw.Height)); }
         }
 
         public Image Image

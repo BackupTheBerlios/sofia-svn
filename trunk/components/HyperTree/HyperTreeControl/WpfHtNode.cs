@@ -34,7 +34,7 @@ namespace HyperTreeControl
 
         public int Size
         {
-            get { return 4; }
+            get { return 5; }
         }
 
         public int BorderSize

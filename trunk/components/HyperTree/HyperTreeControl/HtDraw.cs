@@ -66,7 +66,7 @@ namespace HyperTreeControl
                 _drawRoot = new HtDrawNodeComposite(null, (HtModelNodeComposite)__root, this);
             }
 
-            this.Background = new LinearGradientBrush(Colors.Black, Colors.Indigo, 90);          
+            this.Background = new LinearGradientBrush(Colors.Black, Colors.DarkBlue, 90);          
         }
 
         #endregion

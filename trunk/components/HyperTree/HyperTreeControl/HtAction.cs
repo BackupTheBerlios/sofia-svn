@@ -59,6 +59,22 @@ namespace HyperTreeControl
 
                 if (__p != null)
                 {
+                   
+                    if (sender is HtDraw)
+                    {
+                        HtDraw __htDraw = ((HtDraw)sender);
+                        HtDrawNode __node = __htDraw.FindNode(__p);
+
+                        if (__node != null)
+                            __node.RenderIsPressed = true;
+                        else
+                            foreach (HtDrawNode __n in __htDraw.Children)
+                            {
+                                __n.RenderIsPressed = false;
+                            }
+
+                    }
+
                     startPoint.ProjectionStoE(__p.X, __p.Y, model.SOrigin, model.SMax);
 
                     clickPoint.X = __p.X;
@@ -90,6 +106,21 @@ namespace HyperTreeControl
 
             if (__p != null)
             {
+                if (sender is HtDraw)
+                {
+                    HtDraw __htDraw = ((HtDraw)sender);
+                    HtDrawNode __node = __htDraw.FindNode(__p);
+
+                    if (__node != null)
+                        __node.RenderIsPressed = false;
+                    else
+                        foreach (HtDrawNode __n in __htDraw.Children)
+                        {
+                            __n.RenderIsPressed = false;
+                        }
+
+                }
+
                 //uncomment this to allow translate to node clicked
                 if (_statusButtonDown)
                 {
@@ -125,40 +156,29 @@ namespace HyperTreeControl
             }
         }
 
-        /// <summary> Called when a used drag the mouse on the hyperbolic tree.
-        /// Used to translate the hypertree, thus moving the focus.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void MouseDragged(object sender, MouseButtonEventArgs e)
-        {
-            HtCoordS __p = GetPosition(sender, e);
-
-            if (__p != null)
-            {
-                if (startPoint.IsValid)
-                {
-                    endPoint.ProjectionStoE(__p.X, __p.Y, model.SOrigin, model.SMax);
-                    if (endPoint.IsValid)
-                    {
-                        HtDraw.Translate(startPoint, endPoint);
-                    }
-                }
-            }
-        }
 
         public void MouseMoveHandler(object sender, MouseEventArgs e)
         {
-            if (_statusButtonDown == true)
+            HtCoordS __p = this.GetPosition(sender, e);
+            if (__p != null)
             {
-                /*
-                Point __p = e.GetPosition((IInputElement)(e.OriginalSource));
-                HtCoordS __zs = new HtCoordS((int)__p.X, (int)__p.Y);
-                 */
-                HtCoordS __p = this.GetPosition(sender, e);
 
+                if (sender is HtDraw)
+                {
+                    HtDraw __htDraw = ((HtDraw)sender);
+                    HtDrawNode __node = __htDraw.FindNode(__p);
 
-                if (__p != null)
+                    if (__node != null)
+                        __node.RenderIsMouseOver = true;
+                    else
+                        foreach (HtDrawNode __n in __htDraw.Children)
+                        {
+                            __n.RenderIsMouseOver = false;
+                        }
+
+                }
+
+                if (_statusButtonDown == true)
                 {
                     if (startPoint.IsValid)
                     {

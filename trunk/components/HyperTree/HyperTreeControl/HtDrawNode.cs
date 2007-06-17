@@ -5,10 +5,11 @@ using System.Windows.Media;
 using System.Windows;
 using System.Windows.Controls;
 using System.Globalization;
+using WiredPrairie.Decorators;
 
 namespace HyperTreeControl
 {
-    public class HtDrawNode: Border
+    public class HtDrawNode: SmartBorder
     {
         #region fields
 
@@ -39,10 +40,10 @@ namespace HyperTreeControl
             _node = node;
             _model = model;
 
-            this.Background = new LinearGradientBrush(Colors.DarkGray, Colors.LightGray, 90);
-            this.BorderBrush = Brushes.White;
-            this.BorderThickness = new Thickness(1);
-            this.CornerRadius = new CornerRadius(3);
+            //this.Background = new LinearGradientBrush(Colors.DarkGray, Colors.LightGray, 90);
+            //this.BorderBrush = Brushes.White;
+            //this.BorderThickness = new Thickness(1);
+            //this.CornerRadius = new CornerRadius(3);
             this.Opacity = 0.9;
 
             this.Child = new HtNodeLabel(this);
