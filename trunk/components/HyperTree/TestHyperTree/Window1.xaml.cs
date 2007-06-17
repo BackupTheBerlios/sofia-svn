@@ -44,17 +44,21 @@ namespace TestHyperTree
         }
 
         public void Window1_Loaded(object sender, RoutedEventArgs e)
-        {            
+        {
+
+            this.Width = 500;
+            this.Height = 500;
+
 
             _ht = new WpfHtView(_model, _grid);
             _ht.Height = 500;
             _ht.Width = 500;
-            
+
         }
 
         private void SetUp()
-        {            
-            _root = new TestNode("root", false);            
+        {
+            _root = new TestNode("root", false);
             _r1 = new TestNode("r1", false);
             _f = new TestNode("f");
             _r1f = new TestNode("r1f");
@@ -69,7 +73,7 @@ namespace TestHyperTree
             _r1.Add(_r1r2);
             _r1r1.Add(_r1r1f);
 
-            _model = new HtModel(_root);    
+            _model = new HtModel(_root);
         }
     }
 
@@ -129,7 +133,7 @@ namespace TestHyperTree
         }
 
         public void Add(IHtNode node)
-        {            
+        {
             _children.Add(node);
         }
 
