@@ -100,8 +100,7 @@ namespace HyperTreeControl
         /// <param name="e"></param>
         public void MouseUpHandler(object sender, MouseButtonEventArgs e)
         {
-            HtDraw.EndTranslation();
-
+           
             HtCoordS __p = GetPosition(sender, e);
 
             if (__p != null)
@@ -119,19 +118,20 @@ namespace HyperTreeControl
                             __n.RenderIsPressed = false;
                         }
 
-                }
+                    __htDraw.EndTranslation();
 
-                //uncomment this to allow translate to node clicked
-                if (_statusButtonDown)
-                {
-                    if (__p.X - clickPoint.X < 5 && __p.Y - clickPoint.Y < 5)
+                    //uncomment this to allow translate to node clicked
+                    if (_statusButtonDown)
                     {
-                        this.MouseClicked(sender, e);
+                        if (__p.X - clickPoint.X < 5 && __p.Y - clickPoint.Y < 5)
+                        {
+                            this.MouseClicked(sender, e);
+                        }
                     }
                 }
-            }
 
-            _statusButtonDown = false;
+                _statusButtonDown = false;
+            }
         }
 
         /// <summary> Called when a user clicked on the hyperbolic tree.
@@ -176,16 +176,15 @@ namespace HyperTreeControl
                             __n.RenderIsMouseOver = false;
                         }
 
-                }
-
-                if (_statusButtonDown == true)
-                {
-                    if (startPoint.IsValid)
+                    if (_statusButtonDown == true)
                     {
-                        endPoint.ProjectionStoE(__p.X, __p.Y, model.SOrigin, model.SMax);
-                        if (endPoint.IsValid)
+                        if (startPoint.IsValid)
                         {
-                            HtDraw.Translate(startPoint, endPoint);
+                            endPoint.ProjectionStoE(__p.X, __p.Y, model.SOrigin, model.SMax);
+                            if (endPoint.IsValid)
+                            {
+                                __htDraw.Translate(startPoint, endPoint);
+                            }
                         }
                     }
                 }

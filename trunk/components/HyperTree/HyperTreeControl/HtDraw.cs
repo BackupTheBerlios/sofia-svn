@@ -16,17 +16,20 @@ namespace HyperTreeControl
 
         public static readonly int NBR_FRAMES = 50; // number of intermediates animation frames
 
-        private static HtModel _model = null;  // the tree model
-        private static IHtView _view = null;  // the view using this drawing model
-        private static HtDrawNode _drawRoot = null;  // the root of the drawing tree 
-        private static double[] _ray = null;
+        private HtModel _model = null;  // the tree model
+        private IHtView _view = null;  // the view using this drawing model
+        private HtDrawNode _drawRoot = null;  // the root of the drawing tree 
+        private double[] _ray = null;
 
         private HtCoordS _sOrigin = null;  // origin of the screen plane
         private HtCoordS _sMax = null;  // max point in the screen plane 
 
         private Dictionary<IHtNode, HtDrawNode> _drawToHTNodeMap;
 
-        private static object _lockObject = new object();
+        private TimeSpan _lastRender;
+        private HtDrawNode _animatedNode = null;
+        private double _velocity = 0;
+        private bool _animating = false;
 
         #endregion
 
@@ -66,13 +69,17 @@ namespace HyperTreeControl
                 _drawRoot = new HtDrawNodeComposite(null, (HtModelNodeComposite)__root, this);
             }
 
-            this.Background = new LinearGradientBrush(Colors.Black, Colors.DarkBlue, 90);          
+            this.Background = new LinearGradientBrush(Colors.Black, Colors.DarkBlue, 90);
+
+            _lastRender = TimeSpan.FromTicks(DateTime.Now.Ticks);
+            CompositionTarget.Rendering += UpdatePosition;
+
         }
 
         #endregion
 
         #region Internal classes accessors
-
+        /*
         public static HtModel Model
         {
             get
@@ -96,6 +103,7 @@ namespace HyperTreeControl
                 return _view;
             }
         }
+        */
 
         #endregion
 
@@ -166,6 +174,44 @@ namespace HyperTreeControl
             _drawRoot.DrawNodes(dc);
         }
 
+        private void UpdatePosition(object sender, EventArgs e)
+        {
+            HtCoordE __zn = new HtCoordE();
+            HtCoordE __zf = new HtCoordE();
+
+            if (_velocity > 0.1)
+            {
+                _animating = true;
+                RenderingEventArgs renderingArgs = (RenderingEventArgs)e;
+
+                double deltaTime = (renderingArgs.RenderingTime - _lastRender).TotalSeconds;
+                _lastRender = renderingArgs.RenderingTime;
+
+                __zn = _animatedNode.OldCoordinates;
+
+                _velocity *= 0.95;
+                __zf.X = __zn.X + (_velocity * deltaTime);
+                __zf.Y = __zn.Y + (_velocity * deltaTime);
+
+
+                this.Translate(__zn, __zf);
+                _view.Repaint();
+            }
+            else
+                if (_animating)
+                {
+                    __zf.X = 0.0;
+                    __zf.Y = 0.0;
+                    this.Translate(__zn, __zf);
+                    this.EndTranslation();
+                    _view.Repaint();
+                    _view.StartMouseListening();
+                    _animating = false;
+                }
+
+        }
+
+
         #endregion
 
         #region Translation
@@ -174,42 +220,36 @@ namespace HyperTreeControl
         /// </summary>
         /// <param name="zs">The first coordinates.</param>
         /// <param name="ze">The second coordinates.</param>
-        public static void Translate(HtCoordE zs, HtCoordE ze)
+        public void Translate(HtCoordE zs, HtCoordE ze)
         {
-            lock (_lockObject)
+            HtCoordE __zo = new HtCoordE(_drawRoot.OldCoordinates);
+            __zo.X = -__zo.X;
+            __zo.Y = -__zo.Y;
+            HtCoordE __zs2 = new HtCoordE(zs);
+            __zs2.Translate(__zo);
+
+            HtCoordE __t = new HtCoordE();
+            double __de = ze.D2();
+            double __ds = __zs2.D2();
+            double __dd = 1.0 - __de * __ds;
+            __t.X = (ze.X * (1.0 - __ds) - __zs2.X * (1.0 - __de)) / __dd;
+            __t.Y = (ze.Y * (1.0 - __ds) - __zs2.Y * (1.0 - __de)) / __dd;
+
+            if (__t.IsValid)
             {
-                HtCoordE __zo = new HtCoordE(_drawRoot.OldCoordinates);
-                __zo.X = -__zo.X;
-                __zo.Y = -__zo.Y;
-                HtCoordE __zs2 = new HtCoordE(zs);
-                __zs2.Translate(__zo);
+                HtTransformation __to = new HtTransformation();
+                __to.Composition(__zo, __t);
 
-                HtCoordE __t = new HtCoordE();
-                double __de = ze.D2();
-                double __ds = __zs2.D2();
-                double __dd = 1.0 - __de * __ds;
-                __t.X = (ze.X * (1.0 - __ds) - __zs2.X * (1.0 - __de)) / __dd;
-                __t.Y = (ze.Y * (1.0 - __ds) - __zs2.Y * (1.0 - __de)) / __dd;
-
-                if (__t.IsValid)
-                {
-                    HtTransformation __to = new HtTransformation();
-                    __to.Composition(__zo, __t);
-
-                    _drawRoot.Transform(__to);
-                    _view.Repaint();
-                }
+                _drawRoot.Transform(__to);
+                _view.Repaint();
             }
         }
 
         /// <summary> Signal that the translation ended.
         /// </summary>
-        public static void EndTranslation()
+        public void EndTranslation()
         {
-            lock (_lockObject)
-            {
-                _drawRoot.EndTranslation();
-            }
+            _drawRoot.EndTranslation();
         }
 
         /// <summary> Translate the hyperbolic tree 
@@ -219,8 +259,10 @@ namespace HyperTreeControl
         public void TranslateToOrigin(HtDrawNode node)
         {
             _view.StopMouseListening();
-            AnimThread __t = new AnimThread(node);
-            __t.Start();
+            //AnimThread __t = new AnimThread(node);
+            //__t.Start();
+            _velocity = 50;
+            _animatedNode = node;
         }
 
         /// <summary> Restores the hyperbolic tree to its origin.
@@ -316,10 +358,12 @@ namespace HyperTreeControl
             HtCoordE __zn = _node.OldCoordinates;
             HtCoordE __zf = new HtCoordE();
 
-            int __frames = HtDraw.NBR_FRAMES;
-            int __nodes = HtDraw.Model.NumberOfNodes;
+
+            int __frames = 0;// HtDraw.NBR_FRAMES;
+            int __nodes = 0;// HtDraw.Model.NumberOfNodes;
 
             double __d = __zn.D();
+            /*
             for (int __i = 0; __i < HtDraw.Ray.Length; __i++)
             {
                 if (__d > HtDraw.Ray[__i])
@@ -327,6 +371,7 @@ namespace HyperTreeControl
                     __frames += HtDraw.NBR_FRAMES / 2;
                 }
             }
+             * */
 
             double __factorX = __zn.X / __frames;
             double __factorY = __zn.Y / __frames;
@@ -382,8 +427,8 @@ namespace HyperTreeControl
         /// </summary>
         public void Run()
         {
-            HtDraw.Translate(zStart, zEnd);
-            HtDraw.View.Repaint();
+            //HtDraw.Translate(zStart, zEnd);
+            //HtDraw.View.Repaint();
         }
     }
 
@@ -405,10 +450,10 @@ namespace HyperTreeControl
         /// </summary>
         public void Run()
         {
-            HtDraw.Translate(zStart, zEnd);
-            HtDraw.EndTranslation();
-            HtDraw.View.Repaint();
-            HtDraw.View.StartMouseListening();
+            //HtDraw.Translate(zStart, zEnd);
+            //HtDraw.EndTranslation();
+            //HtDraw.View.Repaint();
+            //HtDraw.View.StartMouseListening();
         }
     }
 
