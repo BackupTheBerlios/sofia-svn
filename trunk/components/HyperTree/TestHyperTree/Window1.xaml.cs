@@ -31,6 +31,11 @@ namespace TestHyperTree
         private TestNode _r1r1 = null;
         private TestNode _r1r2 = null;
         private TestNode _r1r1f = null;
+        private TestNode _r1r2r1 = null;
+        private TestNode _r1r2r1r1 = null;
+        private TestNode _r1r2r1r1f = null;
+        private TestNode _r2 = null;
+        private TestNode _r3 = null;
         private HtModel _model = null;
 
 
@@ -60,18 +65,30 @@ namespace TestHyperTree
         {
             _root = new TestNode("root", false);
             _r1 = new TestNode("r1", false);
-            _f = new TestNode("f");
-            _r1f = new TestNode("r1f");
+            _f = new TestNode("f", false);
+            _r1f = new TestNode("r1f", false);
             _r1r1 = new TestNode("r1r1", false);
             _r1r2 = new TestNode("r1r2", false);
-            _r1r1f = new TestNode("r1r1f");
+            _r1r2r1 = new TestNode("r1r2r1", false);
+            _r1r1f = new TestNode("r1r1f", false);
+
+            _r2 = new TestNode("r2", false);
+            _r3 = new TestNode("r3", false);
 
             _root.Add(_r1);
             _root.Add(_f);
+            _root.Add(_r1r2);
+            _root.Add(_r2);
+            _root.Add(_r3);
+
+            _r2.Add(_r1r2r1);
+
             _r1.Add(_r1f);
-            _r1.Add(_r1r1);
-            _r1.Add(_r1r2);
+            _r1.Add(_r1r1);    
+        
             _r1r1.Add(_r1r1f);
+            
+
 
             _model = new HtModel(_root);
         }

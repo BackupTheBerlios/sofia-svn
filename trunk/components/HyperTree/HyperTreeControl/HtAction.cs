@@ -168,6 +168,7 @@ namespace HyperTreeControl
                     HtDraw __htDraw = ((HtDraw)sender);
                     HtDrawNode __node = __htDraw.FindNode(__p);
 
+                    /*
                     if (__node != null)
                         __node.RenderIsMouseOver = true;
                     else
@@ -175,7 +176,7 @@ namespace HyperTreeControl
                         {
                             __n.RenderIsMouseOver = false;
                         }
-
+                    */
                     if (_statusButtonDown == true)
                     {
                         if (startPoint.IsValid)
