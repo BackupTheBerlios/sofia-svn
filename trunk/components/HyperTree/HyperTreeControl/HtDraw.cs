@@ -26,10 +26,8 @@ namespace HyperTreeControl
 
         private Dictionary<IHtNode, HtDrawNode> _drawToHTNodeMap;
 
-        private TimeSpan _lastRender;
         private HtDrawNode _animatedNode = null;
-        private double _velocity = 0;
-        private bool _animating = false;
+        private HtCoordE _velocity = new HtCoordE();
 
         #endregion
 
@@ -71,7 +69,6 @@ namespace HyperTreeControl
 
             this.Background = new LinearGradientBrush(Colors.Black, Colors.DarkBlue, 90);
 
-            _lastRender = TimeSpan.FromTicks(DateTime.Now.Ticks);
             CompositionTarget.Rendering += UpdatePosition;
 
         }
@@ -176,42 +173,22 @@ namespace HyperTreeControl
 
         private void UpdatePosition(object sender, EventArgs e)
         {
-            HtCoordE __zn = new HtCoordE();
-            HtCoordE __zf = new HtCoordE();
 
-            if (_velocity > 0.1)
+            if (_animatedNode != null)
             {
-                _animating = true;
-                RenderingEventArgs renderingArgs = (RenderingEventArgs)e;
-
-                double deltaTime = (renderingArgs.RenderingTime - _lastRender).TotalSeconds;
-                _lastRender = renderingArgs.RenderingTime;
-
-                __zn = _animatedNode.OldCoordinates;
-
-                _velocity *= 0.95;
-                __zf.X = __zn.X + (_velocity * deltaTime);
-                __zf.Y = __zn.Y + (_velocity * deltaTime);
-
-
-                this.Translate(__zn, __zf);
-                _view.Repaint();
-            }
-            else
-                if (_animating)
+                HtCoordE __toCenter = new HtCoordE(-_animatedNode.Coordinates.X, -_animatedNode.Coordinates.Y);
+                _velocity.X *= 0.90;
+                _velocity.Y *= 0.90;
+                if (_velocity.D() > 0.01)
+                    this.Translate(_animatedNode.OldCoordinates, _velocity);
+                else
                 {
-                    __zf.X = 0.0;
-                    __zf.Y = 0.0;
-                    this.Translate(__zn, __zf);
+                    _animatedNode = null;
                     this.EndTranslation();
-                    _view.Repaint();
                     _view.StartMouseListening();
-                    _animating = false;
                 }
-
+            }
         }
-
-
         #endregion
 
         #region Translation
@@ -259,10 +236,8 @@ namespace HyperTreeControl
         public void TranslateToOrigin(HtDrawNode node)
         {
             _view.StopMouseListening();
-            //AnimThread __t = new AnimThread(node);
-            //__t.Start();
-            _velocity = 50;
-            _animatedNode = node;
+            _velocity = new HtCoordE(node.Coordinates);
+            _animatedNode = node;            
         }
 
         /// <summary> Restores the hyperbolic tree to its origin.
@@ -311,151 +286,5 @@ namespace HyperTreeControl
         }
 
         #endregion
-    }
-
-    #region Inner animation thread
-
-    internal delegate void AnimDelegate();
-
-    /// <summary>
-    /// Used for the Dispatcher delegate invoke
-    /// </summary>
-    internal interface IRunnable
-    {
-        void Run();
-    }
-
-    /// <summary> The AnimThread class implements the thread that do the animation
-    /// when clicking on a node.
-    /// </summary>
-    internal class AnimThread
-    {
-
-        private HtDrawNode _node = null; // node to put at the origin
-        private IRunnable _task = null; // translation task
-
-        /// <summary> Constructor.
-        /// </summary>
-        /// <param name="node">The node to put at the origin.</param>
-        public AnimThread(HtDrawNode node)
-        {
-            _node = node;
-        }
-
-        /// <summary> Starts the animation.
-        /// </summary>
-        public void Start()
-        {
-            ThreadPool.QueueUserWorkItem(new WaitCallback(this.Run));
-        }
-
-        /// <summary> Delegate for the  <see cref="System.Windows.Threading.Dispatcher"/> event queue.
-        /// </summary>
-        /// <param name="stateInfo"></param>
-        private void Run(object stateInfo)
-        {
-
-            HtCoordE __zn = _node.OldCoordinates;
-            HtCoordE __zf = new HtCoordE();
-
-
-            int __frames = 0;// HtDraw.NBR_FRAMES;
-            int __nodes = 0;// HtDraw.Model.NumberOfNodes;
-
-            double __d = __zn.D();
-            /*
-            for (int __i = 0; __i < HtDraw.Ray.Length; __i++)
-            {
-                if (__d > HtDraw.Ray[__i])
-                {
-                    __frames += HtDraw.NBR_FRAMES / 2;
-                }
-            }
-             * */
-
-            double __factorX = __zn.X / __frames;
-            double __factorY = __zn.Y / __frames;
-
-            for (int __i = 1; __i < __frames; __i++)
-            {
-                __zf.X = __zn.X - (__i * __factorX);
-                __zf.Y = __zn.Y - (__i * __factorY);
-
-                _task = new TranslateThread(__zn, __zf);
-                try
-                {
-                    Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Render, new AnimDelegate(_task.Run));
-                }
-                catch (Exception)
-                {
-                    //TODO : throw more convenient exception
-                    throw;
-                }
-            }
-
-            __zf.X = 0.0;
-            __zf.Y = 0.0;
-            _task = new LastTranslateThread(__zn, __zf);
-            try
-            {
-                Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Render, new AnimDelegate(_task.Run));
-            }
-            catch (Exception)
-            {
-                //TODO : throw more convenient exception
-                throw;
-            }
-        }
-
-    }
-
-    /// <summary> Part of the animation thread.
-    /// </summary>
-    internal class TranslateThread : IRunnable
-    {
-
-        HtCoordE zStart = null;
-        HtCoordE zEnd = null;
-
-        public TranslateThread(HtCoordE z1, HtCoordE z2)
-        {
-            zStart = z1;
-            zEnd = z2;
-        }
-
-        /// <summary> Implementation of <see cref="IRunnable"/>.
-        /// </summary>
-        public void Run()
-        {
-            //HtDraw.Translate(zStart, zEnd);
-            //HtDraw.View.Repaint();
-        }
-    }
-
-    /// <summary> Part of the animation thread.    
-    /// </summary>
-    internal class LastTranslateThread : IRunnable
-    {
-
-        HtCoordE zStart = null;
-        HtCoordE zEnd = null;
-
-        public LastTranslateThread(HtCoordE z1, HtCoordE z2)
-        {
-            zStart = z1;
-            zEnd = z2;
-        }
-
-        /// <summary> Implementation of <see cref="IRunnable"/>.
-        /// </summary>
-        public void Run()
-        {
-            //HtDraw.Translate(zStart, zEnd);
-            //HtDraw.EndTranslation();
-            //HtDraw.View.Repaint();
-            //HtDraw.View.StartMouseListening();
-        }
-    }
-
-    #endregion
+    }    
 }

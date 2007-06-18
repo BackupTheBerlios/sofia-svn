@@ -155,10 +155,20 @@ namespace HyperTreeControl
     /// </summary>
     /// <param name="a">The first coord.</param>
     /// <param name="b">The second coord.</param>
-    private void Sub(HtCoordE a, HtCoordE b)
+    public void Sub(HtCoordE a, HtCoordE b)
     {
       _x = a._x - b._x;
       _y = a._y - b._y;
+    }
+
+    /// <summary> Adds the second coord to the first one and put the result in this HTCoorE (this = a - b).
+    /// </summary>
+    /// <param name="a">The first coord.</param>
+    /// <param name="b">The second coord.</param>
+    public void Add(HtCoordE a, HtCoordE b)
+    {
+        _x = a._x + b._x;
+        _y = a._y + b._y;
     }
 
     /// <summary> Returns the angle between the x axis and the line passing throught the origin O and this point.
@@ -199,7 +209,7 @@ namespace HyperTreeControl
     /// </summary>
     /// <param name="p">The other point.</param>
     /// <returns>The distance between the 2 points.</returns>
-    private double D(HtCoordE p)
+    public double D(HtCoordE p)
     {
       return Math.Sqrt((p._x - _x) * (p._x - _x) + (p._y - _y) * (p._y - _y));
     }
