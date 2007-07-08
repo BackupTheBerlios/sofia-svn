@@ -4,16 +4,16 @@ using System.Text;
 
 namespace HyperTreeControl
 {
-  /// <summary> The HTModel class implements the model for the HyperTree.
-  /// It's a tree of HTModelNode and HTModelNodeComposite, each keeping the initial layout of the tree in the Poincarre's Model.
+    /// <summary> The Model class implements the model for the HyperTree.
+    /// It's a tree of NodeModel and CompositeNodeModel, each keeping the initial layout of the tree in the Poincarre's Model.
   /// </summary>
-  public class HtModel
+  public class Model
   {
     #region Private fields
 
-    private HtModelNode _root = null; // the root of the tree's model 
+    private NodeModel _root = null; // the root of the tree's model 
     private double _length = 0.3;  // distance between node and children
-    private int _nodes = 0;    // number of nodes
+    private int _nodeCount = 0;    // number of nodes
 
     #endregion
 
@@ -22,15 +22,15 @@ namespace HyperTreeControl
     /// <summary> Constructor.
     /// </summary>
     /// <param name="root">The root of the real tree.</param>
-    public HtModel(IHtNode root)
+    public Model(INode root)
     {
       if (root.IsLeaf)
       {
-        _root = new HtModelNode(root, this);
+        _root = new NodeModel(root, this);
       }
       else
       {
-        _root = new HtModelNodeComposite(root, this);
+        _root = new CompositeNodeModel(root, this);
       }
       _root.LayoutHyperbolicTree();
     }
@@ -41,7 +41,7 @@ namespace HyperTreeControl
 
     /// <summary> Gets the root of the tree model.
     /// </summary>
-    public HtModelNode Root
+    public NodeModel Root
     {
       get
       {
@@ -59,16 +59,6 @@ namespace HyperTreeControl
       }
     }
 
-    /// <summary> Gets the number of nodes.
-    /// </summary>
-    public int NumberOfNodes
-    {
-      get
-      {
-        return _nodes;
-      }
-    }
-
     #endregion
 
     #region Nodes methods
@@ -77,7 +67,7 @@ namespace HyperTreeControl
     /// </summary>
     public void IncrementNumberOfNodes()
     {
-      _nodes++;
+      _nodeCount++;
     }
 
     #endregion

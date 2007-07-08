@@ -10,24 +10,25 @@ using System.Windows.Markup;
 
 namespace HyperTreeControl
 {
-    public class HtDraw : Canvas
+    /// <summary>
+    /// The Renderer class implements the drawing model for the <see cref="IView"/>.
+    /// </summary>
+    public class Renderer : Canvas
     {
         #region fields
 
-        public static readonly int NBR_FRAMES = 50; // number of intermediates animation frames
-
-        private HtModel _model = null;  // the tree model
-        private IHtView _view = null;  // the view using this drawing model
-        private HtDrawNode _drawRoot = null;  // the root of the drawing tree 
+        private Model _model = null;  // the tree model
+        private IView _view = null;  // the view using this drawing model
+        private NodeView _rootNodeView = null;  // the root of the drawing tree 
         private double[] _ray = null;
 
-        private HtCoordS _sOrigin = null;  // origin of the screen plane
-        private HtCoordS _sMax = null;  // max point in the screen plane 
+        private ScreenVector _screenPlaneOrigin = null;  // origin of the screen plane
+        private ScreenVector _screenPlaneMaxPoint = null;  // max point in the screen plane 
 
-        private Dictionary<IHtNode, HtDrawNode> _drawToHTNodeMap;
+        private Dictionary<INode, NodeView> _nodeViewMap;
 
-        private HtDrawNode _animatedNode = null;
-        private HtCoordE _velocity = new HtCoordE();
+        private NodeView _animatedNode = null;
+        private EuclidianVector _velocity = new EuclidianVector();
 
         #endregion
 
@@ -38,16 +39,16 @@ namespace HyperTreeControl
         /// </summary>
         /// <param name="model">The tree model to draw.</param>
         /// <param name="view">The view using this drawing model.</param>
-        public HtDraw(HtModel model, IHtView view)
+        public Renderer(Model model, IView view)
         {
             // initialize mapping
-            _drawToHTNodeMap = new Dictionary<IHtNode, HtDrawNode>();
+            _nodeViewMap = new Dictionary<INode, NodeView>();
 
             _view = view;
             _model = model;
 
-            _sOrigin = new HtCoordS();
-            _sMax = new HtCoordS();
+            _screenPlaneOrigin = new ScreenVector();
+            _screenPlaneMaxPoint = new ScreenVector();
 
             _ray = new double[4];
             _ray[0] = model.Length;
@@ -57,14 +58,14 @@ namespace HyperTreeControl
                 _ray[i] = (_ray[0] + _ray[i - 1]) / (1 + (_ray[0] * _ray[i - 1]));
             }
 
-            HtModelNode __root = model.Root;
-            if (__root.IsLeaf)
+            NodeModel __rootNodeModel = model.Root;
+            if (__rootNodeModel.IsLeaf)
             {
-                _drawRoot = new HtDrawNode(null, __root, this);
+                _rootNodeView = new NodeView(null, __rootNodeModel, this);
             }
             else
             {
-                _drawRoot = new HtDrawNodeComposite(null, (HtModelNodeComposite)__root, this);
+                _rootNodeView = new CompositeNodeView(null, (CompositeNodeModel)__rootNodeModel, this);
             }
 
             this.Background = new LinearGradientBrush(Colors.Black, Colors.DarkBlue, 90);
@@ -75,35 +76,6 @@ namespace HyperTreeControl
 
         #endregion
 
-        #region Internal classes accessors
-        /*
-        public static HtModel Model
-        {
-            get
-            {
-                return _model;
-            }
-        }
-
-        public static double[] Ray
-        {
-            get
-            {
-                return _ray;
-            }
-        }
-
-        public static IHtView View
-        {
-            get
-            {
-                return _view;
-            }
-        }
-        */
-
-        #endregion
-
         #region Screen coordinates
 
         /// <summary>
@@ -111,21 +83,21 @@ namespace HyperTreeControl
         /// </summary>
         public void RefreshScreenCoordinates()
         {
-            _sMax.X = (int)((this.Width) / 2);
-            _sMax.Y = (int)((this.Height) / 2);
-            _sOrigin.X = _sMax.X + 0;
-            _sOrigin.Y = _sMax.Y + 0;
-            _drawRoot.RefreshScreenCoordinates(_sOrigin, _sMax);
+            _screenPlaneMaxPoint.X = (int)((this.Width) / 2);
+            _screenPlaneMaxPoint.Y = (int)((this.Height) / 2);
+            _screenPlaneOrigin.X = _screenPlaneMaxPoint.X + 0;
+            _screenPlaneOrigin.Y = _screenPlaneMaxPoint.Y + 0;
+            _rootNodeView.RefreshScreenCoordinates(_screenPlaneOrigin, _screenPlaneMaxPoint);
         }
 
         /// <summary>
         /// Gets the origin of the screen plane.
         /// </summary>
-        public HtCoordS SOrigin
+        public ScreenVector SOrigin
         {
             get
             {
-                return _sOrigin;
+                return _screenPlaneOrigin;
             }
         }
 
@@ -133,11 +105,11 @@ namespace HyperTreeControl
         /// Gets the point representing the up right corner of the screen plane, 
         /// thus giving x and y maxima.
         /// </summary>
-        public HtCoordS SMax
+        public ScreenVector SMax
         {
             get
             {
-                return _sMax;
+                return _screenPlaneMaxPoint;
             }
         }
 
@@ -159,7 +131,7 @@ namespace HyperTreeControl
         /// <param name="canvas">The graphic canvas.</param>
         public void DrawBranches(DrawingContext dc)
         {
-            _drawRoot.DrawBranches(dc);
+            _rootNodeView.DrawBranches(dc);
         }
 
         /// <summary>
@@ -168,7 +140,7 @@ namespace HyperTreeControl
         /// <param name="canvas">The graphic canvas.</param>
         public void DrawNodes(DrawingContext dc)
         {
-            _drawRoot.DrawNodes(dc);
+            _rootNodeView.DrawNodes(dc);
         }
 
         private void UpdatePosition(object sender, EventArgs e)
@@ -176,7 +148,6 @@ namespace HyperTreeControl
 
             if (_animatedNode != null)
             {
-                HtCoordE __toCenter = new HtCoordE(-_animatedNode.Coordinates.X, -_animatedNode.Coordinates.Y);
                 _velocity.X *= 0.90;
                 _velocity.Y *= 0.90;
                 if (_velocity.D() > 0.01)
@@ -197,15 +168,15 @@ namespace HyperTreeControl
         /// </summary>
         /// <param name="zs">The first coordinates.</param>
         /// <param name="ze">The second coordinates.</param>
-        public void Translate(HtCoordE zs, HtCoordE ze)
+        public void Translate(EuclidianVector zs, EuclidianVector ze)
         {
-            HtCoordE __zo = new HtCoordE(_drawRoot.OldCoordinates);
+            EuclidianVector __zo = new EuclidianVector(_rootNodeView.OldCoordinates);
             __zo.X = -__zo.X;
             __zo.Y = -__zo.Y;
-            HtCoordE __zs2 = new HtCoordE(zs);
+            EuclidianVector __zs2 = new EuclidianVector(zs);
             __zs2.Translate(__zo);
 
-            HtCoordE __t = new HtCoordE();
+            EuclidianVector __t = new EuclidianVector();
             double __de = ze.D2();
             double __ds = __zs2.D2();
             double __dd = 1.0 - __de * __ds;
@@ -214,10 +185,10 @@ namespace HyperTreeControl
 
             if (__t.IsValid)
             {
-                HtTransformation __to = new HtTransformation();
+                HyperbolicTransformation __to = new HyperbolicTransformation();
                 __to.Composition(__zo, __t);
 
-                _drawRoot.Transform(__to);
+                _rootNodeView.Transform(__to);
                 _view.Repaint();
             }
         }
@@ -226,17 +197,17 @@ namespace HyperTreeControl
         /// </summary>
         public void EndTranslation()
         {
-            _drawRoot.EndTranslation();
+            _rootNodeView.EndTranslation();
         }
 
         /// <summary> Translate the hyperbolic tree 
         /// so that the given node  is put at the origin of the hyperbolic tree.        
         /// </summary>
         /// <param name="node">The given <see cref="HtDrawNode"/></param>
-        public void TranslateToOrigin(HtDrawNode node)
+        public void TranslateToOrigin(NodeView node)
         {
             _view.StopMouseListening();
-            _velocity = new HtCoordE(node.Coordinates);
+            _velocity = new EuclidianVector(node.Coordinates);
             _animatedNode = node;            
         }
 
@@ -244,7 +215,7 @@ namespace HyperTreeControl
         /// </summary>
         public void Restore()
         {
-            _drawRoot.Restore();
+            _rootNodeView.Restore();
             _view.Repaint();
         }
 
@@ -258,9 +229,18 @@ namespace HyperTreeControl
         /// <param name="zs">The given screen coordinate.</param>
         /// <returns>The searched <see cref="HtDrawNode"/> if found;
         /// <code>null</code> otherwise</returns>
-        public HtDrawNode FindNode(HtCoordS zs)
+        public NodeView FindNode(ScreenVector zs)
         {
-            return _drawRoot.FindNode(zs);
+            return _rootNodeView.FindNode(zs);
+        }
+
+        /// <summary> Performs the specified action on each child node of the node with the specified coordinates.
+        /// </summary>
+        /// <param name="zs">The given screen coordinate.</param>
+        /// <param name="action">The <see cref="System.Action<T>"></see> delegate to perform on each node.</param>
+        public void ForEachNode(ScreenVector zs, Action<NodeView> action, Action<NodeView> actionElse)
+        {
+            _rootNodeView.ForEach(zs, action, actionElse);
         }
 
 
@@ -270,18 +250,18 @@ namespace HyperTreeControl
         /// </summary>
         /// <param name="htNode">The <see cref="IHtNode"/></param>
         /// <param name="drawNode">the <see cref="HtDrawNode"/> for the given <see cref="IHtNode"/></param>
-        public void MapNode(IHtNode htNode, HtDrawNode drawNode)
+        public void MapNode(INode htNode, NodeView drawNode)
         {
-            _drawToHTNodeMap.Add(htNode, drawNode);
+            _nodeViewMap.Add(htNode, drawNode);
         }
 
         /// <summary> Finds a <see cref="HtDrawNode"/> for a given <see cref="IHtNode"/>.
         /// </summary>
         /// <param name="htNode">the <see cref="IHtNode"/> for which we want to find the <see cref="HtDrawNode"/>.</param>
         /// <returns>The <see cref="HtDrawNode"/> for the given <see cref="IHtNode"/>.</returns>
-        public HtDrawNode FindDrawNode(IHtNode htNode)
+        public NodeView FindDrawNode(INode htNode)
         {
-            HtDrawNode __drawNode = _drawToHTNodeMap[htNode];
+            NodeView __drawNode = _nodeViewMap[htNode];
             return __drawNode;
         }
 

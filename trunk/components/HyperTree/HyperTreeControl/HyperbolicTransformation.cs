@@ -4,37 +4,37 @@ using System.Text;
 
 namespace HyperTreeControl
 {
-  /// <summary> The HTTransformation class implements a isometrie transformation in the hyperbolic space.
+    /// <summary> The HyperbolicTransformation class implements a isometrie transformation in the hyperbolic space.
   /// </summary>
-  public class HtTransformation
+  public class HyperbolicTransformation
   {
     #region Private fields
 
-    private HtCoordE _p = null; // translation vector
-    private HtCoordE _o = null; // rotation vector 
+    private EuclidianVector _p = null; // translation vector
+    private EuclidianVector _o = null; // rotation vector 
 
     #endregion
 
     #region ctor
     /// <summary> Constructor.
     /// </summary>
-    public HtTransformation()
+    public HyperbolicTransformation()
     {
-      _p = new HtCoordE();
-      _o = new HtCoordE();
+      _p = new EuclidianVector();
+      _o = new EuclidianVector();
     }
 
     #endregion
 
     #region Public properties
 
-    public HtCoordE P
+    public EuclidianVector P
     {
       get { return _p; }
       set { _p = value; }
     }
 
-    public HtCoordE O
+    public EuclidianVector O
     {
       get { return _o; }
       set { _o = value; }
@@ -48,20 +48,20 @@ namespace HyperTreeControl
     /// </summary>
     /// <param name="first"></param>
     /// <param name="second"></param>
-    public void Composition(HtCoordE first, HtCoordE second)
+    public void Composition(EuclidianVector v1, EuclidianVector v2)
     {
-      _p.X = first.X + second.X;
-      _p.Y = first.Y + second.Y;
+      _p.X = v1.X + v2.X;
+      _p.Y = v1.Y + v2.Y;
 
-      HtCoordE __d = new HtCoordE(second);
+      EuclidianVector __d = new EuclidianVector(v2);
       __d.Y = -__d.Y;
-      __d.Multiply(first);
+      __d.Multiply(v1);
       __d.X += 1;
       _p.Divide(__d);
 
-      _o.X = first.X;
-      _o.Y = -first.Y;
-      _o.Multiply(second);
+      _o.X = v1.X;
+      _o.Y = -v1.Y;
+      _o.Multiply(v2);
       _o.X += 1;
       _o.Divide(__d);
     }
@@ -76,8 +76,8 @@ namespace HyperTreeControl
     public override string ToString()
     {
       string __result = "Transformation : " +
-                      "\n\tP = " + _p +
-                      "\n\tO = " + _o;
+                      " P= " + _p +
+                      ";O= " + _o;
       return __result;
     }
 

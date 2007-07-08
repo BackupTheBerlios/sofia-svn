@@ -9,19 +9,23 @@ using WiredPrairie.Decorators;
 
 namespace HyperTreeControl
 {
-    public class HtDrawNode: SmartBorder
+    /// <summary>
+    /// The NodeView class contains the drawing coordinates of a <see cref="ModelNodel"></see>for the <see cref="IView"/>.
+    /// It implements the Composite design pattern.
+    /// </summary>
+    public class NodeView : SmartBorder
     {
         #region fields
 
-        private HtDraw _model = null;  // drawing model
-        private HtModelNode _node = null;  // encapsulated HTModelNode
+        private Renderer _renderer = null;  // drawing model
+        private NodeModel _nodeModel = null;  // encapsulated NodeModel
 
-        private HtCoordE _ze = null;  // current euclidian coordinates
-        private HtCoordE _oldZe = null;  // old euclidian coordinates
-        protected HtCoordS _zs = null;  // current screen coordinates
+        private EuclidianVector _ze = null;  // current euclidian coordinates
+        private EuclidianVector _oldZe = null;  // old euclidian coordinates
+        private ScreenVector _screenCoordinates = null;  // current screen coordinates
 
-        private HtDrawNodeComposite _father = null;  // father of this node
-        private HtDrawNode _brother = null;  // brother of this node
+        private CompositeNodeView _parentNode = null;  // father of this node
+        private NodeView _brother = null;  // brother of this node
 
         private bool _active = false; // should be drawed ?
 
@@ -31,31 +35,26 @@ namespace HyperTreeControl
 
         /// <summary> Constructor.
         /// </summary>
-        /// <param name="father">The father of this node.</param>
-        /// <param name="node">The encapsulated <see cref="HtModelNode"/>.</param>
-        /// <param name="model">The drawing model.</param>
-        public HtDrawNode(HtDrawNodeComposite father, HtModelNode node, HtDraw model)
+        /// <param name="parentNode">The father of this node.</param>
+        /// <param name="nodeModel">The encapsulated <see cref="NodeModel"/>.</param>
+        /// <param name="renderer">The drawing model.</param>
+        public NodeView(CompositeNodeView parentNode, NodeModel nodeModel, Renderer renderer)
         {
-            _father = father;
-            _node = node;
-            _model = model;
+            _parentNode = parentNode;
+            _nodeModel = nodeModel;
+            _renderer = renderer;
 
-            //this.Background = new LinearGradientBrush(Colors.DarkGray, Colors.LightGray, 90);
-            //this.BorderBrush = Brushes.White;
-            //this.BorderThickness = new Thickness(1);
-            //this.CornerRadius = new CornerRadius(3);
             this.Opacity = 0.9;
+            this.Child = new NodeLabel(this);
 
-            this.Child = new HtNodeLabel(this);
-            
-            _ze = new HtCoordE(node.Coordinates);
-            _oldZe = new HtCoordE(_ze);
-            _zs = new HtCoordS();
+            _ze = new EuclidianVector(nodeModel.OriginalCoordinates);
+            _oldZe = new EuclidianVector(_ze);
+            _screenCoordinates = new ScreenVector();
 
-            // store this object in IHtNode -> HtDrawNode mapping
-            model.MapNode(node.Node, this);
+            // store this object in INode -> NodeView mapping
+            renderer.MapNode(nodeModel.Node, this);
 
-            model.Children.Add(this);
+            renderer.Children.Add(this);
         }
 
         #endregion
@@ -64,7 +63,7 @@ namespace HyperTreeControl
 
         /// <summary> Gets or sets the brother of this node.
         /// </summary>
-        public HtDrawNode Brother
+        public NodeView Brother
         {
             get
             {
@@ -79,11 +78,11 @@ namespace HyperTreeControl
 
         /// <summary> Gets the encapsulated HtModelNode.
         /// </summary>
-        public HtModelNode HtModelNode
+        public NodeModel NodeModel
         {
             get
             {
-                return _node;
+                return _nodeModel;
             }
         }
 
@@ -93,7 +92,7 @@ namespace HyperTreeControl
         {
             get
             {
-                return _node.Node.Color;
+                return _nodeModel.Node.Color;
             }
         }
 
@@ -103,7 +102,7 @@ namespace HyperTreeControl
         {
             get
             {
-                return _node.Name;
+                return _nodeModel.Name;
             }
         }
 
@@ -113,7 +112,7 @@ namespace HyperTreeControl
         {
             get
             {
-                return _node.Node.Size;
+                return _nodeModel.Node.Size;
             }
         }
 
@@ -124,7 +123,7 @@ namespace HyperTreeControl
         {
             get
             {
-                return _node.Node.BorderSize;
+                return _nodeModel.Node.BorderSize;
             }
         }
 
@@ -134,7 +133,7 @@ namespace HyperTreeControl
         {
             get
             {
-                return _node.Node.Image;
+                return _nodeModel.Node.Image;
             }
         }
 
@@ -144,7 +143,7 @@ namespace HyperTreeControl
 
         /// <summary> Gets the current coordinates of this node.
         /// </summary>
-        public HtCoordE Coordinates
+        public EuclidianVector Coordinates
         {
             get
             {
@@ -154,7 +153,7 @@ namespace HyperTreeControl
 
         /// <summary> Gets the old coordinates of this node.
         /// </summary>
-        public HtCoordE OldCoordinates
+        public EuclidianVector OldCoordinates
         {
             get
             {
@@ -164,21 +163,21 @@ namespace HyperTreeControl
 
         /// <summary> Gets the screen coordinates of this node.
         /// </summary>
-        public HtCoordS ScreenCoordinates
+        public ScreenVector ScreenCoordinates
         {
             get
             {
-                return _zs;
+                return _screenCoordinates;
             }
         }
 
         /// <summary> Refresh the screen coordinates of this node. 
         /// </summary>
-        /// <param name="sOrigin">The origin of the screen plane.</param>
-        /// <param name="sMax">The (xMax, yMax) point in the screen plane.</param>
-        public virtual void RefreshScreenCoordinates(HtCoordS sOrigin, HtCoordS sMax)
+        /// <param name="origin">The origin of the screen plane.</param>
+        /// <param name="max">The (xMax, yMax) point in the screen plane.</param>
+        public virtual void RefreshScreenCoordinates(ScreenVector origin, ScreenVector max)
         {
-            _zs.ProjectionEtoS(_ze, sOrigin, sMax);
+            _screenCoordinates.ProjectionEtoS(_ze, origin, max);
         }
 
         #endregion
@@ -188,15 +187,17 @@ namespace HyperTreeControl
 
         /// <summary> Draws the branches from this node to its children.
         /// </summary>
-        /// <remarks>Overriden by the <see cref="HtDrawNodeComposite"/> class.</remarks>
+        /// <remarks>Overriden by the <see cref="CompositeNodeView"/> class.</remarks>
         /// <param name="canvas">The graphic canvas.</param>
         public virtual void DrawBranches(DrawingContext dc) { }
 
         /// <summary> Draw this node.
+        /// Adjust size and position accordingly to the font metrics.
         /// </summary>
-        /// <param name="canvas">The graphic canvas.</param>
+        /// <param name="dc">The graphic canvas.</param>        
         public virtual void DrawNodes(DrawingContext dc)
         {
+            //get the font metrics
             FontFamily __font = new FontFamily("Arial");
             FormattedText __formattedText = new FormattedText(
                this.NodeName,
@@ -215,7 +216,7 @@ namespace HyperTreeControl
             int __width = (int)__formattedText.Width;
             this.Height = __height + 2 * this.Size;
             this.Width = __width + 10 + 2 * this.Size;
-            HtCoordS __zs = this.ScreenCoordinates;
+            ScreenVector __zs = this.ScreenCoordinates;
 
             double __x = __zs.X - (this.Width / 2) - this.Size;
             double __y = __zs.Y - (this.Height / 2) - this.Size;
@@ -234,7 +235,7 @@ namespace HyperTreeControl
                 this.Visibility = Visibility.Collapsed;
             }
         }
-        
+
         /// <summary> Returns the minimal distance between this node
         /// and his father and his brother.
         /// </summary>
@@ -244,15 +245,15 @@ namespace HyperTreeControl
             int __dF = -1;
             int __dB = -1;
 
-            if (_father != null)
+            if (_parentNode != null)
             {
-                HtCoordS __zF = _father.ScreenCoordinates;
-                __dF = _zs.GetDistance(__zF);
+                ScreenVector __zF = _parentNode.ScreenCoordinates;
+                __dF = _screenCoordinates.GetDistance(__zF);
             }
             if (_brother != null)
             {
-                HtCoordS __zB = _brother.ScreenCoordinates;
-                __dB = _zs.GetDistance(__zB);
+                ScreenVector __zB = _brother.ScreenCoordinates;
+                __dB = _screenCoordinates.GetDistance(__zB);
             }
 
             // this means that the node is a standalone node
@@ -281,7 +282,7 @@ namespace HyperTreeControl
         /// <summary> Translates this node by the given vector.
         /// </summary>
         /// <param name="t">The translation vector.</param>
-        public virtual void Translate(HtCoordE t)
+        public virtual void Translate(EuclidianVector t)
         {
             _ze.Translate(_oldZe, t);
         }
@@ -289,7 +290,7 @@ namespace HyperTreeControl
         /// <summary> Transform this node by the given transformation.
         /// </summary>
         /// <param name="t">The transformation.</param>
-        public virtual void Transform(HtTransformation t)
+        public virtual void Transform(HyperbolicTransformation t)
         {
             _ze.Copy(_oldZe);
             _ze.Transform(t);
@@ -306,7 +307,7 @@ namespace HyperTreeControl
         /// </summary>
         public virtual void Restore()
         {
-            HtCoordE __orig = _node.Coordinates;
+            EuclidianVector __orig = _nodeModel.OriginalCoordinates;
             _ze.X = __orig.X;
             _ze.Y = __orig.Y;
             _oldZe.Copy(_ze);
@@ -316,12 +317,11 @@ namespace HyperTreeControl
 
         #region Node searching
 
-        /// <summary> Returns the node (if any) whose screen coordinates' zone
-        /// contains thoses given in parameters.
+        /// <summary> Returns the node (if any) whose screen coordinates' zone contains thoses given in parameters.
         /// </summary>
         /// <param name="zs">The given screen coordinate.</param>
-        /// <returns>the searched <see cref="HtDrawNode"/> if found; <code>null</code> otherwise.</returns>
-        public virtual HtDrawNode FindNode(HtCoordS zs)
+        /// <returns>the searched <see cref="NodeView"/> if found; <code>null</code> otherwise.</returns>
+        public virtual NodeView FindNode(ScreenVector zs)
         {
             if (this.Contains(zs))
             {
@@ -333,15 +333,32 @@ namespace HyperTreeControl
             }
         }
 
+        /// <summary> Performs the specified action on this node.
+        /// </summary>
+        /// <param name="zs">The given screen coordinate.</param>
+        /// <param name="action">The <see cref="System.Action<T>"></see> delegate to perform on the node whose screen coordinates' zone contains thoses given in parameters.</param>
+        /// <param name="actionElse">The <see cref="System.Action<T>"></see> delegate to perform on the node whose screen coordinates' zone do not contains thoses given in parameters.</param>
+        public virtual void ForEach(ScreenVector zs, Action<NodeView> action, Action<NodeView> actionElse)
+        {
+            if (this.Contains(zs))
+            {
+                action(this);
+            }
+            else
+            {
+                actionElse(this);
+            }
+        }
+
         #endregion
 
         #region Zone containing
 
-        /// <summary> Is the given <see cref="HtCoordS"/> within this control ?
+        /// <summary> Is the given <see cref="ScreenVector"/> within this control ?
         /// </summary>
         /// <param name="zs">The given point.</param>
         /// <returns><code>true</code> if it is, <code>false</code> otherwise.</returns>
-        public bool Contains(HtCoordS zs)
+        public bool Contains(ScreenVector zs)
         {
             if (_active)
             {
@@ -371,8 +388,8 @@ namespace HyperTreeControl
         public override string ToString()
         {
             string __result = NodeName +
-                            "\n\t" + _ze +
-                            "\n\t" + _zs;
+                            ";" + _ze +
+                            ";" + _screenCoordinates;
             return __result;
         }
 

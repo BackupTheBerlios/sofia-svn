@@ -7,13 +7,16 @@ using System.Windows;
 
 namespace HyperTreeControl
 {
-    public class HtDrawNodeComposite : HtDrawNode
+    /// <summary> The CompositeNodeView class implements the Composite design pattern for NodeView.
+    /// It represents a NodeView which is not a leaf.
+    /// </summary>
+    public class CompositeNodeView : NodeView
     {
         #region fields
 
-        private HtModelNodeComposite _node = null; // encapsulated HtModelNode
-        private List<HtDrawNode> _childNodes = null; // children of this node
-        private Dictionary<HtDrawNode, HtGeodesic> _geodesics = null; // geodesics linking the children
+        private CompositeNodeModel _node = null; // encapsulated NodeModel
+        private List<NodeView> _childNodes = null; // children of this node
+        private Dictionary<NodeView, Geodesic> _geodesics = null; // geodesics linking the children
 
         #endregion
 
@@ -22,29 +25,28 @@ namespace HyperTreeControl
         /// <summary> Constructor.
         /// </summary>
         /// <param name="father">The father of this node.</param>
-        /// <param name="node">The encapsulated <see cref="HtModelNode"/>.</param>
-        /// <param name="model">The drawing model.</param>
-        public HtDrawNodeComposite(HtDrawNodeComposite father, HtModelNodeComposite node, HtDraw model)
-            : base(father, node, model)
+        /// <param name="node">The encapsulated <see cref="NodeModel"/>.</param>
+        /// <param name="renderer">The drawing model.</param>
+        public CompositeNodeView(CompositeNodeView father, CompositeNodeModel node, Renderer renderer)
+            : base(father, node, renderer)
         {
-
             _node = node;
-            _childNodes = new List<HtDrawNode>();
-            _geodesics = new Dictionary<HtDrawNode, HtGeodesic>();
+            _childNodes = new List<NodeView>();
+            _geodesics = new Dictionary<NodeView, Geodesic>();
 
-            HtDrawNode __child = null;
-            HtDrawNode __brother = null;
+            NodeView __child = null;
+            NodeView __brother = null;
             bool __first = true;
             bool __second = false;
-            foreach (HtModelNode __childNode in _node.Children)
+            foreach (NodeModel childNode in _node.Children)
             {
-                if (__childNode.IsLeaf)
+                if (childNode.IsLeaf)
                 {
-                    __child = new HtDrawNode(this, __childNode, model);
+                    __child = new NodeView(this, childNode, renderer);
                 }
                 else
                 {
-                    __child = new HtDrawNodeComposite(this, (HtModelNodeComposite)__childNode, model);
+                    __child = new CompositeNodeView(this, (CompositeNodeModel)childNode, renderer);
                 }
                 this.AddChild(__child);
                 if (__first)
@@ -74,7 +76,7 @@ namespace HyperTreeControl
 
         /// <summary> Gets the children of this node.
         /// </summary>
-        public List<HtDrawNode> ChildNodes
+        public List<NodeView> ChildNodes
         {
             get
             {
@@ -82,35 +84,34 @@ namespace HyperTreeControl
             }
         }
 
-        /// <summary> Adds the HtDrawNode as a children.
+        /// <summary> Adds the <see cref="NodeView"/> as a children.
         /// </summary>
         /// <param name="child">The child.</param>
-        private void AddChild(HtDrawNode child)
+        private void AddChild(NodeView child)
         {
             _childNodes.Add(child);
-            _geodesics.Add(child, new HtGeodesic(Coordinates, child.Coordinates));
+            _geodesics.Add(child, new Geodesic(Coordinates, child.Coordinates));
         }
 
         #endregion
 
         #region Screen Coordinates
 
-        /// <summary> Refresh the screen coordinates of this node
-        /// and recurse on children.
+        /// <summary> Refresh the screen coordinates of this node and recurse on children.
         /// </summary>
-        /// <param name="sOrigin">The origin of the screen plane.</param>
-        /// <param name="sMax">The (xMax, yMax) point in the screen plane.</param>
-        public override void RefreshScreenCoordinates(HtCoordS sOrigin, HtCoordS sMax)
+        /// <param name="origin">The origin of the screen plane.</param>
+        /// <param name="max">The (xMax, yMax) point in the screen plane.</param>
+        public override void RefreshScreenCoordinates(ScreenVector origin, ScreenVector max)
         {
-            base.RefreshScreenCoordinates(sOrigin, sMax);
+            base.RefreshScreenCoordinates(origin, max);
 
-            foreach (HtDrawNode child in _childNodes)
+            foreach (NodeView child in _childNodes)
             {
-                child.RefreshScreenCoordinates(sOrigin, sMax);
-                HtGeodesic geod = _geodesics[child];
+                child.RefreshScreenCoordinates(origin, max);
+                Geodesic geod = _geodesics[child];
                 if (geod != null)
                 {
-                    geod.RefreshScreenCoordinates(sOrigin, sMax);
+                    geod.RefreshScreenCoordinates(origin, max);
                 }
 
             }
@@ -126,9 +127,9 @@ namespace HyperTreeControl
         /// <param name="canvas">The graphic canvas.</param>
         public override void DrawBranches(DrawingContext dc)
         {
-            foreach (HtDrawNode child in _childNodes)
+            foreach (NodeView child in _childNodes)
             {
-                HtGeodesic __geod = _geodesics[child];
+                Geodesic __geod = _geodesics[child];
                 if (__geod != null)
                 {
                     __geod.Draw(dc);
@@ -144,14 +145,13 @@ namespace HyperTreeControl
         {
             base.DrawNodes(dc);
 
-            foreach (HtDrawNode __child in _childNodes)
+            foreach (NodeView child in _childNodes)
             {
-                __child.DrawNodes(dc);
+                child.DrawNodes(dc);
             }
         }
 
-        /// <summary> Returns the minimal distance between this node
-        /// and his father and his brother.
+        /// <summary> Returns the minimal distance between this node and his father and his brother.
         /// </summary>
         /// <returns>The minimal distance.</returns>
         public override int GetSpace()
@@ -160,9 +160,9 @@ namespace HyperTreeControl
 
             if (_childNodes.Count > 0)
             {
-                HtDrawNode __child = _childNodes[0];
-                HtCoordS __zC = __child.ScreenCoordinates;
-                int __dC = _zs.GetDistance(__zC);
+                NodeView __child = _childNodes[0];
+                ScreenVector __zC = __child.ScreenCoordinates;
+                int __dC = this.ScreenCoordinates.GetDistance(__zC);
 
                 if (__space == -1)
                 {
@@ -186,17 +186,17 @@ namespace HyperTreeControl
         /// <summary> Translates this node by the given vector. 
         /// </summary>
         /// <param name="t">The translation vector.</param>
-        public override void Translate(HtCoordE t)
+        public override void Translate(EuclidianVector t)
         {
             base.Translate(t);
 
-            foreach (HtDrawNode __child in _childNodes)
+            foreach (NodeView child in _childNodes)
             {
-                __child.Translate(t);
-                HtGeodesic __geod = _geodesics[__child];
-                if (__geod != null)
+                child.Translate(t);
+                Geodesic __geodesic = _geodesics[child];
+                if (__geodesic != null)
                 {
-                    __geod.Rebuild();
+                    __geodesic.Rebuild();
                 }
             }
         }
@@ -204,17 +204,17 @@ namespace HyperTreeControl
         /// <summary> Transform this node by the given transformation.
         /// </summary>
         /// <param name="t">The transformation.</param>
-        public override void Transform(HtTransformation t)
+        public override void Transform(HyperbolicTransformation t)
         {
             base.Transform(t);
 
-            foreach (HtDrawNode __child in _childNodes)
+            foreach (NodeView child in _childNodes)
             {
-                __child.Transform(t);
-                HtGeodesic __geod = _geodesics[__child];
-                if (__geod != null)
+                child.Transform(t);
+                Geodesic __geodesic = _geodesics[child];
+                if (__geodesic != null)
                 {
-                    __geod.Rebuild();
+                    __geodesic.Rebuild();
                 }
             }
         }
@@ -225,9 +225,9 @@ namespace HyperTreeControl
         {
             base.EndTranslation();
 
-            foreach (HtDrawNode __child in _childNodes)
+            foreach (NodeView child in _childNodes)
             {
-                __child.EndTranslation();
+                child.EndTranslation();
             }
         }
 
@@ -237,13 +237,13 @@ namespace HyperTreeControl
         {
             base.Restore();
 
-            foreach (HtDrawNode __child in _childNodes)
+            foreach (NodeView child in _childNodes)
             {
-                __child.Restore();
-                HtGeodesic __geod = _geodesics[__child];
-                if (__geod != null)
+                child.Restore();
+                Geodesic __geodesic = _geodesics[child];
+                if (__geodesic != null)
                 {
-                    __geod.Rebuild();
+                    __geodesic.Rebuild();
                 }
             }
         }
@@ -252,23 +252,22 @@ namespace HyperTreeControl
 
         #region Node searching
 
-        /// <summary> Returns the node (if any) whose screen coordinates' zone
-        /// contains thoses given in parameters.
+        /// <summary> Returns the node (if any) whose screen coordinates's zone contains thoses given in parameters.
         /// </summary>
         /// <param name="zs">The given screen coordinate.</param>
-        /// <returns>the searched <see cref="HtDrawNode"/> if found; <code>null</code> otherwise.</returns>
-        public override HtDrawNode FindNode(HtCoordS zs)
+        /// <returns>The searched <see cref="NodeView"/> if found; <code>null</code> otherwise.</returns>
+        public override NodeView FindNode(ScreenVector zs)
         {
-            HtDrawNode __result = base.FindNode(zs);
+            NodeView __result = base.FindNode(zs);
             if (__result != null)
             {
                 return __result;
             }
             else
             {
-                foreach (HtDrawNode __child in _childNodes)
+                foreach (NodeView child in _childNodes)
                 {
-                    __result = __child.FindNode(zs);
+                    __result = child.FindNode(zs);
                     if (__result != null)
                     {
                         return __result;
@@ -276,6 +275,21 @@ namespace HyperTreeControl
                 }
 
                 return null;
+            }
+        }
+
+        /// <summary> Performs the specified action on each child node of this node.
+        /// </summary>
+        /// <param name="zs">The given screen coordinate.</param>
+        /// <param name="action">The <see cref="System.Action<T>"></see> delegate to perform on the node whose screen coordinates' zone contains thoses given in parameters.</param>
+        /// <param name="actionElse">The <see cref="System.Action<T>"></see> delegate to perform on the node whose screen coordinates' zone do not contains thoses given in parameters.</param>
+        public override void ForEach(ScreenVector zs, Action<NodeView> action, Action<NodeView> actionElse)
+        {
+            base.ForEach(zs, action, actionElse);
+
+            foreach (NodeView child in _childNodes)
+            {
+                child.ForEach(zs, action, actionElse);
             }
         }
 
@@ -289,10 +303,10 @@ namespace HyperTreeControl
         public override string ToString()
         {
             string __result = base.ToString();
-            __result += "\n\tChildren :";
-            foreach (HtDrawNode __child in _childNodes)
+            __result += "Children :";
+            foreach (NodeView __child in _childNodes)
             {
-                __result += "\n\t-> " + __child.NodeName;
+                __result += " ->" + __child.NodeName;
             }
 
             return __result;

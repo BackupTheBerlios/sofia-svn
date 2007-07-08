@@ -9,11 +9,13 @@ using System.Globalization;
 
 namespace HyperTreeControl
 {
-    public class HtNodeLabel : Label
+    /// <summary> The NodeLabel class implements the drawed label representing a node text content.
+    /// </summary>
+    public class NodeLabel : Label
     {
         #region fields
 
-        private HtDrawNode _node = null;  // represented node
+        private NodeView _node = null;  // represented node
 
         #endregion
 
@@ -22,7 +24,7 @@ namespace HyperTreeControl
         /// <summary> Constructor.
         /// </summary>
         /// <param name="node">The represented node.</param>
-        public HtNodeLabel(HtDrawNode node)
+        public NodeLabel(NodeView node)
         {
             _node = node;
             this.Content = _node.NodeName;

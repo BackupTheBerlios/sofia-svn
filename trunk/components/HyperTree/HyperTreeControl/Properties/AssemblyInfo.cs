@@ -6,6 +6,8 @@ using System.Resources;
 using System.Globalization;
 using System.Windows;
 using System.Runtime.InteropServices;
+using System;
+using System.Security.Permissions;
 
 #endregion
 
@@ -20,7 +22,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright @  2007")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+[assembly: CLSCompliant(true)]
 [assembly: ComVisible(false)]
+[assembly: SecurityPermission(SecurityAction.RequestMinimum, Execution = true)]
+
 
 //In order to begin building localizable applications, set 
 //<UICulture>CultureYouAreCodingWith</UICulture> in your .csproj file

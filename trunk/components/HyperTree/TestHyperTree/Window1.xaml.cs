@@ -32,14 +32,12 @@ namespace TestHyperTree
         private TestNode _r1r2 = null;
         private TestNode _r1r1f = null;
         private TestNode _r1r2r1 = null;
-        private TestNode _r1r2r1r1 = null;
-        private TestNode _r1r2r1r1f = null;
         private TestNode _r2 = null;
         private TestNode _r3 = null;
-        private HtModel _model = null;
+        private Model _model = null;
 
 
-        WpfHtView _ht;
+        View _ht;
         #endregion
 
         public Window1()
@@ -55,7 +53,7 @@ namespace TestHyperTree
             this.Height = 500;
 
 
-            _ht = new WpfHtView(_model, _grid);
+            _ht = new View(_model, _grid);
             _ht.Height = 500;
             _ht.Width = 500;
 
@@ -65,12 +63,12 @@ namespace TestHyperTree
         {
             _root = new TestNode("root", false);
             _r1 = new TestNode("r1", false);
-            _f = new TestNode("f", false);
-            _r1f = new TestNode("r1f", false);
+            _f = new TestNode("f");
+            _r1f = new TestNode("r1f");
             _r1r1 = new TestNode("r1r1", false);
             _r1r2 = new TestNode("r1r2", false);
             _r1r2r1 = new TestNode("r1r2r1", false);
-            _r1r1f = new TestNode("r1r1f", false);
+            _r1r1f = new TestNode("r1r1f");
 
             _r2 = new TestNode("r2", false);
             _r3 = new TestNode("r3", false);
@@ -82,77 +80,39 @@ namespace TestHyperTree
             _root.Add(_r3);
 
             _r2.Add(_r1r2r1);
+            _r1r2.Add(new TestNode("bug1", false));
+            _r1r2.Add(new TestNode("bug2", false));
+            _r1r2.Add(new TestNode("bug3", false));
+            _r1r2.Add(new TestNode("bug4", false));
 
             _r1.Add(_r1f);
-            _r1.Add(_r1r1);    
-        
+            _r1.Add(_r1r1);
+
             _r1r1.Add(_r1r1f);
-            
 
 
-            _model = new HtModel(_root);
+
+            _model = new Model(_root);
         }
     }
 
     #region Inner classes
 
-    class TestNode : WpfHtNode
+    class TestNode : NodeBase
     {
-
-        private string _name = null; // name of the node
-        private bool _leaf = true; // is a leaf
-        private List<IHtNode> _children = null; // children
-
         #region ctor
 
         public TestNode(string name)
+            : base(name)
         {
-            _name = name;
-            _children = new List<IHtNode>();
         }
 
-
         public TestNode(string name, bool leaf)
-            : this(name)
+            : base(name, leaf)
         {
-            _leaf = leaf;
         }
 
         #endregion
-
-
-        /// <summary> Is leaf ?
-        /// </summary>
-        public override bool IsLeaf
-        {
-            get
-            {
-                return _leaf;
-            }
-        }
-
-        /// <summary> Gets the name.
-        /// </summary>
-        public override string NodeName
-        {
-            get
-            {
-                return _name;
-            }
-        }
-
-        public override List<IHtNode> ChildNodes
-        {
-            get
-            {
-                return _children;
-            }
-        }
-
-        public void Add(IHtNode node)
-        {
-            _children.Add(node);
-        }
 
     }
 

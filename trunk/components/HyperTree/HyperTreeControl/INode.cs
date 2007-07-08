@@ -9,19 +9,17 @@ using System.Windows.Markup;
 
 namespace HyperTreeControl
 {
-
-
-    /// <smmary> The HtNode interface should be implemented by object that are node of the tree that want to be displayed in the TreeMap.  
+    /// <smmary> The INode interface should be implemented by object that are node of the tree that want to be displayed in the TreeMap.  
     ///If you have already a tree structure, just implements this interface in node of the tree.
     /// </summary>
-    public interface IHtNode
+    public interface INode
     {
         /// <summary> Returns the children of this node in an Enumeration.
         ///If this object does not have children, it should return an empty Enumeration.
         ///All objects contained in the Enumeration should implements IHtNode.
         ///<returns>an Enumeration containing childs of this node</returns>
         /// </summary>    
-        List<IHtNode> ChildNodes { get; }
+        List<INode> ChildNodes { get; }
 
         /// <summary> Checks if this node is a leaf or not. 
         ///A node could have no children and still not be a leaf.
@@ -49,7 +47,7 @@ namespace HyperTreeControl
         /// <returns>The border width.</returns>
         int BorderSize { get; }
 
-        /// <summary> Gets the image (icon) which should be displayed insidethe node. 
+        /// <summary> Gets the image (icon) which should be displayed inside the node. 
         /// null is interpreted as no image.
         /// </summary>
         Image Image { get; }

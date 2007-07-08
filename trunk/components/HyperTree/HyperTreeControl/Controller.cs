@@ -6,39 +6,49 @@ using System.Windows;
 
 namespace HyperTreeControl
 {
-    public class HtAction
+    /// <summary> The Controller class manage the action on the hypertree :
+    /// drag of a node, etc.
+    /// </summary>
+    public class Controller
     {
         #region fields
 
-        private HtDraw model = null; //the drawing model
+        private Renderer _model = null; //the drawing model
 
-        private HtCoordE startPoint = null; // starting point of dragging
-        private HtCoordE endPoint = null; // ending point of dragging
-        private HtCoordS clickPoint = null; // clicked point    
-
+        private EuclidianVector _startPoint = null; // starting point of dragging
+        private EuclidianVector _endPoint = null; // ending point of dragging
+        private ScreenVector _clickPoint = null; // clicked point    
         private bool _statusButtonDown = false;
 
         #endregion
 
         #region ctor
 
-        public HtAction(HtDraw model)
+        /// <summary> Initialize a new instance of the <see cref="Controller"/> class.
+        /// </summary>
+        /// <param name="model"></param>
+        public Controller(Renderer model)
         {
-            this.model = model;
-            startPoint = new HtCoordE();
-            endPoint = new HtCoordE();
-            clickPoint = new HtCoordS();
+            _model = model;
+            _startPoint = new EuclidianVector();
+            _endPoint = new EuclidianVector();
+            _clickPoint = new ScreenVector();
         }
         #endregion
 
         #region Mouse handling
 
-        private HtCoordS GetPosition(object sender, MouseEventArgs e)
+        /// <summary> Gets the mouse position relatively to the sender of a mouse event.
+        /// </summary>
+        /// <param name="sender">The sender of the mouse event.</param>
+        /// <param name="e">The <see cref="MouseEventArgs"/> passed to the mouse event handler.</param>
+        /// <returns>The <see cref="ScreenVector"/> according to mouse position.</returns>
+        private ScreenVector GetPosition(object sender, MouseEventArgs e)
         {
             IInputElement __relativeTo = sender as IInputElement;
             if (__relativeTo != null)
             {
-                return new HtCoordS((int)e.GetPosition(__relativeTo).X, (int)e.GetPosition(__relativeTo).Y);
+                return new ScreenVector((int)e.GetPosition(__relativeTo).X, (int)e.GetPosition(__relativeTo).Y);
             }
             else
             {
@@ -55,30 +65,30 @@ namespace HyperTreeControl
         {
             if (e.OriginalSource is System.Windows.Controls.TextBlock)
             {
-                HtCoordS __p = GetPosition(sender, e);
+                ScreenVector __p = GetPosition(sender, e);
 
                 if (__p != null)
                 {
-                   
-                    if (sender is HtDraw)
+
+                    if (sender is Renderer)
                     {
-                        HtDraw __htDraw = ((HtDraw)sender);
-                        HtDrawNode __node = __htDraw.FindNode(__p);
+                        Renderer __htDraw = ((Renderer)sender);
+                        NodeView __node = __htDraw.FindNode(__p);
 
                         if (__node != null)
                             __node.RenderIsPressed = true;
                         else
-                            foreach (HtDrawNode __n in __htDraw.Children)
+                            foreach (NodeView __n in __htDraw.Children)
                             {
                                 __n.RenderIsPressed = false;
                             }
 
                     }
 
-                    startPoint.ProjectionStoE(__p.X, __p.Y, model.SOrigin, model.SMax);
+                    _startPoint.ProjectionStoE(__p.X, __p.Y, _model.SOrigin, _model.SMax);
 
-                    clickPoint.X = __p.X;
-                    clickPoint.Y = __p.Y;
+                    _clickPoint.X = __p.X;
+                    _clickPoint.Y = __p.Y;
 
                     if (e.ClickCount > 1)
                     {
@@ -100,30 +110,30 @@ namespace HyperTreeControl
         /// <param name="e"></param>
         public void MouseUpHandler(object sender, MouseButtonEventArgs e)
         {
-           
-            HtCoordS __p = GetPosition(sender, e);
+
+            ScreenVector __p = GetPosition(sender, e);
 
             if (__p != null)
             {
-                if (sender is HtDraw)
+                if (sender is Renderer)
                 {
-                    HtDraw __htDraw = ((HtDraw)sender);
-                    HtDrawNode __node = __htDraw.FindNode(__p);
+                    Renderer __htDraw = ((Renderer)sender);
+                    NodeView __node = __htDraw.FindNode(__p);
 
                     if (__node != null)
                         __node.RenderIsPressed = false;
                     else
-                        foreach (HtDrawNode __n in __htDraw.Children)
+                        foreach (NodeView __n in __htDraw.Children)
                         {
                             __n.RenderIsPressed = false;
                         }
 
                     __htDraw.EndTranslation();
 
-                    //uncomment this to allow translate to node clicked
+                    //uncomment this to allow translate on simple node click
                     if (_statusButtonDown)
                     {
-                        if (__p.X - clickPoint.X < 5 && __p.Y - clickPoint.Y < 5)
+                        if (__p.X - _clickPoint.X < 5 && __p.Y - _clickPoint.Y < 5)
                         {
                             this.MouseClicked(sender, e);
                         }
@@ -144,47 +154,45 @@ namespace HyperTreeControl
 
             if (e.MiddleButton == MouseButtonState.Pressed)
             {
-                model.Restore();
+                _model.Restore();
             }
             else
             {
-                HtDrawNode node = model.FindNode(clickPoint);
+                NodeView node = _model.FindNode(_clickPoint);
                 if (node != null)
                 {
-                    model.TranslateToOrigin(node);
+                    _model.TranslateToOrigin(node);
                 }
             }
         }
 
-
+        /// <summary> Called when the user moves the mouse over the hyperbolic tree.
+        /// Used to signal the tree translation when the left button has been pressed over a node. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void MouseMoveHandler(object sender, MouseEventArgs e)
         {
-            HtCoordS __p = this.GetPosition(sender, e);
+            ScreenVector __p = this.GetPosition(sender, e);
             if (__p != null)
             {
 
-                if (sender is HtDraw)
+                if (sender is Renderer)
                 {
-                    HtDraw __htDraw = ((HtDraw)sender);
-                    HtDrawNode __node = __htDraw.FindNode(__p);
+                    Renderer __htDraw = ((Renderer)sender);
+                    __htDraw.ForEachNode(__p,
+                          delegate(NodeView node) { node.RenderIsMouseOver = true; },
+                          delegate(NodeView node) { node.RenderIsMouseOver = false; }
+                    );
 
-                    /*
-                    if (__node != null)
-                        __node.RenderIsMouseOver = true;
-                    else
-                        foreach (HtDrawNode __n in __htDraw.Children)
-                        {
-                            __n.RenderIsMouseOver = false;
-                        }
-                    */
                     if (_statusButtonDown == true)
                     {
-                        if (startPoint.IsValid)
+                        if (_startPoint.IsValid)
                         {
-                            endPoint.ProjectionStoE(__p.X, __p.Y, model.SOrigin, model.SMax);
-                            if (endPoint.IsValid)
+                            _endPoint.ProjectionStoE(__p.X, __p.Y, _model.SOrigin, _model.SMax);
+                            if (_endPoint.IsValid)
                             {
-                                __htDraw.Translate(startPoint, endPoint);
+                                __htDraw.Translate(_startPoint, _endPoint);
                             }
                         }
                     }

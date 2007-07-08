@@ -4,9 +4,9 @@ using System.Text;
 
 namespace HyperTreeControl
 {
-  /// <summary> The HTCoordE class implements the coordinates of a point in the Euclidian space.
+    /// <summary> The EuclidianVector class implements the coordinates of a point in the Euclidian space.
   /// </summary>
-  public class HtCoordE
+  public class EuclidianVector
   {
     #region Private fields
 
@@ -20,12 +20,12 @@ namespace HyperTreeControl
     /// <summary> Constructor.
     /// x = 0 and y = 0.
     /// </summary>
-    public HtCoordE() { }
+    public EuclidianVector() { }
 
     /// <summary> Constructor copying the given screen point.
     /// </summary>
     /// <param name="z">The screen point to copy.</param>
-    public HtCoordE(HtCoordE z)
+    public EuclidianVector(EuclidianVector z)
     {
       this.Copy(z);
     }
@@ -34,7 +34,7 @@ namespace HyperTreeControl
     /// </summary>
     /// <param name="x">The x coord.</param>
     /// <param name="y">The y coord.</param>
-    public HtCoordE(double x, double y)
+    public EuclidianVector(double x, double y)
     {
       _x = x;
       _y = y;
@@ -47,7 +47,7 @@ namespace HyperTreeControl
     /// <summary> Copy the given HtCoordE into this HtCoordE.
     /// </summary>
     /// <param name="z">The HtCoordE to copy.</param>
-    public void Copy(HtCoordE z)
+    public void Copy(EuclidianVector z)
     {
       _x = z._x;
       _y = z._y;
@@ -81,12 +81,12 @@ namespace HyperTreeControl
     /// </summary>
     /// <param name="x">The x screen coordinate.</param>
     /// <param name="y">The y screen coordinate.</param>
-    /// <param name="sOrigin">The origin of the screen plane.</param>
-    /// <param name="sMax">The (xMax, yMax) point in the screen plane.</param>
-    public void ProjectionStoE(int x, int y, HtCoordS sOrigin, HtCoordS sMax)
+    /// <param name="origin">The origin of the screen plane.</param>
+    /// <param name="max">The (xMax, yMax) point in the screen plane.</param>
+    public void ProjectionStoE(int x, int y, ScreenVector origin, ScreenVector max)
     {
-      _x = (double)(x - sOrigin.X) / (double)sMax.X;
-      _y = -((double)(y - sOrigin.Y) / (double)sMax.Y);
+      _x = (double)(x - origin.X) / (double)max.X;
+      _y = -((double)(y - origin.Y) / (double)max.Y);
     }
 
 
@@ -131,7 +131,7 @@ namespace HyperTreeControl
     /// <summary> Multiply this coordinate by the given coordinate.      
     /// </summary>
     /// <param name="z">The coord to multiply with.</param>
-    public void Multiply(HtCoordE z)
+    public void Multiply(EuclidianVector z)
     {
       double __tx = _x;
       double __ty = _y;
@@ -142,7 +142,7 @@ namespace HyperTreeControl
     /// <summary> Divide this coordinate by the given coordinate.
     /// </summary>
     /// <param name="z">The coord to divide with.</param>
-    public void Divide(HtCoordE z)
+    public void Divide(EuclidianVector z)
     {
       double d = z.D2();
       double tx = _x;
@@ -151,21 +151,21 @@ namespace HyperTreeControl
       _y = ((ty * z._x) - (tx * z._y)) / d;
     }
 
-    /// <summary> Substracts the second coord to the first one and put the result in this HTCoorE (this = a - b).
+    /// <summary> Substracts the second coord to the first one and put the result in this EuclidianVector (this = a - b).
     /// </summary>
     /// <param name="a">The first coord.</param>
     /// <param name="b">The second coord.</param>
-    public void Sub(HtCoordE a, HtCoordE b)
+    public void Sub(EuclidianVector a, EuclidianVector b)
     {
       _x = a._x - b._x;
       _y = a._y - b._y;
     }
 
-    /// <summary> Adds the second coord to the first one and put the result in this HTCoorE (this = a - b).
+    /// <summary> Adds the second coord to the first one and put the result in this EuclidianVector (this = a - b).
     /// </summary>
     /// <param name="a">The first coord.</param>
     /// <param name="b">The second coord.</param>
-    public void Add(HtCoordE a, HtCoordE b)
+    public void Add(EuclidianVector a, EuclidianVector b)
     {
         _x = a._x + b._x;
         _y = a._y + b._y;
@@ -209,7 +209,7 @@ namespace HyperTreeControl
     /// </summary>
     /// <param name="p">The other point.</param>
     /// <returns>The distance between the 2 points.</returns>
-    public double D(HtCoordE p)
+    public double D(EuclidianVector p)
     {
       return Math.Sqrt((p._x - _x) * (p._x - _x) + (p._y - _y) * (p._y - _y));
     }
@@ -217,7 +217,7 @@ namespace HyperTreeControl
     /// <summary> Translate this Euclidian point  by the coordinates of the given Euclidian point.
     /// </summary>
     /// <param name="t">The translation coordinates.</param>
-    public void Translate(HtCoordE t)
+    public void Translate(EuclidianVector t)
     {
       // z = (z + t) / (1 + z * conj(t))
 
@@ -230,7 +230,7 @@ namespace HyperTreeControl
       double __numX = _x + t._x;
       double __numY = _y + t._y;
 
-      // then the division (bell)
+      // then the division
       _x = ((__numX * __denX) + (__numY * __denY)) / __dd;
       _y = ((__numY * __denX) - (__numX * __denY)) / __dd;
     }
@@ -239,7 +239,7 @@ namespace HyperTreeControl
     /// </summary>
     /// <param name="s">The source point.</param>
     /// <param name="t">The translation vector.</param>
-    public void Translate(HtCoordE s, HtCoordE t)
+    public void Translate(EuclidianVector s, EuclidianVector t)
     {
       this.Copy(s);
       this.Translate(t);
@@ -249,15 +249,15 @@ namespace HyperTreeControl
     /// Transform this node by the given transformation.
     /// </summary>
     /// <param name="t">The transformation.</param>
-    public void Transform(HtTransformation t)
+    public void Transform(HyperbolicTransformation t)
     {
 
-      HtCoordE __z = new HtCoordE(this);
+      EuclidianVector __z = new EuclidianVector(this);
       Multiply(t.O);
       _x += t.P._x;
       _y += t.P._y;
 
-      HtCoordE __d = new HtCoordE(t.P);
+      EuclidianVector __d = new EuclidianVector(t.P);
       __d._y = -__d._y;
       __d.Multiply(__z);
       __d.Multiply(t.O);

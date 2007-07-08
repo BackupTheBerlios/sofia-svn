@@ -17,6 +17,8 @@
     <OldToolsVersion>2.0</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Hypertree.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -56,27 +58,28 @@
     <Reference Include="System.IdentityModel" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="WpfHtNode.cs" />
-    <Compile Include="HtAction.cs" />
-    <Compile Include="HtCoordE.cs" />
-    <Compile Include="HtCoordS.cs" />
-    <Compile Include="HtDraw.cs" />
-    <Compile Include="HtDrawNode.cs" />
-    <Compile Include="HtDrawNodeComposite.cs" />
-    <Compile Include="HtGeodesic.cs" />
-    <Compile Include="HtModel.cs" />
-    <Compile Include="HtModelNode.cs" />
-    <Compile Include="HtModelNodeComposite.cs" />
-    <Compile Include="HtNodeLabel.cs" />
-    <Compile Include="HtTransformation.cs" />
-    <Compile Include="IHtNode.cs" />
-    <Compile Include="IHtView.cs" />
+    <Compile Include="NodeBase.cs" />
+    <Compile Include="Controller.cs" />
+    <Compile Include="EuclidianVector.cs" />
+    <Compile Include="ScreenVector.cs" />
+    <Compile Include="Renderer.cs" />
+    <Compile Include="NodeView.cs" />
+    <Compile Include="CompositeNodeView.cs" />
+    <Compile Include="Geodesic.cs" />
+    <Compile Include="Model.cs" />
+    <Compile Include="NodeModel.cs" />
+    <Compile Include="CompositeNodeModel.cs" />
+    <Compile Include="NodeLabel.cs" />
+    <Compile Include="HyperbolicTransformation.cs" />
+    <Compile Include="INode.cs" />
+    <Compile Include="IView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Hypertree.snk" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -92,7 +95,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="SmartBorder.cs" />
-    <Compile Include="WpfHtView.cs" />
+    <Compile Include="View.cs" />
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

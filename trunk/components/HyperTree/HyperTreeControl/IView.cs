@@ -7,7 +7,9 @@ using System.Windows;
 
 namespace HyperTreeControl
 {
-    public interface IHtView
+    /// <summary> The IView is used by specific renderers of the hyperbolic tree.
+    /// </summary>
+    public interface IView
     {
         void StartMouseListening();
 
@@ -18,10 +20,6 @@ namespace HyperTreeControl
         int Height { get; }
 
         int Width { get; }
-
-        IHtNode GetNodeUnderTheMouse(MouseEventArgs e);
-
-        void TranslateToOrigin(IHtNode node);
 
         Image Image { get; set; }        
     }

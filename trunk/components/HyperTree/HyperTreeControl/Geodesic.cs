@@ -8,7 +8,9 @@ using System.Windows;
 
 namespace HyperTreeControl
 {
-    public class HtGeodesic
+    /// <summary> The Geodesic class implements a geodesic linking to points in the Poincarre model.
+    /// </summary>
+    public class Geodesic
     {
         enum DrawType
         {
@@ -22,14 +24,14 @@ namespace HyperTreeControl
 
         private DrawType _type = DrawType.Line; // type of the geodesic
 
-        private HtCoordE _za = null; // first point (Euclidian)
-        private HtCoordE _zb = null; // second point (Euclidian)
-        private HtCoordE _zc = null; // control point (Euclidian)
-        private HtCoordE _zo = null; // center of the geodesic;
+        private EuclidianVector _za = null; // first point (Euclidian)
+        private EuclidianVector _zb = null; // second point (Euclidian)
+        private EuclidianVector _zc = null; // control point (Euclidian)
+        private EuclidianVector _zo = null; // center of the geodesic;
 
-        private HtCoordS _a = null; // first point (on the screen)
-        private HtCoordS _b = null; // second point (on the screen)
-        private HtCoordS _c = null; // control point (on the screen)
+        private ScreenVector _a = null; // first point (on the screen)
+        private ScreenVector _b = null; // second point (on the screen)
+        private ScreenVector _c = null; // control point (on the screen)
 
         #endregion
 
@@ -39,17 +41,17 @@ namespace HyperTreeControl
         /// </summary>
         /// <param name="za">The first point.</param>
         /// <param name="zb">The second point.</param>
-        public HtGeodesic(HtCoordE za, HtCoordE zb)
+        public Geodesic(EuclidianVector za, EuclidianVector zb)
         {
             _za = za;
             _zb = zb;
 
-            _zc = new HtCoordE();
-            _zo = new HtCoordE();
+            _zc = new EuclidianVector();
+            _zo = new EuclidianVector();
 
-            _a = new HtCoordS();
-            _b = new HtCoordS();
-            _c = new HtCoordS();
+            _a = new ScreenVector();
+            _b = new ScreenVector();
+            _c = new ScreenVector();
 
             this.Rebuild();
         }
@@ -60,13 +62,13 @@ namespace HyperTreeControl
 
         /// <summary> Refresh the screen coordinates of this node.
         /// </summary>
-        /// <param name="sOrigin">The origin of the screen plane.</param>
-        /// <param name="sMax">The (xMax, yMax) point in the screen plane.</param>
-        public void RefreshScreenCoordinates(HtCoordS sOrigin, HtCoordS sMax)
+        /// <param name="origin">The origin of the screen plane.</param>
+        /// <param name="max">The (xMax, yMax) point in the screen plane.</param>
+        public void RefreshScreenCoordinates(ScreenVector origin, ScreenVector max)
         {
-            _a.ProjectionEtoS(_za, sOrigin, sMax);
-            _b.ProjectionEtoS(_zb, sOrigin, sMax);
-            _c.ProjectionEtoS(_zc, sOrigin, sMax);
+            _a.ProjectionEtoS(_za, origin, max);
+            _b.ProjectionEtoS(_zb, origin, max);
+            _c.ProjectionEtoS(_zc, origin, max);
         }
 
         #endregion
@@ -79,7 +81,7 @@ namespace HyperTreeControl
         {
             if ((Math.Abs(_za.D()) < EPSILON) ||                          // za == origin
                  (Math.Abs(_zb.D()) < EPSILON) ||                         // zb == origin
-                 (Math.Abs((_za.X / _zb.X) - (_za.Y / _zb.Y)) < EPSILON)) // za = lambda.zb
+                 (Math.Abs((_za.X / _zb.X) - (_za.Y / _zb.Y)) < EPSILON)) // za == lambda.zb
             {
                 _type = DrawType.Line;
             }
@@ -117,8 +119,8 @@ namespace HyperTreeControl
 
             switch (_type)
             {
-                case DrawType.Line:                    
-                    __pathSegments.Add(new LineSegment(new Point(_b.X, _b.Y), true));                    
+                case DrawType.Line:
+                    __pathSegments.Add(new LineSegment(new Point(_b.X, _b.Y), true));
                     break;
                 case DrawType.Arc:
                     __pathSegments.Add(new QuadraticBezierSegment(new Point(_c.X, _c.Y), new Point(_b.X, _b.Y), true));
@@ -141,9 +143,9 @@ namespace HyperTreeControl
         public override string ToString()
         {
             string __result = "Geodesic betweens : " +
-                            "\n\t A: " + _za +
-                            "\n\t B: " + _zb +
-                            "\n\t is ";
+                            " A= " + _za +
+                            ";B= " + _zb +
+                            " is ";
             switch (_type)
             {
                 case DrawType.Line:
